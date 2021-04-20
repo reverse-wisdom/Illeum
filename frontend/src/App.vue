@@ -1,11 +1,18 @@
 <template>
-  <div id="app">
+  <v-app id="app">
     <div id="nav">
-      <router-link to="/">Home</router-link> |
+      <router-link to="/">Home</router-link>
+      |
       <router-link to="/about">About</router-link>
+      |
+      <router-link to="/webrtcTest">webrtcTest</router-link>
+      |
+      <router-link to="/webrtcTest2">webrtcTest2</router-link>
+      |
+      <router-link to="/componentTest">componentTest</router-link>
     </div>
     <router-view />
-  </div>
+  </v-app>
 </template>
 
 <style>
