@@ -6,6 +6,7 @@ import Home from '../views/Home.vue';
 import webrtcTest from '../views/webrtcTest.vue';
 import webrtcTest2 from '../views/webrtcTest2.vue';
 import componentTest from '../views/componentTest.vue';
+import chartTest from '../views/chartTest.vue';
 
 Vue.use(VueRouter);
 
@@ -31,6 +32,11 @@ const routes = [
     path: '/componentTest',
     name: 'componentTest',
     component: componentTest,
+  },
+  {
+    path: '/chartTest',
+    name: 'chartTest',
+    component: chartTest,
   },
   // end
   {
