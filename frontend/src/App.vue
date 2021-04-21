@@ -9,6 +9,8 @@
       |
       <router-link to="/webrtcTest2">webrtcTest2</router-link>
       |
+      <router-link to="/webrtcTest3">webrtcTest3</router-link>
+      |
       <router-link to="/componentTest">componentTest</router-link>
       |
       <router-link to="/chartTest">chartTest</router-link>
