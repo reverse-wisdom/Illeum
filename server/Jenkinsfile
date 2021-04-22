@@ -6,6 +6,8 @@ pipeline {
       agent any
       steps {
         sh 'docker build -t illeum-front:latest ./frontend'
+        sh 'docker build -t illeum-back:latest ./backend'
+        
       }
     }
   
@@ -15,6 +17,9 @@ pipeline {
         sh 'docker ps -f name=illeum-front -q | xargs --no-run-if-empty docker container stop'
         sh 'docker container ls -a -name=illeum-front -q | xargs -r docker container rm'
 
+        sh 'docker ps -f name=illeum-back -q | xargs --no-run-if-empty docker container stop'  
+        sh 'docker container ls -a -name=illeum-back -q | xargs -r docker container rm'
+        
         sh 'docker ps -a -f "status=created" -f "status=exited" -q | xargs -r docker container rm'
         sh 'docker images -f "dangling=true" -q | xargs -r docker rmi'
       }
@@ -23,16 +28,16 @@ pipeline {
     stage('Docker run') {
       agent any
       steps {
-        // sh 'docker run -d --name illeum-back \
-        //     -v /volumes/back_home/profile:/volumes/profile \
-        //     --network field-network \
-        //     illeum-back:latest' 
+        sh 'docker run -d --name illeum-back \
+            --network field-network \
+            illeum-back:latest' 
 
         sh 'docker run -d --name illeum-front \
             -p 80:80 \
             -p 443:443 \
             -v /volumes/web_home:/volumes \
             -v /volumes/web_home/log:/var/log/nginx/host.access.log \
+            --network illeum-network \
              illeum-front:latest'
         
        }
