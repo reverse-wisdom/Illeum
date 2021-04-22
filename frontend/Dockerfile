@@ -15,6 +15,5 @@ EXPOSE 80
 
 ARG DEBIAN_FRONTEND=noninteractive
 ENV TZ=Asia/Seoul
-RUN apt-get install -y tzdata
 
 CMD ["nginx", "-g", "daemon off;"]
