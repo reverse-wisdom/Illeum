@@ -7,6 +7,7 @@ import Home from '../views/Home.vue';
 import webrtcTest from '../views/testpage/webrtcTest.vue';
 import webrtcTest2 from '../views/testpage/webrtcTest2.vue';
 import webrtcTest3 from '../views/testpage/webrtcTest3.vue';
+import webrtcTest4 from '../views/testpage/webrtcTest4.vue';
 import componentTest from '../views/testpage/componentTest.vue';
 import chartTest from '../views/testpage/chartTest.vue';
 
@@ -34,6 +35,11 @@ const routes = [
     path: '/webrtctest3',
     name: 'webrtcTest3',
     component: webrtcTest3,
+  },
+  {
+    path: '/webrtctest4',
+    name: 'webrtcTest4',
+    component: webrtcTest4,
   },
   {
     path: '/componentTest',
