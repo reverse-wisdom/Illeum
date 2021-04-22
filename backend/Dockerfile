@@ -7,6 +7,5 @@ ENV JAVA_OPTS=""
 
 ARG DEBIAN_FRONTEND=noninteractive
 ENV TZ=Asia/Seoul
-RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 ENTRYPOINT ["java","-jar","/app.jar"]
