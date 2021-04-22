@@ -22,7 +22,6 @@ pipeline {
         
       }
     }
-  
     stage('Docker Container rm') {
       agent any 
       steps {
@@ -41,7 +40,7 @@ pipeline {
       agent any
       steps {
         sh 'docker run -d --name illeum-back \
-            --network field-network \
+            --network illeum-network \
             illeum-back:latest' 
 
         sh 'docker run -d --name illeum-front \
