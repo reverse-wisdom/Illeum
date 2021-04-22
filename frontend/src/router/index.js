@@ -3,11 +3,12 @@ import VueRouter from 'vue-router';
 import Home from '../views/Home.vue';
 
 // 테스트용 임포트 페이지
-// import webrtcTest from '../views/test/webrtcTest.vue';
-// import webrtcTest2 from '../views/test/webrtcTest2.vue';
-// import webrtcTest3 from '../views/test/webrtcTest3.vue';
-// import componentTest from '../views/test/componentTest.vue';
-// import chartTest from '../views/test/chartTest.vue';
+
+import webrtcTest from '../views/testpage/webrtcTest.vue';
+import webrtcTest2 from '../views/testpage/webrtcTest2.vue';
+import webrtcTest3 from '../views/testpage/webrtcTest3.vue';
+import componentTest from '../views/testpage/componentTest.vue';
+import chartTest from '../views/testpage/chartTest.vue';
 
 Vue.use(VueRouter);
 
@@ -19,31 +20,31 @@ const routes = [
   },
 
   // 테스트용 라우터 세팅
-  // {
-  //   path: '/webrtctest',
-  //   name: 'webrtcTest',
-  //   component: webrtcTest,
-  // },
-  // {
-  //   path: '/webrtctest2',
-  //   name: 'webrtcTest2',
-  //   component: webrtcTest2,
-  // },
-  // {
-  //   path: '/webrtctest3',
-  //   name: 'webrtcTest3',
-  //   component: webrtcTest3,
-  // },
-  // {
-  //   path: '/componentTest',
-  //   name: 'componentTest',
-  //   component: componentTest,
-  // },
-  // {
-  //   path: '/chartTest',
-  //   name: 'chartTest',
-  //   component: chartTest,
-  // },
+  {
+    path: '/webrtctest',
+    name: 'webrtcTest',
+    component: webrtcTest,
+  },
+  {
+    path: '/webrtctest2',
+    name: 'webrtcTest2',
+    component: webrtcTest2,
+  },
+  {
+    path: '/webrtctest3',
+    name: 'webrtcTest3',
+    component: webrtcTest3,
+  },
+  {
+    path: '/componentTest',
+    name: 'componentTest',
+    component: componentTest,
+  },
+  {
+    path: '/chartTest',
+    name: 'chartTest',
+    component: chartTest,
+  },
   // // end
   {
     path: '/about',
