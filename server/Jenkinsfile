@@ -39,17 +39,19 @@ pipeline {
     stage('Docker run') {
       agent any
       steps {
-        sh 'docker run -d --name illeum-back \
-            --network illeum-network \
-            illeum-back:latest' 
-
         sh 'docker run -d --name illeum-front \
             -p 80:80 \
             -p 443:443 \
-            -v /volumes/web_home:/volumes \
-            -v /volumes/web_home/log:/var/log/nginx/host.access.log \
+            -v /volumes/front_home:/volumes \
+            -v /volumes/back_home/profile:/volumes/profile \
+            -v /volumes/front_home/log:/var/log/nginx/host.access.log \
             --network illeum-network \
              illeum-front:latest'
+
+        sh 'docker run -d --name illeum-back \
+            -v /volumes/back_home:/volumes/profile \
+            --network illeum-network \
+            illeum-back:latest' 
         
        }
     }
