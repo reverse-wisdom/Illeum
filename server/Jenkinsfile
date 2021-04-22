@@ -1,7 +1,19 @@
 pipeline {
   agent none
-  options { skipDefaultCheckout(false) }
+  options { skipDefaultCheckout(true) }
   stages {
+    stage('Build and Test') {
+      agent {
+        docker {
+          image 'maven:3-alpine'
+          args '-v /root/.m2:/root/.m2'
+        }
+      }
+      options { skipDefaultCheckout(false) }
+        steps {
+          sh 'mvn -B -DskipTests -f ./backend/pom.xml clean package'
+        }
+    }
     stage('Docker Build') {
       agent any
       steps {
