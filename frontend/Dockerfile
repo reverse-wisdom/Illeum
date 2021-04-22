@@ -12,6 +12,8 @@ COPY ./nginx/homepage.conf /etc/nginx/conf.d/homepage.conf
 
 COPY --from=build-stage ./homepage/dist /usr/share/nginx/html/homepage
 EXPOSE 80
+
+ARG DEBIAN_FRONTEND=noninteractive
+ENV TZ=Asia/Seoul
+
 CMD ["nginx", "-g", "daemon off;"]
-
-
