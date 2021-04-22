@@ -3,11 +3,12 @@ import VueRouter from 'vue-router';
 import Home from '../views/Home.vue';
 
 // 테스트용 임포트 페이지
-import webrtcTest from '../views/test/webrtcTest.vue';
-import webrtcTest2 from '../views/test/webrtcTest2.vue';
-import webrtcTest3 from '../views/test/webrtcTest3.vue';
-import componentTest from '../views/test/componentTest.vue';
-import chartTest from '../views/test/chartTest.vue';
+
+import webrtcTest from '../views/testpage/webrtcTest.vue';
+import webrtcTest2 from '../views/testpage/webrtcTest2.vue';
+import webrtcTest3 from '../views/testpage/webrtcTest3.vue';
+import componentTest from '../views/testpage/componentTest.vue';
+import chartTest from '../views/testpage/chartTest.vue';
 
 Vue.use(VueRouter);
 
@@ -44,7 +45,7 @@ const routes = [
     name: 'chartTest',
     component: chartTest,
   },
-  // end
+  // // end
   {
     path: '/about',
     name: 'About',
