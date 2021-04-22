@@ -4,4 +4,9 @@ FROM openjdk:8-jdk-alpine
 # ADD ./target/basePJT-0.0.1-SNAPSHOT.jar app.jar
 ADD ./target/auth-0.0.1-SNAPSHOT.jar app.jar
 ENV JAVA_OPTS=""
+
+ARG DEBIAN_FRONTEND=noninteractive
+ENV TZ=Asia/Seoul
+RUN apt-get install -y tzdata
+
 ENTRYPOINT ["java","-jar","/app.jar"]
