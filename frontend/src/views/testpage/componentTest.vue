@@ -3,11 +3,19 @@
     <h1>컴포넌트테스트페이지</h1>
     <v-btn depressed color="primary" @click="sweetalertTest1">sweetalert test1</v-btn>
     <br />
+    <br />
     <v-btn depressed class="btn" color="primary" @click="sweetalertTest1">sweetalert test1</v-btn>
+    <br />
     <br />
     <v-btn depressed class="btn" color="primary" @click="sweetalertTest2">sweetalert test2</v-btn>
     <br />
+    <br />
     <v-btn depressed class="btn" color="error" @click="sweetalertTest3">sweetalert test3</v-btn>
+    <br />
+    <br />
+    <v-btn depressed class="btn" color="error" @click="pushTest">Push.JS테스트</v-btn>
+    <br />
+    <br />
     <br />
     <template>
       <v-sheet class="mx-auto" elevation="8" max-width="800">
@@ -27,6 +35,8 @@
   </div>
 </template>
 <script>
+import push from 'push.js';
+
 export default {
   data() {
     return {
@@ -61,6 +71,9 @@ export default {
       if (email) {
         this.$swal(`Entered email: ${email}`);
       }
+    },
+    pushTest() {
+      push.create('GoodBye World!');
     },
   },
 };
