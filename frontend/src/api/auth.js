@@ -6,7 +6,7 @@ function loginUser(userData) {
 }
 
 //회원가입
-function register(userData) {
+function registerUser(userData) {
   return instance.post(`/member/user/signup`, userData);
 }
 //정보수정
@@ -19,4 +19,4 @@ function signout(email) {
   return posts.delete(``);
 }
 
-export { loginUser, register, editUser, signout };
+export { loginUser, registerUser, editUser, signout };
