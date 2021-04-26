@@ -21,6 +21,11 @@
               </a>
             </li>
             <li>
+              <a href="/classsearch">
+                <span class="Navtext">classsearch</span>
+              </a>
+            </li>
+            <li>
               <a href="/webrtcTest4">
                 <span class="Navtext">webrtc Test4</span>
               </a>
