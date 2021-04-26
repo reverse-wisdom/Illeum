@@ -113,45 +113,54 @@ export default {
     },
     //통신
     async signup() {
-      if (!this.msg['email']) {
-        this.$swal({
-          icon: 'error',
-          title: '이메일 형식이 잘못되었습니다.!',
-        });
-      } else if (this.nickname == null) {
-        this.$swal({
-          icon: 'error',
-          title: '닉네임을 입력해주세요!',
-        });
-      } else if (!this.msg['password']) {
-        this.$swal({
-          icon: 'error',
-          title: '비밀번호 입력시 8자리이상, 특수문자를 포함해주세요!',
-        });
-      } else {
-        const userData = {
-          name: this.name,
-          email: this.email,
-          password: this.password,
-        };
-        const { data } = await register(userData);
+      // if (!this.msg['email']) {
+      //   this.$swal({
+      //     icon: 'error',
+      //     title: '이메일 형식이 잘못되었습니다.!',
+      //   });
+      // } else if (this.nickname == null) {
+      //   this.$swal({
+      //     icon: 'error',
+      //     title: '닉네임을 입력해주세요!',
+      //   });
+      // } else if (!this.msg['password']) {
+      //   this.$swal({
+      //     icon: 'error',
+      //     title: '비밀번호 입력시 8자리이상, 특수문자를 포함해주세요!',
+      //   });
+      // } else {
+      //   const userData = {
+      //     name: this.name,
+      //     email: this.email,
+      //     password: this.password,
+      //   };
+      //   const { data } = await register(userData);
 
-        if (data == 'SUCCESS') {
-          this.$swal({
-            position: 'top-end',
-            icon: 'success',
-            title: '회원가입성공!!',
-            showConfirmButton: false,
-            timer: 1500,
-          });
-          this.$router.push('/');
-        } else {
-          this.$swal({
-            icon: 'error',
-            title: '회원가입 실패 관리자에게 문의해주세요',
-          });
-        }
-      }
+      //   if (data == 'SUCCESS') {
+      //     this.$swal({
+      //       position: 'top-end',
+      //       icon: 'success',
+      //       title: '회원가입성공!!',
+      //       showConfirmButton: false,
+      //       timer: 1500,
+      //     });
+      //     this.$router.push('/');
+      //   } else {
+      //     this.$swal({
+      //       icon: 'error',
+      //       title: '회원가입 실패 관리자에게 문의해주세요',
+      //     });
+      //   }
+      // }
+
+      const userData = {
+        email: this.email,
+        name: this.name,
+        thumbnail: 'string',
+        password: this.password,
+      };
+      const { data } = await register(userData);
+      console.log(data);
     },
     async login() {
       if (this.Lemail == null) {
