@@ -4,11 +4,13 @@ import lombok.Data;
 
 import javax.persistence.*;
 
-import java.util.Collection;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Entity
 public class Member {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int uid;
@@ -25,8 +27,8 @@ public class Member {
 
     private String thumbnail;
     
-//    @OneToMany(fetch=FetchType.EAGER, cascade= CascadeType.ALL)
+//    @OneToMany(fetch=FetchType.LAZY, cascade= CascadeType.REMOVE)
 //    @JoinColumn(name="uid")
-//    private Collection<Room> room;
-     
+//    private Collection<Entrant> entreant;
+    
 }

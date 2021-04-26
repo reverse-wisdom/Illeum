@@ -1,7 +1,10 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import Home from '../views/Home.vue';
+import Landing from '../views/Landing.vue';
+import Navbar from '../components/layout/Navbar.vue';
 
+//user
+import Sign from '../views/user/Sign.vue';
 // 테스트용 임포트 페이지
 
 import webrtcTest from '../views/testpage/webrtcTest.vue';
@@ -10,14 +13,23 @@ import webrtcTest3 from '../views/testpage/webrtcTest3.vue';
 import webrtcTest4 from '../views/testpage/webrtcTest4.vue';
 import componentTest from '../views/testpage/componentTest.vue';
 import chartTest from '../views/testpage/chartTest.vue';
-
 Vue.use(VueRouter);
 
 const routes = [
   {
     path: '/',
     name: 'Home',
-    component: Home,
+    components: { default: Navbar },
+  },
+  {
+    path: '/landing',
+    name: 'Landing',
+    components: { default: Landing },
+  },
+  {
+    path: '/sign',
+    name: 'Sign',
+    components: { default: Sign },
   },
 
   // 테스트용 라우터 세팅

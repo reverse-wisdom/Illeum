@@ -19,12 +19,20 @@ public class Room {
     @Column(nullable=false, length=45)
     private String roomName;
     
+    @Column(nullable=false, length=45)
+    private String roomPassword;
+    
+    
     @CreationTimestamp
     private Date startTime;
     
     @UpdateTimestamp
     private Date endTime;
+    
+    @Column(nullable=false, length=45)
+    private String roomState;
+    
+    @Column(nullable=false, length=45)
+    private String roomType;
 
-    private String state;
-  
 }
