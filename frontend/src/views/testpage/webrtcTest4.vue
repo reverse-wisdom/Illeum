@@ -119,6 +119,9 @@ export default {
         OfferToReceiveVideo: true,
       };
 
+      // 콘솔로그 출력 해제
+      this.connection.enableLogs = false; // to disable logs
+
       this.connection.openOrJoin(this.roomid);
       this.connection.videosContainer = document.querySelector('.videos-container');
 
@@ -234,5 +237,9 @@ export default {
 #conversation-panel .message video,
 #conversation-panel .message iframe {
   max-width: 100%;
+}
+
+.videos-container >>> video {
+  width: inherit;
 }
 </style>
