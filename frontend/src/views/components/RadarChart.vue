@@ -40,10 +40,10 @@ export default {
       borderWidth: '10px',
       hoverBackgroundColor: 'red',
       hoverBorderWidth: '10px',
-      maintainAspectRatio: true, // false: 상위 div를 무시한 채 창 크기에 따라 크기가 크기가 마음대로 바뀌던 것이 상위 div에 구속된다
+      maintainAspectRatio: false, // false: 상위 div를 무시한 채 창 크기에 따라 크기가 크기가 마음대로 바뀌던 것이 상위 div에 구속된다
       responsive: true,
-      width: '200%',
-      height: '200%',
+      width: '50%',
+      height: '50%',
     });
   },
 };
