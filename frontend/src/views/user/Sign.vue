@@ -189,8 +189,8 @@ export default {
         });
       } else {
         const userData = {
-          email: this.email,
-          password: this.password,
+          email: this.Lemail,
+          password: this.Lpassword,
         };
         this.$store.dispatch('LOGIN', userData);
       }
