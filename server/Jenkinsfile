@@ -53,6 +53,7 @@ pipeline {
             -v /etc/localtime:/etc/localtime:ro \
             -v /usr/share/zoneinfo/Asia/Seoul:/etc/timezone:ro \
             --network illeum-network \
+            -p 8080:8080 \
             illeum-back:latest' 
         
        }
