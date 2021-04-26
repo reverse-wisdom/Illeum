@@ -1,38 +1,35 @@
 package com.ssafy.pjt.dto;
 
-import java.util.Date;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-
+import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import lombok.Data;
+import javax.persistence.*;
+import java.util.Date;
+
 
 @Data
 @Entity
 public class Evaluation {
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	int vid;
 
-	int eid;
-
-	@CreationTimestamp
-	private Date eval_date;
-	
-	int attention;
-	int participation;
-	int distracted;
-	int asleep;
-	int afk;
-
-	@CreationTimestamp
-	private Date startTime;
-
-	@UpdateTimestamp
-	private Date endTime;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private int vid;
+    
+    private int eid;
+    
+    @CreationTimestamp
+    private Date evalDate;
+    
+    private int attention;
+    private int particlpation;
+    private int asleep;
+    private int afk;
+    
+    @CreationTimestamp
+    private Date startTime;
+    
+    @UpdateTimestamp
+    private Date endTime;
 }
