@@ -1,5 +1,6 @@
 <template>
   <v-app id="app">
+    <router-view name="header" />
     <router-view />
   </v-app>
 </template>
