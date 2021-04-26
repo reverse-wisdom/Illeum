@@ -7,5 +7,7 @@ import com.ssafy.pjt.dto.Member;
 public interface MemberRepository extends JpaRepository<Member, Integer> {
     Member findByName(String username);
     Member findByEmail(String email);
+    Member findByUid(int uid);
     Long deleteByEmail(String email);
 }
+
