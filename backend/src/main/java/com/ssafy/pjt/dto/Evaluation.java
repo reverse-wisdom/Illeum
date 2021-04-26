@@ -1,5 +1,6 @@
 package com.ssafy.pjt.dto;
 
+
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -7,32 +8,28 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import java.util.Date;
 
+
 @Data
 @Entity
-public class Room {
+public class Evaluation {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int rid;
+    private int vid;
     
-    private int uid;
+    private int eid;
     
-    @Column(nullable=false, length=45)
-    private String roomName;
+    @CreationTimestamp
+    private Date evalDate;
     
-    @Column(nullable=false, length=45)
-    private String roomPassword;
-    
+    private int attention;
+    private int particlpation;
+    private int asleep;
+    private int afk;
     
     @CreationTimestamp
     private Date startTime;
     
     @UpdateTimestamp
     private Date endTime;
-    
-    @Column(nullable=false, length=45)
-    private String roomState;
-    
-    @Column(nullable=false, length=45)
-    private String roomType;
-
 }
