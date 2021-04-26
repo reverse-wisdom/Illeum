@@ -2,12 +2,12 @@ import { instance, posts } from './index';
 
 // 로그인
 function loginUser(userData) {
-  return instance.post(``);
+  return instance.post('/member/user/login', userData);
 }
 
 //회원가입
 function registerUser(userData) {
-  return instance.post(`/member/user/signup`, userData);
+  return instance.post('/member/user/signup', userData);
 }
 //정보수정
 function editUser(userData) {

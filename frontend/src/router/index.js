@@ -5,6 +5,9 @@ import Navbar from '../components/layout/Navbar.vue';
 
 //user
 import Sign from '../views/user/Sign.vue';
+
+//class
+import ClassSearch from '../views/class/ClassSearch.vue';
 // 테스트용 임포트 페이지
 
 import webrtcTest from '../views/testpage/webrtcTest.vue';
@@ -31,7 +34,12 @@ const routes = [
     name: 'Sign',
     components: { default: Sign },
   },
-
+  //class
+  {
+    path: '/classsearch',
+    name: 'ClassSearch',
+    components: { default: ClassSearch, header: Navbar },
+  },
   // 테스트용 라우터 세팅
   {
     path: '/webrtctest',
