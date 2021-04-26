@@ -7,7 +7,7 @@ function loginUser(userData) {
 
 //회원가입
 function register(userData) {
-  return instance.post(``);
+  return instance.post(`/member/user/signup`, userData);
 }
 //정보수정
 function editUser(userData) {
