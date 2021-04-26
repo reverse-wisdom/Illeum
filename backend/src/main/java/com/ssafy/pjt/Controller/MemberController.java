@@ -1,6 +1,7 @@
 package com.ssafy.pjt.Controller;
 
 import com.ssafy.pjt.Repository.MemberRepository;
+import com.ssafy.pjt.Repository.mapper.MemberMapper;
 import com.ssafy.pjt.dto.Member;
 import com.ssafy.pjt.dto.Token;
 import com.ssafy.pjt.dto.request.LoginDto;
@@ -27,6 +28,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import javax.transaction.Transactional;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -39,6 +41,8 @@ public class MemberController {
     @Autowired
     private MemberRepository accountRepository;
     @Autowired
+    private MemberMapper memberMapper;
+    @Autowired
     RedisTemplate<String, Object> redisTemplate;
     @Autowired
     private JwtUserDetailsService userDetailsService;
@@ -48,7 +52,7 @@ public class MemberController {
     private AuthenticationManager am;
     @Autowired
     private PasswordEncoder bcryptEncoder;
-
+        
     @ApiOperation(value = "로그인")
     @PostMapping(path = "/user/login")
     public ResponseEntity<?> login(@RequestBody LoginDto login) throws Exception {
@@ -191,14 +195,60 @@ public class MemberController {
         return accountRepository.findAll();
     }
     
+    @ApiOperation(value = "맴버가 참여한 방목록")
+    @GetMapping(path = "/user/room")
+    //차후에 액세스 토큰으로 이름 찾고 이름으로 uid 찾고 그걸로 데이터 뺴자
+    public ResponseEntity<?> memberJoinRoom(@RequestParam int uid) throws Exception {
+    	List<Map<String,Object>> list;
+    	try {
+    		list = memberMapper.mamberJoinRoom(uid);
+    		if(list.size() == 0) return new ResponseEntity<>("수강 중인 강의가 없습니다.",HttpStatus.OK);
+    	}catch (Exception e) {
+    		return new ResponseEntity<>("fail",HttpStatus.BAD_REQUEST);
+		}
+        return new ResponseEntity<>(list,HttpStatus.OK);
+    }
+    
+    @ApiOperation(value = "맴버가  개설한 방 목록")
+    @GetMapping(path = "/user/founder")
+    //차후에 액세스 토큰으로 이름 찾고 이름으로 uid 찾고 그걸로 데이터 뺴자
+    public ResponseEntity<?> founder(@RequestParam int uid) throws Exception {
+    	List<Map<String,Object>> list;
+    	try {
+    		list = memberMapper.founder(uid);
+    		if(list.size() == 0) return new ResponseEntity<>("개설한 방이 없습니다.",HttpStatus.OK);
+    	}catch (Exception e) {
+    		System.out.println(e);
+    		return new ResponseEntity<>("fail",HttpStatus.BAD_REQUEST);
+		}
+        return new ResponseEntity<>(list,HttpStatus.OK);
+    }
+    
+    @ApiOperation(value = "맴버의 평가 목록")
+    @GetMapping(path = "/user/evaluation")
+    //차후에 액세스 토큰으로 이름 찾고 이름으로 uid 찾고 그걸로 데이터 뺴자
+    public ResponseEntity<?> memberJoinEvaluation(@RequestParam int uid) throws Exception {
+    	List<Map<String,Object>> list;
+    	try {
+    		list = memberMapper.memberJoinEvaluation(uid);
+    		if(list.size() == 0) return new ResponseEntity<>("평가가 없습니다",HttpStatus.OK);
+    	}catch (Exception e) {
+    		return new ResponseEntity<>("fail",HttpStatus.BAD_REQUEST);
+		}
+        return new ResponseEntity<>(list,HttpStatus.OK);
+    }
+    
     @ApiOperation(value = "회원정보수정")
     @Transactional
     @PutMapping(path="/user/update")
     public ResponseEntity<?> UpdateMember(@RequestBody UpdateMemberDto update) {  	
     	Member member = accountRepository.findByEmail(update.getEmail());
     	if(member == null) new ResponseEntity<String>("fail",HttpStatus.NO_CONTENT);
-    	member.setName(update.getName());
-    	member.setThumbnail(update.getThumbnail());
+    	
+    	if(update.getPassword() != null) member.setPassword(bcryptEncoder.encode(update.getPassword()));
+    	if(update.getName() != null) member.setName(update.getName());
+    	if(update.getThumbnail() != null) member.setThumbnail(update.getThumbnail());
+    	    	
     	try {
     		accountRepository.save(member);
     	}catch (Exception e) {
