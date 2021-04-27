@@ -4,6 +4,8 @@ import lombok.Data;
 
 import javax.persistence.*;
 
+import org.hibernate.annotations.ColumnDefault;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,11 +22,12 @@ public class Member {
     
     private String password;
     
-    @Column(nullable=false, unique=true, length=30)
+    @Column(length=30)
     private String name;
 
     private String role;
-
+    
+    @ColumnDefault("")
     private String thumbnail;
     
 //    @OneToMany(fetch=FetchType.LAZY, cascade= CascadeType.REMOVE)
