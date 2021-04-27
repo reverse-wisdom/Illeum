@@ -1,5 +1,8 @@
 <template>
   <div>
+    <div class="class-name">
+      <h2>클래스이름</h2>
+    </div>
     <div class="drag-container">
       <div class="panel-one" id="drag-left">
         <div class="videos-container"></div>
@@ -11,20 +14,19 @@
       </div>
       <div class="dragbar" id="dragbar"></div>
       <div class="panel-two" id="drag-right">
-        <h2>Panel 2</h2>
         <div id="conversation-panel"></div>
         <div id="key-press" style="text-align: right; display: none; font-size: 11px;">
           <span style="vertical-align: middle;"></span>
           <img src="https://www.webrtc-experiment.com/images/key-press.gif" style="height: 12px; vertical-align: middle;" />
         </div>
-        <textarea id="txt-chat-message" v-model="message"></textarea>
+        <v-text-field id="txt-chat-message" sold v-model="message" dense label="채팅"></v-text-field>
         <button class="btn btn-primary" id="btn-chat-message" @click="chat">Send</button>
       </div>
     </div>
-    <div>
-      <h2>Panel 3</h2>
-      <img class="img" src="https://i0.wp.com/kiramonthly.com/wp-content/uploads/2020/02/1.jpg?fit=1000%2C1429" />
-      <img class="img" src="https://img.huffingtonpost.com/asset/5d80b5133b00002efad5453a.jpeg?ops=scalefit_630_noupscale" />
+    <div class="panel-three">
+      <v-btn depressed color="primary" @click="onVideo">비디오 켜기</v-btn>
+      <v-btn depressed color="warning" @click="offVideo">비디오 끄기</v-btn>
+      <!-- <v-btn depressed color="warning" @click="screen">화면공유</v-btn> -->
     </div>
   </div>
 </template>
@@ -69,6 +71,15 @@ export default {
     };
   },
   methods: {
+    offVideo() {
+      let localStream = this.connection.attachStreams[0];
+      localStream.mute('video');
+    },
+    onVideo() {
+      this.connection.session.video = true;
+      let localStream = this.connection.attachStreams[0];
+      localStream.unmute('video');
+    },
     chat() {
       var chatMessage = this.message;
       console.log(this.userName);
@@ -120,7 +131,8 @@ export default {
       };
 
       // 콘솔로그 출력 해제
-      this.connection.enableLogs = false; // to disable logs
+      // this.connection.enableLogs = false; // to disable logs
+      this.connection.enableLogs = true; // to enable logs
 
       this.connection.openOrJoin(this.roomid);
       this.connection.videosContainer = document.querySelector('.videos-container');
@@ -177,18 +189,35 @@ export default {
 </script>
 
 <style scoped>
+body {
+  -ms-overflow-style: none;
+  overflow-y: hidden;
+}
+body::-webkit-scrollbar {
+  display: none;
+}
+
+.class-name {
+  text-align: center;
+  border-bottom: 1px solid #e5e5e5;
+}
 .drag-container {
   display: flex;
-  min-height: 100vh;
+  min-height: 85vh;
 }
 
 .panel-one {
   width: 80%;
+  min-width: 500px;
 }
 
 .panel-two {
   flex: 1;
   width: 20%;
+}
+.panel-three {
+  border-top: 2px solid black;
+  padding-top: 5px;
 }
 
 .dragbar {
@@ -200,13 +229,6 @@ export default {
   width: inherit;
 }
 
-.videos-container video {
-  display: inline-block;
-  width: 23.7vw;
-  /* width: 30vw; */
-  /* width: calc((100vw - 400px) / 2.5); */
-  border: 1px solid;
-}
 #txt-chat-message {
   width: 100%;
   resize: vertical;
@@ -222,10 +244,11 @@ export default {
 #conversation-panel {
   margin-bottom: 20px;
   text-align: left;
-  max-height: 200px;
-  overflow: auto;
-  border-top: 1px solid #e5e5e5;
-  width: 106%;
+  min-height: 700px;
+  overflow: scroll;
+  overflow-x: hidden;
+  /* border-top: 1px solid #e5e5e5; */
+  width: 100%;
 }
 
 #conversation-panel .message {
@@ -240,6 +263,9 @@ export default {
 }
 
 .videos-container >>> video {
-  width: inherit;
+  display: inline;
+  width: -webkit-fill-available;
+  width: 30%;
+  border: 1px solid;
 }
 </style>

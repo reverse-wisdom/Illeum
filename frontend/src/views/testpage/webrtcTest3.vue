@@ -4,7 +4,7 @@
       <div class="panel-one" id="drag-left">
         <div class="videos-container"></div>
         <input v-model="roomid" placeholder="Unique room ID" />
-        <v-btn depressed color="primary" @click="openRoom">open or join</v-btn>
+        <v-btn depressed color="primary" @click="openRoom">화면공유시작</v-btn>
         <v-btn depressed color="warning" @click="outRoom">퇴장</v-btn>
       </div>
       <div class="dragbar" id="dragbar"></div>
@@ -16,8 +16,6 @@
     </div>
     <div>
       <h2>Panel 3</h2>
-      <img class="img" src="https://i0.wp.com/kiramonthly.com/wp-content/uploads/2020/02/1.jpg?fit=1000%2C1429" />
-      <img class="img" src="https://img.huffingtonpost.com/asset/5d80b5133b00002efad5453a.jpeg?ops=scalefit_630_noupscale" />
     </div>
   </div>
 </template>
@@ -62,9 +60,8 @@ export default {
       this.connection = new RTCMultiConnection();
 
       this.connection.session = {
-        audio: true,
-        video: true,
-        data: true,
+        screen: true,
+        oneway: true,
       };
 
       this.connection.socketURL = 'https://rtcmulticonnection.herokuapp.com:443/';
@@ -73,8 +70,84 @@ export default {
         OfferToReceiveAudio: true,
         OfferToReceiveVideo: true,
       };
+
       this.connection.openOrJoin(this.roomid);
+
+      this.connection.iceServers = [
+        {
+          urls: ['stun:stun.l.google.com:19302', 'stun:stun1.l.google.com:19302', 'stun:stun2.l.google.com:19302', 'stun:stun.l.google.com:19302?transport=udp'],
+        },
+      ];
+
       this.connection.videosContainer = document.querySelector('.videos-container');
+
+      console.log(document.querySelector('.videos-container'));
+
+      this.connection.onstream = function(event) {
+        var existing = document.getElementById(event.streamid);
+        if (existing && existing.parentNode) {
+          existing.parentNode.removeChild(existing);
+        }
+
+        event.mediaElement.removeAttribute('src');
+        event.mediaElement.removeAttribute('srcObject');
+        event.mediaElement.muted = true;
+        event.mediaElement.volume = 0;
+
+        var video = document.createElement('video');
+
+        try {
+          video.setAttributeNode(document.createAttribute('autoplay'));
+          video.setAttributeNode(document.createAttribute('playsinline'));
+        } catch (e) {
+          video.setAttribute('autoplay', true);
+          video.setAttribute('playsinline', true);
+        }
+
+        if (event.type === 'local') {
+          video.volume = 0;
+          try {
+            video.setAttributeNode(document.createAttribute('muted'));
+          } catch (e) {
+            video.setAttribute('muted', true);
+          }
+        }
+        video.srcObject = event.stream;
+
+        var width = innerWidth - 80;
+        var mediaElement = getHTMLMediaElement(video, {
+          title: event.userid,
+          buttons: ['full-screen'],
+          width: width,
+          showOnMouseEnter: false,
+        });
+
+        connection.videosContainer.appendChild(mediaElement);
+
+        setTimeout(function() {
+          mediaElement.media.play();
+        }, 5000);
+
+        mediaElement.id = event.streamid;
+      };
+
+      var ref = this;
+
+      this.connection.onMediaError = function(e) {
+        if (e.message === 'Concurrent mic process limit.') {
+          if (DetectRTC.audioInputDevices.length <= 1) {
+            alert('Please select external microphone. Check github issue number 483.');
+            return;
+          }
+
+          var secondaryMic = DetectRTC.audioInputDevices[1].deviceId;
+          connection.mediaConstraints.audio = {
+            deviceId: secondaryMic,
+          };
+
+          ref.connection.join(ref.connection.sessionid);
+        }
+      };
     },
     outRoom() {
       this.connection.getAllParticipants().forEach((participantId) => {
@@ -121,13 +194,5 @@ export default {
 }
 .img {
   width: inherit;
-}
-
-.videos-container video {
-  display: inline-block;
-  width: 23.7vw;
-  /* width: 30vw; */
-  /* width: calc((100vw - 400px) / 2.5); */
-  border: 1px solid;
 }
 </style>
