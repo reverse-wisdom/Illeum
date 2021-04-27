@@ -6,6 +6,7 @@
     <div class="drag-container">
       <div class="panel-one" id="drag-left">
         <div class="videos-container"></div>
+        <div class="share-videos-container"></div>
         <v-text-field v-model="roomid" label="방번호 입력"></v-text-field>
         <br />
         <v-text-field v-model="userName" label="닉네임 입력"></v-text-field>
@@ -26,7 +27,7 @@
     <div class="panel-three">
       <v-btn depressed color="primary" @click="onVideo">비디오 켜기</v-btn>
       <v-btn depressed color="warning" @click="offVideo">비디오 끄기</v-btn>
-      <!-- <v-btn depressed color="warning" @click="screen">화면공유</v-btn> -->
+      <v-btn depressed color="warning" @click="screen">화면공유</v-btn>
     </div>
   </div>
 </template>
@@ -40,10 +41,16 @@ export default {
     cdn1.setAttribute('src', 'https://cdn.jsdelivr.net/npm/rtcmulticonnection@latest/dist/RTCMultiConnection.min.js');
     cdn1.setAttribute('id', 'cdn1');
     document.body.appendChild(cdn1);
+
     let cdn2 = document.createElement('script');
     cdn2.setAttribute('src', 'https://rtcmulticonnection.herokuapp.com/socket.io/socket.io.js');
     cdn2.setAttribute('id', 'cdn2');
     document.body.appendChild(cdn2);
+
+    // let cdn3 = document.createElement('script');
+    // cdn2.setAttribute('src', 'https://cdn.WebRTC-Experiment.com/getScreenId.js');
+    // cdn2.setAttribute('id', 'cdn3');
+    // document.body.appendChild(cdn3);
 
     var left = document.getElementById('drag-left');
     var right = document.getElementById('drag-right');
@@ -121,6 +128,8 @@ export default {
         audio: true,
         video: true,
         data: true,
+        // screen: true,
+        // oneway: true,
       };
 
       this.connection.socketURL = 'https://rtcmulticonnection.herokuapp.com:443/';
@@ -164,6 +173,72 @@ export default {
           return;
         }
       };
+      getScreenStream(function(screenStream) {
+        var container = document.querySelector('.share-videos-container');
+        var video = document.createElement('video');
+        video.srcObject = screenStream;
+        video.onloadedmetadata = function(e) {
+          video.play();
+        };
+        console.log(screenStream);
+        console.log(video);
+        container.appendChild(video);
+      });
+
+      function getScreenStream(callback) {
+        window.getScreenId(function(error, sourceId, screen_constraints) {
+          navigator.mediaDevices.getUserMedia(screen_constraints).then(function(screenStream) {
+            callback(screenStream);
+          });
+        });
+      }
+    },
+    screen() {
+      var ref = this;
+      this.connection.session = {
+        audio: true,
+        video: true,
+        data: true,
+        screen: true,
+        // oneway: true,
+      };
+      getScreenStream(function(screenStream) {
+        var container = document.querySelector('.share-videos-container');
+        var video = document.createElement('video');
+        video.srcObject = screenStream;
+        video.onloadedmetadata = function(e) {
+          video.play();
+        };
+        console.log(screenStream);
+        console.log(video);
+        container.appendChild(video);
+      });
+
+      function getScreenStream(callback) {
+        if (navigator.getDisplayMedia) {
+          navigator
+            .getDisplayMedia({
+              video: true,
+            })
+            .then((screenStream) => {
+              callback(screenStream);
+            });
+        } else if (navigator.mediaDevices.getDisplayMedia) {
+          navigator.mediaDevices
+            .getDisplayMedia({
+              video: true,
+            })
+            .then((screenStream) => {
+              callback(screenStream);
+            });
+        } else {
+          windowgetScreenId(function(error, sourceId, screen_constraints) {
+            navigator.mediaDevices.getUserMedia(screen_constraints).then(function(screenStream) {
+              callback(screenStream);
+            });
+          });
+        }
+      }
     },
     outRoom() {
       this.connection.getAllParticipants().forEach((participantId) => {
@@ -184,6 +259,8 @@ export default {
     el1.remove();
     var el2 = document.querySelector('#cdn2');
     el2.remove();
+    // var el3 = document.querySelector('#cdn3');
+    // el3.remove();
   },
 };
 </script>
