@@ -256,13 +256,14 @@ public class UploadFileUtils {
 
 	private static String makeThumbnail(String uploadPath, String path, String fileName, String saveName, int width,
 			int height) throws IOException {
+
 		BufferedImage sourceImg = ImageIO.read(new File(uploadPath + path, fileName));
 
 //		BufferedImage destImg = Scalr.resize(sourceImg, width, height);
 		BufferedImage destImg = resizeAndCrop(sourceImg, width, height);
 
 		String thumbnailName = uploadPath + path + File.separator + "s_" + saveName;
-
+		thumbnailName = thumbnailName.replace('\\', '/');
 		File newFile = new File(thumbnailName);
 		String formatName = fileName.substring(fileName.lastIndexOf(".") + 1);
 

@@ -110,7 +110,7 @@ public class ImageService {
 				throw new Exception("Failed to store empty file " + file.getOriginalFilename());
 			}
 
-			String saveFileName = UploadFileUtils.fileSave(rootLocation.toString(), subPath, filename, thumbnail, file);
+			String saveFileName = UploadFileUtils.fileSave(rootLocation.toString().replace('\\', '/'), subPath, filename, thumbnail, file);
 
 			if (saveFileName.toCharArray()[0] == '/') {
 				saveFileName = saveFileName.substring(1);
@@ -122,7 +122,7 @@ public class ImageService {
 			saveFile.setSaveFileName(saveFileName);
 			saveFile.setOriginFileName(file.getOriginalFilename());
 			saveFile.setContentType(file.getContentType());
-			saveFile.setFilePath(rootLocation.toString().replace(File.separatorChar, '/') + '/' + saveFileName);
+			saveFile.setFilePath(rootLocation.toString().replace('\\', '/') + '/' + saveFileName);
 			saveFile.setSize(resource.contentLength());
 			saveFile.setRegDate(new Date());
 			System.out.println(saveFile);
