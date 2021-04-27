@@ -5,9 +5,12 @@
       <div>
         <img src="../../assets/img/navbar.jpg" class="Navbg" alt="" />
       </div>
-      <div class="sidebar" @mouseover="hoverNav">
+      <div class="sidebar">
         <img src="../../assets/img/greenlogo.png" class="Navlogo" alt="" />
         <hr />
+        <v-btn v-if="this.$store.state.token" @click="signoutUser">LOGOUT</v-btn>
+        <!-- <v-btn v-if="this.$store.state.token" @click="profileUser">PROFILE</v-btn> -->
+
         <div class="sidebar_inner">
           <ul>
             <li>
@@ -52,10 +55,31 @@
   </div>
 </template>
 <script>
+import { logoutUser } from '@/api/auth';
 export default {
   components: {},
   created() {},
-  methods: {},
+  methods: {
+    async signoutUser() {
+      const userData = this.$store.state.token;
+      localStorage.clear();
+      sessionStorage.clear();
+      const { data } = await logoutUser(userData);
+      console.log(data);
+
+      if (data == 'success') {
+        this.$store.commit('clearToken');
+        this.$store.commit('clearUuid');
+        this.$store.commit('clearEmail');
+        this.$store.commit('clearRole');
+        this.$store.commit('clearName');
+        this.$router.push('/sign');
+        console.log('로그아웃 성공');
+      } else {
+        console.log('로그아웃실패');
+      }
+    },
+  },
 };
 </script>
 
