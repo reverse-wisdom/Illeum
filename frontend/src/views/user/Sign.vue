@@ -57,7 +57,7 @@
 </template>
 
 <script>
-import { registerUser, loginUser } from '@/api/auth';
+import { registerUser } from '@/api/auth';
 export default {
   name: 'Sign',
   data() {
@@ -159,22 +159,9 @@ export default {
         thumbnail: 'string',
         password: this.password,
       };
-      const { data } = await registerUser(userData);
+      const { data } = await register(userData);
       console.log(data);
-      if (data.success === true) {
-        this.$swal({
-          icon: 'success',
-          title: '회원가입성공!!',
-          showConfirmButton: false,
-          timer: 1500,
-        });
-        this.$router.push('/');
-      } else {
-        this.$swal({
-          icon: 'error',
-          title: '회원가입 실패 관리자에게 문의해주세요',
-        });
-      }
+      this.$router.push('/sign');
     },
     async login() {
       if (this.Lemail == null) {
@@ -189,8 +176,8 @@ export default {
         });
       } else {
         const userData = {
-          email: this.Lemail,
-          password: this.Lpassword,
+          email: this.email,
+          password: this.password,
         };
         this.$store.dispatch('LOGIN', userData);
       }
