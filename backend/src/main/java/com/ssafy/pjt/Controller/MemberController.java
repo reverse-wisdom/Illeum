@@ -129,7 +129,7 @@ public class MemberController {
         	member.setPassword(bcryptEncoder.encode(signup.getPassword()));
         	member.setEmail(email);
         	member.setName(signup.getName());
-        	//member.setThumbnail(signup.getThumbnail());
+        	member.setThumbnail("");
         	
             map.put("success", true);
             accountRepository.save(member);
