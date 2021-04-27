@@ -96,11 +96,11 @@ export default {};
   }
 }
 .class-search {
-  margin-left: 20%;
+  margin-left: 10%;
   /* margin-top: 10px; */
   width: 100%;
   height: 100vh;
   background-size: cover;
-  background: url(../../assets/img/desk2_1.jpg) no-repeat;
+  background: url(../../assets/img/onlineclass.jpg) no-repeat;
 }
 </style>

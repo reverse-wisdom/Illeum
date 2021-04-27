@@ -7,7 +7,9 @@ import Navbar from '../components/layout/Navbar.vue';
 import Sign from '../views/user/Sign.vue';
 
 //class
+import ClassTest from '../views/class/ClassTest.vue';
 import ClassSearch from '../views/class/ClassSearch.vue';
+import CreateClass from '../views/class/CreateClass.vue';
 // 테스트용 임포트 페이지
 
 import webrtcTest from '../views/testpage/webrtcTest.vue';
@@ -36,9 +38,19 @@ const routes = [
   },
   //class
   {
+    path: '/classtest',
+    name: 'ClassTest',
+    components: { default: ClassTest, header: Navbar },
+  },
+  {
     path: '/classsearch',
     name: 'ClassSearch',
     components: { default: ClassSearch, header: Navbar },
+  },
+  {
+    path: '/classcreate',
+    name: 'CreateClass',
+    components: { default: CreateClass, header: Navbar },
   },
   // 테스트용 라우터 세팅
   {
