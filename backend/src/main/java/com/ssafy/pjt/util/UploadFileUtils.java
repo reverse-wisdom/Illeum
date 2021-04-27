@@ -6,7 +6,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.Calendar;
-import java.util.List;
 import java.util.UUID;
 
 import javax.imageio.ImageIO;
@@ -17,8 +16,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
-
-import com.google.common.collect.Lists;
 
 /**
  * @author https://github.com/woobong/spring-boot-jpa-summernote-image-upload-example
@@ -112,8 +109,8 @@ public class UploadFileUtils {
 	 * @throws IllegalStateException
 	 * @throws IOException
 	 */
-	public static String fileSave(String uploadPath, String savePath, String filename, boolean thumbnail, MultipartFile file)
-			throws IllegalStateException, IOException {
+	public static String fileSave(String uploadPath, String savePath, String filename, boolean thumbnail,
+			MultipartFile file) throws IllegalStateException, IOException {
 
 		File uploadPathDir = new File(uploadPath + savePath);
 
@@ -235,26 +232,26 @@ public class UploadFileUtils {
 
 		return thumbnailName.substring(uploadPath.length()).replace(File.separatorChar, '/');
 	}
-	
+
 	private static BufferedImage resizeAndCrop(BufferedImage bufferedImage, Integer width, Integer height) {
 
-	    Mode mode = (double) width / (double) height >= (double) bufferedImage.getWidth() / (double) bufferedImage.getHeight() 
-	    		? Scalr.Mode.FIT_TO_WIDTH : Scalr.Mode.FIT_TO_HEIGHT;
+		Mode mode = (double) width / (double) height >= (double) bufferedImage.getWidth()
+				/ (double) bufferedImage.getHeight() ? Scalr.Mode.FIT_TO_WIDTH : Scalr.Mode.FIT_TO_HEIGHT;
 
-	    bufferedImage = Scalr.resize(bufferedImage, Scalr.Method.ULTRA_QUALITY, mode, width, height);
+		bufferedImage = Scalr.resize(bufferedImage, Scalr.Method.ULTRA_QUALITY, mode, width, height);
 
-	    int x = 0;
-	    int y = 0;
+		int x = 0;
+		int y = 0;
 
-	    if (mode == Scalr.Mode.FIT_TO_WIDTH) {
-	        y = (bufferedImage.getHeight() - height) / 2;
-	    } else if (mode == Scalr.Mode.FIT_TO_HEIGHT) {
-	        x = (bufferedImage.getWidth() - width) / 2;
-	    }
+		if (mode == Scalr.Mode.FIT_TO_WIDTH) {
+			y = (bufferedImage.getHeight() - height) / 2;
+		} else if (mode == Scalr.Mode.FIT_TO_HEIGHT) {
+			x = (bufferedImage.getWidth() - width) / 2;
+		}
 
-	    bufferedImage = Scalr.crop(bufferedImage, x, y, width, height);
+		bufferedImage = Scalr.crop(bufferedImage, x, y, width, height);
 
-	    return bufferedImage;
+		return bufferedImage;
 	}
 
 	private static String makeThumbnail(String uploadPath, String path, String fileName, String saveName, int width,
@@ -263,7 +260,7 @@ public class UploadFileUtils {
 
 //		BufferedImage destImg = Scalr.resize(sourceImg, width, height);
 		BufferedImage destImg = resizeAndCrop(sourceImg, width, height);
-		
+
 		String thumbnailName = uploadPath + path + File.separator + "s_" + saveName;
 
 		File newFile = new File(thumbnailName);
