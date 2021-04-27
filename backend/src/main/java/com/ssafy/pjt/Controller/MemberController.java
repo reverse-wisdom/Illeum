@@ -83,14 +83,14 @@ public class MemberController {
         Map<String, Object> map = new HashMap<>();
         map.put("accessToken", accessToken);
         map.put("refreshToken", refreshToken);
-        Member member = null;
         try {
-        	member =  memberRepository.findByEmail(email);
-        	 member.setPassword("");
-             map.put("member", member);
+        	Member member =  memberRepository.findByEmail(email);
+        	member.setPassword("");
+            map.put("member", member);
         }catch (Exception e) {
         	return new ResponseEntity<>("fail",HttpStatus.BAD_REQUEST);
 		}      
+     
         return new ResponseEntity<>(map,HttpStatus.OK);
     }
     
