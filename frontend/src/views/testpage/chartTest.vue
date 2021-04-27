@@ -6,6 +6,10 @@
     <br />
     <div style="height:50%; width:50%; margin:auto">
       <radar-chart :sampleData="sampleData" />
+      <radar-chart :sampleData="sampleData" />
+      <radar-chart :sampleData="sampleData" />
+      <radar-chart :sampleData="sampleData" />
+      <radar-chart :sampleData="sampleData" />
     </div>
   </div>
 </template>
