@@ -26,6 +26,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
 import javax.transaction.Transactional;
 import java.util.HashMap;
 import java.util.List;
@@ -39,7 +41,7 @@ import java.util.concurrent.TimeUnit;
 public class MemberController {
     private Logger logger = LoggerFactory.getLogger(ApplicationRunner.class);
     @Autowired
-    private MemberRepository accountRepository;
+    private MemberRepository memberRepository;
     @Autowired
     private MemberMapper memberMapper;
     @Autowired
@@ -81,6 +83,7 @@ public class MemberController {
         Map<String, Object> map = new HashMap<>();
         map.put("accessToken", accessToken);
         map.put("refreshToken", refreshToken);
+        map.put("member", memberRepository.findByEmail(email));
         return new ResponseEntity<>(map,HttpStatus.OK);
     }
     
@@ -119,7 +122,7 @@ public class MemberController {
         String email = signup.getEmail();
         Map<String, Object> map = new HashMap<>();
         System.out.println("회원가입요청 아이디: "+email + "비번: " + signup.getPassword());
-        if (accountRepository.findByEmail(email) == null) {        	            
+        if (memberRepository.findByEmail(email) == null) {        	            
         	Member member = new Member();        	
         	if (signup.getRole() != null && signup.getRole().equals("admin")) {
         		member.setRole("ROLE_ADMIN");
@@ -132,7 +135,7 @@ public class MemberController {
         	member.setThumbnail("");
         	
             map.put("success", true);
-            accountRepository.save(member);
+            memberRepository.save(member);
             return map;
         } else {
             map.put("success", false);
@@ -148,7 +151,7 @@ public class MemberController {
     public ResponseEntity<?> deleteAdminUser (@RequestParam String email) {
         logger.info("delete user: " +email);
         try {
-        	 accountRepository.deleteByEmail(email);
+        	 memberRepository.deleteByEmail(email);
         }catch (Exception e) {
         	 return new ResponseEntity<String>("fail", HttpStatus.NO_CONTENT);
 		}      
@@ -182,7 +185,7 @@ public class MemberController {
         redisTemplate.expire(accessToken, 10*6*1000, TimeUnit.MILLISECONDS);
         
         logger.info("delete user: " + email);
-        Long result = accountRepository.deleteByEmail(email);
+        Long result = memberRepository.deleteByEmail(email);
         logger.info("delete result: " + result);
         
         return new ResponseEntity<String>("success",HttpStatus.OK);
@@ -192,7 +195,7 @@ public class MemberController {
     @ApiOperation(value = "관리자용 회원 전체조회")
     @GetMapping(path="/admin/getusers")
     public Iterable<Member> getAllMember() {
-        return accountRepository.findAll();
+        return memberRepository.findAll();
     }
     
     @ApiOperation(value = "맴버가 참여한 방목록")
@@ -242,7 +245,7 @@ public class MemberController {
     @Transactional
     @PutMapping(path="/user/update")
     public ResponseEntity<?> UpdateMember(@RequestBody UpdateMemberDto update) {  	
-    	Member member = accountRepository.findByEmail(update.getEmail());
+    	Member member = memberRepository.findByEmail(update.getEmail());
     	if(member == null) new ResponseEntity<String>("fail",HttpStatus.NO_CONTENT);
     	
     	if(update.getPassword() != null) member.setPassword(bcryptEncoder.encode(update.getPassword()));
@@ -250,7 +253,7 @@ public class MemberController {
     	if(update.getThumbnail() != null) member.setThumbnail(update.getThumbnail());
     	    	
     	try {
-    		accountRepository.save(member);
+    		memberRepository.save(member);
     	}catch (Exception e) {
     		new ResponseEntity<String>("fail",HttpStatus.BAD_REQUEST);
 		}
@@ -262,7 +265,7 @@ public class MemberController {
     @GetMapping(path="/user/checkemail")
     public boolean checkEmail (@RequestParam String email) {
         System.out.println("이메일체크 요청 이메일: " +email);
-        if (accountRepository.findByEmail(email) == null) return true;
+        if (memberRepository.findByEmail(email) == null) return true;
         else return false;
     }
     	
