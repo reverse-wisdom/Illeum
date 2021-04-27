@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Landing from '../views/Landing.vue';
+import About from '../views/About.vue';
 import Navbar from '../components/layout/Navbar.vue';
 
 //user
@@ -10,6 +11,10 @@ import Sign from '../views/user/Sign.vue';
 import ClassTest from '../views/class/ClassTest.vue';
 import ClassSearch from '../views/class/ClassSearch.vue';
 import CreateClass from '../views/class/CreateClass.vue';
+import UserClasslist from '../views/class/UserClasslist.vue';
+
+//evaluation
+import UserEval from '../views/evaluation/UserEval.vue';
 // 테스트용 임포트 페이지
 
 import webrtcTest from '../views/testpage/webrtcTest.vue';
@@ -24,7 +29,7 @@ const routes = [
   {
     path: '/',
     name: 'Home',
-    components: { default: Navbar },
+    components: { default: About, header: Navbar },
   },
   {
     path: '/landing',
@@ -52,6 +57,18 @@ const routes = [
     name: 'CreateClass',
     components: { default: CreateClass, header: Navbar },
   },
+  {
+    path: '/userclasslist',
+    name: 'UserClasslist',
+    components: { default: UserClasslist, header: Navbar },
+  },
+  //evaluation
+  {
+    path: '/usereval',
+    name: 'UserEval',
+    components: { default: UserEval, header: Navbar },
+  },
+
   // 테스트용 라우터 세팅
   {
     path: '/webrtctest',
