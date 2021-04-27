@@ -116,7 +116,7 @@ public class MemberController {
     @ApiOperation(value = "회원가입")
     @PostMapping(path="/user/signup")
     public Map<String, Object> addNewUser (@RequestBody SignUpDto signup) {
-        String email = signup.getName();
+        String email = signup.getEmail();
         Map<String, Object> map = new HashMap<>();
         System.out.println("회원가입요청 아이디: "+email + "비번: " + signup.getPassword());
         if (accountRepository.findByEmail(email) == null) {        	            
@@ -129,7 +129,7 @@ public class MemberController {
         	member.setPassword(bcryptEncoder.encode(signup.getPassword()));
         	member.setEmail(email);
         	member.setName(signup.getName());
-        	member.setThumbnail(signup.getThumbnail());
+        	//member.setThumbnail(signup.getThumbnail());
         	
             map.put("success", true);
             accountRepository.save(member);
