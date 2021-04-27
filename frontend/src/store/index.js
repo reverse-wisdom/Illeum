@@ -10,10 +10,9 @@ export default new Vuex.Store({
   state: {
     token: '',
     email: '',
-    password: '',
-    nickname: '',
+    name: '',
     uuid: '',
-    type: '',
+    role: '',
   },
   getters: {
     isLogin(state) {
@@ -28,6 +27,7 @@ export default new Vuex.Store({
     clearToken(state) {
       state.token = '';
     },
+
     //이메일
     setEmail(state, email) {
       state.email = email;
@@ -35,67 +35,58 @@ export default new Vuex.Store({
     clearEmail(state) {
       state.email = '';
     },
-    setPassword(state, password) {
-      state.password = password;
+
+    //비밀번호
+    // setPassword(state, password) {
+    //   state.password = password;
+    // },
+    // clearPassword(state) {
+    //   state.password = '';
+    // },
+
+    //이름
+    setName(state, name) {
+      state.name = name;
     },
-    clearPassword(state) {
-      state.password = '';
-    },
-    setNickname(state, nickname) {
-      state.nickname = nickname;
-    },
-    clearNickname(state) {
-      state.nickname = '';
+    clearName(state) {
+      state.name = '';
     },
 
-    //일반유저
+    //uuid
     setUuid(state, uuid) {
       state.uuid = uuid;
     },
     clearUuid(state) {
       state.uuid = '';
     },
-    setType(state, type) {
-      state.type = type;
+    //role
+    setRole(state, role) {
+      state.role = role;
     },
-    clearType(state) {
-      state.type = '';
+    clearRole(state) {
+      state.role = '';
     },
   },
 
   actions: {
     async LOGIN({ commit }, userData) {
-      const data = await loginUser(userData);
+      const { data } = await loginUser(userData);
+      // console.log(data.accessToken);
       console.log(data);
-      // if (data.data.message == 'SUCCESS') {
-      //   commit('setToken', data.data['access-token']);
-      //   commit('setEmail', userData.email);
-      //   commit('setPassword', userData.password);
-      //   // console.log(response.data);
-      //   commit('setUuid', response.data.uuid);
-      //   commit('setType', response.data.type);
-      //   if (response.data.type == 1) {
-      //     commit('setNickname', response.data.nickname);
-      //   }
-      //   router.push('/');
-      // } else {
-      //   Vue.swal({
-      //     icon: 'error',
-      //     title: '로그인 실패! 이메일 및 비밀번호를 확인해 주세요!',
-      //   });
-      // }
-      // if (data !== null) {
-      //   commit('setToken', data.data['access-token']);
-      //   commit('setEmail', userData.email);
-      //   commit('setPassword', userData.password);
-      //   // console.log(response.data);
-      //   commit('setUuid', response.data.uuid);
-      //   commit('setType', response.data.type);
-      //   if (response.data.type == 1) {
-      //     commit('setNickname', response.data.nickname);
-      //   }
-      //   router.push('/');
-      // }
+      if (data.accessToken !== '') {
+        commit('setToken', data.accessToken);
+        commit('setUuid', data.member.uid);
+        commit('setEmail', data.member.email);
+        commit('setName', data.member.name);
+        commit('setRole', data.member.role);
+
+        router.push('/');
+      } else {
+        Vue.swal({
+          icon: 'error',
+          title: '로그인 실패! 이메일 및 비밀번호를 확인해 주세요!',
+        });
+      }
     },
   },
 });

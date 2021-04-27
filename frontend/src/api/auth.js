@@ -6,7 +6,7 @@ function loginUser(userData) {
 }
 // 로그아웃
 function logoutUser(userData) {
-  return instance.post('/member/user/logout', userData);
+  return posts.post('/member/user/logout', userData);
 }
 
 //회원가입

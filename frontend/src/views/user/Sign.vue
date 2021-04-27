@@ -25,12 +25,9 @@
               <!-- <a href="#">Forgot password?</a> -->
             </div>
             <div class="field btn">
-              <div class="btn-layer"></div>
-              <input type="submit" value="LOGIN" @click="login" />
+              <div class="btn-layer" @click="signinUser"></div>
+              <input type="text" value="LOGIN" @click="signinUser" />
             </div>
-            <!-- <div class="signup-link">
-              <a @click="signuplink" href="">Signup now</a>
-            </div> -->
           </form>
           <form action="#" class="signup">
             <div class="field">
@@ -159,11 +156,24 @@ export default {
         thumbnail: 'string',
         password: this.password,
       };
-      const { data } = await register(userData);
+      const { data } = await registerUser(userData);
       console.log(data);
-      this.$router.push('/sign');
+      if (data.success === true) {
+        this.$swal({
+          icon: 'success',
+          title: '회원가입성공!!',
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        this.$router.push('/sign');
+      } else {
+        this.$swal({
+          icon: 'error',
+          title: '회원가입 실패 관리자에게 문의해주세요',
+        });
+      }
     },
-    async login() {
+    async signinUser() {
       if (this.Lemail == null) {
         this.$swal({
           icon: 'error',
@@ -176,10 +186,14 @@ export default {
         });
       } else {
         const userData = {
-          email: this.email,
-          password: this.password,
+          email: this.Lemail,
+          password: this.Lpassword,
         };
+        // console.log(userData);
         this.$store.dispatch('LOGIN', userData);
+        console.log(this.$store.state.token);
+        console.log(this.$store.state.name);
+        console.log(this.$store.state.role);
       }
     },
   },
@@ -199,7 +213,7 @@ export default {
   height: 100%;
   width: 100%;
   place-items: center;
-  background: no-repeat center/100% url('../../assets/img/signbg.jpg');
+  /* background: no-repeat center/100% url('../../assets/img/signbg.jpg'); */
   /* background: -webkit-linear-gradient(90deg, #0162c8, #55e7fc); */
 }
 ::selection {
@@ -356,7 +370,7 @@ form .btn .btn-layer {
 form .btn:hover .btn-layer {
   left: 0;
 }
-form .btn input[type='submit'] {
+form .btn input[type='text'] {
   height: 100%;
   width: 100%;
   z-index: 1;
@@ -364,7 +378,7 @@ form .btn input[type='submit'] {
   background: none;
   border: none;
   color: #fff;
-  padding-left: 0;
+  text-align: center;
   border-radius: 5px;
   font-size: 20px;
   font-weight: 500;
