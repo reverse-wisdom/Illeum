@@ -8,5 +8,5 @@ public class SignUpDto {
 	private String password;
 	private String name;
 	private String role;
-	private String thumbnail;
+	//private String thumbnail;
 }
