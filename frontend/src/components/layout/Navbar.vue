@@ -86,6 +86,11 @@
                 <span class="Navtext">class</span>
               </a>
             </li>
+            <li>
+              <a href="/userevaluation">
+                <span class="Navtext">evaluation</span>
+              </a>
+            </li>
             <!-- <li>
               <a href="/classsearch">
                 <span class="Navtext">classsearch</span>
@@ -118,7 +123,7 @@ export default {
   components: {},
   data() {
     return {
-      dialog: true,
+      dialog: false,
       image: null,
       url: null,
     };
@@ -128,7 +133,10 @@ export default {
     Preview_image() {
       this.url = URL.createObjectURL(this.image);
     },
-    userUpdate() {},
+    async userUpdate() {
+      // var frm = new FormData();
+      // frm.append('file', this.image);
+    },
     async signoutUser() {
       const userData = this.$store.state.token;
       localStorage.clear();
