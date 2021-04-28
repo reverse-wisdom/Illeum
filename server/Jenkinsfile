@@ -4,12 +4,6 @@ pipeline {
 	stages {
 		stage('Build and Test') {
 			agent {
-				script{
-					mattermostSend (
-						color: "#2A42EE", 
-						message: "빌드 시작: ${env.JOB_NAME} #${env.BUILD_NUMBER} (<${env.BUILD_URL}|Link to build>)"
-					)
-				}
 				docker {
 				  image 'maven:3-alpine'
 				  args '-v /root/.m2:/root/.m2'
@@ -17,6 +11,12 @@ pipeline {
 			}
 			options { skipDefaultCheckout(false) }
 			steps {
+				script{
+					mattermostSend (
+						color: "#2A42EE", 
+						message: "빌드 시작: ${env.JOB_NAME} #${env.BUILD_NUMBER} (<${env.BUILD_URL}|Link to build>)"
+					)
+				}
 				sh 'mvn -B -DskipTests -f ./backend/pom.xml clean package'
 			}
 		}
