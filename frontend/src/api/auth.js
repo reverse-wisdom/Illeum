@@ -28,8 +28,8 @@ function signout(userData) {
 }
 
 //멤버의 평가목록
-function userEval(userData) {
-  return posts.get('/member/user/evaluation', userData);
+function userEvaluation(userData) {
+  return posts.get(`/member/user/evaluation?uid=${userData}`);
 }
 
 //멤버가 개설한방 목록
@@ -37,4 +37,4 @@ function userClasslist(userData) {
   return posts.get('/member/user/founder', userData);
 }
 
-export { loginUser, registerUser, editUser, signout, checkEmail, logoutUser, userEval, userClasslist };
+export { loginUser, registerUser, editUser, signout, checkEmail, logoutUser, userEvaluation, userClasslist };
