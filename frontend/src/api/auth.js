@@ -27,14 +27,17 @@ function signout(userData) {
   return posts.delete('/member/user/delete', userData);
 }
 
-//멤버의 평가목록
-function userEvaluation(userData) {
+//멤버가 참여한 방목록
+function usePartinClass(userData) {
+  return posts.get(`/member/user/room?uid=${userData}`);
+}
+//멤범의 평가 목록
+function userEvalList(userData) {
   return posts.get(`/member/user/evaluation?uid=${userData}`);
 }
-
 //멤버가 개설한방 목록
 function userClasslist(userData) {
   return posts.get('/member/user/founder', userData);
 }
 
-export { loginUser, registerUser, editUser, signout, checkEmail, logoutUser, userEvaluation, userClasslist };
+export { loginUser, registerUser, editUser, signout, checkEmail, logoutUser, usePartinClass, userClasslist, userEvalList };
