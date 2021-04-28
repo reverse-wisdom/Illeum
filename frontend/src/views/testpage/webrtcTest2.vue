@@ -28,6 +28,7 @@
       <v-btn depressed color="primary" @click="onVideo">비디오 켜기</v-btn>
       <v-btn depressed color="warning" @click="offVideo">비디오 끄기</v-btn>
       <v-btn depressed color="warning" @click="screen">화면공유</v-btn>
+      <v-btn depressed color="warning" @click="capture">화면캡쳐테스트</v-btn>
     </div>
   </div>
 </template>
@@ -46,11 +47,6 @@ export default {
     cdn2.setAttribute('src', 'https://rtcmulticonnection.herokuapp.com/socket.io/socket.io.js');
     cdn2.setAttribute('id', 'cdn2');
     document.body.appendChild(cdn2);
-
-    // let cdn3 = document.createElement('script');
-    // cdn2.setAttribute('src', 'https://cdn.WebRTC-Experiment.com/getScreenId.js');
-    // cdn2.setAttribute('id', 'cdn3');
-    // document.body.appendChild(cdn3);
 
     var left = document.getElementById('drag-left');
     var right = document.getElementById('drag-right');
@@ -75,10 +71,25 @@ export default {
       userName: '',
       connection: null,
       message: '',
-      isShare: false,
     };
   },
   methods: {
+    capture() {
+      var screenVideo = document.querySelector('video');
+      var screenShot = takeSnapshot(screenVideo);
+      console.log(screenShot);
+
+      function takeSnapshot(video) {
+        var canvas = document.createElement('canvas');
+        canvas.width = video.videoWidth || video.clientWidth;
+        canvas.height = video.videoHeight || video.clientHeight;
+
+        var context = canvas.getContext('2d');
+        context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+        return canvas.toDataURL('image/png');
+      }
+    },
     offVideo() {
       let localStream = this.connection.attachStreams[0];
       localStream.mute('video');
@@ -181,33 +192,21 @@ export default {
       };
       this.connection.onstream = function(event) {
         var video = event.mediaElement;
-        console.log(event);
-        // document.querySelector('.videos-container').appendChild(video);
 
         if (event.extra.type == 'cam') {
-          console.log('asdhasdahd');
           document.querySelector('.videos-container').appendChild(video);
+          video.removeAttribute('controls');
         } else {
           document.querySelector('.share-videos-container').appendChild(video);
         }
-
-        // document.body.appendChild(video);
       };
     },
     screen() {
       var ref = this;
 
       console.log(this.connection, '1');
-      // if (!this.isShare) {
-
-      // this.connection.videosContainer = document.querySelector('.share-videos-container');
       this.connection.extra.type = 'share';
       this.connection.extra.typeAlpha = 'share';
-
-      // this.connection.onExtraDataUpdated = function(event) {
-      //   event.extra.type = 'share';
-      //   event.extra.typeAlpha = 'share';
-      // };
 
       this.connection.updateExtraData();
       console.log(this.connection.extra, '바뀐 엑스트라');
@@ -215,9 +214,6 @@ export default {
       this.connection.addStream({
         screen: true,
       });
-
-      this.isShare = true;
-      // }
 
       this.connection.videosContainer = document.querySelector('.share-videos-container');
       console.log('test when open', this.connection);
@@ -241,8 +237,6 @@ export default {
     el1.remove();
     var el2 = document.querySelector('#cdn2');
     el2.remove();
-    // var el3 = document.querySelector('#cdn3');
-    // el3.remove();
   },
 };
 </script>
@@ -326,5 +320,13 @@ body::-webkit-scrollbar {
   width: -webkit-fill-available;
   width: 30%;
   border: 1px solid;
+  /* pointer-events: none; */
+}
+.share-videos-container >>> video {
+  display: inline;
+  width: -webkit-fill-available;
+  width: 80%;
+  border: 1px solid;
+  /* pointer-events: none; */
 }
 </style>

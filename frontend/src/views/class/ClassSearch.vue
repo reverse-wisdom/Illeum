@@ -1,17 +1,19 @@
 <template>
-  <div class="class-search" style="overflow: hidden;">
-    <!-- search -->
-    <div class="box">
-      <!-- <h1 class="title-search" style="">클래스명을 검색하세요!</h1> -->
-      <v-row class="text-center" style="height: 10px">
-        <div class="search-contain">
-          <div class="search_box">
-            <input type="text" placeholder="클래스명을 입력해주세요" />
-            <i class="fa fa-search"></i>
-            <!-- <div>SEARCH</div> -->
+  <div>
+    <div class="class-search" style="overflow: hidden;">
+      <!-- search -->
+      <div class="box">
+        <!-- <h1 class="title-search" style="">클래스명을 검색하세요!</h1> -->
+        <v-row class="text-center" style="height: 10px">
+          <div class="search-contain">
+            <div class="search_box">
+              <input type="text" placeholder="클래스명을 입력해주세요" />
+              <i class="fa fa-search"></i>
+              <!-- <div>SEARCH</div> -->
+            </div>
           </div>
-        </div>
-      </v-row>
+        </v-row>
+      </div>
     </div>
   </div>
 </template>
