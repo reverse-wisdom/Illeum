@@ -73,6 +73,11 @@ public class RoomController {
 	public ResponseEntity<?> findByrid(@RequestParam int rid) {
 		return new ResponseEntity<Room>(roomRepository.findByRid(rid), HttpStatus.OK);
 	}
+	@ApiOperation(value = "room_name으로 방 조회")
+	@GetMapping(path = "/findByRoomName")
+	public ResponseEntity<?> findByRoomName(@RequestParam String roomname) {
+		return new ResponseEntity<Room>(roomRepository.findByRoomName(roomname), HttpStatus.OK);
+	}
 
 	@ApiOperation(value = "방에 참여한 맴버 목록 조회")
 	@GetMapping(path = "/member")
