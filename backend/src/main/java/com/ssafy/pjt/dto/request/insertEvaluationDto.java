@@ -6,11 +6,6 @@ import lombok.Data;
 
 @Data
 public class insertEvaluationDto {
-	private int eid;
-    private int attention;
-    private int particlpation;
-    private int asleep;
-    private int afk;
-    private Date startTime;   
-    private Date endTime;
+	private int uid;
+	private int rid;
 }

@@ -23,13 +23,13 @@ public class Evaluation {
     private Date evalDate;
     
     private int attention;
-    private int particlpation;
+    private int participation;
+    private int distracted;
     private int asleep;
     private int afk;
     
     @CreationTimestamp
-    private Date startTime;
+    private Date attendTime;
     
-    @UpdateTimestamp
-    private Date endTime;
+    private int ranking;
 }
