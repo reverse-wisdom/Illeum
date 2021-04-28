@@ -135,7 +135,7 @@ public class EvaluationController {
         if(evaluationDto.getAsleep() != null)evaluation.setAsleep(evaluationDto.getAsleep());
         if(evaluationDto.getAfk() != null)evaluation.setAfk(evaluationDto.getAfk());
         if(evaluationDto.getAttendTime() != null)evaluation.setAttendTime(evaluationDto.getAttendTime());
-        if(evaluationDto.getRank() != null)evaluation.setRanking(evaluationDto.getRank());
+        if(evaluationDto.getRanking() != null)evaluation.setRanking(evaluationDto.getRanking());
         
     	try {
     		evaluationRepository.save(evaluation);
