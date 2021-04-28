@@ -13,6 +13,7 @@ import ClassTest from '../views/class/ClassTest.vue';
 import ClassSearch from '../views/class/ClassSearch.vue';
 import CreateClass from '../views/class/CreateClass.vue';
 import UserClasslist from '../views/class/UserClasslist.vue';
+import ClassList from '../views/class/ClassList.vue';
 
 //evaluation
 import UserEval from '../views/evaluation/UserEval.vue';
@@ -73,6 +74,11 @@ const routes = [
     path: '/userclasslist',
     name: 'UserClasslist',
     components: { default: UserClasslist, header: Navbar },
+  },
+  {
+    path: '/classList',
+    name: 'ClassList',
+    components: { default: ClassList, header: Navbar },
   },
   //evaluation
   {
