@@ -75,6 +75,7 @@ export default {
       userName: '',
       connection: null,
       message: '',
+      isShare: false,
     };
   },
   methods: {
@@ -135,6 +136,7 @@ export default {
 
       this.connection.socketURL = 'https://rtcmulticonnection.herokuapp.com:443/';
       this.connection.extra.userFullName = this.userName;
+      this.connection.extra.type = 'cam';
       this.connection.sdpConstraints.mandatory = {
         OfferToReceiveAudio: true,
         OfferToReceiveVideo: true,
@@ -145,7 +147,8 @@ export default {
       this.connection.enableLogs = true; // to enable logs
 
       this.connection.openOrJoin(this.roomid);
-      this.connection.videosContainer = document.querySelector('.videos-container');
+      console.log('test when open', this.connection);
+      // this.connection.videosContainer = document.querySelector('.videos-container');
 
       push.create(this.connection.extra.userFullName + '님이 ' + this.roomid + '방에 입장했습니다');
 
@@ -173,70 +176,51 @@ export default {
           ref.appendChatMessage(event, event.extra.userFullName);
           return;
         }
+
+        console.log(this.connection, 'income');
+      };
+      this.connection.onstream = function(event) {
+        var video = event.mediaElement;
+        console.log(event);
+        // document.querySelector('.videos-container').appendChild(video);
+
+        if (event.extra.type == 'cam') {
+          console.log('asdhasdahd');
+          document.querySelector('.videos-container').appendChild(video);
+        } else {
+          document.querySelector('.share-videos-container').appendChild(video);
+        }
+
+        // document.body.appendChild(video);
       };
     },
     screen() {
       var ref = this;
+
       console.log(this.connection, '1');
+      // if (!this.isShare) {
+
+      // this.connection.videosContainer = document.querySelector('.share-videos-container');
+      this.connection.extra.type = 'share';
+      this.connection.extra.typeAlpha = 'share';
+
+      // this.connection.onExtraDataUpdated = function(event) {
+      //   event.extra.type = 'share';
+      //   event.extra.typeAlpha = 'share';
+      // };
+
+      this.connection.updateExtraData();
+      console.log(this.connection.extra, '바뀐 엑스트라');
 
       this.connection.addStream({
         screen: true,
-        oneway: true,
-        streamCallback: function(screenStream) {
-          if (!screenStream) {
-            alert('User did NOT select to share any stream. He clicked "Cancel" button instead.');
-            return;
-          }
-          screenStream.onended = function() {};
-        },
       });
 
-      this.connection.iceServers = [
-        {
-          urls: ['stun:stun.l.google.com:19302', 'stun:stun1.l.google.com:19302', 'stun:stun2.l.google.com:19302', 'stun:stun.l.google.com:19302?transport=udp'],
-        },
-      ];
+      this.isShare = true;
+      // }
 
-      // this.connection.videosContainer = document.querySelector('.share-videos-container');
-      console.log(this.connection, '2');
-
-      getScreenStream(function(screenStream) {
-        var container = document.querySelector('.share-videos-container');
-        var video = document.createElement('video');
-        video.srcObject = screenStream;
-        video.onloadedmetadata = function(e) {
-          video.play();
-        };
-
-        ref.connection.videosContainer.appendChild(video);
-        console.log(ref.connection);
-      });
-
-      function getScreenStream(callback) {
-        if (navigator.getDisplayMedia) {
-          navigator
-            .getDisplayMedia({
-              video: true,
-            })
-            .then((screenStream) => {
-              callback(screenStream);
-            });
-        } else if (navigator.mediaDevices.getDisplayMedia) {
-          navigator.mediaDevices
-            .getDisplayMedia({
-              video: true,
-            })
-            .then((screenStream) => {
-              callback(screenStream);
-            });
-        } else {
-          windowgetScreenId(function(error, sourceId, screen_constraints) {
-            navigator.mediaDevices.getUserMedia(screen_constraints).then(function(screenStream) {
-              callback(screenStream);
-            });
-          });
-        }
-      }
+      this.connection.videosContainer = document.querySelector('.share-videos-container');
+      console.log('test when open', this.connection);
     },
     outRoom() {
       this.connection.getAllParticipants().forEach((participantId) => {
