@@ -98,7 +98,7 @@ export default {
   },
   methods: {
     homeGo() {
-      this.$router.push('/');
+      this.$router.push('/home');
     },
     startGo() {
       this.$router.push('/sign');

@@ -80,7 +80,7 @@ export default new Vuex.Store({
         commit('setName', data.member.name);
         commit('setRole', data.member.role);
 
-        router.push('/');
+        router.push('/home');
       } else {
         Vue.swal({
           icon: 'error',
