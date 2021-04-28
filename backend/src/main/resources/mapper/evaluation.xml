@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.ssafy.pjt.Repository.mapper.EvaluationMapper">
+	<!--방의 맴버 조회 -->
+	<select id="seachEvaluation" parameterType="int"
+		resultType="Evaluation">
+		SELECT *
+		FROM evaluation e
+		RIGHT JOIN entrant t
+		ON e.eid = t.eid
+		JOIN room r
+		ON r.rid = t.rid
+		WHERE e.eid = #{eid}
+		AND (DATE_FORMAT(e.attend_time,'%H:%i:%s') BETWEEN
+		DATE_FORMAT(r.start_time ,'%H:%i:%s') AND DATE_FORMAT(r.end_time
+		,'%H:%i:%s'))
+		AND DATE(NOW()) = DATE(e.attend_time);
+	</select>
+
+
+</mapper>

@@ -56,17 +56,6 @@ public class RoomController {
 	@Autowired
 	RedisTemplate<String, Object> redisTemplate;
 
-	@Autowired
-	private JwtTokenUtil jwtTokenUtil;
-
-	@Autowired
-	private JwtUserDetailsService userDetailsService;
-
-	@Autowired
-	private AuthenticationManager am;
-
-	@Autowired
-	private PasswordEncoder bcryptEncoder;
 
 	@ApiOperation(value = "방  리스트 조회")
 	@GetMapping(path = "/findAll")
@@ -78,6 +67,16 @@ public class RoomController {
 	@GetMapping(path = "/findByUid")
 	public List<Room> findByUid(@RequestParam int uid, @RequestParam String password) {
 		return roomRepository.findByUid(uid);
+	}
+	@ApiOperation(value = "rid로 방 조회")
+	@GetMapping(path = "/findByRid")
+	public ResponseEntity<?> findByrid(@RequestParam int rid) {
+		return new ResponseEntity<Room>(roomRepository.findByRid(rid), HttpStatus.OK);
+	}
+	@ApiOperation(value = "room_name으로 방 조회")
+	@GetMapping(path = "/findByRoomName")
+	public ResponseEntity<?> findByRoomName(@RequestParam String roomname) {
+		return new ResponseEntity<Room>(roomRepository.findByRoomName(roomname), HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "방에 참여한 맴버 목록 조회")
@@ -112,42 +111,13 @@ public class RoomController {
 		return new ResponseEntity<>(list, HttpStatus.OK);
 	}
 
-	@ApiOperation(value = "개설자 uid로 방 조회")
-	@GetMapping(path = "/findByRid")
-	public ResponseEntity<?> findByrid(@RequestParam int rid, @RequestParam String password) {
-		Room room = roomRepository.findByRid(rid);
-		try {
-			if (room.getRoomState().equals("준비")) {
-				new ResponseEntity<String>("준비중입니다.", HttpStatus.OK);
-			} else {
-				if (room.getRoomType().equals("공개")) {
-					return new ResponseEntity<Room>(room, HttpStatus.OK);
-				} else {
-					if (password.equals("")) {
-						password = bcryptEncoder.encode(password);
-						if (room.getRoomPassword().equals(password)) {
-							new ResponseEntity<Room>(room, HttpStatus.OK);
-						} else {
-							new ResponseEntity<String>("비밀번호가 일치하지 안습니다.", HttpStatus.OK);
-						}
-					} else {
-						new ResponseEntity<String>("비밀번호를 입력하세요", HttpStatus.OK);
-					}
-				}
-			}
-		} catch (Exception e) {
-			new ResponseEntity<String>("fail", HttpStatus.BAD_REQUEST);
-		}
-		return new ResponseEntity<Room>(room, HttpStatus.OK);
-	}
-
 	@ApiOperation(value = "방 생성")
 	@Transactional
 	@PostMapping(path = "/insert")
 	public ResponseEntity<?> insertByUid(@RequestBody insertRoomDto insertRoom) {
 		Room room = new Room();
 		if (insertRoom.getRoomType().equals("비공개")) {
-			room.setRoomPassword(bcryptEncoder.encode(insertRoom.getRoomPassword()));
+			room.setRoomPassword(insertRoom.getRoomPassword());
 			room.setRoomType("비공개");
 		} else {
 			room.setRoomPassword(null);
@@ -157,7 +127,7 @@ public class RoomController {
 		room.setRoomName(insertRoom.getRoomName());
 		room.setStartTime(insertRoom.getStartTime());
 		room.setEndTime(insertRoom.getEndTime());
-		room.setRoomState(insertRoom.getRoomState());
+		room.setRoomState("준비");
 
 		try {
 			room = roomRepository.save(room);

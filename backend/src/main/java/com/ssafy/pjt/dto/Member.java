@@ -27,8 +27,7 @@ public class Member {
 
     private String role;
     
-    @ColumnDefault("")
-    private String thumbnail;
+
     
 //    @OneToMany(fetch=FetchType.LAZY, cascade= CascadeType.REMOVE)
 //    @JoinColumn(name="uid")
