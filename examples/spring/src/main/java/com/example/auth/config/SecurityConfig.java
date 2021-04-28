@@ -57,7 +57,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 and().
                     authorizeRequests().
                     antMatchers("/user/**").hasAnyRole("USER", "ADMIN").
-                    
+                and().
+                    authorizeRequests().
+                    antMatchers("/rabbitmq/**").permitAll().   
                     
                 and().
                     authorizeRequests().
