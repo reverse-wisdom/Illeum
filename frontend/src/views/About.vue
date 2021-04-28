@@ -9,7 +9,9 @@
 <script>
 export default {
   methods: {
-    gouserEval() {},
+    gouserEval() {
+      this.$router.push({ name: 'UserEval' });
+    },
     gouserClassLi() {},
   },
 };

@@ -15,6 +15,7 @@ import UserClasslist from '../views/class/UserClasslist.vue';
 
 //evaluation
 import UserEval from '../views/evaluation/UserEval.vue';
+import UserEvaluation from '../views/UserEvaluation.vue';
 // 테스트용 임포트 페이지
 
 import webrtcTest from '../views/testpage/webrtcTest.vue';
@@ -67,6 +68,11 @@ const routes = [
     path: '/usereval',
     name: 'UserEval',
     components: { default: UserEval, header: Navbar },
+  },
+  {
+    path: '/userevaluation',
+    name: 'UserEvaluation',
+    components: { default: UserEvaluation, header: Navbar },
   },
 
   // 테스트용 라우터 세팅
