@@ -49,7 +49,7 @@ pipeline {
              illeum-front:latest'
 
         sh 'docker run -d --name illeum-back \
-            -v /volumes/back_home:/volumes/profile \
+            -v /volumes/back_home:/volumes \
             -v /etc/localtime:/etc/localtime:ro \
             -v /usr/share/zoneinfo/Asia/Seoul:/etc/timezone:ro \
             --network illeum-network \
