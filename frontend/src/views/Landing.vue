@@ -1,142 +1,399 @@
 <template>
-  <div class="box">
-    <div class="box-inner">
-      <div class="slide1">
-        <img src="@/assets/img/class3.png" style="width: 495px; height: 500px" alt="" />
-        <div class="content">
-          <h2>
-            집중
-            <br />
-          </h2>
-        </div>
-      </div>
-      <div class="slide2">
-        <img src="@/assets/img/fatigue.png" style="width: 495px; height: 500px" alt="" />
-        <div class="content">
-          <h2>
-            딴짓
-            <br />
-          </h2>
-        </div>
-      </div>
+  <div id="landing2">
+    <div class="content">
+      <div class="section1">
+        <img src="@/assets/img/finallogo.png" class="logo" alt="logo" />
 
-      <div class="slide3">
-        <img src="@/assets/img/sleep.png" style="width: 495px; height: 500px" alt="" />
-        <div class="content">
-          <h2>졸음</h2>
+        <h1>
+          '일름'이 원격수업의 질을 체계적으로 높이겠습니다
+        </h1>
+        <div class="text-box">
+          <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Beatae qui accusamus tempora esse aliquam in impedit aut placeat sunt cumque animi nemo sapiente fuga, sed obcaecati ducimus nisi
+            sit veritatis?
+          </p>
+        </div>
+        <div class="buttons">
+          <button class="button-guide" @click="homeGo">TEST</button>
+          <button class="button-start" @click="startGo">START</button>
         </div>
       </div>
-
-      <div class="slide4">
-        <img src="@/assets/img/class5.jpg" style="width: 495px; height: 500px" alt="" />
-        <div class="content">
-          <h2>자리비움</h2>
+      <div class="section2">
+        <h2>Lorem ipsum dolor sit, amet consectetur</h2>
+        <div class="text-box">
+          <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Eum velit iste voluptatum, maiores dicta doloribus eius consectetur neque deleniti praesentium voluptates placeat repudiandae
+            assumenda vel sunt reprehenderit veritatis repellat numquam.
+          </p>
         </div>
+        <div class="section2a">
+          <img src="@/assets/img/onlinestudy.jpeg" class="monitor" alt="computer" />
+          <div class="explanation">
+            <div>
+              <h3>출결관리</h3>
+              <p>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim magni veritatis, expedita maiores error.
+              </p>
+            </div>
+            <div>
+              <h3>학습관리</h3>
+              <p>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim magni veritatis, expedita maiores error.
+              </p>
+            </div>
+            <div>
+              <h3>참여도</h3>
+              <p>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim magni veritatis, expedita maiores error.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="section3">
+        <h2>Lorem ipsum dolor sit amet consectetur adipisicing elit</h2>
+        <div class="text-box">
+          <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Officiis ipsum adipisci fugit delectus voluptatum? Distinctio nihil eveniet corrupti vitae ex nemo dolore. Unde saepe,
+            necessitatibus ab iure voluptatum nemo molestiae?
+          </p>
+        </div>
+        <LandingComp></LandingComp>
+      </div>
+      <div class="section4">
+        <h2>AI학습관리</h2>
+        <div class="text-box"><p class="subtitle">Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores ut eveniet ab veniam hic et, distinctio reprehenderit</p></div>
+        <ul class="features">
+          <li>
+            <i class="fa fa-3x fa-address-book"></i>
+            <h3>집중</h3>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium aut,</p>
+          </li>
+          <li>
+            <i class="fa fa-3x fa-address-book"></i>
+            <h3>딴짓</h3>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium aut,</p>
+          </li>
+          <li>
+            <i class="fa fa-3x fa-address-book"></i>
+            <h3>졸음</h3>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium aut,</p>
+          </li>
+          <li>
+            <i class="fa fa-3x fa-address-book"></i>
+            <h3>자리비움</h3>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium aut,</p>
+          </li>
+        </ul>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-
+import LandingComp from '@/views/LandingComp.vue';
 export default {
-  name: 'Landing',
-  components: {},
+  components: {
+    LandingComp,
+  },
+  methods: {
+    homeGo() {
+      this.$router.push('/');
+    },
+    startGo() {
+      this.$router.push('/sign');
+    },
+  },
 };
 </script>
+
 <style scoped>
-@font-face {
-  font-family: 'GmarketSansMedium';
-  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff') format('woff');
-  font-weight: normal;
-  font-style: normal;
+@import url('https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@400;600&display=swap');
+
+:root {
+  --cyan: hsl(171, 66%, 44%);
+  --lightblue: hsl(233, 100%, 69%);
+  --dk-grey-blue: hsl(210, 10%, 33%);
+  --grey-blue: hsl(201, 11%, 66%);
 }
-.box {
-  width: 95vw;
-  height: 50vh;
+
+#landing2 {
+  font-family: 'Bai Jamjuree', sans-serif;
+  margin: 0;
+  padding: 0;
   background-color: #fff;
-  /* float: right; */
-  margin: 10% 0 10% 20%;
-  perspective: 1700px;
-  transform: translateY(10%);
-  transition: all ease 300ms;
-  cursor: pointer;
+  font-size: 15px;
 }
-.box:hover {
-  transform: translateY(0%);
-}
-.box:after {
-  position: absolute;
-  content: '';
-  left: 0;
-  bottom: 30%;
-  opacity: 0;
-  width: 100%;
-  height: 20%;
-  background-color: gray;
-  filter: blur(20px);
-  border-radius: 100%;
-  z-index: -1;
-  transition: all ease 300ms;
-}
-.box:hover:after {
-  bottom: -30%;
-  opacity: 0.35;
-}
-.box-inner {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  transition: all 4s linear;
-  transform-style: preserve-3d;
-}
-.box:hover .box-inner {
-  transform: rotateY(270deg);
-}
-.box-inner {
-  transform: rotateY(45deg);
-}
-.box-inner > div {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  font-size: 45px;
-  text-align: center;
-  border-radius: 4px;
-  overflow: hidden;
-}
-.box .box-inner .content {
-  position: absolute;
-  bottom: 0;
-  height: 80px;
-  width: 32.3vw;
-  background: #00d2ff;
-  margin-left: 33%;
+
+.content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
   text-align: center;
 }
 
-.slide1 {
-  transform: rotateY(90deg) translateZ(34vh);
+.section1 {
+  background-image: url('../assets/img/teacher_edit.png');
+  background-color: rgba(255, 255, 255, 0.1);
+  /* z-index: -1; */
+  /* opacity: 0.5; */
+  background-size: cover;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding-top: 100px;
+  padding-bottom: 50px;
 }
-.slide2 {
-  transform: rotateY(180deg) translateZ(34vh);
+
+.logo {
+  position: relative;
+  /* width: 125px; */
+  /* height: 125px; */
+  margin-bottom: 20px;
 }
-.slide3 {
-  transform: rotateY(270deg) translateZ(34vh);
+
+.text-box {
+  width: 600px;
 }
-.slide4 {
-  transform: rotateY(360deg) translateZ(34vh);
+
+.section1 h1 {
+  color: hsl(210, 10%, 33%);
+  margin-bottom: 5px;
+  font-size: 2.5em;
 }
-.box .box-inner .content h2 {
-  padding-top: 1.5rem;
-  font-size: 2rem;
-  font-weight: bold;
-  color: #fff;
-  font-family: 'GmarketSansMedium';
+
+.section1 p {
+  margin-top: 10px;
+  color: hsl(201, 11%, 66%);
+  font-size: 1.15em;
+  line-height: 1.5em;
 }
-.box .box-inner .content h2 span {
-  font-size: 16px;
-  color: #f44336;
+
+.buttons {
+  display: flex;
+  flex-direction: row;
+  column-gap: 15px;
+  padding-top: 15px;
+}
+
+.button-guide {
+  background-color: hsl(171, 66%, 44%);
+  color: white;
+  border-radius: 30px;
+  letter-spacing: 3px;
+  border: none;
+  width: 175px;
+  height: 40px;
+  font-size: 1em;
+  font-family: 'Bai Jamjuree', sans-serif;
+  cursor: pointer;
+  box-shadow: 0px 2px 0px hsl(171, 66%, 35%);
+}
+
+.button-guide:hover {
+  box-shadow: 0px 2px 5px hsl(171, 66%, 35%);
+  letter-spacing: 3px;
+}
+
+.button-start {
+  background-color: hsl(233, 100%, 69%);
+  color: white;
+  border-radius: 30px;
+  border: none;
+  width: 175px;
+  height: 40px;
+  font-size: 1em;
+  font-family: 'Bai Jamjuree', sans-serif;
+  cursor: pointer;
+  box-shadow: 0px 2px 0px hsl(233, 45%, 43%);
+  letter-spacing: 3px;
+}
+
+.button-start:hover {
+  box-shadow: 0px 2px 5px hsl(233, 45%, 43%);
+  letter-spacing: 3px;
+}
+
+.section2 {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding-top: 50px;
+}
+
+.section2a {
+  text-align: left;
+  line-height: 1.5em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 30px;
+  margin-right: 350px;
+}
+
+.monitor {
+  height: 550px;
+  margin-top: 30px;
+}
+
+.explanation {
+  margin-left: 100px;
+  margin-top: -30px;
+  width: 325px;
+}
+
+h2 {
+  color: hsl(210, 10%, 33%);
+  font-size: 2em;
+}
+
+.section2 h3 {
+  color: hsl(210, 10%, 33%);
+  font-size: 1.5em;
+  padding-top: 20px;
+}
+
+.section2 p {
+  margin-top: 10px;
+  color: hsl(201, 11%, 66%);
+  font-size: 1em;
+  line-height: 2em;
+}
+
+.section3 {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin-top: 100px;
+}
+
+.section3 p {
+  margin-top: 0px;
+  color: hsl(201, 11%, 66%);
+  font-size: 1em;
+  line-height: 2em;
+}
+
+.tablet {
+  margin-top: 70px;
+  width: 800px;
+}
+
+.section4 {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin-top: 50px;
+}
+
+.subtitle {
+  margin-top: -10px;
+  color: var(--grey-blue);
+  font-size: 1em;
+  line-height: 2em;
+}
+
+.features {
+  padding: 0;
+  margin: 0;
+  display: flex;
+  align-items: flex-start;
+  margin-top: 30px;
+  justify-content: center;
+}
+
+.features h3 {
+  color: hsl(210, 10%, 33%);
+  font-size: 1.5em;
+  padding-top: 20px;
+}
+.features li {
+  list-style-type: none;
+  width: 330px;
+  margin: 0 15px;
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  flex-direction: column;
+}
+
+.blacklist {
+  height: 35px;
+}
+
+.fa .fa-address-book {
+  height: 50px;
+}
+
+.text {
+  height: 35px;
+}
+
+.features p {
+  line-height: 2em;
+  margin-top: 0px;
+  color: hsl(201, 11%, 66%);
+  font-size: 1em;
+}
+
+.companies {
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  margin-top: 70px;
+}
+
+.companies li {
+  list-style-type: none;
+  width: 130px;
+  height: 100px;
+  margin: 0 50px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.companies img {
+  position: relative;
+}
+
+.section5 {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  flex-wrap: wrap;
+  margin-top: 50px;
+  margin-bottom: 100px;
+}
+
+.section5 p {
+  margin-top: 0px;
+  color: hsl(201, 11%, 66%);
+  font-size: 1em;
+  line-height: 2em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  flex-wrap: wrap;
+}
+
+.section5 div {
+  margin-top: 30px;
 }
 </style>
