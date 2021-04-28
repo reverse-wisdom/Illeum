@@ -1,7 +1,9 @@
 <template>
   <div id="user-eval">
     <div class="user-evaldata">
-      <header>{{ this.$store.state.name }}의 평가</header>
+      <v-alert type="info" elevation="3" color="#304FFE" style="margin-top:10%; width:60vw;">
+        <header>{{ this.$store.state.name }}의 평가</header>
+      </v-alert>
       <input type="radio" name="slider" checked id="attend" />
       <input type="radio" name="slider" id="learn" />
       <input type="radio" name="slider" id="partin" />
@@ -51,7 +53,7 @@ export default {
 }
 #user-eval {
   overflow: hidden;
-  margin-top: 0;
+  /* margin-top: 0; */
   padding: 0 20px;
 }
 ::selection {
@@ -60,7 +62,7 @@ export default {
 .user-evaldata {
   max-width: 700px;
   width: 100%;
-  margin: 200px auto;
+  margin: auto;
   padding: 25px 30px 30px 30px;
   border-radius: 5px;
   background: #fff;
@@ -112,7 +114,7 @@ nav .slider {
   bottom: 0;
   z-index: 0;
   border-radius: 5px;
-  background: #4b3fed;
+  background: #304ffe;
   transition: all 0.3s ease;
 }
 input[type='radio'] {

@@ -44,7 +44,7 @@
             </div>
             <div class="field btn">
               <div class="btn-layer"></div>
-              <input type="submit" value="SIGN UP" @click="signup" />
+              <input type="text" value="SIGN UP" @click="signup" />
             </div>
           </form>
         </div>

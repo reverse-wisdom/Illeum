@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Landing from '../views/Landing.vue';
+import Landing2 from '../views/Landing2.vue';
 import About from '../views/About.vue';
 import Navbar from '../components/layout/Navbar.vue';
 
@@ -36,6 +37,11 @@ const routes = [
     path: '/landing',
     name: 'Landing',
     components: { default: Landing },
+  },
+  {
+    path: '/landing2',
+    name: 'Landing2',
+    components: { default: Landing2 },
   },
   {
     path: '/sign',
