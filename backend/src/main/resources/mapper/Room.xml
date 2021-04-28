@@ -5,7 +5,7 @@
 	namespace="com.ssafy.pjt.Repository.mapper.RoomMapper">
 	<!--방의 맴버 조회-->
 	<select id="roomjoinMemeber" parameterType="int" resultType="map">
-		select r.rid, e.eid, m.uid, m.email, m.name, m.role, m.thumbnail
+		select r.rid, m.uid, m.email, m.name, m.role
 		from room r join entrant e
 		on r.rid = e.rid
 		right join member m
@@ -15,7 +15,7 @@
 	
 	<!--방의 평가 목록 조회   -->
 	<select id="roomJoinEvaluation" parameterType="int" resultType="map">
-		select r.rid, m.uid,m.name, r.room_name, ev.vid, ev.eval_date, ev.attention, ev.participation, ev.distracted, ev.asleep, ev.afk, ev.start_time, ev.end_time
+		select r.rid, m.uid, m.name, r.room_name, (select m.name from member m where m.uid = r.uid) as founder, ev.vid, ev.eval_date, ev.attention, ev.participation, ev.distracted, ev.asleep, ev.afk, ev.attend_time, ev.ranking
 		from room r join entrant e
 		on r.rid = e.rid
 		right join evaluation ev

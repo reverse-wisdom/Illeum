@@ -13,9 +13,10 @@ public class updateEvaluationDto {
 	private Integer vid;
 	private Integer eid;
 	private Integer attention;
-	private Integer particlpation;
+	private Integer participation;
+	private Integer distracted;
 	private Integer asleep;
 	private Integer afk;
-	private Date startTime;
-	private Date endTime;
+	private Date attendTime;
+	private Integer ranking;
 }
