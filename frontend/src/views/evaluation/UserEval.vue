@@ -11,7 +11,7 @@
       <h2>show evaluation</h2>
       <h2>{{ date }}</h2>
       <EvalPieChart :learnData="learnData" :key="change" />
-      <EvalRadarchart :averageData="averageData" />
+      <EvalRadarchart :averageData="averageData" :key="renderKey" />
     </v-row>
   </div>
 </template>
@@ -89,6 +89,7 @@ export default {
       per4: 0,
       per5: 0,
       change: 0,
+      renderKey: -1,
 
       // change2: 1,
     };
@@ -113,7 +114,6 @@ export default {
     classNameFetch() {
       this.roomName = [];
       for (var i = 0; i < this.eval.length; i++) {
-        console.log(this.eval[i]);
         if (this.eval[i].eval_date.slice(0, 10) === this.date && !this.roomName.includes(this.eval[i].room_name)) {
           this.roomName.push(this.eval[i].room_name);
         }
@@ -129,21 +129,25 @@ export default {
       }
     },
     async showEvaluation(selected) {
+      this.per1 = 0;
+      this.per2 = 0;
+      this.per3 = 0;
+      this.per4 = 0;
+      this.per5 = 0;
       // console.log(selected);
+      this.evalcheck = true;
+
+      console.log(this.averageData);
       for (var i = 0; i < this.eval.length; i++) {
         if (this.eval[i].room_name === selected) {
-          this.evalcheck = true;
           this.learnData[0].per = this.eval[i].attention;
           this.learnData[1].per = this.eval[i].distracted;
           this.learnData[2].per = this.eval[i].asleep;
           this.learnData[3].per = this.eval[i].afk;
           const { data } = await fetchRoomname(this.eval[i].room_name);
           const roomPartinUser = data.rid;
-          console.log(roomPartinUser);
 
           const res = await evaluateList(roomPartinUser);
-          console.log(data);
-
           for (var i = 0; i < res.data.length; i++) {
             this.per1 += res.data[i].attention;
             this.per2 += res.data[i].distracted;
@@ -158,9 +162,9 @@ export default {
           this.averageData[3].per = (this.per4 / res.data.length).toFixed(1);
           this.averageData[4].per = (this.per5 / res.data.length).toFixed(1);
         }
-        console.log(this.averageData);
       }
       this.change++;
+      this.renderKey++;
     },
   },
 };
