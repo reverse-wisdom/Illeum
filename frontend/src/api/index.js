@@ -3,13 +3,13 @@ import { setInterceptors } from './common/interceptors';
 
 function createInstance() {
   return axios.create({
-    baseURL: 'http://k4d106.p.ssafy.io:8080/api',
+    baseURL: 'https:/api',
   });
 }
 
 function createInstanceWithAuth(url) {
   const instance = axios.create({
-    baseURL: 'http://k4d106.p.ssafy.io:8080/api',
+    baseURL: 'https:/api',
   });
   return setInterceptors(instance);
 }
