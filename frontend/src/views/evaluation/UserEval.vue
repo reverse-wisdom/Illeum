@@ -11,16 +11,20 @@
       <h2>show evaluation</h2>
       <h2>{{ date }}</h2>
       <EvalPieChart :learnData="learnData" :key="change" />
+      <EvalRadarchart :averageData="averageData" />
     </v-row>
   </div>
 </template>
 
 <script>
 import { userEvalList } from '@/api/auth';
+import { fetchRoomname, evaluateList } from '@/api/class';
 import EvalPieChart from '@/views/components/EvalPieChart';
+import EvalRadarchart from '@/views/components/EvalRadarchart';
 export default {
   components: {
     EvalPieChart,
+    EvalRadarchart,
   },
 
   data() {
@@ -36,26 +40,57 @@ export default {
       // arrayDates: ['2021-04-27', '2021-04-23'],
       arrayDates: [],
       roomName: [],
+      averageEachList: [],
       evalcheck: false,
-      learnData: [
+      averageData: [
         {
           data: '집중',
-          per: 12,
+          per: 0,
         },
         {
           data: '딴짓',
-          per: 12,
+          per: 0,
         },
         {
           data: '졸음',
-          per: 12,
+          per: 0,
         },
         {
           data: '자리비움',
-          per: 12,
+          per: 0,
+        },
+        {
+          data: '참여도',
+          per: 0,
         },
       ],
+
+      learnData: [
+        {
+          data: '집중',
+          per: 0,
+        },
+        {
+          data: '딴짓',
+          per: 0,
+        },
+        {
+          data: '졸음',
+          per: 0,
+        },
+        {
+          data: '자리비움',
+          per: 0,
+        },
+      ],
+      per1: 0,
+      per2: 0,
+      per3: 0,
+      per4: 0,
+      per5: 0,
       change: 0,
+
+      // change2: 1,
     };
   },
   async created() {
@@ -93,7 +128,7 @@ export default {
         }
       }
     },
-    showEvaluation(selected) {
+    async showEvaluation(selected) {
       // console.log(selected);
       for (var i = 0; i < this.eval.length; i++) {
         if (this.eval[i].room_name === selected) {
@@ -102,8 +137,28 @@ export default {
           this.learnData[1].per = this.eval[i].distracted;
           this.learnData[2].per = this.eval[i].asleep;
           this.learnData[3].per = this.eval[i].afk;
-          // console.log(this.eval[i].attention, this.eval[i].distracted, this.eval[i].asleep, this.eval[i].afk);
+          const { data } = await fetchRoomname(this.eval[i].room_name);
+          const roomPartinUser = data.rid;
+          console.log(roomPartinUser);
+
+          const res = await evaluateList(roomPartinUser);
+          console.log(data);
+
+          for (var i = 0; i < res.data.length; i++) {
+            this.per1 += res.data[i].attention;
+            this.per2 += res.data[i].distracted;
+            this.per3 += res.data[i].asleep;
+            this.per4 += res.data[i].afk;
+            this.per5 += res.data[i].participation;
+          }
+
+          this.averageData[0].per = (this.per1 / res.data.length).toFixed(1);
+          this.averageData[1].per = (this.per2 / res.data.length).toFixed(1);
+          this.averageData[2].per = (this.per3 / res.data.length).toFixed(1);
+          this.averageData[3].per = (this.per4 / res.data.length).toFixed(1);
+          this.averageData[4].per = (this.per5 / res.data.length).toFixed(1);
         }
+        console.log(this.averageData);
       }
       this.change++;
     },

@@ -3,7 +3,7 @@ import { Radar } from 'vue-chartjs'; // npm vue-chart.js 기반 차트 컴포넌
 
 export default {
   extends: Radar,
-  props: ['sampleData'],
+  props: ['averageData'],
   data() {
     return {
       chartData: {
@@ -12,7 +12,7 @@ export default {
         labels: [],
         datasets: [
           {
-            label: 'Data One',
+            label: '평균비교',
             backgroundColor: [],
             data: [],
             fill: true,
@@ -29,9 +29,9 @@ export default {
   },
 
   created() {
-    for (let i = 0; i < this.sampleData.length; i++) {
-      this.chartData.labels.push(this.sampleData[i].data);
-      this.chartData.datasets[0].data.push(this.sampleData[i].score);
+    for (let i = 0; i < this.averageData.length; i++) {
+      this.chartData.labels.push(this.averageData[i].data);
+      this.chartData.datasets[0].data.push(this.averageData[i].per);
     }
   },
   mounted() {
