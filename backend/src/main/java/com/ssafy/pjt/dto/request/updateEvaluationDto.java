@@ -1,11 +1,6 @@
 package com.ssafy.pjt.dto.request;
 
-import java.sql.Date;
-
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-
-import io.swagger.annotations.ApiParam;
+import java.util.Date;
 import lombok.Data;
 
 @Data
