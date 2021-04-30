@@ -144,8 +144,8 @@ export default {
           this.learnData[1].per = this.eval[i].distracted;
           this.learnData[2].per = this.eval[i].asleep;
           this.learnData[3].per = this.eval[i].afk;
-          const { data } = await fetchRoomname(this.eval[i].room_name);
-          const roomPartinUser = data.rid;
+          // const { data } = await fetchRoomname(this.eval[i].room_name);
+          // const roomPartinUser = data.rid;
 
           // const res = await evaluateList(roomPartinUser);
           // for (var i = 0; i < res.data.length; i++) {
