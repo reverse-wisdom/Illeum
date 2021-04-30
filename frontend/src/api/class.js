@@ -23,6 +23,10 @@ function createClass(classData) {
 function updateClass(classData) {
   return posts.put('/room/updateByRid', classData);
 }
+//room_name으로 방 조회
+function fetchRoomname(roomName) {
+  return posts.get(`/room/findByRoomName?roomName=${roomName}`);
+}
 //방 삭제
 function deleteClass(classData) {
   return posts.delete('/room/deleteByRid', classData);
