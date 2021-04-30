@@ -7,7 +7,7 @@ function classAll(classData) {
 
 //room_name으로 방 조회 (3. WebRTC 방조회)
 function fetchRoomname(roomName) {
-  return posts.get(`/room/findByRoomName?roomname=${roomName}`);
+  return posts.get(`/room/findByRoomName?roomName=${roomName}`);
 }
 
 //방 참여 로직
