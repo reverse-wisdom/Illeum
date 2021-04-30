@@ -147,20 +147,20 @@ export default {
           const { data } = await fetchRoomname(this.eval[i].room_name);
           const roomPartinUser = data.rid;
 
-          const res = await evaluateList(roomPartinUser);
-          for (var i = 0; i < res.data.length; i++) {
-            this.per1 += res.data[i].attention;
-            this.per2 += res.data[i].distracted;
-            this.per3 += res.data[i].asleep;
-            this.per4 += res.data[i].afk;
-            this.per5 += res.data[i].participation;
-          }
+          // const res = await evaluateList(roomPartinUser);
+          // for (var i = 0; i < res.data.length; i++) {
+          //   this.per1 += res.data[i].attention;
+          //   this.per2 += res.data[i].distracted;
+          //   this.per3 += res.data[i].asleep;
+          //   this.per4 += res.data[i].afk;
+          //   this.per5 += res.data[i].participation;
+          // }
 
-          this.averageData[0].per = (this.per1 / res.data.length).toFixed(1);
-          this.averageData[1].per = (this.per2 / res.data.length).toFixed(1);
-          this.averageData[2].per = (this.per3 / res.data.length).toFixed(1);
-          this.averageData[3].per = (this.per4 / res.data.length).toFixed(1);
-          this.averageData[4].per = (this.per5 / res.data.length).toFixed(1);
+          // this.averageData[0].per = (this.per1 / res.data.length).toFixed(1);
+          // this.averageData[1].per = (this.per2 / res.data.length).toFixed(1);
+          // this.averageData[2].per = (this.per3 / res.data.length).toFixed(1);
+          // this.averageData[3].per = (this.per4 / res.data.length).toFixed(1);
+          // this.averageData[4].per = (this.per5 / res.data.length).toFixed(1);
         }
       }
       this.change++;
