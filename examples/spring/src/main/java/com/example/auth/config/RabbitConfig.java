@@ -1,36 +1,53 @@
 package com.example.auth.config;
 
+import org.springframework.amqp.core.AmqpAdmin;
+import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
+import org.springframework.amqp.core.DirectExchange;
 import org.springframework.amqp.core.Queue;
-import org.springframework.amqp.core.TopicExchange;
+import org.springframework.amqp.rabbit.connection.ConnectionFactory;
+import org.springframework.amqp.rabbit.core.RabbitAdmin;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+
 @Configuration
 public class RabbitConfig {
-	@Bean
-	Queue workerOneQueue() {
-		return new Queue("workerOne", false);
-	}
 
+	@Autowired
+	ConnectionFactory connectionFactory;
+	
+	@Value("amq.direct")
+	String exchange;
+	
+	@Value("queue-name")
+	String queueName;
+	
+	@Value("routing-key")
+	String routingkey;
+	
 	@Bean
-	Queue workerTwoQueue() {
-		return new Queue("workerTwo", false);
+	Queue queue() {
+		return new Queue(queueName, true);
 	}
-
+	
 	@Bean
-	TopicExchange topicExchange() {
-		return new TopicExchange("task-exchange");
+	DirectExchange exchange() {
+		return new DirectExchange(exchange);
 	}
-
+	
 	@Bean
-	Binding workerOneBinding(Queue workerOneQueue, TopicExchange topicExchange) {
-		return BindingBuilder.bind(workerOneQueue).to(topicExchange).with("worker.one");
+	Binding binding(Queue queue, DirectExchange exchange) {
+		return BindingBuilder.bind(queue).to(exchange).with(routingkey);
 	}
-
+	
 	@Bean
-	Binding workerTwoBinding(Queue workerTwoQueue, TopicExchange topicExchange) {
-		return BindingBuilder.bind(workerTwoQueue).to(topicExchange).with("worker.two");
+	public AmqpTemplate template(ConnectionFactory connectionFactory) {
+		final RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
+		return rabbitTemplate;
 	}
 }
