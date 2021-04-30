@@ -20,12 +20,26 @@ pipeline {
 				sh 'mvn -B -DskipTests -f ./backend/pom.xml clean package'
 			}
 		}
-		stage('Docker Build') {
-			agent any
-			steps {
-				sh 'docker build -t illeum-front:latest ./frontend'
-				sh 'docker build -t illeum-back:latest ./backend'
-				sh 'docker build -t illeum-AI:latest ./AI'
+		stage('Parallel Docker Build') {
+			parallel {
+				stage('Front Docker Build'){
+					agent any
+					steps {
+						sh 'docker build -t illeum-front:latest ./frontend'
+					}
+				}
+				stage('Backend Docker Build'){
+					agent any
+					steps {
+						sh 'docker build -t illeum-back:latest ./backend'
+					}
+				}
+				stage('AI Docker Build'){
+					agent any
+					steps {
+						sh 'docker build -t illeum-AI:latest ./AI'
+					}
+				}
 			}
 		}
 		stage('Docker Container rm') {
