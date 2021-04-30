@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="class-name">
-      <h2>{{ this.$route.query.roomName }}</h2>
+      <h2>{{ this.$route.query.room_name }}</h2>
     </div>
     <div class="drag-container">
       <div class="panel-one" id="drag-left">
@@ -48,10 +48,9 @@ export default {
   },
   created() {
     const name = 'string'; // 지금 user name은 임시고정 값!!!!!
-    const roomName = this.$route.query.roomName;
-    this.roomid = roomName;
+    const room_name = this.$route.query.room_name;
+    this.roomid = room_name;
     this.userName = name;
-    console.log(roomName);
   },
   mounted() {
     let cdn1 = document.createElement('script');

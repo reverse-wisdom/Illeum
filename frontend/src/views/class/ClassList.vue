@@ -5,7 +5,7 @@
       :headers="headers"
       :items="rooms"
       :items-per-page="5"
-      item-key="roomName"
+      item-key="room_name"
       class="elevation-1"
       @click:row="detailClass"
       :footer-props="{
@@ -28,11 +28,11 @@ export default {
         {
           text: '방제목',
           align: 'start',
-          value: 'roomName',
+          value: 'room_name',
         },
-        { text: '시작시간', value: 'startTime' },
-        { text: '방상태', value: 'roomState' },
-        { text: '공개/비공개', value: 'roomType' },
+        { text: '시작시간', value: 'start_time' },
+        { text: '방상태', value: 'room_state' },
+        { text: '공개/비공개', value: 'room_type' },
       ],
       rooms: [],
     };
@@ -40,7 +40,7 @@ export default {
   async created() {
     const { data } = await classAll();
     for (let index = 0; index < data.length; index++) {
-      if (data[index].roomState != '종료') {
+      if (data[index].room_state != '종료') {
         this.rooms.push(data[index]);
       }
     }
@@ -62,7 +62,7 @@ export default {
       var rid = value.rid;
       var insertInfo = { uid: uid, rid: rid };
 
-      if (value.roomType == '비공개') {
+      if (value.room_type == '비공개') {
         const { value: room_password } = await this.$swal({
           icon: 'question',
           title: '비밀번호를 입력해 주세요',
@@ -70,7 +70,7 @@ export default {
           showCancelButton: true,
         });
         if (room_password != undefined) {
-          if (room_password != value.roomPassword) {
+          if (room_password != value.room_password) {
             this.$swal({
               icon: 'error',
               title: '방비밀번호가 일치하지 않습니다.!!',
@@ -78,14 +78,14 @@ export default {
           } else {
             const { data } = await insertRoom(insertInfo);
             if (data != null) {
-              this.$router.push({ name: 'Class', query: { roomName: value.roomName } });
+              this.$router.push({ name: 'Class', query: { room_name: value.room_name } });
             }
           }
         }
       } else {
         const { data } = await insertRoom(insertInfo);
         if (data != null) {
-          this.$router.push({ name: 'Class', query: { roomName: value.roomName } });
+          this.$router.push({ name: 'Class', query: { room_name: value.room_name } });
         }
       }
     },
