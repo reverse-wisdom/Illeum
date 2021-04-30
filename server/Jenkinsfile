@@ -20,7 +20,7 @@ pipeline {
 				sh 'mvn -B -DskipTests -f ./backend/pom.xml clean package'
 			}
 		}
-		stage('Parallel Docker Build') {
+		stage('Docker Build') {
 			parallel {
 				stage('Front Docker Build'){
 					agent any
