@@ -15,7 +15,7 @@
 		select  r.rid, r.uid, m.name as founder, r.room_name, r.room_password, r.start_time, r.end_time, r.room_state, r.room_type
 		from room r join member m
 		on r.uid = m.uid
-		where r.room_name = #{roomname};
+		where r.room_name = #{roomName};
 	</select>
 	<!--방의 맴버 조회-->
 	<select id="roomjoinMemeber" parameterType="int" resultType="map">
