@@ -11,7 +11,7 @@
       <h2>show evaluation</h2>
       <h2>{{ date }}</h2>
       <EvalPieChart :learnData="learnData" :key="change" />
-      <EvalRadarchart :averageData="averageData" :key="renderKey" />
+      <EvalRadarchart :learnData="learnData" :averageData="averageData" :key="renderKey" />
     </v-row>
   </div>
 </template>
@@ -40,7 +40,7 @@ export default {
       // arrayDates: ['2021-04-27', '2021-04-23'],
       arrayDates: [],
       roomName: [],
-      averageEachList: [],
+
       evalcheck: false,
       averageData: [
         {
@@ -82,6 +82,10 @@ export default {
           data: '자리비움',
           per: 0,
         },
+        {
+          data: '참여도',
+          per: 0,
+        },
       ],
       per1: 0,
       per2: 0,
@@ -90,8 +94,6 @@ export default {
       per5: 0,
       change: 0,
       renderKey: -1,
-
-      // change2: 1,
     };
   },
   async created() {
@@ -103,6 +105,7 @@ export default {
       this.arrayDates.push(eval_date);
     }
     this.eval = data;
+    console.log(this.eval);
     this.items = [];
     this.evalcheck = false;
   },
@@ -144,25 +147,28 @@ export default {
           this.learnData[1].per = this.eval[i].distracted;
           this.learnData[2].per = this.eval[i].asleep;
           this.learnData[3].per = this.eval[i].afk;
-          // const { data } = await fetchRoomname(this.eval[i].room_name);
-          // const roomPartinUser = data.rid;
-
-          // const res = await evaluateList(roomPartinUser);
-          // for (var i = 0; i < res.data.length; i++) {
-          //   this.per1 += res.data[i].attention;
-          //   this.per2 += res.data[i].distracted;
-          //   this.per3 += res.data[i].asleep;
-          //   this.per4 += res.data[i].afk;
-          //   this.per5 += res.data[i].participation;
-          // }
-
-          // this.averageData[0].per = (this.per1 / res.data.length).toFixed(1);
-          // this.averageData[1].per = (this.per2 / res.data.length).toFixed(1);
-          // this.averageData[2].per = (this.per3 / res.data.length).toFixed(1);
-          // this.averageData[3].per = (this.per4 / res.data.length).toFixed(1);
-          // this.averageData[4].per = (this.per5 / res.data.length).toFixed(1);
+          this.learnData[4].per = this.eval[i].participation;
+          const { data } = await fetchRoomname(this.eval[i].room_name);
+          console.log(data);
+          const roomPartinUser = data[0].rid;
+          console.log(roomPartinUser);
+          const res = await evaluateList(roomPartinUser);
+          for (var j = 0; j < res.data.length; j++) {
+            this.per1 += res.data[j].attention;
+            this.per2 += res.data[j].distracted;
+            this.per3 += res.data[j].asleep;
+            this.per4 += res.data[j].afk;
+            this.per5 += res.data[j].participation;
+          }
+          //소수둘째자리에서 반올림해서 소수첫째자리까지 보여줌
+          this.averageData[0].per = (this.per1 / res.data.length).toFixed(1);
+          this.averageData[1].per = (this.per2 / res.data.length).toFixed(1);
+          this.averageData[2].per = (this.per3 / res.data.length).toFixed(1);
+          this.averageData[3].per = (this.per4 / res.data.length).toFixed(1);
+          this.averageData[4].per = (this.per5 / res.data.length).toFixed(1);
         }
       }
+
       this.change++;
       this.renderKey++;
     },

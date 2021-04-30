@@ -31,7 +31,10 @@ function deleteClass(classData) {
 function getStudents(studentData) {
   return posts.get('/room/member', studentData);
 }
-
+//room_name으로 방 조회
+function fetchRoomname(roomName) {
+  return posts.get(`/room/findByRoomName?roomName=${roomName}`);
+}
 //방에 참여한 멤버의 평가 목록 조회
 function evaluateList(roomId) {
   return posts.get(`/room/evaluation?rid=${roomId}`);
