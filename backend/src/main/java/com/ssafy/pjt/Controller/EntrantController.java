@@ -133,7 +133,7 @@ public class EntrantController {
     
     @ApiOperation(value = "참가자 수정")
     @Transactional
-    @PutMapping(path="/updateByRid")
+    @PutMapping(path="/updateByEid")
     public ResponseEntity<?> updateTheRoom(@RequestBody Entrant entranDto) {
     	Entrant entrant = entrantRepository.findByEid(entranDto.getEid());
     	
