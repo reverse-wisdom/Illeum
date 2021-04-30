@@ -31,6 +31,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -59,8 +60,12 @@ public class RoomController {
 
 	@ApiOperation(value = "방  리스트 조회")
 	@GetMapping(path = "/findAll")
-	public Iterable<Room> findAll() {
-		return roomRepository.findAll();
+	public ResponseEntity<?> findAll() {
+		try {
+			return new ResponseEntity<>(roomMapper.roomAll(), HttpStatus.OK);
+		} catch (SQLException e) {
+			return new ResponseEntity<String>("fail", HttpStatus.BAD_REQUEST);
+		}
 	}
 
 	@ApiOperation(value = "개설자 uid로 방 조회")
@@ -68,6 +73,7 @@ public class RoomController {
 	public List<Room> findByUid(@RequestParam int uid, @RequestParam String password) {
 		return roomRepository.findByUid(uid);
 	}
+	
 	@ApiOperation(value = "rid로 방 조회")
 	@GetMapping(path = "/findByRid")
 	public ResponseEntity<?> findByrid(@RequestParam int rid) {
@@ -75,8 +81,12 @@ public class RoomController {
 	}
 	@ApiOperation(value = "room_name으로 방 조회")
 	@GetMapping(path = "/findByRoomName")
-	public ResponseEntity<?> findByRoomName(@RequestParam String roomname) {
-		return new ResponseEntity<Room>(roomRepository.findByRoomName(roomname), HttpStatus.OK);
+	public ResponseEntity<?> findByRoomName(@RequestParam String roomName) {
+		try {
+			return new ResponseEntity<>(roomMapper.roomName(roomName), HttpStatus.OK);
+		} catch (SQLException e) {
+			return new ResponseEntity<String>("fail", HttpStatus.BAD_REQUEST);
+		}
 	}
 
 	@ApiOperation(value = "방에 참여한 맴버 목록 조회")
@@ -127,7 +137,7 @@ public class RoomController {
 		room.setRoomName(insertRoom.getRoomName());
 		room.setStartTime(insertRoom.getStartTime());
 		room.setEndTime(insertRoom.getEndTime());
-		room.setRoomState("준비");
+		room.setRoomState("진행");
 
 		try {
 			room = roomRepository.save(room);
