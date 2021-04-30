@@ -3,7 +3,7 @@ import { Radar } from 'vue-chartjs'; // npm vue-chart.js 기반 차트 컴포넌
 
 export default {
   extends: Radar,
-  props: ['averageData'],
+  props: ['learnData', 'averageData'],
   data() {
     return {
       chartData: {
@@ -12,7 +12,19 @@ export default {
         labels: [],
         datasets: [
           {
-            label: '평균비교',
+            label: '내점수',
+            backgroundColor: [],
+            data: [],
+            fill: true,
+            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+            borderColor: 'rgb(54, 162, 235)',
+            pointBackgroundColor: 'rgb(54, 162, 235)',
+            pointBorderColor: '#fff',
+            pointHoverBackgroundColor: '#fff',
+            pointHoverBorderColor: 'rgb(54, 162, 235)',
+          },
+          {
+            label: '평균',
             backgroundColor: [],
             data: [],
             fill: true,
@@ -31,7 +43,12 @@ export default {
   created() {
     for (let i = 0; i < this.averageData.length; i++) {
       this.chartData.labels.push(this.averageData[i].data);
-      this.chartData.datasets[0].data.push(this.averageData[i].per);
+      this.chartData.datasets[1].data.push(this.averageData[i].per);
+    }
+    for (let i = 0; i < this.learnData.length; i++) {
+      // this.chartData.labels.push(this.learnData[i].data);
+
+      this.chartData.datasets[0].data.push(this.learnData[i].per);
     }
   },
   mounted() {

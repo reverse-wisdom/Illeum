@@ -18,7 +18,7 @@ function getStudents(studentData) {
 }
 //room_name으로 방 조회
 function fetchRoomname(roomName) {
-  return posts.get(`/room/findByRoomName?roomname=${roomName}`);
+  return posts.get(`/room/findByRoomName?roomName=${roomName}`);
 }
 //방에 참여한 멤버의 평가 목록 조회
 function evaluateList(roomId) {
