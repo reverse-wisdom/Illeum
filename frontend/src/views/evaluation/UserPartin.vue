@@ -4,15 +4,25 @@
     <v-row justify="center">
       <v-date-picker v-model="date" @click:date="classNameFetch" :allowed-dates="allowedDates" class="mt-4" min="1900-04-01" max="2100-10-30"></v-date-picker>
       <v-col class="d-flex" cols="12" sm="6">
-        <v-select :items="items" :label="date" solo @change="showEvaluation"></v-select>
+        <v-select :items="items" :label="date" solo @change="showPartin"></v-select>
       </v-col>
     </v-row>
-    <v-row v-if="evalcheck">
-      <h2>show evaluation</h2>
+
+    <div>
+      <h2>show participation</h2>
       <h2>{{ date }}</h2>
-      <EvalPieChart :learnData="learnData" :key="change" />
-      <EvalRadarchart :learnData="learnData" :averageData="averageData" :key="renderKey" />
-    </v-row>
+    </div>
+
+    <div>
+      <p>
+        출석왕
+        <span>{{ firstUser }}</span>
+      </p>
+      <p>
+        채팅참여왕
+        <span>{{ maxUser }}</span>
+      </p>
+    </div>
   </div>
 </template>
 
@@ -40,60 +50,11 @@ export default {
       // arrayDates: ['2021-04-27', '2021-04-23'],
       arrayDates: [],
       roomName: [],
-
+      partData: [],
+      attendData: [],
+      maxUser: '',
+      firstUser: '',
       evalcheck: false,
-      averageData: [
-        {
-          data: '집중',
-          per: 0,
-        },
-        {
-          data: '딴짓',
-          per: 0,
-        },
-        {
-          data: '졸음',
-          per: 0,
-        },
-        {
-          data: '자리비움',
-          per: 0,
-        },
-        {
-          data: '참여도',
-          per: 0,
-        },
-      ],
-
-      learnData: [
-        {
-          data: '집중',
-          per: 0,
-        },
-        {
-          data: '딴짓',
-          per: 0,
-        },
-        {
-          data: '졸음',
-          per: 0,
-        },
-        {
-          data: '자리비움',
-          per: 0,
-        },
-        {
-          data: '참여도',
-          per: 0,
-        },
-      ],
-      per1: 0,
-      per2: 0,
-      per3: 0,
-      per4: 0,
-      per5: 0,
-      change: 0,
-      renderKey: -1,
     };
   },
   // props: {
@@ -113,7 +74,6 @@ export default {
       this.arrayDates.push(eval_date);
     }
     this.eval = data;
-
     this.items = [];
     this.evalcheck = false;
   },
@@ -139,49 +99,37 @@ export default {
         }
       }
     },
-    async showEvaluation(selected) {
-      this.per1 = 0;
-      this.per2 = 0;
-      this.per3 = 0;
-      this.per4 = 0;
-      this.per5 = 0;
+    async showPartin(selected) {
       // console.log(selected);
       this.evalcheck = true;
 
-      console.log(this.averageData);
       for (var i = 0; i < this.eval.length; i++) {
         if (this.eval[i].room_name === selected) {
-          this.learnData[0].per = this.eval[i].attention;
-          this.learnData[1].per = this.eval[i].distracted;
-          this.learnData[2].per = this.eval[i].asleep;
-          this.learnData[3].per = this.eval[i].afk;
-          this.learnData[4].per = this.eval[i].participation;
           const { data } = await fetchRoomname(this.eval[i].room_name);
-          console.log(data);
           const roomPartinUser = data[0].rid;
-          console.log(roomPartinUser);
           const res = await evaluateList(roomPartinUser);
+          var maxPartin = 0;
+          var first = 100000;
           for (var j = 0; j < res.data.length; j++) {
-            this.per1 += res.data[j].attention;
-            this.per2 += res.data[j].distracted;
-            this.per3 += res.data[j].asleep;
-            this.per4 += res.data[j].afk;
-            this.per5 += res.data[j].participation;
+            if (maxPartin < res.data[j].participation) {
+              var maxPartin = res.data[j].participation;
+              this.maxUser = res.data[j].name;
+            }
+
+            if (first > res.data[j].ranking) {
+              var first = res.data[j].ranking;
+              this.firstUser = res.data[j].name;
+            }
           }
-          //소수둘째자리에서 반올림해서 소수첫째자리까지 보여줌
-          this.averageData[0].per = (this.per1 / res.data.length).toFixed(1);
-          this.averageData[1].per = (this.per2 / res.data.length).toFixed(1);
-          this.averageData[2].per = (this.per3 / res.data.length).toFixed(1);
-          this.averageData[3].per = (this.per4 / res.data.length).toFixed(1);
-          this.averageData[4].per = (this.per5 / res.data.length).toFixed(1);
         }
       }
-
+      // console.log('채팅참여왕', this.partData);
+      // console.log('출석왕', this.attendData);
+      console.log(maxPartin, this.maxUser);
+      console.log(first, this.firstUser);
       this.change++;
       this.renderKey++;
     },
   },
 };
 </script>
-
-<style></style>
