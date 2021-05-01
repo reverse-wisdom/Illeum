@@ -29,6 +29,10 @@
       &nbsp;
       <v-btn depressed color="warning" @click="capture">화면캡쳐테스트</v-btn>
       &nbsp;
+      <v-btn depressed color="warning" @click="saveMessageLog">채팅기록저장</v-btn>
+      &nbsp;
+      <v-btn depressed color="warning" @click="chatTest">채팅콘솔테스트</v-btn>
+      &nbsp;
       <v-btn depressed color="warning" @click="outRoom">퇴장</v-btn>
       &nbsp;
     </div>
@@ -45,6 +49,8 @@ export default {
       userName: '',
       connection: null,
       message: '',
+      chatLog: '',
+      chatResult: [],
     };
   },
   created() {
@@ -136,6 +142,9 @@ export default {
 
       if (event.data) {
         div.innerHTML = '<b>' + userName + '&nbsp;' + timestamp + ':</b><br>' + event.data.chatMessage;
+        console.log(userName + ' ' + uuid + ' ' + event.data.chatMessage + ' ' + timestamp);
+        this.chatResult.push({ uuid: uuid, userName: userName, chatMessage: event.data.chatMessage, timestamp: timestamp });
+        this.chatLog += userName + ' ' + uuid + ' ' + event.data.chatMessage + ' ' + timestamp + '\r\n';
       } else {
         div.innerHTML = '<b>' + this.userName + '(당신)&nbsp;' + timestamp + '</b> <br>' + event;
         div.style.background = '#cbffcb';
@@ -148,6 +157,7 @@ export default {
     },
     openRoom() {
       this.connection = new RTCMultiConnection();
+      var ref = this;
 
       this.connection.session = {
         audio: true,
@@ -170,39 +180,25 @@ export default {
       // this.connection.enableLogs = false; // to disable logs
       this.connection.enableLogs = true; // to enable logs
 
-      this.connection.openOrJoin(this.roomid);
-      console.log('test when open', this.connection);
-      // this.connection.videosContainer = document.querySelector('.videos-container');
+      this.connection.onstream = function(event) {
+        console.log('open');
+        ref.connection.onUserStatusChanged(event);
 
-      push.create(this.connection.extra.userFullName + '님이 ' + this.roomid + '방에 입장했습니다');
+        push.create(ref.connection.extra.userFullName + '님이 ' + ref.roomid + '방을 개설하였습니다');
+      };
+
+      this.connection.open(this.roomid);
 
       // 채팅부분영역 시작
-      var ref = this;
 
       this.connection.onmessage = function(event) {
-        // 현재 타이핑 중인 이벤트처리 미구현
-        // if (event.data.typing === true) {
-        //   var key = document.getElementById('key-press');
-        //   key.style.display = 'block';
-        //   console.log(event.extra.userFullName + ' is typing');
-        //   key.querySelector('span').innerHTML(event.extra.userFullName + ' is typing');
-        //   return;
-        // }
-
-        // if (event.data.typing === false) {
-        //   var key = document.getElementById('key-press');
-        //   key.style.display = 'none';
-        //   key.querySelector('span').innerHTML('');
-        //   return;
-        // }
-
         if (event.data.chatMessage) {
           console.log(event);
           ref.appendChatMessage(event, event.extra.userFullName, event.extra.userUUID);
           return;
         }
 
-        console.log(this.connection, 'income');
+        console.log(ref.connection, 'income');
       };
       this.connection.onstream = function(event) {
         var video = event.mediaElement;
@@ -222,14 +218,14 @@ export default {
           var user = ref.connection.peers[participantId];
           names.push(user.extra.userFullName);
         });
-
+        console.log(names);
         if (!names.length) {
           names = ['Only You'];
         } else {
           names = [ref.connection.extra.userFullName || 'You'].concat(names);
         }
 
-        infoBar.innerHTML = '<b>Active users:</b> ' + names.join(', ');
+        infoBar.innerHTML = '<b>참여자 목록:</b> ' + names.join(', ');
       };
     },
     screen() {
@@ -260,6 +256,53 @@ export default {
 
       this.connection.closeSocket();
       this.$router.push({ name: 'ClassList' });
+    },
+    saveMessageLog() {
+      var fileName = this.roomid;
+      var content = this.chatLog;
+      var blob = new Blob([content], { type: 'text/plain' });
+      var objURL = window.URL.createObjectURL(blob);
+
+      // 이전에 생성된 메모리 해제
+      if (window.__Xr_objURL_forCreatingFile__) {
+        window.URL.revokeObjectURL(window.__Xr_objURL_forCreatingFile__);
+      }
+
+      window.__Xr_objURL_forCreatingFile__ = objURL;
+      // a링크로 다운로드 바로실행
+      var a = document.createElement('a');
+      a.download = fileName;
+      a.href = objURL;
+      a.click();
+    },
+    chatTest() {
+      // this.chatResult.push({"uuid":uuid, "userName":userName,"chatMessage":event.data.chatMessage,"timestamp":timestamp})
+
+      //   var chatResult = [
+      //     { uuid: 1, userName: 'A' },
+      //     { uuid: 3, userName: 'B' },
+      //     { uuid: 2, userName: 'C' },
+      //     { uuid: 2, userName: 'C' },
+      //     { uuid: 2, userName: 'C' },
+      //     { uuid: 2, userName: 'C' },
+      //     { uuid: 3, userName: 'B' },
+      //     { uuid: 1, userName: 'A' },
+      //   ];
+
+      var rankArr = [];
+      var rank = 1;
+      for (let index = 0; index < this.chatResult.length; index++) {
+        var indexOfchatResult = rankArr.findIndex((i) => i.uuid == this.chatResult[index].uuid);
+        if (indexOfchatResult == -1) {
+          rankArr.push({ uuid: this.chatResult[index].uuid, participation: 1, rank: rank });
+          rank++;
+        } else {
+          var indexOfObj = rankArr.findIndex((i) => i.uuid == this.chatResult[index].uuid);
+          rankArr[indexOfObj].participation++;
+        }
+      }
+
+      console.log(rankArr);
     },
   },
 
