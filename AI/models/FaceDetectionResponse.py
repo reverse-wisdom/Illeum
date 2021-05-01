@@ -1,6 +1,9 @@
+from typing import Optional
+
 from OpenVtuber.SimpleFaceModule import SimpleFaceDetectionResult
 
 RESULT_TYPE_UNAUTHORIZED = "unauthorized"
+RESULT_TYPE_NOT_DEFINED_EVAL = "not_defined_evaluation"
 RESULT_TYPE_ASLEEP = "asleep"
 RESULT_TYPE_ATTENTION = "attention"
 RESULT_TYPE_DISTRACTED = "distracted"
@@ -15,7 +18,7 @@ class FaceDetectionResponse:
     def __init__(self,
                  result: str,
                  message: str,
-                 data: SimpleFaceDetectionResult
+                 data: Optional[SimpleFaceDetectionResult]
                  ):
         self.result = result
         self.message = message
