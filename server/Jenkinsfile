@@ -65,7 +65,7 @@ pipeline {
 				-p 8080:8080 \
 				illeum-back:latest' 
 			
-			sh 'docker run -d --name illeum-AI \
+			sh 'docker run -d --name illeum-ai \
 				-v /volumes/AI_home:/volumes \
 				-v /etc/localtime:/etc/localtime:ro \
 				-v /usr/share/zoneinfo/Asia/Seoul:/etc/timezone:ro \
