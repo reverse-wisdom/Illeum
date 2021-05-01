@@ -15,6 +15,7 @@ import CreateClass from '../views/class/CreateClass.vue';
 import UserClasslist from '../views/class/UserClasslist.vue';
 import ClassList from '../views/class/ClassList.vue';
 import Class from '../views/class/Class.vue';
+import ClassMaster from '../views/class/ClassMaster.vue';
 
 //evaluation
 import UserEval from '../views/evaluation/UserEval.vue';
@@ -86,6 +87,11 @@ const routes = [
     path: '/class',
     name: 'Class',
     components: { default: Class },
+  },
+  {
+    path: '/classmaster',
+    name: 'ClassMaster',
+    components: { default: ClassMaster },
   },
   //evaluation
   {
