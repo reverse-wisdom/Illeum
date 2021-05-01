@@ -71,19 +71,19 @@ public class EvaluationController {
     
     @ApiOperation(value = "평가 전체조회")
     @GetMapping(path="/findAll")
-    public Iterable<Evaluation> getAllRoom() {
+    public Iterable<Evaluation> getAllEvaluation() {
         return evaluationRepository.findAll();
     }
-    @ApiOperation(value = "평가 전체조회")
+    @ApiOperation(value = "평가 조회")
     @GetMapping(path="/findByVid")
-    public Evaluation getByUidMember(@RequestParam int vid) {
+    public Evaluation getByVid(@RequestParam int vid) {
         return evaluationRepository.findByVid(vid);
     }
     
     @ApiOperation(value = "평가 생성(출석 체크)")
     @Transactional
     @PostMapping(path="/insert")
-    public ResponseEntity<?> insertByUid(@RequestBody insertEvaluationDto insertDto) {
+    public ResponseEntity<?> insert(@RequestBody insertEvaluationDto insertDto) {
     	Entrant entrant = entrantRepository.findByUidAndRid(insertDto.getUid(), insertDto.getRid());
     	// 리스트가 없으면 생성   	
 
@@ -118,10 +118,10 @@ public class EvaluationController {
     	return new ResponseEntity<String>("success",HttpStatus.OK);
     }
     
-    @ApiOperation(value = "평가 수정(eid만 필수)")
+    @ApiOperation(value = "평가 수정(vid만 필수)")
     @Transactional
     @PutMapping(path="/updateByVid")
-    public ResponseEntity<?> updateTheRoom(@RequestBody updateEvaluationDto evaluationDto) {
+    public ResponseEntity<?> update(@RequestBody updateEvaluationDto evaluationDto) {
     	Evaluation evaluation = evaluationRepository.findByVid(evaluationDto.getVid());
     	
         if(evaluation == null) new ResponseEntity<String>("평가가 없습니다.",HttpStatus.NO_CONTENT);
