@@ -10,18 +10,12 @@ COPY requirements.txt /app/
 #    apk del tzdata && \
 #    rm -rf /var/cache/apk/*
 
-# make docker use bash instead of sh
-# SHELL ["/bin/bash", "-c"]
-
-RUN conda init bash
-
-RUN conda activate AI
-
-RUN python -m pip install --upgrade pip
-
-RUN pip install cmake
-
-RUN pip install -r /app/requirements.txt
+RUN . /root/.bashrc && \
+    /root/anaconda3/bin/conda init bash && \
+    /root/anaconda3/bin/conda activate AI && \
+	python -m pip install --upgrade pip && \
+	pip install cmake && \
+	pip install -r /app/requirements.txt
 
 COPY . /app
 
