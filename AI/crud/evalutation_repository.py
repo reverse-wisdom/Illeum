@@ -30,7 +30,7 @@ def select_entrant_eid_by_uid_and_rid(uid: int, rid: int) -> Optional[int]:
     return None
 
 
-@cached(cache=TTLCache(maxsize=1024, ttl=1200))
+@cached(cache=TTLCache(maxsize=1024, ttl=600))
 def select_evaluation_vid_recent_by_eid(eid: int):
     with db.query("SELECT vid FROM evaluation WHERE eid = %s ORDER BY eval_date DESC LIMIT 1", (eid,)) as cursor:
         data = cursor.fetchone()
@@ -39,13 +39,33 @@ def select_evaluation_vid_recent_by_eid(eid: int):
     return None
 
 
+def update_evaluation_increase_column_by_eid(column: str, eid: int) -> None:
+    db.query(f"UPDATE evaluation SET {column} = {column} + 1 WHERE eid = %s", (eid,))
+
+
+def update_evaluation_increase_attention_by_eid(eid: int) -> None:
+    update_evaluation_increase_column_by_eid("attention", eid)
+
+
+def update_evaluation_increase_distracted_by_eid(eid: int) -> None:
+    update_evaluation_increase_column_by_eid("distracted", eid)
+
+
+def update_evaluation_increase_asleep_by_eid(eid: int) -> None:
+    update_evaluation_increase_column_by_eid("asleep", eid)
+
+
+def update_evaluation_increase_afk_by_eid(eid: int) -> None:
+    update_evaluation_increase_column_by_eid("afk", eid)
+
+
 if __name__ == "__main__":
     rid = 2
     uid = 2
     # 2번 방에 2번 멤버가 소속해 있는 번호를 확인 (소속이 아닌 경우 None 반환)
     id = select_entrant_eid_by_uid_and_rid(rid, uid)
     print(f"{rid}번 방의 {uid}번 멤버의 참가 번호 : {id}")
-    if id is None: # 소속이 안되어 있으므로 하단 과정은 패스
+    if id is None:  # 소속이 안되어 있으므로 하단 과정은 패스
         pass
     # 1번 방의 1번 멤버의 참가자가 가지고 있는 최근 평가 번호를 출력
     id = select_evaluation_vid_recent_by_eid(id)
