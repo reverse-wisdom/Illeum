@@ -56,10 +56,13 @@ export default {
   mounted() {
     // 실제 차트 랜더링 부분
     this.renderChart(this.chartData, {
-      ticks: {
-        max: 100,
-        min: 0,
-        beginAtZero: true,
+      scale: {
+        ticks: {
+          max: 10,
+          min: 0,
+          stepsize: 1,
+          beginAtZero: true,
+        },
       },
     });
   },
