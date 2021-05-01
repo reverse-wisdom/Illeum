@@ -71,7 +71,7 @@ pipeline {
 				-v /usr/share/zoneinfo/Asia/Seoul:/etc/timezone:ro \
 				--network illeum-network \
 				-p 8000:8000 \
-				illeum-AI:latest' 
+				illeum-ai:latest' 
 			}
 		}
 	}
