@@ -14,6 +14,7 @@ import ClassSearch from '../views/class/ClassSearch.vue';
 import CreateClass from '../views/class/CreateClass.vue';
 import UserClasslist from '../views/class/UserClasslist.vue';
 import ClassList from '../views/class/ClassList.vue';
+import Class from '../views/class/Class.vue';
 
 //evaluation
 import UserEval from '../views/evaluation/UserEval.vue';
@@ -26,6 +27,7 @@ import webrtcTest3 from '../views/testpage/webrtcTest3.vue';
 import webrtcTest4 from '../views/testpage/webrtcTest4.vue';
 import componentTest from '../views/testpage/componentTest.vue';
 import chartTest from '../views/testpage/chartTest.vue';
+import navTest from '../views/testpage/navTest.vue';
 Vue.use(VueRouter);
 
 const routes = [
@@ -76,9 +78,14 @@ const routes = [
     components: { default: UserClasslist, header: Navbar },
   },
   {
-    path: '/classList',
+    path: '/classlist',
     name: 'ClassList',
-    components: { default: ClassList, header: Navbar },
+    components: { default: ClassList },
+  },
+  {
+    path: '/class',
+    name: 'Class',
+    components: { default: Class },
   },
   //evaluation
   {
@@ -122,6 +129,11 @@ const routes = [
     path: '/chartTest',
     name: 'chartTest',
     component: chartTest,
+  },
+  {
+    path: '/navTest',
+    name: 'navTest',
+    component: navTest,
   },
   // // end
   {

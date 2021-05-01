@@ -3,13 +3,13 @@ import { setInterceptors } from './common/interceptors';
 
 function createInstance() {
   return axios.create({
-    baseURL: 'https:/api',
+    baseURL: '/api',
   });
 }
 
 function createInstanceWithAuth(url) {
   const instance = axios.create({
-    baseURL: 'https:/api',
+    baseURL: '/api',
   });
   return setInterceptors(instance);
 }
