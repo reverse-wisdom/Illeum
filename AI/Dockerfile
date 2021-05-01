@@ -11,7 +11,9 @@ COPY requirements.txt /app/
 #    rm -rf /var/cache/apk/*
 
 # make docker use bash instead of sh
-SHELL ["/bin/bash", "-c"]
+# SHELL ["/bin/bash", "-c"]
+
+RUN conda init bash
 
 RUN conda activate AI
 
