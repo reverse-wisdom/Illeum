@@ -1,21 +1,19 @@
-FROM getcurrentthread/miniconda3:0.0.1
-# FROM python-fastapi-image:0.0.1
+FROM getcurrentthread/python-fastapi-image:0.0.1
 
 WORKDIR /app
 
 COPY requirements.txt /app/
 
-# RUN apk --update add tzdata && \
-#    cp /usr/share/zoneinfo/Asia/Seoul /etc/localtime && \
-#    apk del tzdata && \
-#    rm -rf /var/cache/apk/*
+RUN apk --update add tzdata && \
+    cp /usr/share/zoneinfo/Asia/Seoul /etc/localtime && \
+    apk del tzdata && \
+    rm -rf /var/cache/apk/*
 
-RUN . /root/.bashrc && \
-    /root/anaconda3/bin/conda init bash && \
-    /root/anaconda3/bin/conda activate AI && \
-	python -m pip install --upgrade pip && \
-	pip install cmake && \
-	pip install -r /app/requirements.txt
+RUN python -m pip install --upgrade pip
+
+RUN pip install cmake
+
+RUN pip install -r /app/requirements.txt
 
 COPY . /app
 
