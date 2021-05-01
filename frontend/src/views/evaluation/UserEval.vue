@@ -2,7 +2,7 @@
   <div>
     <span>{{ this.$store.state.uuid }}의 평가목록</span>
     <v-row justify="center">
-      <v-date-picker v-model="date" @click:date="classNameFetch" :allowed-dates="allowedDates" class="mt-4" min="1900-04-01" max="2100-10-30"></v-date-picker>
+      <v-date-picker v-model="date" @click:date="classNameFetch" :landscape="landscape" locale="ko-kr" :allowed-dates="allowedDates" class="mt-4" min="1900-04-01" max="2100-10-30"></v-date-picker>
       <v-col class="d-flex" cols="12" sm="6">
         <v-select :items="items" :label="date" solo @change="showEvaluation"></v-select>
       </v-col>
@@ -33,6 +33,7 @@ export default {
       eval: [],
       items: [],
       date: '',
+      landscape: true,
       menu: false,
       // date: '2018-03-02',
       mindate: '2021-04-01',
@@ -118,10 +119,6 @@ export default {
     this.evalcheck = false;
   },
   methods: {
-    allowedDates(val) {
-      var arrayDates = this.arrayDates;
-      arrayDates.indexOf(val) !== -1;
-    },
     classNameFetch() {
       this.roomName = [];
       for (var i = 0; i < this.eval.length; i++) {
