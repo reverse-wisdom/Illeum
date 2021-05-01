@@ -4,10 +4,10 @@ WORKDIR /app
 
 COPY requirements.txt /app/
 
-RUN apk --update add tzdata && \
-    cp /usr/share/zoneinfo/Asia/Seoul /etc/localtime && \
-    apk del tzdata && \
-    rm -rf /var/cache/apk/*
+# RUN apk --update add tzdata && \
+#    cp /usr/share/zoneinfo/Asia/Seoul /etc/localtime && \
+#    apk del tzdata && \
+#    rm -rf /var/cache/apk/*
 
 RUN python -m pip install --upgrade pip
 
