@@ -1,4 +1,4 @@
-FROM getcurrentthread/miniconda3:latest
+FROM getcurrentthread/miniconda3:0.0.1
 # FROM python-fastapi-image:0.0.1
 
 WORKDIR /app
