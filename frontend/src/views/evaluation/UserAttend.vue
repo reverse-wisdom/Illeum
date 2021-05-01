@@ -1,34 +1,26 @@
 <template>
   <div>
-    <span>{{ this.$store.state.uuid }}의 출석/채팅참여</span>
+    <span>{{ this.$store.state.uuid }}의출결현황</span>
     <v-row justify="center">
       <v-date-picker v-model="date" @click:date="classNameFetch" :landscape="landscape" locale="ko-kr" :allowed-dates="allowedDates" class="mt-4" min="1900-04-01" max="2100-10-30"></v-date-picker>
-      <v-col class="d-flex" cols="12" sm="6">
+      <v-col cols="12" sm="6">
         <v-select :items="items" :label="date" solo @change="showPartin"></v-select>
       </v-col>
     </v-row>
-
     <div style="margin-top: 100px;">
       <h2>show participation</h2>
       <h2>{{ date }}</h2>
+      <h2>요일</h2>
     </div>
-
     <div>
       <p>
         출석왕
         <span>{{ firstUser }}</span>
       </p>
-      <p>
-        채팅참여왕
-        <span>{{ maxUser }}</span>
-      </p>
     </div>
     <div>
       <div>{{ this.$store.state.name }}님</div>
-      <div>{{ selectedRoomName }} 수업에서 수업참여도</div>
-      <div>총 수강생 {{ fetchRoomlen }}명중에 {{ partuidRank }}위입니다</div>
-      <div>{{ selectedRoomName }} 수업에서 출석을</div>
-      <div>총 수강생 {{ fetchRoomlen }}명중에 {{ attenduidRank }}위입니다</div>
+      <div>{{ attenduidTime }}</div>
     </div>
   </div>
 </template>
@@ -53,7 +45,7 @@ export default {
       partinRank: [],
       partuidRank: '',
       attendRank: [],
-      attenduidRank: '',
+      attenduidTime: '',
       arrayDates: [],
       roomName: [],
       partData: [],
@@ -143,30 +135,30 @@ export default {
             }
           }
           //채팅참여도 배열 제일 많은순으로 정렬하기
-          this.partinRank.sort(function(a, b) {
-            if (a.participation < b.participation) {
-              return 1;
-            }
-            if (a.participation > b.participation) {
-              return -1;
-            }
+          // this.partinRank.sort(function(a, b) {
+          //   if (a.participation < b.participation) {
+          //     return 1;
+          //   }
+          //   if (a.participation > b.participation) {
+          //     return -1;
+          //   }
 
-            return 0;
-          });
+          //   return 0;
+          // });
 
           //로그인한 청강자 채팅참여도 순위 구하기
-          for (var k = 0; k < this.partinRank.length; k++) {
-            if (this.partinRank[k].uid === this.$store.state.uuid) {
-              this.partuidRank = this.partinRank.indexOf(this.partinRank[k]) + 1;
-            }
-          }
+          // for (var k = 0; k < this.partinRank.length; k++) {
+          //   if (this.partinRank[k].uid === this.$store.state.uuid) {
+          //     this.partuidRank = this.partinRank.indexOf(this.partinRank[k]) + 1;
+          //   }
+          // }
           //로그인한 청강자 출석시간 순위 구하기
           console.log(this.attendRank);
           for (var m = 0; m < this.attendRank.length; m++) {
             // var test1 = this.$moment(this.attendRank[0].attend_time).format('YYYY-MM-DD, h:mm:ss a');
 
             if (this.attendRank[m].uid === this.$store.state.uuid) {
-              this.attenduidRank = this.attendRank.indexOf(this.attendRank[m]) + 1;
+              this.attenduidTime = this.$moment(this.attendRank[m].attend_time).format('h:mm:ss a');
             }
           }
         }
@@ -178,3 +170,5 @@ export default {
   },
 };
 </script>
+
+<style></style>

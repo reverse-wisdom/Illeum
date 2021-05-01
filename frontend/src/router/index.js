@@ -28,6 +28,7 @@ import webrtcTest4 from '../views/testpage/webrtcTest4.vue';
 import componentTest from '../views/testpage/componentTest.vue';
 import chartTest from '../views/testpage/chartTest.vue';
 import navTest from '../views/testpage/navTest.vue';
+import calendarTest from '../views/testpage/calendarTest.vue';
 Vue.use(VueRouter);
 
 const routes = [
@@ -134,6 +135,11 @@ const routes = [
     path: '/navTest',
     name: 'navTest',
     component: navTest,
+  },
+  {
+    path: '/calendarTest',
+    name: 'calendarTest',
+    component: calendarTest,
   },
   // // end
   {
