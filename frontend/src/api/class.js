@@ -38,12 +38,12 @@ function evaluateList(roomId) {
   return posts.get(`/room/evaluation?rid=${roomId}`);
 }
 
-//개설자 uid로 방조회 (Rid)
+//rid로 방조회
 function findByRidClass(rid) {
-  return posts.get('/room/findByRid', rid);
+  return posts.get(`/room/findByRid?rid=${rid}`);
 }
 //개설자 uid로 방조회 (uid)
-function findByUidClass(classData) {
+function findByUidClass(uuid) {
   return posts.get('/room/findByUid', uuid);
 }
 
