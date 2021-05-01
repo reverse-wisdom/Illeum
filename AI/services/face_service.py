@@ -7,6 +7,8 @@ import git
 import cv2
 import numpy as np
 
+import crud.evalutation_repository as repository
+
 BASE_REPO_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "OpenVtuber")
 
 if not os.path.isdir(BASE_REPO_DIR):
@@ -19,6 +21,7 @@ sys.path.insert(1, BASE_REPO_DIR)
 from OpenVtuber.SimpleFaceModule import SimpleFaceModule, SimpleFaceDetectionResult
 import models.FaceDetectionResponse as FDR
 from models.FaceDetectionResponse import FaceDetectionResponse as Response
+from utils.image_util import data_uri_to_cv2_img
 
 
 
@@ -42,6 +45,16 @@ def face_detection(image: np.ndarray) -> Response:
         return Response(FDR.RESULT_TYPE_DISTRACTED, '딴 짓을 하고 있는 상태 입니다. (하품, 시선, 고개)', result)
     else:
         return Response(FDR.RESULT_TYPE_ATTENTION, '집중 중', result)
+
+def face_detection_from_base64_string(base64_string: str) -> Response:
+    image = data_uri_to_cv2_img(base64_string)
+    return face_detection(image)
+
+def face_detection_task(uid: int, rid: int, b64_string: str) -> Response:
+    eid: Optional[int] = repository.select_entrant_eid_by_uid_and_rid(uid, rid)
+    if eid is None:
+        return Response(result=FDR.RESULT_TYPE_UNAUTHORIZED, message="해당 방에 가입하지 않은 사용자 입니다.")
+
 
 # 서비스 코드 종료 ##
 

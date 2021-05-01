@@ -11,3 +11,6 @@ tqdm
 uuid
 python-multipart
 python-dateutil
+mysql-connector-python
+numpy
+cachetools
