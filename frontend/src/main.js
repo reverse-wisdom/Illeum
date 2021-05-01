@@ -6,7 +6,7 @@ import 'vuetify/dist/vuetify.min.css';
 import store from './store';
 import VueSweetalert2 from 'vue-sweetalert2';
 import 'sweetalert2/dist/sweetalert2.min.css';
-
+import VueMoment from 'vue-moment';
 Vue.config.productionTip = false;
 
 const sweetalert2_options = {
@@ -15,6 +15,8 @@ const sweetalert2_options = {
 };
 
 Vue.use(VueSweetalert2, sweetalert2_options); // alert API
+
+Vue.use(VueMoment); // vue-moment
 
 Vue.use(Vuetify); // Vuetify
 
