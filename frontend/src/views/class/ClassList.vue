@@ -58,7 +58,7 @@ export default {
   },
   methods: {
     async detailClass(value) {
-      var uid = 1; // 지금 uid는 임시고정 값!!!!!
+      var uid = this.$store.state.uuid; // 지금 uid는 임시고정 값!!!!!
       var rid = value.rid;
       var insertInfo = { uid: uid, rid: rid };
 
@@ -73,19 +73,37 @@ export default {
           if (room_password != value.room_password) {
             this.$swal({
               icon: 'error',
-              title: '방비밀번호가 일치하지 않습니다.!!',
+              title: '방 비밀번호가 일치하지 않습니다.!!',
             });
           } else {
-            const { data } = await insertRoom(insertInfo);
-            if (data != null) {
-              this.$router.push({ name: 'Class', query: { room_name: value.room_name } });
+            if (value.uid == this.$store.state.uuid) {
+              this.$router.push({ name: 'ClassMaster', query: { room_name: value.room_name } });
+            } else {
+              try {
+                const { data } = await insertRoom(insertInfo);
+                if (data != null) {
+                  this.$router.push({ name: 'Class', query: { room_name: value.room_name } });
+                }
+              } catch {
+                this.$swal({
+                  icon: 'error',
+                  title: '참여할 수 없는 방입니다.!!',
+                });
+              }
             }
           }
         }
       } else {
-        const { data } = await insertRoom(insertInfo);
-        if (data != null) {
-          this.$router.push({ name: 'Class', query: { room_name: value.room_name } });
+        try {
+          const { data } = await insertRoom(insertInfo);
+          if (data != null) {
+            this.$router.push({ name: 'Class', query: { room_name: value.room_name } });
+          }
+        } catch {
+          this.$swal({
+            icon: 'error',
+            title: '참여할 수 없는 방입니다.!!',
+          });
         }
       }
     },
