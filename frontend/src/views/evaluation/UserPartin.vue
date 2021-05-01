@@ -26,7 +26,10 @@
     </div>
     <div>
       <div>{{ this.$store.state.name }}님</div>
-      <div>{{ selectedRoomName }} 수업에서 총 수강생 {{ fetchRoomlen }}명중에 {{ partuidRank }}위입니다</div>
+      <div>{{ selectedRoomName }} 수업에서 수업참여도</div>
+      <div>총 수강생 {{ fetchRoomlen }}명중에 {{ partuidRank }}위입니다</div>
+      <div>{{ selectedRoomName }} 수업에서 출석을</div>
+      <div>총 수강생 {{ fetchRoomlen }}명중에 {{ attenduidRank }}위입니다</div>
     </div>
   </div>
 </template>
@@ -114,6 +117,7 @@ export default {
       // console.log(selected);
       this.evalcheck = true;
       this.partinRank = [];
+      this.attendRank = [];
       this.fetchRoomlen = 0;
       for (var i = 0; i < this.eval.length; i++) {
         if (this.eval[i].room_name === selected) {
@@ -124,8 +128,16 @@ export default {
 
           var maxPartin = 0;
           var first = 100000;
+          //채팅참여도1등, 출석1등 구하기
+          console.log(res.data);
           for (var j = 0; j < res.data.length; j++) {
             this.partinRank.push({ uid: res.data[j].uid, participation: res.data[j].participation });
+            // attendRank push 메소드 시간순으로 정렬됨
+            this.attendRank.push({ uid: res.data[j].uid, attend_time: res.data[j].attend_time });
+            console.log(this.attendRank);
+            this.attendRank.sort(function(a, b) {
+              return a.attend_time < b.attend_time ? -1 : a.attend_time > b.attend_time ? 1 : 0;
+            });
             if (maxPartin < res.data[j].participation) {
               var maxPartin = res.data[j].participation;
               this.maxUser = res.data[j].name;
@@ -140,9 +152,7 @@ export default {
               this.fetchRoomlen = res.data.length;
             }
           }
-
-          console.log(this.partinRank);
-
+          //채팅참여도 배열 제일 많은순으로 정렬하기
           this.partinRank.sort(function(a, b) {
             if (a.participation < b.participation) {
               return 1;
@@ -153,23 +163,26 @@ export default {
 
             return 0;
           });
-          console.log(this.partinRank);
-          //로그인한 청강자 순위 구하기
+
+          //로그인한 청강자 채팅참여도 순위 구하기
           for (var k = 0; k < this.partinRank.length; k++) {
-            // console.log(this.partinRank.length);
-            console.log(this.partinRank[k].uid);
-            console.log(this.$store.state.uuid);
-            if (this.partinRank[k].uid == this.$store.state.uuid) {
-              console.log(this.partinRank[k].uid);
-              console.log(this.$store.state.uuid);
+            if (this.partinRank[k].uid === this.$store.state.uuid) {
               this.partuidRank = this.partinRank.indexOf(this.partinRank[k]) + 1;
             }
           }
-          console.log(this.partuidRank);
+          //로그인한 청강자 출석시간 순위 구하기
+          console.log(this.attendRank);
+          for (var m = 0; m < this.attendRank.length; m++) {
+            // var test1 = this.$moment(this.attendRank[0].attend_time).format('YYYY-MM-DD, h:mm:ss a');
+            // var test2 = this.$moment(this.attendRank[1].attend_time).format('YYYY-MM-DD, h:mm:ss a');
+            // console.log(test1 > test2);
+            if (this.attendRank[m].uid === this.$store.state.uuid) {
+              this.attenduidRank = this.attendRank.indexOf(this.attendRank[m]) + 1;
+            }
+          }
         }
       }
-      // console.log(maxPartin, this.maxUser);
-      // console.log(first, this.firstUser);
+
       this.change++;
       this.renderKey++;
     },
