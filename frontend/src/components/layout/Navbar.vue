@@ -82,7 +82,7 @@
               </a>
             </li>
             <li>
-              <a href="/classtest">
+              <a href="/classlist">
                 <span class="Navtext">class</span>
               </a>
             </li>
