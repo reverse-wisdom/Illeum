@@ -21,11 +21,25 @@ pipeline {
 			}
 		}
 		stage('Docker Build') {
-			agent any
-			steps {
-				sh 'docker build -t illeum-front:latest ./frontend'
-				sh 'docker build -t illeum-back:latest ./backend'
-				sh 'docker build -t illeum-ai:latest ./AI'
+			parallel {
+				stage('Front Docker Build'){
+					agent any
+					steps {
+						sh 'docker build -t illeum-front:latest ./frontend'
+					}
+				}
+				stage('Backend Docker Build'){
+					agent any
+					steps {
+						sh 'docker build -t illeum-back:latest ./backend'
+					}
+				}
+				stage('AI Docker Build'){
+					agent any
+					steps {
+						sh 'docker build -t illeum-ai:latest ./AI'
+					}
+				}
 			}
 		}
 		stage('Docker Container rm') {
