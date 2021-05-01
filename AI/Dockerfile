@@ -10,7 +10,7 @@ COPY requirements.txt /app/
 #    apk del tzdata && \
 #    rm -rf /var/cache/apk/*
 
-RUN conda activate AI
+RUN source activate AI
 
 RUN python -m pip install --upgrade pip
 
