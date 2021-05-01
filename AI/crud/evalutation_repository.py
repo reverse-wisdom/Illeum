@@ -67,6 +67,9 @@ if __name__ == "__main__":
     print(f"{rid}번 방의 {uid}번 멤버의 참가 번호 : {id}")
     if id is None:  # 소속이 안되어 있으므로 하단 과정은 패스
         pass
-    # 1번 방의 1번 멤버의 참가자가 가지고 있는 최근 평가 번호를 출력
+    # 해당 참가자가 가지고 있는 최근 평가 번호를 출력
     id = select_evaluation_vid_recent_by_eid(id)
     print(f"해당 참가자의 최근 평가 번호 : {id}")
+    # 해당 참가자의 attention 포인트를 1 증가
+    update_evaluation_increase_attention_by_eid(id)
+    print(f"평가 {id}번호의 attention 포인트를 1 증가")

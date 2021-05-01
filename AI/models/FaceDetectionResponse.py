@@ -26,3 +26,6 @@ class FaceDetectionResponse:
 
     def __str__(self) -> str:
         return self.__dict__.__str__()
+
+    def __repr__(self) -> str:
+        return self.__str__()
