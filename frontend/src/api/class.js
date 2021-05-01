@@ -1,5 +1,20 @@
 import { instance, posts } from './index';
 
+//방리스트조회 (2. WebRTC 전체 조회)
+function classAll(classData) {
+  return posts.get('/room/findAll', classData);
+}
+
+//room_name으로 방 조회 (3. WebRTC 방조회)
+function fetchRoomname(roomName) {
+  return posts.get(`/room/findByRoomName?roomName=${roomName}`);
+}
+
+//방 참여 로직
+function insertRoom(insertInfo) {
+  return posts.post('/entrant/insert', insertInfo);
+}
+
 //방생성
 function createClass(classData) {
   return posts.post('/room/insert', classData);
@@ -8,6 +23,7 @@ function createClass(classData) {
 function updateClass(classData) {
   return posts.put('/room/updateByRid', classData);
 }
+
 //방 삭제
 function deleteClass(classData) {
   return posts.delete('/room/deleteByRid', classData);
@@ -18,13 +34,10 @@ function getStudents(studentData) {
 }
 
 //방에 참여한 멤버의 평가 목록 조회
-function evaluateList(classData) {
-  return posts.get('/room/evaluation', classData);
+function evaluateList(roomId) {
+  return posts.get(`/room/evaluation?rid=${roomId}`);
 }
-//방리스트조회
-function classAll(classData) {
-  return posts.get('/room/findAll', classData);
-}
+
 //개설자 uid로 방조회 (Rid)
 function findByRidClass(rid) {
   return posts.get('/room/findByRid', rid);
@@ -34,4 +47,4 @@ function findByUidClass(classData) {
   return posts.get('/room/findByUid', uuid);
 }
 
-export { createClass, updateClass, deleteClass, getStudents, evaluateList, classAll, findByRidClass, findByUidClass };
+export { createClass, updateClass, deleteClass, getStudents, fetchRoomname, evaluateList, classAll, findByRidClass, findByUidClass, insertRoom };

@@ -377,6 +377,7 @@ form .btn input[type='text'] {
   position: relative;
   background: none;
   border: none;
+  caret-color: transparent;
   color: #fff;
   text-align: center;
   border-radius: 5px;

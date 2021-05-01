@@ -26,16 +26,20 @@
         <div class="content content-2">
           <UserEval></UserEval>
         </div>
-        <div class="content content-3"></div>
+        <div class="content content-3">
+          <UserPartin></UserPartin>
+        </div>
       </section>
     </div>
   </div>
 </template>
 <script>
 import UserEval from '@/views/evaluation/UserEval';
+import UserPartin from '@/views/evaluation/UserPartin';
 export default {
   components: {
     UserEval,
+    UserPartin,
   },
   data() {
     return {
