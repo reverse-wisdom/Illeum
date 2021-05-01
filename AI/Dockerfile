@@ -10,7 +10,10 @@ COPY requirements.txt /app/
 #    apk del tzdata && \
 #    rm -rf /var/cache/apk/*
 
-RUN source activate AI
+# make docker use bash instead of sh
+SHELL ["/bin/bash", "-c"]
+
+RUN conda activate AI
 
 RUN python -m pip install --upgrade pip
 
