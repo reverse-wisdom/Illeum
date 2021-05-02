@@ -14,11 +14,6 @@ import org.springframework.cache.annotation.EnableCaching;
 @MapperScan(basePackages = "com.ssafy.pjt.Repository.mapper")
 public class AuthApplication {
 
-	@PostConstruct
-	void started() {
-		TimeZone.setDefault(TimeZone.getTimeZone("Asia/Seoul"));
-	}
-
 	public static void main(String[] args) {
 		SpringApplication.run(AuthApplication.class);
 	}
