@@ -37,6 +37,7 @@
 
 <script>
 import push from 'push.js';
+import { insertRoom } from '@/api/class';
 
 export default {
   data() {
@@ -45,13 +46,13 @@ export default {
       userName: '',
       connection: null,
       message: '',
+      rid: '',
     };
   },
   created() {
-    const name = this.$store.state.name;
-    const room_name = this.$route.query.room_name;
-    this.roomid = room_name;
-    this.userName = name;
+    this.roomid = this.$route.query.room_name;
+    this.rid = this.$route.query.rid;
+    this.userName = this.$store.state.name;
   },
   mounted() {
     let cdn1 = document.createElement('script');
@@ -148,6 +149,7 @@ export default {
     },
     openRoom() {
       this.connection = new RTCMultiConnection();
+      var ref = this;
 
       this.connection.session = {
         audio: true,
@@ -170,15 +172,33 @@ export default {
       // this.connection.enableLogs = false; // to disable logs
       this.connection.enableLogs = true; // to enable logs
 
-      this.connection.openOrJoin(this.roomid);
-      console.log('test when open', this.connection);
-      // this.connection.videosContainer = document.querySelector('.videos-container');
-
-      push.create(this.connection.extra.userFullName + '님이 ' + this.roomid + '방에 입장했습니다');
+      this.connection.checkPresence(this.roomid, function(isRoomExist, roomid) {
+        if (isRoomExist === true) {
+          var check = ref.checkEntrant();
+          console.log(check);
+          if (!check) {
+            ref.$swal({
+              icon: 'error',
+              title: '참여할 수 없는 방입니다.!!',
+            });
+            ref.$router.push({ name: 'ClassList' });
+            return;
+          }
+          console.log('present');
+          ref.connection.onUserStatusChanged();
+          push.create(ref.connection.extra.userFullName + '님이 ' + ref.roomid + '방에 입장했습니다');
+          ref.connection.join(roomid);
+        } else {
+          console.log('open');
+          ref.$swal({
+            icon: 'error',
+            title: '개설되지 않는 방입니다.!!',
+          });
+          ref.$router.push({ name: 'ClassList' });
+        }
+      });
 
       // 채팅부분영역 시작
-      var ref = this;
-
       this.connection.onmessage = function(event) {
         // 현재 타이핑 중인 이벤트처리 미구현
         // if (event.data.typing === true) {
@@ -204,6 +224,8 @@ export default {
 
         console.log(this.connection, 'income');
       };
+
+      // 스트림영역
       this.connection.onstream = function(event) {
         var video = event.mediaElement;
 
@@ -215,6 +237,7 @@ export default {
         }
       };
 
+      // 유저변화영역
       this.connection.onUserStatusChanged = function(event) {
         var infoBar = document.getElementById('onUserStatusChanged');
         var names = [];
@@ -260,6 +283,21 @@ export default {
 
       this.connection.closeSocket();
       this.$router.push({ name: 'ClassList' });
+    },
+    async checkEntrant() {
+      var uid = this.$store.state.uuid;
+      var rid = this.rid;
+      var insertInfo = { uid: uid, rid: rid };
+      try {
+        const { data } = await insertRoom(insertInfo);
+        await new Promise((resolve, reject) => setTimeout(resolve, 3000));
+        console.log(data);
+        if (data != null) {
+          return true;
+        }
+      } catch {
+        return false;
+      }
     },
   },
 
