@@ -4,7 +4,7 @@
 <mapper
 	namespace="com.ssafy.pjt.Repository.mapper.MemberMapper">
 	<!--맴버가 수강 중인 강의(방) 목록 -->
-	<select id="mamberJoinRoom" parameterType="int" resultType="map">
+	<select id="mamberJoinRoom" parameterType="int" resultType="findMemberRoom">
 		select m.uid, m.name , r.rid, r.room_name,(select m.name from member m where m.uid = r.uid) as founder , r.start_time, r.end_time, r.room_state, r.room_type
 		from member m join entrant e 
 		on m.uid = e.uid
@@ -14,7 +14,7 @@
 	</select>
 	
 	<!--맴버가 개설한 방 목록  -->
-	<select id="founder" parameterType="int" resultType="map">
+	<select id="founder" parameterType="int" resultType="findFounder">
 		select m.uid, m.name , r.rid, r.room_name, r.start_time, r.end_time, r.room_state, r.room_type 
 		from member m right join room r 
 		on m.uid = r.uid
@@ -22,13 +22,25 @@
 	</select>
 	
 	<!--맴버 평가 목록  -->
-	<select id="memberJoinEvaluation" parameterType="int" resultType="map">
-		select ev.vid, e.eid, m.name, r.uid as founderUid,r.room_name,(select m.name from member m where m.uid = r.uid) as founder ,ev.eval_date, ev.attention, ev.participation, ev.distracted, ev.asleep, ev.afk, ev.attend_time, ev.ranking
+	<select id="memberJoinEvaluation" parameterType="int" resultType="findMemberEvaluation">
+		select ev.vid, e.eid,r.uid as founderUid, m.name, r.room_name,(select m.name from member m where m.uid = r.uid) as founder ,ev.eval_date, ev.attention, ev.participation, ev.distracted, ev.asleep, ev.afk, ev.attend_time, ev.ranking
 		from member m join entrant e 
 		on m.uid = e.uid
 		right join evaluation ev
 		on e.eid = ev.eid
 		right join room r
+		on e.rid = r.rid
+		where m.uid = #{uid};
+	</select>
+	
+	<!-- 맴버 출석 현황 -->
+	<select id="memberAttend" parameterType="int" resultType="memberAttend">
+		select m.uid,m.name, r.room_name,ev.attend_time
+		from member m join entrant e 
+		on m.uid = e.uid
+		right join evaluation ev
+		on e.eid = ev.eid
+		left join room r
 		on e.rid = r.rid
 		where m.uid = #{uid};
 	</select>
