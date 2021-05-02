@@ -1,4 +1,5 @@
 import { instance, posts } from './index';
+import axios from 'axios';
 
 // 로그인
 function loginUser(userData) {
@@ -39,5 +40,9 @@ function userEvalList(userData) {
 function userClasslist(userData) {
   return posts.get('/member/user/founder', userData);
 }
+//프로필이미지 넣기
+function createThumbnails(uid, frm) {
+  return axios.post(`http://k4d106.p.ssafy.io:8080/api/member/profile/${uid}`, frm, { headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'multipart/form-data' } });
+}
 
-export { loginUser, registerUser, editUser, signout, checkEmail, logoutUser, usePartinClass, userClasslist, userEvalList };
+export { loginUser, registerUser, editUser, signout, checkEmail, logoutUser, usePartinClass, userClasslist, userEvalList, createThumbnails };

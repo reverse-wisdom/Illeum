@@ -109,6 +109,7 @@ export default {
     // const uuid = this.$store.state.uuid;
     // console.log(this.uuid);
     const { data } = await userEvalList(this.uuid);
+    console.log(data);
     for (var i = 0; i < data.length; i++) {
       var eval_date = data[i].eval_date.slice(0, 10);
       this.arrayDates.push(eval_date);
