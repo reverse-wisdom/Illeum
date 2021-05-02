@@ -180,17 +180,29 @@ export default {
       // this.connection.enableLogs = false; // to disable logs
       this.connection.enableLogs = true; // to enable logs
 
-      this.connection.onstream = function(event) {
-        console.log('open');
-        ref.connection.onUserStatusChanged(event);
+      //   this.connection.open(this.roomid);
 
-        push.create(ref.connection.extra.userFullName + '님이 ' + ref.roomid + '방을 개설하였습니다');
-      };
+      //   this.connection.onopen = function(event) {
+      //     console.log('open');
+      //     ref.connection.onUserStatusChanged(event);
 
-      this.connection.open(this.roomid);
+      //     push.create(ref.connection.extra.userFullName + '님이 ' + ref.roomid + '방을 개설하였습니다');
+      //   };
+
+      this.connection.checkPresence(this.roomid, function(isRoomExist, roomid) {
+        if (isRoomExist === true) {
+          console.log('present');
+          ref.connection.join(roomid);
+        } else {
+          console.log('open');
+          ref.connection.onUserStatusChanged();
+
+          push.create(ref.connection.extra.userFullName + '님이 ' + ref.roomid + '방을 개설하였습니다');
+          ref.connection.open(roomid);
+        }
+      });
 
       // 채팅부분영역 시작
-
       this.connection.onmessage = function(event) {
         if (event.data.chatMessage) {
           console.log(event);
@@ -218,7 +230,6 @@ export default {
           var user = ref.connection.peers[participantId];
           names.push(user.extra.userFullName);
         });
-        console.log(names);
         if (!names.length) {
           names = ['Only You'];
         } else {
