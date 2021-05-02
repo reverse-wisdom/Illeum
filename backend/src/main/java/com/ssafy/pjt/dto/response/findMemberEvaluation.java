@@ -1,5 +1,4 @@
-package com.ssafy.pjt.dto;
-
+package com.ssafy.pjt.dto.response;
 
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
@@ -10,20 +9,23 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import javax.persistence.*;
 import java.util.Date;
 
-
 @Data
-@Entity
-public class Evaluation {
+public class findMemberEvaluation {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private int vid;
     
     private int eid;
     
+    private int founderUid;
+    
+    private String name;
+  
+    private String room_name;
+    
+    private String founder;
+    
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
-    @UpdateTimestamp
-    private Date evalDate;
+    private Date eval_date;
     
     private int attention;
     private int participation;
@@ -32,7 +34,8 @@ public class Evaluation {
     private int afk;
     
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
-    private Date attendTime;
+    private Date attend_time;
     
     private int ranking;
+    
 }

@@ -10,6 +10,7 @@ import com.ssafy.pjt.dto.Token;
 import com.ssafy.pjt.dto.request.LoginDto;
 import com.ssafy.pjt.dto.request.insertRoomDto;
 import com.ssafy.pjt.dto.request.updateRoomDto;
+import com.ssafy.pjt.dto.response.findRoomEvaluation;
 import com.ssafy.pjt.jwt.JwtTokenUtil;
 import com.ssafy.pjt.service.JwtUserDetailsService;
 
@@ -55,8 +56,10 @@ public class RoomController {
 	private MemberRepository memberRepository;
 
 	@Autowired
-	RedisTemplate<String, Object> redisTemplate;
+	private JwtTokenUtil jwtTokenUtil;
 
+	@Autowired
+	RedisTemplate<String, Object> redisTemplate;
 
 	@ApiOperation(value = "방  리스트 조회")
 	@GetMapping(path = "/findAll")
@@ -70,15 +73,26 @@ public class RoomController {
 
 	@ApiOperation(value = "개설자 uid로 방 조회")
 	@GetMapping(path = "/findByUid")
-	public List<Room> findByUid(@RequestParam int uid, @RequestParam String password) {
-		return roomRepository.findByUid(uid);
+	public ResponseEntity<?> findByUid(@RequestParam int uid, @RequestParam String accessToken) {
+		try {
+			String email = jwtTokenUtil.getUsernameFromToken(accessToken);
+			Member member = memberRepository.findByEmail(email);
+			if (uid == member.getUid()) {
+				return new ResponseEntity<List<Room>>(roomRepository.findByUid(uid), HttpStatus.BAD_REQUEST);
+			} else {
+				return new ResponseEntity<String>("토큰 uid랑 uid가 다릅니다", HttpStatus.NO_CONTENT);
+			}
+		} catch (Exception e) {
+			return new ResponseEntity<String>("fail", HttpStatus.BAD_REQUEST);
+		}
 	}
-	
+
 	@ApiOperation(value = "rid로 방 조회")
 	@GetMapping(path = "/findByRid")
 	public ResponseEntity<?> findByrid(@RequestParam int rid) {
 		return new ResponseEntity<Room>(roomRepository.findByRid(rid), HttpStatus.OK);
 	}
+
 	@ApiOperation(value = "room_name으로 방 조회")
 	@GetMapping(path = "/findByRoomName")
 	public ResponseEntity<?> findByRoomName(@RequestParam String roomName) {
@@ -109,9 +123,10 @@ public class RoomController {
 	@GetMapping(path = "/evaluation")
 	// 차후에 액세스 토큰으로 이름 찾고 이름으로 uid 찾고 그걸로 데이터 뺴자
 	public ResponseEntity<?> roomJoinEvaluation(@RequestParam int rid) throws Exception {
-		List<Map<String, Object>> list;
+		List<findRoomEvaluation> list;
 		try {
 			list = roomMapper.roomJoinEvaluation(rid);
+			System.out.println(list);
 			if (list.size() == 0)
 				return new ResponseEntity<>("평가가 없습니다.", HttpStatus.OK);
 		} catch (Exception e) {
