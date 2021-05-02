@@ -5,7 +5,12 @@
 </template>
 
 <script>
-export default {};
+export default {
+  async created() {
+    console.log(this.$store.state.password);
+    console.log(this.$store.state.uuid);
+  },
+};
 </script>
 
 <style></style>
