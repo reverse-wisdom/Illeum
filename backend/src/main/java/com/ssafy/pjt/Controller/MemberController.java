@@ -218,6 +218,21 @@ public class MemberController {
         return new ResponseEntity<>(list,HttpStatus.OK);
     }
     
+    @ApiOperation(value = "맴버 출결기록")
+    @GetMapping(path = "/user/attend")
+    //차후에 액세스 토큰으로 이름 찾고 이름으로 uid 찾고 그걸로 데이터 뺴자
+    public ResponseEntity<?> memberAttend(@RequestParam int uid) throws Exception {
+    	List<memberAttend> list;
+    	try {
+    		list = memberMapper.memberAttend(uid);
+    		System.out.println(memberMapper.memberAttend(uid));
+    		if(list.size() == 0) return new ResponseEntity<>("출결 기록이 없습니다.",HttpStatus.OK);
+    	}catch (Exception e) {
+    		return new ResponseEntity<>("fail",HttpStatus.BAD_REQUEST);
+		}
+        return new ResponseEntity<>(list,HttpStatus.OK);
+    }
+    
     @ApiOperation(value = "맴버가  개설한 방 목록")
     @GetMapping(path = "/user/founder")
     //차후에 액세스 토큰으로 이름 찾고 이름으로 uid 찾고 그걸로 데이터 뺴자

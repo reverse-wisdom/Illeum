@@ -32,4 +32,16 @@
 		on e.rid = r.rid
 		where m.uid = #{uid};
 	</select>
+	
+	<!-- 맴버 출석 현황 -->
+	<select id="memberAttend" parameterType="int" resultType="memberAttend">
+		select m.uid,m.name, r.room_name,ev.attend_time
+		from member m join entrant e 
+		on m.uid = e.uid
+		right join evaluation ev
+		on e.eid = ev.eid
+		left join room r
+		on e.rid = r.rid
+		where m.uid = #{uid};
+	</select>
 </mapper>
