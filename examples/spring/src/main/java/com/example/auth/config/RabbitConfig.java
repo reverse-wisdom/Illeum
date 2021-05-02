@@ -6,6 +6,7 @@ import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.DirectExchange;
 import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.core.TopicExchange;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -30,6 +31,9 @@ public class RabbitConfig {
 	@Value("routing-key")
 	String routingkey;
 	
+	@Value("topic-name")
+	String topicName;
+	
 	@Bean
 	Queue queue() {
 		return new Queue(queueName, true);
@@ -41,13 +45,18 @@ public class RabbitConfig {
 	}
 	
 	@Bean
-	Binding binding(Queue queue, DirectExchange exchange) {
-		return BindingBuilder.bind(queue).to(exchange).with(routingkey);
+	TopicExchange topic() {
+		return new TopicExchange(topicName);
 	}
 	
-	@Bean
-	public AmqpTemplate template(ConnectionFactory connectionFactory) {
-		final RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
-		return rabbitTemplate;
-	}
+//	@Bean
+//	Binding binding(Queue queue, DirectExchange exchange) {
+//		return BindingBuilder.bind(queue).to(exchange).with(routingkey);
+//	}
+	
+//	@Bean
+//	public AmqpTemplate template(ConnectionFactory connectionFactory) {
+//		final RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
+//		return rabbitTemplate;
+//	}
 }
