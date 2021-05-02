@@ -1,4 +1,4 @@
-package com.ssafy.pjt.dto;
+package com.ssafy.pjt.dto.response;
 
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
@@ -7,34 +7,35 @@ import org.hibernate.annotations.UpdateTimestamp;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import javax.persistence.*;
-
-import java.time.LocalDateTime;
 import java.util.Date;
 
 @Data
-@Entity
-public class Room {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+public class findRoomEvaluation {
+
+    private int vid;
+    
     private int rid;
     
     private int uid;
     
-    @Column(nullable=false, length=45)
-    private String roomName;
+    private String name;
+  
+    private String room_name;
     
-    @Column(nullable=false, length=45)
-    private String roomPassword;
+    private String founder;
     
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
-    private LocalDateTime startTime;
+    private Date eval_date;
+    
+    private int attention;
+    private int participation;
+    private int distracted;
+    private int asleep;
+    private int afk;
+    
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
-    private LocalDateTime endTime;
+    private Date attend_time;
     
-    @Column(nullable=false, length=45)
-    private String roomState;
+    private int ranking;
     
-    @Column(nullable=false, length=45)
-    private String roomType;
-
 }

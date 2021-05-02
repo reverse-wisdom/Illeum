@@ -1,5 +1,6 @@
 package com.ssafy.pjt.dto.request;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import lombok.Data;
@@ -10,8 +11,8 @@ public class updateRoomDto {
 	private int uid;
 	private String roomName;
 	private String roomPassword;
-	private Date startTime;
-	private Date endTime;
+	private LocalDateTime startTime;
+	private LocalDateTime endTime;
 	private String roomState;
 	private String roomType;
 }

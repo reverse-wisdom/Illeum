@@ -1,17 +1,11 @@
 package com.ssafy.pjt.Controller;
 
-import com.ssafy.pjt.Repository.MemberRepository;
-import com.ssafy.pjt.Repository.mapper.MemberMapper;
-import com.ssafy.pjt.dto.Member;
-import com.ssafy.pjt.dto.Token;
-import com.ssafy.pjt.dto.request.LoginDto;
-import com.ssafy.pjt.dto.request.SignUpDto;
-import com.ssafy.pjt.dto.request.UpdateMemberDto;
-import com.ssafy.pjt.jwt.JwtTokenUtil;
-import com.ssafy.pjt.service.JwtUserDetailsService;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
-import io.jsonwebtoken.ExpiredJwtException;
-import io.swagger.annotations.ApiOperation;
+import javax.transaction.Transactional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,14 +19,32 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.transaction.Transactional;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
+import com.ssafy.pjt.Repository.MemberRepository;
+import com.ssafy.pjt.Repository.mapper.MemberMapper;
+import com.ssafy.pjt.dto.Member;
+import com.ssafy.pjt.dto.Token;
+import com.ssafy.pjt.dto.request.LoginDto;
+import com.ssafy.pjt.dto.request.SignUpDto;
+import com.ssafy.pjt.dto.request.UpdateMemberDto;
+import com.ssafy.pjt.dto.response.findFounder;
+import com.ssafy.pjt.dto.response.findMemberEvaluation;
+import com.ssafy.pjt.dto.response.findMemberRoom;
+import com.ssafy.pjt.dto.response.memberAttend;
+import com.ssafy.pjt.jwt.JwtTokenUtil;
+import com.ssafy.pjt.service.JwtUserDetailsService;
+
+import io.jsonwebtoken.ExpiredJwtException;
+import io.swagger.annotations.ApiOperation;
 
 
 @RestController
@@ -208,7 +220,7 @@ public class MemberController {
     @GetMapping(path = "/user/room")
     //차후에 액세스 토큰으로 이름 찾고 이름으로 uid 찾고 그걸로 데이터 뺴자
     public ResponseEntity<?> memberJoinRoom(@RequestParam int uid) throws Exception {
-    	List<Map<String,Object>> list;
+    	List<findMemberRoom> list;
     	try {
     		list = memberMapper.mamberJoinRoom(uid);
     		if(list.size() == 0) return new ResponseEntity<>("수강 중인 강의가 없습니다.",HttpStatus.OK);
@@ -237,7 +249,7 @@ public class MemberController {
     @GetMapping(path = "/user/founder")
     //차후에 액세스 토큰으로 이름 찾고 이름으로 uid 찾고 그걸로 데이터 뺴자
     public ResponseEntity<?> founder(@RequestParam int uid) throws Exception {
-    	List<Map<String,Object>> list;
+    	List<findFounder> list;
     	try {
     		list = memberMapper.founder(uid);
     		if(list.size() == 0) return new ResponseEntity<>("개설한 방이 없습니다.",HttpStatus.OK);
@@ -252,7 +264,7 @@ public class MemberController {
     @GetMapping(path = "/user/evaluation")
     //차후에 액세스 토큰으로 이름 찾고 이름으로 uid 찾고 그걸로 데이터 뺴자
     public ResponseEntity<?> memberJoinEvaluation(@RequestParam int uid) throws Exception {
-    	List<Map<String,Object>> list;
+    	List<findMemberEvaluation> list;
     	try {
     		list = memberMapper.memberJoinEvaluation(uid);
     		if(list.size() == 0) return new ResponseEntity<>("평가가 없습니다",HttpStatus.OK);

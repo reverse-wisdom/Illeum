@@ -10,6 +10,7 @@ import com.ssafy.pjt.dto.Token;
 import com.ssafy.pjt.dto.request.LoginDto;
 import com.ssafy.pjt.dto.request.insertRoomDto;
 import com.ssafy.pjt.dto.request.updateRoomDto;
+import com.ssafy.pjt.dto.response.findRoomEvaluation;
 import com.ssafy.pjt.jwt.JwtTokenUtil;
 import com.ssafy.pjt.service.JwtUserDetailsService;
 
@@ -109,9 +110,10 @@ public class RoomController {
 	@GetMapping(path = "/evaluation")
 	// 차후에 액세스 토큰으로 이름 찾고 이름으로 uid 찾고 그걸로 데이터 뺴자
 	public ResponseEntity<?> roomJoinEvaluation(@RequestParam int rid) throws Exception {
-		List<Map<String, Object>> list;
+		List<findRoomEvaluation> list;
 		try {
 			list = roomMapper.roomJoinEvaluation(rid);
+			System.out.println(list);
 			if (list.size() == 0)
 				return new ResponseEntity<>("평가가 없습니다.", HttpStatus.OK);
 		} catch (Exception e) {

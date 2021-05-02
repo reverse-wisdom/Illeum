@@ -1,6 +1,9 @@
 package com.ssafy.pjt.dto.request;
 
+import java.time.LocalDateTime;
 import java.util.Date;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.Data;
 
@@ -9,8 +12,8 @@ public class insertRoomDto {
 	private int uid;
 	private String roomName;
 	private String roomPassword;
-	private Date startTime;
-	private Date endTime;
+	private LocalDateTime startTime;
+	private LocalDateTime endTime;
 	private String roomState;
 	private String roomType;
 }
