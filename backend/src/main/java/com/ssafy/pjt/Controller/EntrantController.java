@@ -106,16 +106,20 @@ public class EntrantController {
     @Transactional
     @PostMapping(path="/insert")
     public ResponseEntity<?> insertByUid(@RequestBody insertEntrantDto insertRoom) {
-    	Entrant entran = new Entrant();
-    	
-    	entran.setUid(insertRoom.getUid());
-    	entran.setRid(insertRoom.getRid());
-  	
-    	try {
-    		entran = entrantRepository.save(entran);
-    	}catch (Exception e) {
-    		new ResponseEntity<String>("fail",HttpStatus.BAD_REQUEST);
-		}
+    	Entrant entran = entrantRepository.findByUidAndRid(insertRoom.getUid(),insertRoom.getRid());
+    	//없으면 생성
+    	if(entran == null) {
+    		entran = new Entrant();
+    		entran.setUid(insertRoom.getUid());
+    		entran.setRid(insertRoom.getRid());
+    		try {
+        		entran = entrantRepository.save(entran);
+        		return new ResponseEntity<Entrant>(entran,HttpStatus.OK);
+        	}catch (Exception e) {
+        		new ResponseEntity<String>("fail",HttpStatus.BAD_REQUEST);
+    		}
+    	} 
+    	//있으면 찾은거 그냥 반환
     	return new ResponseEntity<Entrant>(entran,HttpStatus.OK);
     }
     
