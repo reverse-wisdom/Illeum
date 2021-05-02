@@ -20,6 +20,7 @@ import ClassMaster from '../views/class/ClassMaster.vue';
 //evaluation
 import UserEval from '../views/evaluation/UserEval.vue';
 import UserEvaluation from '../views/UserEvaluation.vue';
+import LecturerManage from '../views/evaluation/LecturerManage.vue';
 // 테스트용 임포트 페이지
 
 import webrtcTest from '../views/testpage/webrtcTest.vue';
@@ -53,6 +54,11 @@ const routes = [
   //   name: 'Landing',
   //   components: { default: Landing },
   // },
+  {
+    path: '/lecturermanage',
+    name: 'LecturerManage',
+    components: { default: LecturerManage, header: Navbar },
+  },
   {
     path: '/sign',
     name: 'Sign',
