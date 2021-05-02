@@ -58,10 +58,6 @@ export default {
   },
   methods: {
     async detailClass(value) {
-      var uid = this.$store.state.uuid; // 지금 uid는 임시고정 값!!!!!
-      var rid = value.rid;
-      var insertInfo = { uid: uid, rid: rid };
-
       if (value.room_type == '비공개') {
         const { value: room_password } = await this.$swal({
           icon: 'question',
@@ -77,33 +73,17 @@ export default {
             });
           } else {
             if (value.uid == this.$store.state.uuid) {
-              this.$router.push({ name: 'ClassMaster', query: { room_name: value.room_name } });
+              this.$router.push({ name: 'ClassMaster', query: { room_name: value.room_name, rid: value.rid } });
             } else {
-              try {
-                const { data } = await insertRoom(insertInfo);
-                if (data != null) {
-                  this.$router.push({ name: 'Class', query: { room_name: value.room_name } });
-                }
-              } catch {
-                this.$swal({
-                  icon: 'error',
-                  title: '참여할 수 없는 방입니다.!!',
-                });
-              }
+              this.$router.push({ name: 'Class', query: { room_name: value.room_name, rid: value.rid } });
             }
           }
         }
       } else {
-        try {
-          const { data } = await insertRoom(insertInfo);
-          if (data != null) {
-            this.$router.push({ name: 'Class', query: { room_name: value.room_name } });
-          }
-        } catch {
-          this.$swal({
-            icon: 'error',
-            title: '참여할 수 없는 방입니다.!!',
-          });
+        if (value.uid == this.$store.state.uuid) {
+          this.$router.push({ name: 'ClassMaster', query: { room_name: value.room_name, rid: value.rid } });
+        } else {
+          this.$router.push({ name: 'Class', query: { room_name: value.room_name, rid: value.rid } });
         }
       }
     },
