@@ -182,8 +182,8 @@ export default {
       };
 
       // 콘솔로그 출력 해제
-      // this.connection.enableLogs = false; // to disable logs
-      this.connection.enableLogs = true; // to enable logs
+      this.connection.enableLogs = false; // to disable logs
+      // this.connection.enableLogs = true; // to enable logs
 
       // 개설자 로직(개설자 퇴장시 전체 세션 종료 옵션)
       this.connection.autoCloseEntireSession = true;
@@ -243,6 +243,10 @@ export default {
         }
         infoBar.innerHTML = '<b>참여자 목록:</b> ' + names.join(', ');
       };
+
+      this.connection.onclose = function(event) {
+        console.log('close');
+      };
     },
 
     screen() {
@@ -264,44 +268,46 @@ export default {
     },
     async outRoom() {
       var ref = this;
+      await updateClass({ rid: this.$route.query.rid, room_state: '완료' })
+        .then(({ data }) => {
+          console.log(data);
+          if (data == 'success') {
+            this.$swal({
+              icon: 'success',
+              title: '<h2>클래스가 종료되었습니다.!!</h2>',
+              toast: true,
+              width: 600,
+              padding: '2em',
+              position: 'top-end',
+              showConfirmButton: false,
+              timer: 5000,
+              timerProgressBar: true,
+              didOpen: (toast) => {
+                toast.addEventListener('mouseenter', ref.$swal.stopTimer);
+                toast.addEventListener('mouseleave', ref.$swal.resumeTimer);
+              },
+            });
+            ref.connection.autoCloseEntireSession = true;
 
-      try {
-        const { data } = await updateClass({ rid: value.rid, room_state: '완료' });
-        console.log(data);
-        if (data == 'success') {
+            ref.connection.getAllParticipants().forEach((participantId) => {
+              ref.connection.disconnectWith(participantId);
+            });
+
+            ref.connection.attachStreams.forEach(function(localStream) {
+              localStream.stop();
+            });
+
+            ref.connection.closeSocket();
+
+            this.$router.push({ name: 'ClassList' });
+          }
+        })
+        .catch((err) => {
           this.$swal({
-            icon: 'success',
-            title: '<h2>클래스가 종료되었습니다.!!</h2>',
-            toast: true,
-            width: 600,
-            padding: '2em',
-            position: 'top-end',
-            showConfirmButton: false,
-            timer: 5000,
-            timerProgressBar: true,
-            didOpen: (toast) => {
-              toast.addEventListener('mouseenter', ref.$swal.stopTimer);
-              toast.addEventListener('mouseleave', ref.$swal.resumeTimer);
-            },
+            icon: 'error',
+            title: '클래스 종료 오류.!!',
           });
-
-          ref.connection.getAllParticipants().forEach((participantId) => {
-            ref.connection.disconnectWith(participantId);
-          });
-
-          ref.connection.attachStreams.forEach(function(localStream) {
-            localStream.stop();
-          });
-          ref.connection.closeSocket();
-
-          this.$router.push({ name: 'ClassList' });
-        }
-      } catch {
-        this.$swal({
-          icon: 'error',
-          title: '클래스 종료 오류.!!',
         });
-      }
     },
     saveMessageLog() {
       var fileName = this.roomid;
