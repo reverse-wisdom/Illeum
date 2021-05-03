@@ -59,8 +59,8 @@ public class WebRtcController {
 	}
 	
 	@ApiOperation(value = "미팅 시작")
-	@GetMapping(path = "/exit")
-	public ResponseEntity<?> Exit(@RequestParam(value = "미팅 시작하는 방 rid") int rid) {
+	@GetMapping(path = "/start")
+	public ResponseEntity<?> Start(@RequestParam(value = "미팅 시작하는 방 rid") int rid) {
 		
 		try {
 			List<Entrant> entrant = entrantRepository.findByRid(rid);
