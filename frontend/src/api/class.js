@@ -43,8 +43,8 @@ function findByRidClass(rid) {
   return posts.get(`/room/findByRid?rid=${rid}`);
 }
 //개설자 uid로 방조회 (uid)
-function findByUidClass(uuid) {
-  return posts.get('/room/findByUid', uuid);
+function findByUidClass(token, uid) {
+  return posts.get(`/room/findByUid?accessToken=${token}&uid=${uid}`);
 }
 
 export { createClass, updateClass, deleteClass, getStudents, fetchRoomname, evaluateList, classAll, findByRidClass, findByUidClass, insertRoom };
