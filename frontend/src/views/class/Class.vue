@@ -48,6 +48,7 @@ export default {
       connection: null,
       message: '',
       rid: '',
+      isOutClicked: true,
     };
   },
   created() {
@@ -172,8 +173,10 @@ export default {
       };
 
       // 콘솔로그 출력 해제
-      // this.connection.enableLogs = false; // to disable logs
-      this.connection.enableLogs = true; // to enable logs
+      this.connection.enableLogs = false; // to disable logs
+      // this.connection.enableLogs = true; // to enable logs
+
+      this.connection.autoCloseEntireSession = true;
 
       this.connection.checkPresence(this.roomid, function(isRoomExist, roomid) {
         if (isRoomExist === true) {
@@ -187,7 +190,6 @@ export default {
             ref.$router.push({ name: 'ClassList' });
             return;
           }
-          console.log('present');
           ref.connection.onUserStatusChanged();
           push.create(ref.connection.extra.userFullName + '님이 ' + ref.roomid + '클래스에 입장했습니다');
           ref.connection.join(roomid);
@@ -255,11 +257,19 @@ export default {
       };
 
       this.connection.onclose = function(event) {
-        ref.$swal({
-          icon: 'warning',
-          title: '현재 클래스가 종료 되었습니다.!!',
-        });
-        ref.$router.push({ name: 'ClassList' });
+        console.log(ref.isOutClicked);
+        if (!ref.isOutClicked) {
+          console.log('test');
+          ref.$swal({
+            icon: 'warning',
+            title: '현재 클래스가 종료 되었습니다.!!',
+          });
+          ref.$router.push({ name: 'ClassList' });
+        }
+      };
+
+      this.connection.onEntireSessionClosed = function(event) {
+        console.info('Entire session is closed: ', event.sessionid, event.extra);
       };
     },
     screen() {
@@ -280,6 +290,7 @@ export default {
       console.log('test when open', this.connection);
     },
     outRoom() {
+      this.isOutClicked = true;
       this.connection.getAllParticipants().forEach((participantId) => {
         this.connection.disconnectWith(participantId);
       });
@@ -289,6 +300,11 @@ export default {
       });
 
       this.connection.closeSocket();
+      this.$swal({
+        icon: 'warning',
+        title: '클래스 나가기.!!',
+      });
+
       this.$router.push({ name: 'ClassList' });
     },
     async checkEntrant() {
