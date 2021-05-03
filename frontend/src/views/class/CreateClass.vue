@@ -19,6 +19,7 @@
               v-model="start_room_date"
               no-title
               scrollable
+              color="green lighten-1"
               :weekday-format="getDay"
               :month-format="getMonth"
               :header-date-format="headerDate"
@@ -43,10 +44,23 @@
                 <v-text-field :value="start_room_time | timeFilter" label="시작시간" prepend-icon="mdi-clock-time-four-outline" readonly v-on="on" :error-messages="errors"></v-text-field>
               </validation-provider>
             </template>
-            <v-time-picker v-if="start_time_menu" v-model="start_room_time" full-width @click:minute="$refs.start_time_menu.save(start_room_time)"></v-time-picker>
+            <v-time-picker scrollable color="green lighten-1" v-if="start_time_menu" v-model="start_room_time" @click:minute="$refs.start_time_menu.save(start_room_time)"></v-time-picker>
           </v-menu>
         </v-col>
       </v-row>
+
+      <!-- hours add buttons -->
+      <div v-if="start_room_time != '' && start_room_date != ''">
+        <v-btn class="mr-4" @click="addHour(1)">
+          1시간 추가
+        </v-btn>
+        <v-btn class="mr-4" @click="addHour(2)">
+          2시간 추가
+        </v-btn>
+        <v-btn class="mr-4" @click="addHour(3)">
+          3시간 추가
+        </v-btn>
+      </div>
 
       <!-- end date/time -->
       <v-row>
@@ -85,19 +99,10 @@
                 <v-text-field :value="end_room_time | timeFilter" label="종료시간" prepend-icon="mdi-clock-time-four-outline" readonly v-on="on" :error-messages="errors"></v-text-field>
               </validation-provider>
             </template>
-            <v-time-picker v-if="end_time_menu" v-model="end_room_time" full-width @click:minute="$refs.end_time_menu.save(end_room_time)"></v-time-picker>
+            <v-time-picker scrollable v-if="end_time_menu" v-model="end_room_time" full-width @click:minute="$refs.end_time_menu.save(end_room_time)"></v-time-picker>
           </v-menu>
         </v-col>
       </v-row>
-      <v-btn class="mr-4" @click="addHour(1)">
-        1시간 추가
-      </v-btn>
-      <v-btn class="mr-4" @click="addHour(2)">
-        2시간 추가
-      </v-btn>
-      <v-btn class="mr-4" @click="addHour(3)">
-        3시간 추가
-      </v-btn>
 
       <!-- room_type / room_password -->
       <validation-provider v-slot="{ errors }" name="공개방/암호방" rules="required">
@@ -226,14 +231,11 @@ export default {
     },
     addHour(hour) {
       this.end_room_date = this.start_room_date;
-
-      var start = parseInt(this.start_room_time.substring(0, 2)) + hour;
-
+      let start = parseInt(this.start_room_time.substring(0, 2)) + hour;
       if (start < 10) start = '0' + start;
       if (start >= 24) {
         start = start - 24;
         start = '0' + start;
-
         this.end_room_date = new Date(new Date(this.end_room_date).setDate(new Date(this.start_room_date).getDate() + 1)).toISOString().split('T')[0];
         console.log(this.end_room_date);
       }
@@ -243,14 +245,16 @@ export default {
       var ref = this;
       try {
         const { data } = await createClass(classData);
-        if (!data) {
+        if (data != null) {
           this.$swal({
             icon: 'success',
-            title: '클래스 생성 완료',
+            title: '<h2>클래스 생성 완료</h2>',
             toast: true,
+            width: 600,
+            padding: '2em',
             position: 'top-end',
             showConfirmButton: false,
-            timer: 3000,
+            timer: 5000,
             timerProgressBar: true,
             didOpen: (toast) => {
               toast.addEventListener('mouseenter', ref.$swal.stopTimer);
