@@ -13,7 +13,7 @@ RUN python -m pip install --upgrade pip
 
 RUN pip install cmake
 
-RUN pip uninstall opencv-python
+RUN yes | pip uninstall opencv-python
 
 RUN pip install -r /app/requirements-linux.txt
 
