@@ -5,8 +5,6 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.ssafy.pjt.dto.Entrant;
-import com.ssafy.pjt.dto.Member;
-import com.ssafy.pjt.dto.Room;
 
 public interface EntrantRepository extends JpaRepository<Entrant, Integer> {
 	Entrant findByEid(int rid);

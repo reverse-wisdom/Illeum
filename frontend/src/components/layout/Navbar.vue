@@ -77,7 +77,7 @@
               </a>
             </li>
             <li>
-              <a href="/sign">
+              <a href="/sign" v-if="loginchk === null || loginchk === undefined || loginchk === ''">
                 <span class="Navtext">Sign</span>
               </a>
             </li>
@@ -126,10 +126,12 @@ export default {
       dialog: false,
       image: null,
       url: null,
+      loginchk: this.$store.state.token,
     };
   },
   created() {
     this.url = 'https://k4d106.p.ssafy.io/profile/' + this.$store.state.uuid + '/256';
+    console.log(this.loginchk);
   },
   methods: {
     Preview_image() {
@@ -146,17 +148,15 @@ export default {
       const userData = this.$store.state.token;
 
       const { data } = await logoutUser(userData);
-
-      console.log(data);
       localStorage.clear();
       sessionStorage.clear();
+      this.$router.push('/sign');
       if (data == 'success') {
         this.$store.commit('clearToken');
         this.$store.commit('clearUuid');
         this.$store.commit('clearEmail');
         this.$store.commit('clearRole');
         this.$store.commit('clearName');
-        this.$router.push('/sign');
         console.log('로그아웃 성공');
       } else {
         console.log('로그아웃실패');

@@ -1,8 +1,8 @@
-FROM getcurrentthread/python-fastapi-image:0.0.1
+FROM getcurrentthread/python-fastapi-image:0.0.2
 
 WORKDIR /app
 
-COPY requirements.txt /app/
+COPY requirements-linux.txt /app/
 
 # RUN apk --update add tzdata && \
 #    cp /usr/share/zoneinfo/Asia/Seoul /etc/localtime && \
@@ -13,7 +13,7 @@ RUN python -m pip install --upgrade pip
 
 RUN pip install cmake
 
-RUN pip install -r /app/requirements.txt
+RUN pip install -r /app/requirements-linux.txt
 
 COPY . /app
 
