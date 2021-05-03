@@ -192,18 +192,18 @@ public class RoomController {
 		if (room == null)
 			new ResponseEntity<String>("room이 없습니다", HttpStatus.OK);
 
-		if (roomdto.getRoomName() != null)
-			room.setRoomName(roomdto.getRoomName());
-		if (roomdto.getRoomPassword() != null)
-			room.setRoomPassword(roomdto.getRoomPassword());
-		if (roomdto.getRoomState() != null)
-			room.setRoomState(roomdto.getRoomState());
-		if (roomdto.getRoomType() != null)
-			room.setRoomType(roomdto.getRoomType());
-		if (roomdto.getStartTime() != null)
-			room.setStartTime(roomdto.getStartTime());
-		if (roomdto.getEndTime() != null)
-			room.setEndTime(roomdto.getEndTime());
+		if (roomdto.getRoom_name() != null)
+			room.setRoomName(roomdto.getRoom_name());
+		if (roomdto.getRoom_password() != null)
+			room.setRoomPassword(roomdto.getRoom_password());
+		if (roomdto.getRoom_state() != null)
+			room.setRoomState(roomdto.getRoom_state());
+		if (roomdto.getRoom_type() != null)
+			room.setRoomType(roomdto.getRoom_type());
+		if (roomdto.getStart_time() != null)
+			room.setStartTime(roomdto.getStart_time());
+		if (roomdto.getEnd_time() != null)
+			room.setEndTime(roomdto.getEnd_time());
 
 		try {
 			roomRepository.save(room);

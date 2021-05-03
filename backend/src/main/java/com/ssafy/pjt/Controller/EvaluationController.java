@@ -21,6 +21,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
+import java.time.ZoneId;
+import java.util.Date;
 
 import javax.transaction.Transactional;
 
@@ -100,12 +102,13 @@ public class EvaluationController {
         //Member member = memberRepository.findByUid(entrant.getUid());
         //엑세스 토큰을 받아서 개설자인지 확인을 해야될까?
         if(evaluationDto.getEid() != null)evaluation.setEid(evaluationDto.getEid());
+        if(evaluationDto.getEval_date() != null)evaluation.setEvalDate(Date.from(evaluationDto.getEval_date().atZone(ZoneId.systemDefault()).toInstant()));
         if(evaluationDto.getAttention() != null)evaluation.setAttention(evaluationDto.getAttention());
         if(evaluationDto.getParticipation() != null)evaluation.setParticipation(evaluationDto.getParticipation());
         if(evaluationDto.getDistracted() != null)evaluation.setDistracted(evaluationDto.getDistracted());
         if(evaluationDto.getAsleep() != null)evaluation.setAsleep(evaluationDto.getAsleep());
         if(evaluationDto.getAfk() != null)evaluation.setAfk(evaluationDto.getAfk());
-        if(evaluationDto.getAttendTime() != null)evaluation.setAttendTime(evaluationDto.getAttendTime());
+        if(evaluationDto.getAttend_time() != null)evaluation.setAttendTime(Date.from(evaluationDto.getAttend_time().atZone(ZoneId.systemDefault()).toInstant()));
         if(evaluationDto.getRanking() != null)evaluation.setRanking(evaluationDto.getRanking());
         
     	try {
