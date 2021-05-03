@@ -129,7 +129,8 @@ public class EntrantController {
 				FanoutExchange fanout = new FanoutExchange(roomName);
 				
 				Binding bind = BindingBuilder.bind(queue).to(fanout);
-				
+				admin.declareBinding(bind);
+
 				entran = entrantRepository.save(entran);
 				return new ResponseEntity<Entrant>(entran, HttpStatus.OK);
 			} catch (Exception e) {
