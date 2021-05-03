@@ -1,7 +1,6 @@
 package com.ssafy.pjt.dto.request;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 import lombok.Data;
 

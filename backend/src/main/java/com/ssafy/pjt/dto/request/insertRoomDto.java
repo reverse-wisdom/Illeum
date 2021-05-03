@@ -1,9 +1,6 @@
 package com.ssafy.pjt.dto.request;
 
 import java.time.LocalDateTime;
-import java.util.Date;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.Data;
 

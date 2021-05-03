@@ -1,12 +1,9 @@
 package com.ssafy.pjt.dto.response;
 
 import lombok.Data;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import javax.persistence.*;
 import java.util.Date;
 
 @Data

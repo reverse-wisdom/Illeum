@@ -1,17 +1,12 @@
 package com.ssafy.pjt.Controller;
 
-import com.ssafy.pjt.Repository.EntrantRepository;
 import com.ssafy.pjt.Repository.MemberRepository;
 import com.ssafy.pjt.Repository.RoomRepository;
-import com.ssafy.pjt.dto.Entrant;
 import com.ssafy.pjt.dto.Member;
 import com.ssafy.pjt.dto.Room;
 
 import io.swagger.annotations.ApiOperation;
 
-import java.util.List;
-
-import org.springframework.amqp.core.AmqpAdmin;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,12 +19,6 @@ import org.springframework.web.bind.annotation.*;
 public class WebRtcController {
 	@Autowired
 	private RoomRepository roomRepository;
-	
-	@Autowired
-	private EntrantRepository entrantRepository;
-	
-    @Autowired
-    private AmqpAdmin admin;
     
     @Autowired
     private MemberRepository memberRepository;
