@@ -1,4 +1,4 @@
-FROM getcurrentthread/python-fastapi-image:0.0.1
+FROM getcurrentthread/python-fastapi-image:0.0.2
 
 WORKDIR /app
 
@@ -12,10 +12,6 @@ COPY requirements-linux.txt /app/
 RUN python -m pip install --upgrade pip
 
 RUN pip install cmake
-
-RUN yes | pip uninstall tensorflow
-
-RUN yes | pip uninstall opencv-python
 
 RUN pip install -r /app/requirements-linux.txt
 
