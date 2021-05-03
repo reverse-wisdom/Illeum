@@ -13,7 +13,7 @@ RUN python -m pip install --upgrade pip
 
 RUN pip install cmake
 
-RUN pip install -r /app/requirements.txt
+RUN pip install -r /app/requirements-linux.txt
 
 COPY . /app
 
