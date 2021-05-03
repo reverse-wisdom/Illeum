@@ -1,8 +1,6 @@
 package com.ssafy.pjt.Repository.mapper;
 
 import java.sql.SQLException;
-import java.util.List;
-import java.util.Map;
 
 import com.ssafy.pjt.dto.Evaluation;
 

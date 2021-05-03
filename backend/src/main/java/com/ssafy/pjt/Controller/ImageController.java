@@ -1,21 +1,11 @@
 package com.ssafy.pjt.Controller;
 
-import java.net.URI;
-import java.nio.file.Path;
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
-import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
-import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,9 +18,6 @@ import com.ssafy.pjt.dto.UploadFile;
 import com.ssafy.pjt.service.ImageService;
 //import com.ssafy.pjt.provider.service.MemberService;
 import com.ssafy.pjt.util.MediaUtils;
-import com.ssafy.pjt.util.UploadFileUtils;
-import com.ssafy.pjt.Repository.MemberRepository;
-import com.ssafy.pjt.dto.Member;
 
 /**
  * @author https://github.com/woobong/spring-boot-jpa-summernote-image-upload-example/
@@ -41,8 +28,6 @@ public class ImageController {
 
 	@Autowired
 	ImageService imageService;
-	@Autowired
-	private MemberRepository memberRepository;
 //	@Autowired
 //	ImageController self;
 
@@ -104,7 +89,7 @@ public class ImageController {
 	@ResponseBody
 	public ResponseEntity<?> handleProfileImageUpload(@PathVariable int uid, @RequestParam("file") MultipartFile file) {
 		try {
-			UploadFile uploadedFile = imageService.store(file, "/profile", String.valueOf(uid), true);
+			imageService.store(file, "/profile", String.valueOf(uid), true);
 //			Member member = memberRepository.findByUid(uid);
 //			member.setThumbnail(String.valueOf(uploadedFile.getId()));
 //			memberRepository.save(member);

@@ -4,11 +4,6 @@ import lombok.Data;
 
 import javax.persistence.*;
 
-import org.hibernate.annotations.ColumnDefault;
-
-import java.util.ArrayList;
-import java.util.List;
-
 @Data
 @Entity
 public class Member {

@@ -3,7 +3,6 @@ package com.ssafy.pjt.dto;
 import lombok.Data;
 import org.springframework.data.redis.core.RedisHash;
 
-import javax.persistence.Id;
 import java.io.Serializable;
 
 @Data
