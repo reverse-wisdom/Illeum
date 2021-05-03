@@ -10,9 +10,11 @@ import com.ssafy.pjt.dto.Token;
 import com.ssafy.pjt.dto.request.LoginDto;
 import com.ssafy.pjt.dto.request.insertRoomDto;
 import com.ssafy.pjt.dto.request.updateRoomDto;
+import com.ssafy.pjt.dto.response.findRoom;
 import com.ssafy.pjt.dto.response.findRoomEvaluation;
 import com.ssafy.pjt.jwt.JwtTokenUtil;
 import com.ssafy.pjt.service.JwtUserDetailsService;
+import com.ssafy.pjt.service.RoomService;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -53,7 +55,10 @@ public class RoomController {
 
 	@Autowired
 	private RoomMapper roomMapper;
-
+	
+	@Autowired
+	private RoomService roomService;
+	
 	@Autowired
 	private MemberRepository memberRepository;
 
@@ -83,7 +88,7 @@ public class RoomController {
 			String email = jwtTokenUtil.getUsernameFromToken(accessToken);
 			Member member = memberRepository.findByEmail(email);
 			if (uid == member.getUid()) {
-				return new ResponseEntity<List<Room>>(roomRepository.findByUid(uid), HttpStatus.BAD_REQUEST);
+				return new ResponseEntity<>(roomRepository.findByUid(uid), HttpStatus.BAD_REQUEST);
 			} else {
 				return new ResponseEntity<String>("토큰 uid랑 uid가 다릅니다", HttpStatus.NO_CONTENT);
 			}
@@ -95,7 +100,14 @@ public class RoomController {
 	@ApiOperation(value = "rid로 방 조회")
 	@GetMapping(path = "/findByRid")
 	public ResponseEntity<?> findByrid(@RequestParam int rid) {
-		return new ResponseEntity<Room>(roomRepository.findByRid(rid), HttpStatus.OK);
+		Room room = roomRepository.findByRid(rid);
+		try {
+			findRoom findroom = roomService.conversion(room);
+			return new ResponseEntity<>(findroom, HttpStatus.OK);
+		} catch (SQLException e) {
+			return new ResponseEntity<String>("fail", HttpStatus.BAD_REQUEST);
+		}
+		
 	}
 
 	@ApiOperation(value = "room_name으로 방 조회")
@@ -146,6 +158,7 @@ public class RoomController {
 	@PostMapping(path = "/insert")
 	public ResponseEntity<?> insertByUid(@RequestBody insertRoomDto insertRoom) {
 		Room room = new Room();
+		
 		if (insertRoom.getRoomType().equals("비공개")) {
 			room.setRoomPassword(insertRoom.getRoomPassword());
 			room.setRoomType("비공개");
@@ -161,13 +174,15 @@ public class RoomController {
 
 		try {
 			room = roomRepository.save(room);
-	        String roomName = "room." + Integer.toString(room.getRid());
+			findRoom find = roomService.conversion(room);
+			String roomName = "room." + Integer.toString(room.getRid());
 			FanoutExchange fanout = new FanoutExchange(roomName);
 			admin.declareExchange(fanout);
+			return new ResponseEntity<findRoom>(find, HttpStatus.OK);
 		} catch (Exception e) {
 			new ResponseEntity<String>("fail", HttpStatus.BAD_REQUEST);
 		}
-		return new ResponseEntity<Room>(room, HttpStatus.OK);
+		return new ResponseEntity<String>("fail", HttpStatus.NO_CONTENT);
 	}
 
 	@ApiOperation(value = "방 삭제")

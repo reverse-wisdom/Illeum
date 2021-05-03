@@ -3,8 +3,6 @@ package com.ssafy.pjt.util;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.activation.MimetypesFileTypeMap;
-
 import org.springframework.http.MediaType;
 
 public class MediaUtils {
