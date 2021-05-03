@@ -20,7 +20,7 @@ public class Room {
     
     private int uid;
     
-    @Column(nullable=false, length=45)
+    @Column(name = "room_name", nullable=false, length=45)
     private String roomName;
     
     @Column(nullable=false, length=45)
