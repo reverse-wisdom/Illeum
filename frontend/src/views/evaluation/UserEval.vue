@@ -2,7 +2,7 @@
   <div>
     <span>{{ this.$store.state.uuid }}의 평가목록</span>
     <v-row justify="center">
-      <v-date-picker v-model="date" @click:date="classNameFetch" :allowed-dates="allowedDates" class="mt-4" min="1900-04-01" max="2100-10-30"></v-date-picker>
+      <v-date-picker v-model="date" @click:date="classNameFetch" :landscape="landscape" locale="ko-kr" :allowed-dates="allowedDates" class="mt-4" min="1900-04-01" max="2100-10-30"></v-date-picker>
       <v-col class="d-flex" cols="12" sm="6">
         <v-select :items="items" :label="date" solo @change="showEvaluation"></v-select>
       </v-col>
@@ -33,6 +33,7 @@ export default {
       eval: [],
       items: [],
       date: '',
+      landscape: true,
       menu: false,
       // date: '2018-03-02',
       mindate: '2021-04-01',
@@ -96,24 +97,29 @@ export default {
       renderKey: -1,
     };
   },
+  // props: {
+  //   date: {
+  //     type: String,
+  //   },
+  //   items: {
+  //     type: [],
+  //   },
+  // },
   async created() {
     // const uuid = this.$store.state.uuid;
     // console.log(this.uuid);
     const { data } = await userEvalList(this.uuid);
+    console.log(data);
     for (var i = 0; i < data.length; i++) {
       var eval_date = data[i].eval_date.slice(0, 10);
       this.arrayDates.push(eval_date);
     }
     this.eval = data;
-    console.log(this.eval);
+
     this.items = [];
     this.evalcheck = false;
   },
   methods: {
-    allowedDates(val) {
-      var arrayDates = this.arrayDates;
-      arrayDates.indexOf(val) !== -1;
-    },
     classNameFetch() {
       this.roomName = [];
       for (var i = 0; i < this.eval.length; i++) {

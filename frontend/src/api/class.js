@@ -5,6 +5,11 @@ function classAll(classData) {
   return posts.get('/room/findAll', classData);
 }
 
+//room_name으로 방 조회 (3. WebRTC 방조회)
+function fetchRoomname(roomName) {
+  return posts.get(`/room/findByRoomName?roomName=${roomName}`);
+}
+
 //방 참여 로직
 function insertRoom(insertInfo) {
   return posts.post('/entrant/insert', insertInfo);
@@ -18,10 +23,7 @@ function createClass(classData) {
 function updateClass(classData) {
   return posts.put('/room/updateByRid', classData);
 }
-//room_name으로 방 조회
-function fetchRoomname(roomName) {
-  return posts.get(`/room/findByRoomName?roomName=${roomName}`);
-}
+
 //방 삭제
 function deleteClass(classData) {
   return posts.delete('/room/deleteByRid', classData);
@@ -36,12 +38,12 @@ function evaluateList(roomId) {
   return posts.get(`/room/evaluation?rid=${roomId}`);
 }
 
-//개설자 uid로 방조회 (Rid)
+//rid로 방조회
 function findByRidClass(rid) {
-  return posts.get('/room/findByRid', rid);
+  return posts.get(`/room/findByRid?rid=${rid}`);
 }
 //개설자 uid로 방조회 (uid)
-function findByUidClass(classData) {
+function findByUidClass(uuid) {
   return posts.get('/room/findByUid', uuid);
 }
 
