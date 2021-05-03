@@ -29,7 +29,8 @@ class Item(BaseModel):
 # 실제 사용
 @router.post("/eval", summary="현재 태도에 따른 태도 분석")
 async def evaluate_face_background_task(item: Item):
-    content: bytes = base64.b64decode(item.snapshot).decode('utf-8')
+    base64_string = item.snapshot[1 + item.snapshot.find(','):]
+    content: bytes = base64.b64decode(base64_string)
     return service.face_detection_task(item.uid, item.rid, content)
 
 
