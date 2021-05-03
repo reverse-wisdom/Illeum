@@ -18,7 +18,7 @@ class FaceDetectionResponse:
     def __init__(self,
                  result: str,
                  message: str,
-                 data: Optional[SimpleFaceDetectionResult]
+                 data: Optional[SimpleFaceDetectionResult] = None
                  ):
         self.result = result
         self.message = message
