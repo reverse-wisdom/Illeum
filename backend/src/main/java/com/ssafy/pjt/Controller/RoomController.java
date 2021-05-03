@@ -140,17 +140,17 @@ public class RoomController {
 	public ResponseEntity<?> insertByUid(@RequestBody insertRoomDto insertRoom) {
 		Room room = new Room();
 		
-		if (insertRoom.getRoomType().equals("비공개")) {
-			room.setRoomPassword(insertRoom.getRoomPassword());
+		if (insertRoom.getRoom_type().equals("비공개")) {
+			room.setRoomPassword(insertRoom.getRoom_password());
 			room.setRoomType("비공개");
 		} else {
 			room.setRoomPassword(null);
 			room.setRoomType("공개");
 		}
 		room.setUid(insertRoom.getUid());
-		room.setRoomName(insertRoom.getRoomName());
-		room.setStartTime(insertRoom.getStartTime());
-		room.setEndTime(insertRoom.getEndTime());
+		room.setRoomName(insertRoom.getRoom_name());
+		room.setStartTime(insertRoom.getStart_time());
+		room.setEndTime(insertRoom.getEnd_time());
 		room.setRoomState("진행");
 
 		try {
