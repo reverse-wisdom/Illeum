@@ -163,6 +163,7 @@ public class RoomController {
 			room = roomRepository.save(room);
 	        String roomName = "room." + Integer.toString(room.getRid());
 			FanoutExchange fanout = new FanoutExchange(roomName);
+			admin.declareExchange(fanout);
 		} catch (Exception e) {
 			new ResponseEntity<String>("fail", HttpStatus.BAD_REQUEST);
 		}
