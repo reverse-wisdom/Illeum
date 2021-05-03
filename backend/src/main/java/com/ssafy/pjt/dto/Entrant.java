@@ -2,13 +2,8 @@ package com.ssafy.pjt.dto;
 
 import lombok.Data;
 
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-
 import javax.persistence.*;
 
-import java.util.Collection;
-import java.util.Date;
 
 @Data
 @Entity
