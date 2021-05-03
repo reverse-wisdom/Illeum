@@ -9,6 +9,8 @@ import javax.transaction.Transactional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.amqp.core.AmqpAdmin;
+import org.springframework.amqp.core.Queue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -66,7 +68,9 @@ public class MemberController {
     private AuthenticationManager am;
     @Autowired
     private PasswordEncoder bcryptEncoder;
-        
+    @Autowired
+    private AmqpAdmin admin;
+    
     @ApiOperation(value = "로그인")
     @PostMapping(path = "/user/login")
     public ResponseEntity<?> login(@RequestBody LoginDto login) throws Exception {
@@ -153,7 +157,12 @@ public class MemberController {
         	member.setName(signup.getName());
         	
             map.put("success", true);
-            memberRepository.save(member);
+            Member mem = memberRepository.save(member);
+            
+            String queueName = "member." + Integer.toString(mem.getUid());
+			Queue queue = new Queue(queueName, false);
+            admin.declareQueue(queue);
+            
             return map;
         } else {
             map.put("success", false);
@@ -187,8 +196,10 @@ public class MemberController {
         	 email = e.getClaims().getSubject();
         	 return new ResponseEntity<String>("fail", HttpStatus.NO_CONTENT);
          }
-    	       
+    	    
+        Member mem = memberRepository.findByEmail(email);
         try {
+        	
             if (redisTemplate.opsForValue().get(email) != null) {
                 //delete refresh token
                 redisTemplate.delete(email);
@@ -197,6 +208,9 @@ public class MemberController {
         	return new ResponseEntity<String>("fail", HttpStatus.BAD_REQUEST);
         }
 
+        String queueName = "member." + Integer.toString(mem.getUid());
+        admin.deleteQueue(queueName);
+        
         //cache logout token for 10 minutes!
         logger.info(" logout ing : " + accessToken);
         redisTemplate.opsForValue().set(accessToken, true);
@@ -205,6 +219,8 @@ public class MemberController {
         logger.info("delete user: " + email);
         Long result = memberRepository.deleteByEmail(email);
         logger.info("delete result: " + result);
+        
+        
         
         return new ResponseEntity<String>("success",HttpStatus.OK);
         
