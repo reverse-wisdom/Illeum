@@ -177,6 +177,7 @@ public class RoomController {
 			findRoom find = roomService.conversion(room);
 			String roomName = "room." + Integer.toString(room.getRid());
 			FanoutExchange fanout = new FanoutExchange(roomName);
+			admin.declareExchange(fanout);
 			return new ResponseEntity<findRoom>(find, HttpStatus.OK);
 		} catch (Exception e) {
 			new ResponseEntity<String>("fail", HttpStatus.BAD_REQUEST);
