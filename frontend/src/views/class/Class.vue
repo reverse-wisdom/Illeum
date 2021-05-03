@@ -37,6 +37,7 @@
 
 <script>
 import push from 'push.js';
+import { faceAI, faceAITest } from '@/api/faceAI';
 import { insertRoom } from '@/api/class';
 
 export default {
@@ -47,6 +48,7 @@ export default {
       connection: null,
       message: '',
       rid: '',
+      isOutClicked: true,
     };
   },
   created() {
@@ -86,21 +88,25 @@ export default {
   },
 
   methods: {
-    capture() {
-      var screenVideo = document.querySelector('video');
-      var screenShot = takeSnapshot(screenVideo);
-      console.log(screenShot);
+    async capture() {
+      let video = document.querySelector('video');
+      let canvas = document.createElement('canvas');
+      canvas.width = video.videoWidth || video.clientWidth;
+      canvas.height = video.videoHeight || video.clientHeight;
 
-      function takeSnapshot(video) {
-        var canvas = document.createElement('canvas');
-        canvas.width = video.videoWidth || video.clientWidth;
-        canvas.height = video.videoHeight || video.clientHeight;
+      var context = canvas.getContext('2d');
+      context.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-        var context = canvas.getContext('2d');
-        context.drawImage(video, 0, 0, canvas.width, canvas.height);
+      let img = canvas.toDataURL('image/png');
+      console.log(img);
+      let frm = new FormData();
+      frm.append('uid', this.$store.state.uuid);
+      frm.append('rid', this.$route.query.rid);
+      frm.append('snapshot', img);
 
-        return canvas.toDataURL('image/png');
-      }
+      const { data } = await faceAI(frm);
+      // const { data } = await faceAITest(frm);
+      console.log(data);
     },
     offVideo() {
       let localStream = this.connection.attachStreams[0];
@@ -155,8 +161,6 @@ export default {
         audio: true,
         video: true,
         data: true,
-        // screen: true,
-        // oneway: true,
       };
 
       this.connection.socketURL = 'https://rtcmulticonnection.herokuapp.com:443/';
@@ -169,8 +173,10 @@ export default {
       };
 
       // 콘솔로그 출력 해제
-      // this.connection.enableLogs = false; // to disable logs
-      this.connection.enableLogs = true; // to enable logs
+      this.connection.enableLogs = false; // to disable logs
+      // this.connection.enableLogs = true; // to enable logs
+
+      this.connection.autoCloseEntireSession = true;
 
       this.connection.checkPresence(this.roomid, function(isRoomExist, roomid) {
         if (isRoomExist === true) {
@@ -179,26 +185,25 @@ export default {
           if (!check) {
             ref.$swal({
               icon: 'error',
-              title: '참여할 수 없는 방입니다.!!',
+              title: '참여할 수 없는 클래스입니다.!!',
             });
             ref.$router.push({ name: 'ClassList' });
             return;
           }
-          console.log('present');
           ref.connection.onUserStatusChanged();
-          push.create(ref.connection.extra.userFullName + '님이 ' + ref.roomid + '방에 입장했습니다');
+          push.create(ref.connection.extra.userFullName + '님이 ' + ref.roomid + '클래스에 입장했습니다');
           ref.connection.join(roomid);
         } else {
           console.log('open');
           ref.$swal({
             icon: 'error',
-            title: '개설되지 않는 방입니다.!!',
+            title: '개설되지 않는 클래스입니다.!!',
           });
           ref.$router.push({ name: 'ClassList' });
         }
       });
 
-      // 채팅부분영역 시작
+      // 리스너 영역
       this.connection.onmessage = function(event) {
         // 현재 타이핑 중인 이벤트처리 미구현
         // if (event.data.typing === true) {
@@ -221,11 +226,8 @@ export default {
           ref.appendChatMessage(event, event.extra.userFullName, event.extra.userUUID);
           return;
         }
-
-        console.log(this.connection, 'income');
       };
 
-      // 스트림영역
       this.connection.onstream = function(event) {
         var video = event.mediaElement;
 
@@ -237,7 +239,6 @@ export default {
         }
       };
 
-      // 유저변화영역
       this.connection.onUserStatusChanged = function(event) {
         var infoBar = document.getElementById('onUserStatusChanged');
         var names = [];
@@ -253,6 +254,22 @@ export default {
         }
 
         infoBar.innerHTML = '<b>Active users:</b> ' + names.join(', ');
+      };
+
+      this.connection.onclose = function(event) {
+        console.log(ref.isOutClicked);
+        if (!ref.isOutClicked) {
+          console.log('test');
+          ref.$swal({
+            icon: 'warning',
+            title: '현재 클래스가 종료 되었습니다.!!',
+          });
+          ref.$router.push({ name: 'ClassList' });
+        }
+      };
+
+      this.connection.onEntireSessionClosed = function(event) {
+        console.info('Entire session is closed: ', event.sessionid, event.extra);
       };
     },
     screen() {
@@ -273,6 +290,7 @@ export default {
       console.log('test when open', this.connection);
     },
     outRoom() {
+      this.isOutClicked = true;
       this.connection.getAllParticipants().forEach((participantId) => {
         this.connection.disconnectWith(participantId);
       });
@@ -282,6 +300,11 @@ export default {
       });
 
       this.connection.closeSocket();
+      this.$swal({
+        icon: 'warning',
+        title: '클래스 나가기.!!',
+      });
+
       this.$router.push({ name: 'ClassList' });
     },
     async checkEntrant() {
@@ -290,7 +313,8 @@ export default {
       var insertInfo = { uid: uid, rid: rid };
       try {
         const { data } = await insertRoom(insertInfo);
-        await new Promise((resolve, reject) => setTimeout(resolve, 3000));
+        console.log(data);
+        // await new Promise((resolve, reject) => setTimeout(resolve, 3000));
         console.log(data);
         if (data != null) {
           return true;

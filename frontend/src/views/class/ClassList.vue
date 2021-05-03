@@ -20,7 +20,7 @@
   </div>
 </template>
 <script>
-import { classAll, insertRoom } from '@/api/class';
+import { classAll, insertRoom, updateClass } from '@/api/class';
 export default {
   data() {
     return {
@@ -69,11 +69,19 @@ export default {
           if (room_password != value.room_password) {
             this.$swal({
               icon: 'error',
-              title: '방 비밀번호가 일치하지 않습니다.!!',
+              title: '클래스 비밀번호가 일치하지 않습니다.!!',
             });
           } else {
             if (value.uid == this.$store.state.uuid) {
-              this.$router.push({ name: 'ClassMaster', query: { room_name: value.room_name, rid: value.rid } });
+              try {
+                const { data } = await updateClass({ rid: value.rid, room_state: '진행' });
+                if (data == 'success') this.$router.push({ name: 'ClassMaster', query: { room_name: value.room_name, rid: value.rid } });
+              } catch {
+                this.$swal({
+                  icon: 'error',
+                  title: '클래스 참여 오류.!!',
+                });
+              }
             } else {
               this.$router.push({ name: 'Class', query: { room_name: value.room_name, rid: value.rid } });
             }
@@ -81,7 +89,15 @@ export default {
         }
       } else {
         if (value.uid == this.$store.state.uuid) {
-          this.$router.push({ name: 'ClassMaster', query: { room_name: value.room_name, rid: value.rid } });
+          try {
+            const { data } = await updateClass({ rid: value.rid, room_state: '진행' });
+            if (data == 'success') this.$router.push({ name: 'ClassMaster', query: { room_name: value.room_name, rid: value.rid } });
+          } catch {
+            this.$swal({
+              icon: 'error',
+              title: '클래스 참여 오류.!!',
+            });
+          }
         } else {
           this.$router.push({ name: 'Class', query: { room_name: value.room_name, rid: value.rid } });
         }
