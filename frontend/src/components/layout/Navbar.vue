@@ -146,17 +146,15 @@ export default {
       const userData = this.$store.state.token;
 
       const { data } = await logoutUser(userData);
-
-      console.log(data);
       localStorage.clear();
       sessionStorage.clear();
+      this.$router.push('/sign');
       if (data == 'success') {
         this.$store.commit('clearToken');
         this.$store.commit('clearUuid');
         this.$store.commit('clearEmail');
         this.$store.commit('clearRole');
         this.$store.commit('clearName');
-        this.$router.push('/sign');
         console.log('로그아웃 성공');
       } else {
         console.log('로그아웃실패');
