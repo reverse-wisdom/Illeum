@@ -78,7 +78,7 @@ const routes = [
   {
     path: '/classcreate',
     name: 'CreateClass',
-    components: { default: CreateClass, header: Navbar },
+    components: { default: CreateClass },
   },
   {
     path: '/userclasslist',
