@@ -13,6 +13,8 @@ RUN python -m pip install --upgrade pip
 
 RUN pip install cmake
 
+RUN yes | pip uninstall tensorflow
+
 RUN yes | pip uninstall opencv-python
 
 RUN pip install -r /app/requirements-linux.txt
