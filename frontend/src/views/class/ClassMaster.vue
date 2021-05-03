@@ -33,7 +33,7 @@
       &nbsp;
       <v-btn depressed color="warning" @click="chatTest">채팅콘솔테스트</v-btn>
       &nbsp;
-      <v-btn depressed color="warning" @click="outRoom">퇴장</v-btn>
+      <v-btn depressed color="warning" @click="outRoom">종료</v-btn>
       &nbsp;
     </div>
   </div>
@@ -41,7 +41,8 @@
 
 <script>
 import push from 'push.js';
-
+import { faceAI, faceAITest } from '@/api/faceAI';
+import { updateClass } from '@/api/class';
 export default {
   data() {
     return {
@@ -91,21 +92,25 @@ export default {
   },
 
   methods: {
-    capture() {
-      var screenVideo = document.querySelector('video');
-      var screenShot = takeSnapshot(screenVideo);
-      console.log(screenShot);
+    async capture() {
+      let video = document.querySelector('video');
+      let canvas = document.createElement('canvas');
+      canvas.width = video.videoWidth || video.clientWidth;
+      canvas.height = video.videoHeight || video.clientHeight;
 
-      function takeSnapshot(video) {
-        var canvas = document.createElement('canvas');
-        canvas.width = video.videoWidth || video.clientWidth;
-        canvas.height = video.videoHeight || video.clientHeight;
+      var context = canvas.getContext('2d');
+      context.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-        var context = canvas.getContext('2d');
-        context.drawImage(video, 0, 0, canvas.width, canvas.height);
+      let img = canvas.toDataURL('image/png');
 
-        return canvas.toDataURL('image/png');
-      }
+      let userData = {
+        uid: this.$store.state.uuid,
+        rid: this.$route.query.rid,
+        snapshot: img,
+      };
+
+      const { data } = await faceAI(userData);
+      console.log(data);
     },
     offVideo() {
       let localStream = this.connection.attachStreams[0];
@@ -177,8 +182,11 @@ export default {
       };
 
       // 콘솔로그 출력 해제
-      // this.connection.enableLogs = false; // to disable logs
-      this.connection.enableLogs = true; // to enable logs
+      this.connection.enableLogs = false; // to disable logs
+      // this.connection.enableLogs = true; // to enable logs
+
+      // 개설자 로직(개설자 퇴장시 전체 세션 종료 옵션)
+      this.connection.autoCloseEntireSession = true;
 
       //   this.connection.open(this.roomid);
 
@@ -186,7 +194,7 @@ export default {
       //     console.log('open');
       //     ref.connection.onUserStatusChanged(event);
 
-      //     push.create(ref.connection.extra.userFullName + '님이 ' + ref.roomid + '방을 개설하였습니다');
+      //     push.create(ref.connection.extra.userFullName + '님이 ' + ref.roomid + '클래스을 개설하였습니다');
       //   };
 
       this.connection.checkPresence(this.roomid, function(isRoomExist, roomid) {
@@ -197,24 +205,22 @@ export default {
           console.log('open');
           ref.connection.onUserStatusChanged();
 
-          push.create(ref.connection.extra.userFullName + '님이 ' + ref.roomid + '방을 개설하였습니다');
+          push.create(ref.connection.extra.userFullName + '님이 ' + ref.roomid + '클래스을 개설하였습니다');
           ref.connection.open(roomid);
         }
       });
 
-      // 채팅부분영역 시작
+      // 리스너 영역
       this.connection.onmessage = function(event) {
         if (event.data.chatMessage) {
           console.log(event);
           ref.appendChatMessage(event, event.extra.userFullName, event.extra.userUUID);
           return;
         }
-
-        console.log(ref.connection, 'income');
       };
+
       this.connection.onstream = function(event) {
         var video = event.mediaElement;
-
         if (event.extra.type == 'cam') {
           document.querySelector('.videos-container').appendChild(video);
           video.removeAttribute('controls');
@@ -235,10 +241,14 @@ export default {
         } else {
           names = [ref.connection.extra.userFullName || 'You'].concat(names);
         }
-
         infoBar.innerHTML = '<b>참여자 목록:</b> ' + names.join(', ');
       };
+
+      this.connection.onclose = function(event) {
+        console.log('close');
+      };
     },
+
     screen() {
       var ref = this;
 
@@ -256,17 +266,49 @@ export default {
       this.connection.videosContainer = document.querySelector('.share-videos-container');
       console.log('test when open', this.connection);
     },
-    outRoom() {
-      this.connection.getAllParticipants().forEach((participantId) => {
-        this.connection.disconnectWith(participantId);
-      });
+    async outRoom() {
+      var ref = this;
+      await updateClass({ rid: this.$route.query.rid, room_state: '완료' })
+        .then(({ data }) => {
+          console.log(data);
+          if (data == 'success') {
+            this.$swal({
+              icon: 'success',
+              title: '<h2>클래스가 종료되었습니다.!!</h2>',
+              toast: true,
+              width: 600,
+              padding: '2em',
+              position: 'top-end',
+              showConfirmButton: false,
+              timer: 5000,
+              timerProgressBar: true,
+              didOpen: (toast) => {
+                toast.addEventListener('mouseenter', ref.$swal.stopTimer);
+                toast.addEventListener('mouseleave', ref.$swal.resumeTimer);
+              },
+            });
+            ref.connection.autoCloseEntireSession = true;
 
-      this.connection.attachStreams.forEach(function(localStream) {
-        localStream.stop();
-      });
+            ref.connection.getAllParticipants().forEach((participantId) => {
+              ref.connection.disconnectWith(participantId);
+            });
 
-      this.connection.closeSocket();
-      this.$router.push({ name: 'ClassList' });
+            ref.connection.attachStreams.forEach(function(localStream) {
+              localStream.stop();
+            });
+
+            ref.connection.closeSocket();
+            ref.connection.disconnect();
+
+            this.$router.push({ name: 'ClassList' });
+          }
+        })
+        .catch((err) => {
+          this.$swal({
+            icon: 'error',
+            title: '클래스 종료 오류.!!',
+          });
+        });
     },
     saveMessageLog() {
       var fileName = this.roomid;
