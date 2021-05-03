@@ -4,23 +4,6 @@ from cachetools import cached, TTLCache
 
 from database.db import db
 
-
-# async def check_password_on_board(
-#         password: str,
-#         board_no: int
-# ):
-#     # 해당 게시물 비밀번호 얻어오기
-#     sql = "SELECT password FROM board WHERE board_no = %s"
-#
-#     with db.query(sql, ) as cursor:
-#         cursor.execute(sql, (board_no,))
-#         res = cursor.fetchone()
-#         for pwd in res:
-#             if pwd == password:
-#                 return True
-#             else:
-#                 return False
-
 @cached(cache=TTLCache(maxsize=1024, ttl=600))
 def select_entrant_eid_by_uid_and_rid(uid: int, rid: int) -> Optional[int]:
     with db.query("SELECT eid FROM entrant WHERE uid = %s AND rid = %s", (uid, rid,)) as cursor:
