@@ -45,9 +45,9 @@ def face_detection(image: np.ndarray) -> Response:
         return Response(FDR.RESULT_TYPE_ATTENTION, '집중 중', result)
 
 
-def face_detection_from_base64_string(base64_string: str) -> Response:
-    image = data_uri_to_cv2_img(base64_string)
-    return face_detection(image)
+# def face_detection_from_base64_string(base64_string: str) -> Response:
+#     image = data_uri_to_cv2_img(base64_string)
+#     return face_detection(image)
 
 
 # 각 결과에 따라 repository 함수 매핑
@@ -59,15 +59,19 @@ repo_funcs = {
 }
 
 
-def face_detection_task(uid: int, rid: int, base64_string: str) -> Response:
+def face_detection_task(uid: int, rid: int, content: bytes) -> Response:
     eid: Optional[int] = repository.select_entrant_eid_by_uid_and_rid(uid, rid)
     if eid is None:
         return Response(result=FDR.RESULT_TYPE_UNAUTHORIZED, message="해당 방에 가입하지 않은 사용자 입니다.")
     vid: Optional[int] = repository.select_evaluation_vid_recent_by_eid(eid)
     if vid is None:
         return Response(result=FDR.RESULT_TYPE_NOT_DEFINED_EVAL, message="아직 평가가 생성되지 않은 사용자 입니다.")
-    resp: Response = face_detection_from_base64_string(base64_string)
-    repo_funcs[resp.result](eid)
+    nparr = np.frombuffer(content, np.int8)
+    # print(type(nparr))
+    img_np = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+
+    resp: Response = face_detection(img_np)
+    repo_funcs[resp.result](eid)  # 각 결과에 따라 카운트 하는 쿼리문 실행
     return resp
 
 
@@ -75,7 +79,7 @@ def face_detection_task(uid: int, rid: int, base64_string: str) -> Response:
 
 # 테스트용 모듈 코드
 if __name__ == "__main__":
-    cap = cv2.VideoCapture(0)
+    cap = cv2.VideoCapture(2)
     while True:
         _ret, _frame = cap.read()
 
