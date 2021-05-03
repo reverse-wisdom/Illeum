@@ -14,5 +14,12 @@ function createInstanceWithAuth(url) {
   return setInterceptors(instance);
 }
 
+function postAI() {
+  return axios.create({
+    baseURL: 'http://localhost:8000/',
+  });
+}
+
 export const instance = createInstance();
 export const posts = createInstanceWithAuth();
+export const ai = postAI();
