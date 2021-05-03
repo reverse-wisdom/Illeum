@@ -71,7 +71,7 @@ public class RoomController {
 			String email = jwtTokenUtil.getUsernameFromToken(accessToken);
 			Member member = memberRepository.findByEmail(email);
 			if (uid == member.getUid()) {
-				return new ResponseEntity<>(roomRepository.findByUid(uid), HttpStatus.BAD_REQUEST);
+				return new ResponseEntity<>(roomRepository.findByUid(uid), HttpStatus.OK);
 			} else {
 				return new ResponseEntity<String>("토큰 uid랑 uid가 다릅니다", HttpStatus.NO_CONTENT);
 			}
@@ -126,7 +126,7 @@ public class RoomController {
 			list = roomMapper.roomJoinEvaluation(rid);
 			System.out.println(list);
 			if (list.size() == 0)
-				return new ResponseEntity<>("평가가 없습니다.", HttpStatus.OK);
+				return new ResponseEntity<>("평가가 없습니다.", HttpStatus.NO_CONTENT);
 		} catch (Exception e) {
 			System.out.println(e);
 			return new ResponseEntity<>("fail", HttpStatus.BAD_REQUEST);
