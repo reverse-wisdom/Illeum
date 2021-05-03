@@ -77,7 +77,7 @@
               </a>
             </li>
             <li>
-              <a href="/sign">
+              <a href="/sign" v-if="loginchk === null || loginchk === undefined || loginchk === ''">
                 <span class="Navtext">Sign</span>
               </a>
             </li>
@@ -126,10 +126,12 @@ export default {
       dialog: false,
       image: null,
       url: null,
+      loginchk: this.$store.state.token,
     };
   },
   created() {
     this.url = 'https://k4d106.p.ssafy.io/profile/' + this.$store.state.uuid + '/256';
+    console.log(this.loginchk);
   },
   methods: {
     Preview_image() {
