@@ -87,6 +87,11 @@
               </a>
             </li>
             <li>
+              <a href="/classcreate">
+                <span class="Navtext">CreateClass</span>
+              </a>
+            </li>
+            <li>
               <a href="/userevaluation">
                 <span class="Navtext">evaluation</span>
               </a>
