@@ -11,7 +11,7 @@ amqp.connect('amqp://illeum:illeum123@k4d106.p.ssafy.io:5672', function(error0, 
             throw error1;
         }
 
-        var queue = 'test2';
+        var queue = 'member.2';
 
         channel.assertQueue(queue, {
             durable: false
