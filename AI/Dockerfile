@@ -2,7 +2,7 @@ FROM getcurrentthread/python-fastapi-image:0.0.1
 
 WORKDIR /app
 
-COPY requirements.txt /app/
+COPY requirements-linux.txt /app/
 
 # RUN apk --update add tzdata && \
 #    cp /usr/share/zoneinfo/Asia/Seoul /etc/localtime && \
@@ -12,6 +12,8 @@ COPY requirements.txt /app/
 RUN python -m pip install --upgrade pip
 
 RUN pip install cmake
+
+RUN pip uninstall opencv-python
 
 RUN pip install -r /app/requirements-linux.txt
 
