@@ -102,14 +102,14 @@ export default {
       context.drawImage(video, 0, 0, canvas.width, canvas.height);
 
       let img = canvas.toDataURL('image/png');
-      console.log(img);
-      let frm = new FormData();
-      frm.append('uid', this.$store.state.uuid);
-      frm.append('rid', this.$route.query.rid);
-      frm.append('snapshot', img);
 
-      const { data } = await faceAI(frm);
-      // const { data } = await faceAITest(frm);
+      let userData = {
+        uid: this.$store.state.uuid,
+        rid: this.$route.query.rid,
+        snapshot: img,
+      };
+
+      const { data } = await faceAI(userData);
       console.log(data);
     },
     offVideo() {
@@ -298,6 +298,7 @@ export default {
             });
 
             ref.connection.closeSocket();
+            ref.connection.disconnect();
 
             this.$router.push({ name: 'ClassList' });
           }
