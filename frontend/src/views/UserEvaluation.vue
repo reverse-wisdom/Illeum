@@ -22,22 +22,31 @@
         <div class="slider"></div>
       </nav>
       <section>
-        <div class="content content-1"></div>
+        <div class="content content-1">
+          <UserAttend></UserAttend>
+        </div>
         <div class="content content-2">
           <UserEval></UserEval>
         </div>
-        <div class="content content-3"></div>
+        <div class="content content-3">
+          <UserPartin></UserPartin>
+        </div>
       </section>
     </div>
   </div>
 </template>
 <script>
 import UserEval from '@/views/evaluation/UserEval';
+import UserPartin from '@/views/evaluation/UserPartin';
+import UserAttend from './evaluation/UserAttend.vue';
 export default {
   components: {
     UserEval,
+    UserPartin,
+    UserAttend,
   },
   data() {
+    UserPartin;
     return {
       showcheck2: false,
     };

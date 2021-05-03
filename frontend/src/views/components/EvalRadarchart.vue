@@ -10,12 +10,13 @@ export default {
         hoverBackgroundColor: 'red',
         hoverBorderWidth: 10,
         labels: [],
+        beginAtZero: true,
         datasets: [
           {
             label: '내점수',
             backgroundColor: [],
             data: [],
-            fill: true,
+            stepSize: 1,
             backgroundColor: 'rgba(54, 162, 235, 0.2)',
             borderColor: 'rgb(54, 162, 235)',
             pointBackgroundColor: 'rgb(54, 162, 235)',
@@ -27,6 +28,7 @@ export default {
             label: '평균',
             backgroundColor: [],
             data: [],
+
             fill: true,
             backgroundColor: 'rgba(255, 99, 132, 0.2)',
             borderColor: 'rgb(255, 99, 132)',
@@ -54,13 +56,14 @@ export default {
   mounted() {
     // 실제 차트 랜더링 부분
     this.renderChart(this.chartData, {
-      borderWidth: '10px',
-      hoverBackgroundColor: 'red',
-      hoverBorderWidth: '10px',
-      maintainAspectRatio: false, // false: 상위 div를 무시한 채 창 크기에 따라 크기가 크기가 마음대로 바뀌던 것이 상위 div에 구속된다
-      responsive: true,
-      width: '50%',
-      height: '50%',
+      scale: {
+        ticks: {
+          max: 10,
+          min: 0,
+          stepsize: 1,
+          beginAtZero: true,
+        },
+      },
     });
   },
 };

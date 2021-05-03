@@ -25,6 +25,7 @@ pipeline {
 			steps {
 				sh 'docker build -t illeum-front:latest ./frontend'
 				sh 'docker build -t illeum-back:latest ./backend'
+				sh 'docker build -t illeum-ai:latest ./AI'
 			}
 		}
 		stage('Docker Container rm') {
@@ -35,6 +36,9 @@ pipeline {
 				
 				sh 'docker ps -f name=illeum-back -q | xargs --no-run-if-empty docker container stop'  
 				sh 'docker container ls -a -name=illeum-back -q | xargs -r docker container rm'
+				
+				sh 'docker ps -f name=illeum-ai -q | xargs --no-run-if-empty docker container stop'  
+				sh 'docker container ls -a -name=illeum-ai -q | xargs -r docker container rm'
 				
 				sh 'docker ps -a -f "status=created" -f "status=exited" -q | xargs -r docker container rm'
 				sh 'docker images -f "dangling=true" -q | xargs -r docker rmi'
@@ -61,6 +65,13 @@ pipeline {
 				-p 8080:8080 \
 				illeum-back:latest' 
 			
+			sh 'docker run -d --name illeum-ai \
+				-v /volumes/AI_home:/volumes \
+				-v /etc/localtime:/etc/localtime:ro \
+				-v /usr/share/zoneinfo/Asia/Seoul:/etc/timezone:ro \
+				--network illeum-network \
+				-p 8000:8000 \
+				illeum-ai:latest' 
 			}
 		}
 	}

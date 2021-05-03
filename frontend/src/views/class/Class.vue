@@ -10,6 +10,7 @@
       </div>
       <div class="dragbar" id="dragbar"></div>
       <div class="panel-two" id="drag-right">
+        <div id="onUserStatusChanged"></div>
         <div id="conversation-panel"></div>
         <div id="key-press" style="text-align: right; display: none; font-size: 11px;">
           <span style="vertical-align: middle;"></span>
@@ -36,6 +37,7 @@
 
 <script>
 import push from 'push.js';
+import { insertRoom } from '@/api/class';
 
 export default {
   data() {
@@ -44,13 +46,13 @@ export default {
       userName: '',
       connection: null,
       message: '',
+      rid: '',
     };
   },
   created() {
-    const name = 'string'; // 지금 user name은 임시고정 값!!!!!
-    const room_name = this.$route.query.room_name;
-    this.roomid = room_name;
-    this.userName = name;
+    this.roomid = this.$route.query.room_name;
+    this.rid = this.$route.query.rid;
+    this.userName = this.$store.state.name;
   },
   mounted() {
     let cdn1 = document.createElement('script');
@@ -111,11 +113,10 @@ export default {
     },
     chat() {
       var chatMessage = this.message;
-      console.log(this.userName);
 
       if (!chatMessage || !chatMessage.replace(/ /g, '').length) return;
 
-      this.appendChatMessage(chatMessage, this.userName);
+      this.appendChatMessage(chatMessage, this.userName, this.$store.state.uuid);
 
       this.connection.send({
         chatMessage: chatMessage,
@@ -124,17 +125,20 @@ export default {
       this.connection.send({
         typing: false,
       });
+
+      this.message = '';
     },
-    appendChatMessage(event, userName) {
+    appendChatMessage(event, userName, uuid) {
       var conversationPanel = document.getElementById('conversation-panel');
       var div = document.createElement('div');
-
+      var date = new Date();
+      var timestamp = date.toLocaleTimeString();
       div.className = 'message';
 
       if (event.data) {
-        div.innerHTML = '<b>' + userName + ':</b><br>' + event.data.chatMessage;
+        div.innerHTML = '<b>' + userName + '&nbsp;' + timestamp + ':</b><br>' + event.data.chatMessage;
       } else {
-        div.innerHTML = '<b>' + this.userName + '(당신)</b> <br>' + event;
+        div.innerHTML = '<b>' + this.userName + '(당신)&nbsp;' + timestamp + '</b> <br>' + event;
         div.style.background = '#cbffcb';
       }
 
@@ -145,7 +149,7 @@ export default {
     },
     openRoom() {
       this.connection = new RTCMultiConnection();
-      console.log(this.connection);
+      var ref = this;
 
       this.connection.session = {
         audio: true,
@@ -156,7 +160,8 @@ export default {
       };
 
       this.connection.socketURL = 'https://rtcmulticonnection.herokuapp.com:443/';
-      this.connection.extra.userFullName = this.userName;
+      this.connection.extra.userFullName = this.$store.state.name;
+      this.connection.extra.userUUID = this.$store.state.uuid;
       this.connection.extra.type = 'cam';
       this.connection.sdpConstraints.mandatory = {
         OfferToReceiveAudio: true,
@@ -167,15 +172,33 @@ export default {
       // this.connection.enableLogs = false; // to disable logs
       this.connection.enableLogs = true; // to enable logs
 
-      this.connection.openOrJoin(this.roomid);
-      console.log('test when open', this.connection);
-      // this.connection.videosContainer = document.querySelector('.videos-container');
-
-      push.create(this.connection.extra.userFullName + '님이 ' + this.roomid + '방에 입장했습니다');
+      this.connection.checkPresence(this.roomid, function(isRoomExist, roomid) {
+        if (isRoomExist === true) {
+          var check = ref.checkEntrant();
+          console.log(check);
+          if (!check) {
+            ref.$swal({
+              icon: 'error',
+              title: '참여할 수 없는 방입니다.!!',
+            });
+            ref.$router.push({ name: 'ClassList' });
+            return;
+          }
+          console.log('present');
+          ref.connection.onUserStatusChanged();
+          push.create(ref.connection.extra.userFullName + '님이 ' + ref.roomid + '방에 입장했습니다');
+          ref.connection.join(roomid);
+        } else {
+          console.log('open');
+          ref.$swal({
+            icon: 'error',
+            title: '개설되지 않는 방입니다.!!',
+          });
+          ref.$router.push({ name: 'ClassList' });
+        }
+      });
 
       // 채팅부분영역 시작
-      var ref = this;
-
       this.connection.onmessage = function(event) {
         // 현재 타이핑 중인 이벤트처리 미구현
         // if (event.data.typing === true) {
@@ -194,12 +217,15 @@ export default {
         // }
 
         if (event.data.chatMessage) {
-          ref.appendChatMessage(event, event.extra.userFullName);
+          console.log(event);
+          ref.appendChatMessage(event, event.extra.userFullName, event.extra.userUUID);
           return;
         }
 
         console.log(this.connection, 'income');
       };
+
+      // 스트림영역
       this.connection.onstream = function(event) {
         var video = event.mediaElement;
 
@@ -209,6 +235,24 @@ export default {
         } else {
           document.querySelector('.share-videos-container').appendChild(video);
         }
+      };
+
+      // 유저변화영역
+      this.connection.onUserStatusChanged = function(event) {
+        var infoBar = document.getElementById('onUserStatusChanged');
+        var names = [];
+        ref.connection.getAllParticipants().forEach(function(participantId) {
+          var user = ref.connection.peers[participantId];
+          names.push(user.extra.userFullName);
+        });
+
+        if (!names.length) {
+          names = ['Only You'];
+        } else {
+          names = [ref.connection.extra.userFullName || 'You'].concat(names);
+        }
+
+        infoBar.innerHTML = '<b>Active users:</b> ' + names.join(', ');
       };
     },
     screen() {
@@ -239,6 +283,21 @@ export default {
 
       this.connection.closeSocket();
       this.$router.push({ name: 'ClassList' });
+    },
+    async checkEntrant() {
+      var uid = this.$store.state.uuid;
+      var rid = this.rid;
+      var insertInfo = { uid: uid, rid: rid };
+      try {
+        const { data } = await insertRoom(insertInfo);
+        await new Promise((resolve, reject) => setTimeout(resolve, 3000));
+        console.log(data);
+        if (data != null) {
+          return true;
+        }
+      } catch {
+        return false;
+      }
     },
   },
 

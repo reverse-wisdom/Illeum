@@ -41,7 +41,7 @@
                         @change="Preview_image($event)"
                         style=" cursor : pointer;"
                       ></v-file-input>
-                      <v-img :src="url" id="preview"></v-img>
+                      <v-img :src="url" id="preview" style="width:100px; height:100px;"></v-img>
                     </div>
                   </v-col>
                   <v-col cols="12">
@@ -72,7 +72,7 @@
         <div class="sidebar_inner">
           <ul>
             <li>
-              <a href="#">
+              <a href="/about">
                 <span class="Navtext">Home</span>
               </a>
             </li>
@@ -82,7 +82,7 @@
               </a>
             </li>
             <li>
-              <a href="/classtest">
+              <a href="/classlist">
                 <span class="Navtext">class</span>
               </a>
             </li>
@@ -118,7 +118,7 @@
   </div>
 </template>
 <script>
-import { logoutUser, editUser } from '@/api/auth';
+import { logoutUser, editUser, createThumbnails } from '@/api/auth';
 export default {
   components: {},
   data() {
@@ -128,22 +128,28 @@ export default {
       url: null,
     };
   },
-  created() {},
+  created() {
+    this.url = 'https://k4d106.p.ssafy.io/profile/' + this.$store.state.uuid + '/256';
+  },
   methods: {
     Preview_image() {
       this.url = URL.createObjectURL(this.image);
     },
     async userUpdate() {
-      // var frm = new FormData();
-      // frm.append('file', this.image);
+      const uuid = this.$store.state.uuid;
+      var frm = new FormData();
+      frm.append('file', this.image);
+      const { data } = await createThumbnails(uuid, frm);
+      this.dialog = false;
     },
     async signoutUser() {
       const userData = this.$store.state.token;
+
+      const { data } = await logoutUser(userData);
+
+      console.log(data);
       localStorage.clear();
       sessionStorage.clear();
-      const { data } = await logoutUser(userData);
-      console.log(data);
-
       if (data == 'success') {
         this.$store.commit('clearToken');
         this.$store.commit('clearUuid');

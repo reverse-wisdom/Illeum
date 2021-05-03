@@ -22,6 +22,8 @@ import io.swagger.annotations.ApiOperation;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.amqp.core.AmqpAdmin;
+import org.springframework.amqp.core.FanoutExchange;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -66,6 +68,9 @@ public class RoomController {
 	@Autowired
 	RedisTemplate<String, Object> redisTemplate;
 
+    @Autowired
+    private AmqpAdmin admin;
+    
 	@ApiOperation(value = "방  리스트 조회")
 	@GetMapping(path = "/findAll")
 	public ResponseEntity<?> findAll() {
@@ -170,6 +175,8 @@ public class RoomController {
 		try {
 			room = roomRepository.save(room);
 			findRoom find = roomService.conversion(room);
+			String roomName = "room." + Integer.toString(room.getRid());
+			FanoutExchange fanout = new FanoutExchange(roomName);
 			return new ResponseEntity<findRoom>(find, HttpStatus.OK);
 		} catch (Exception e) {
 			new ResponseEntity<String>("fail", HttpStatus.BAD_REQUEST);
@@ -181,7 +188,11 @@ public class RoomController {
 	@Transactional
 	@DeleteMapping(path = "/deleteByRid")
 	public ResponseEntity<?> deleteByUid(@RequestParam int rid) {
+		Room room = roomRepository.findByRid(rid);
+        String roomName = "room." + Integer.toString(room.getRid());
+
 		try {
+			admin.deleteExchange(roomName);
 			roomRepository.deleteByRid(rid);
 		} catch (Exception e) {
 			System.out.println(e);

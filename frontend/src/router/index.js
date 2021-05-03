@@ -15,10 +15,12 @@ import CreateClass from '../views/class/CreateClass.vue';
 import UserClasslist from '../views/class/UserClasslist.vue';
 import ClassList from '../views/class/ClassList.vue';
 import Class from '../views/class/Class.vue';
+import ClassMaster from '../views/class/ClassMaster.vue';
 
 //evaluation
 import UserEval from '../views/evaluation/UserEval.vue';
 import UserEvaluation from '../views/UserEvaluation.vue';
+import LecturerManage from '../views/evaluation/LecturerManage.vue';
 // 테스트용 임포트 페이지
 
 import webrtcTest from '../views/testpage/webrtcTest.vue';
@@ -28,6 +30,7 @@ import webrtcTest4 from '../views/testpage/webrtcTest4.vue';
 import componentTest from '../views/testpage/componentTest.vue';
 import chartTest from '../views/testpage/chartTest.vue';
 import navTest from '../views/testpage/navTest.vue';
+import calendarTest from '../views/testpage/calendarTest.vue';
 Vue.use(VueRouter);
 
 const routes = [
@@ -51,6 +54,11 @@ const routes = [
   //   name: 'Landing',
   //   components: { default: Landing },
   // },
+  {
+    path: '/lecturermanage',
+    name: 'LecturerManage',
+    components: { default: LecturerManage, header: Navbar },
+  },
   {
     path: '/sign',
     name: 'Sign',
@@ -86,6 +94,11 @@ const routes = [
     path: '/class',
     name: 'Class',
     components: { default: Class },
+  },
+  {
+    path: '/classmaster',
+    name: 'ClassMaster',
+    components: { default: ClassMaster },
   },
   //evaluation
   {
@@ -134,6 +147,11 @@ const routes = [
     path: '/navTest',
     name: 'navTest',
     component: navTest,
+  },
+  {
+    path: '/calendarTest',
+    name: 'calendarTest',
+    component: calendarTest,
   },
   // // end
   {
