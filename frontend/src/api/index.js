@@ -16,7 +16,7 @@ function createInstanceWithAuth(url) {
 
 function postAI() {
   return axios.create({
-    baseURL: 'http://localhost:8000/',
+    baseURL: '/api/face',
   });
 }
 
