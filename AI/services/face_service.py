@@ -8,15 +8,7 @@ import cv2
 import numpy as np
 
 import crud.evalutation_repository as repository
-from utils.image_util import data_uri_to_cv2_img
-
-BASE_REPO_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "OpenVtuber")
-
-if not os.path.isdir(BASE_REPO_DIR):
-    print("OpenVtuber 프로젝트 클론 중", end=' ')
-    git.Repo.clone_from("https://github.com/getCurrentThread/OpenVtuber",
-                        BASE_REPO_DIR)
-    print("done")
+from services import BASE_REPO_DIR
 
 sys.path.insert(1, BASE_REPO_DIR)
 from OpenVtuber.SimpleFaceModule import SimpleFaceModule, SimpleFaceDetectionResult
