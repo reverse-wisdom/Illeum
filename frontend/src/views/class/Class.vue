@@ -164,6 +164,7 @@ export default {
       };
 
       this.connection.socketURL = 'https://rtcmulticonnection.herokuapp.com:443/';
+      // this.connection.socketURL = 'https://illeum-webRTC:9001/';
       this.connection.extra.userFullName = this.$store.state.name;
       this.connection.extra.userUUID = this.$store.state.uuid;
       this.connection.extra.type = 'cam';
@@ -171,6 +172,7 @@ export default {
         OfferToReceiveAudio: true,
         OfferToReceiveVideo: true,
       };
+      console.log(this.connection);
 
       // 콘솔로그 출력 해제
       this.connection.enableLogs = false; // to disable logs
@@ -240,6 +242,20 @@ export default {
       };
 
       this.connection.onUserStatusChanged = function(event) {
+        try {
+          if (typeof event.extra !== 'undefined') {
+            if (event.extra.isMaster && event.status == 'offline') {
+              ref.$swal({
+                icon: 'warning',
+                title: '현재 클래스가 종료 되었습니다.!!',
+              });
+              ref.$router.push({ name: 'ClassList' });
+            }
+          }
+        } catch {
+          console.log(event);
+        }
+
         var infoBar = document.getElementById('onUserStatusChanged');
         var names = [];
         ref.connection.getAllParticipants().forEach(function(participantId) {
@@ -272,6 +288,8 @@ export default {
         console.info('Entire session is closed: ', event.sessionid, event.extra);
       };
     },
+    async check() {},
+
     screen() {
       var ref = this;
 
