@@ -27,10 +27,10 @@ if '%errorlevel%' NEQ '0' (
     CD /D "%~dp0"
 :--------------------------------------
 
-title JJAL Python SERVER
+title Face API Python SERVER
 
 set root=C:\ProgramData\Miniconda3
 call %root%\Scripts\activate.bat %root%
 call conda activate AI
-call uvicorn main:app --reload --host=0.0.0.0 --port=8000
-REM call uvicorn main:app --workers=4 --host=0.0.0.0 --port=8000 --no-access-log --http=httptools
+REM call uvicorn main:app --reload --host=0.0.0.0 --port=8000
+call uvicorn main:app --workers=4 --host=0.0.0.0 --port=8000 --no-access-log --http=httptools
