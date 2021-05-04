@@ -1,6 +1,6 @@
 from typing import Optional
 
-from OpenVtuber.SimpleFaceModule import SimpleFaceDetectionResult
+from SimpleFaceModule import SimpleFaceDetectionResult
 
 RESULT_TYPE_UNAUTHORIZED = "unauthorized"
 RESULT_TYPE_NOT_DEFINED_EVAL = "not_defined_evaluation"
