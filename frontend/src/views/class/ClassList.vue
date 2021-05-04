@@ -5,7 +5,7 @@
       :headers="headers"
       :items="rooms"
       :items-per-page="5"
-      item-key="room_name"
+      item-key="rid"
       class="elevation-1"
       @click:row="detailClass"
       :footer-props="{

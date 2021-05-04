@@ -164,6 +164,11 @@ export default {
       this.connection = new RTCMultiConnection();
       var ref = this;
 
+      this.connection.extra.userFullName = this.$store.state.name;
+      this.connection.extra.userUUID = this.$store.state.uuid;
+      this.connection.extra.type = 'cam';
+      this.connection.extra.isMaster = true;
+
       this.connection.session = {
         audio: true,
         video: true,
@@ -172,21 +177,27 @@ export default {
         // oneway: true,
       };
 
+      this.connection.beforeAddingStream = function(stream, peer) {
+        ref.connection.extra.userFullName = ref.$store.state.name;
+        ref.connection.extra.userUUID = ref.$store.state.uuid;
+        ref.connection.extra.type = 'cam';
+        ref.connection.extra.isMaster = true;
+        return stream;
+      };
+
+      this.connection.autoCloseEntireSession = true;
+
       this.connection.socketURL = 'https://rtcmulticonnection.herokuapp.com:443/';
-      this.connection.extra.userFullName = this.$store.state.name;
-      this.connection.extra.userUUID = this.$store.state.uuid;
-      this.connection.extra.type = 'cam';
+      // this.connection.socketURL = 'https://illeum-webRTC:9001/';
+
       this.connection.sdpConstraints.mandatory = {
         OfferToReceiveAudio: true,
-        OfferToReceiveVideo: true,
+        OfferToReceiveVideo: false,
       };
 
       // 콘솔로그 출력 해제
-      this.connection.enableLogs = false; // to disable logs
-      // this.connection.enableLogs = true; // to enable logs
-
-      // 개설자 로직(개설자 퇴장시 전체 세션 종료 옵션)
-      this.connection.autoCloseEntireSession = true;
+      // this.connection.enableLogs = false; // to disable logs
+      this.connection.enableLogs = true; // to enable logs
 
       //   this.connection.open(this.roomid);
 
@@ -196,6 +207,8 @@ export default {
 
       //     push.create(ref.connection.extra.userFullName + '님이 ' + ref.roomid + '클래스을 개설하였습니다');
       //   };
+
+      console.log(this.connection);
 
       this.connection.checkPresence(this.roomid, function(isRoomExist, roomid) {
         if (isRoomExist === true) {
