@@ -107,13 +107,13 @@
       <!-- room_type / room_password -->
       <validation-provider v-slot="{ errors }" name="공개방/암호방" rules="required">
         <v-radio-group v-model="room_type" row :error-messages="errors">
-          <v-radio label="공개방" value="공개"></v-radio>
-          <v-radio label="암호방" value="비공개"></v-radio>
+          <v-radio label="클래스 공개" value="공개"></v-radio>
+          <v-radio label="클래스 비공개" value="비공개"></v-radio>
         </v-radio-group>
       </validation-provider>
 
-      <validation-provider v-if="room_type == '암호방'" v-slot="{ errors }" name="방 비밀번호" rules="required|max:10">
-        <v-text-field v-model="room_password" :counter="10" :error-messages="errors" label="방 비밀번호" required></v-text-field>
+      <validation-provider v-if="room_type == '비공개'" v-slot="{ errors }" name="방 비밀번호" rules="required|max:10">
+        <v-text-field v-model="room_password" :counter="10" :error-messages="errors" label="방 비밀번호"></v-text-field>
       </validation-provider>
 
       <v-btn class="mr-4" type="submit">
@@ -183,6 +183,7 @@ export default {
   },
   methods: {
     submit() {
+      console.log(this.room_type);
       this.$refs.observer.validate().then((result) => {
         if (result) {
           let start_time = this.start_room_date + 'T' + this.start_room_time + ':00Z';
