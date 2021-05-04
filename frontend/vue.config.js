@@ -13,7 +13,7 @@ module.exports = {
       },
       'http://localhost:8000/': {
         target: 'http://k4d106.p.ssafy.io:8000',
-        changeOrigin: true,
+        // changeOrigin: true,
       },
     },
   },
