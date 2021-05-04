@@ -240,6 +240,20 @@ export default {
       };
 
       this.connection.onUserStatusChanged = function(event) {
+        try {
+          if (typeof event.extra !== 'undefined') {
+            if (event.extra.isMaster && event.status == 'offline') {
+              ref.$swal({
+                icon: 'warning',
+                title: '현재 클래스가 종료 되었습니다.!!',
+              });
+              ref.$router.push({ name: 'ClassList' });
+            }
+          }
+        } catch {
+          console.log(event);
+        }
+
         var infoBar = document.getElementById('onUserStatusChanged');
         var names = [];
         ref.connection.getAllParticipants().forEach(function(participantId) {
@@ -272,6 +286,8 @@ export default {
         console.info('Entire session is closed: ', event.sessionid, event.extra);
       };
     },
+    async check() {},
+
     screen() {
       var ref = this;
 
