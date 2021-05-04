@@ -17,6 +17,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.transaction.Transactional;
 
@@ -39,44 +41,29 @@ public class EntrantController {
 
 	@ApiOperation(value = "방  리스트 조회")
 	@GetMapping(path = "/findAll")
-	public Iterable<Entrant> findAll() {
-		return entrantRepository.findAll();
+	public ResponseEntity<Object> findAll() {
+		return new ResponseEntity<>(entrantRepository.findAll(), HttpStatus.OK);
 	}
-//    @ApiOperation(value = "개설자 uid로 방 조회")
-//    @GetMapping(path="/findByUid")
-//    public List<Room> findByUid(@RequestParam int uid, @RequestParam String password) {
-//    	return roomRepository.findByUid(uid);
-//    }
-//    
-//    @ApiOperation(value = "개설자 uid로 방 조회")
-//    @GetMapping(path="/findByRid")
-//    public ResponseEntity<?> findByrid(@RequestParam int rid, @RequestParam String password) {
-//    	Room room = roomRepository.findByRid(rid);
-//    	if(room.getRoomState().equals("준비")) {
-//    		new ResponseEntity<String>("준비중입니다.",HttpStatus.NO_CONTENT);
-//    	}else {
-//    		if(room.getRoomType().equals("공개")) {
-//    			return new ResponseEntity<Room>(room,HttpStatus.OK);
-//    		}else {   			
-//    			if( password.equals("")) {
-//    				password = bcryptEncoder.encode(password);
-//    				if(room.getRoomPassword().equals(password)) {
-//    					new ResponseEntity<Room>(room,HttpStatus.OK);
-//    				}else {
-//    					new ResponseEntity<String>("비밀번호가 일치하지 안습니다.",HttpStatus.NO_CONTENT);
-//    				}   				
-//    			}else {
-//    				new ResponseEntity<String>("비밀번호를 입력하세요",HttpStatus.NO_CONTENT);
-//    			}
-//    		}
-//    	}
-//    	return new ResponseEntity<Room>(room,HttpStatus.OK);
-//    }
+	
+	@ApiOperation(value = "참여자가 방에 참여했는지 여부 확인")
+	@GetMapping(path = "/findUidAndRid")
+	public ResponseEntity<Object> findUidAndRid(@RequestParam int uid, @RequestParam int rid) {
+		try {
+			Entrant entrant = entrantRepository.findByUidAndRid(uid,rid);
+			if(entrant != null) {
+				return new ResponseEntity<>(entrant, HttpStatus.OK);
+			}else {
+				return new ResponseEntity<>("참가자 명단에 없습니다.", HttpStatus.NO_CONTENT);
+			}
+		}catch (Exception e) {
+			return new ResponseEntity<>("fail", HttpStatus.BAD_REQUEST);
+		}	
+	}
 
 	@ApiOperation(value = "참가자 생성")
 	@Transactional
 	@PostMapping(path = "/insert")
-	public ResponseEntity<?> insertByUid(@RequestBody insertEntrantDto insertRoom) {
+	public ResponseEntity<Object> insertByUid(@RequestBody insertEntrantDto insertRoom) {
 		Entrant entran = entrantRepository.findByUidAndRid(insertRoom.getUid(), insertRoom.getRid());
 		// 없으면 생성
 		if (entran == null) {
@@ -95,19 +82,19 @@ public class EntrantController {
 				admin.declareBinding(bind);
 
 				entran = entrantRepository.save(entran);
-				return new ResponseEntity<Entrant>(entran, HttpStatus.OK);
+				return new ResponseEntity<>(entran, HttpStatus.OK);
 			} catch (Exception e) {
-				new ResponseEntity<String>("fail", HttpStatus.BAD_REQUEST);
+				new ResponseEntity<>("fail", HttpStatus.BAD_REQUEST);
 			}
 		}
 		// 있으면 찾은거 그냥 반환
-		return new ResponseEntity<Entrant>(entran, HttpStatus.OK);
+		return new ResponseEntity<>(entran, HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "참가자 삭제 삭제")
 	@Transactional
 	@DeleteMapping(path = "/deleteByEid")
-	public ResponseEntity<?> deleteByUid(@RequestParam int eid) {
+	public ResponseEntity<Object> deleteByUid(@RequestParam int eid) {
 		Entrant entran = entrantRepository.findByEid(eid);
         String queueName = "member." + Integer.toString(entran.getUid());
         String roomName = "room." + Integer.toString(entran.getRid());
@@ -120,19 +107,19 @@ public class EntrantController {
 			
 			entrantRepository.deleteByEid(eid);
 		} catch (Exception e) {
-			return new ResponseEntity<String>("fail", HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>("fail", HttpStatus.BAD_REQUEST);
 		}
-		return new ResponseEntity<String>("success", HttpStatus.OK);
+		return new ResponseEntity<>("success", HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "참가자 수정")
 	@Transactional
 	@PutMapping(path = "/updateByEid")
-	public ResponseEntity<?> updateTheRoom(@RequestBody Entrant entranDto) {
+	public ResponseEntity<Object> updateTheRoom(@RequestBody Entrant entranDto) {
 		Entrant entrant = entrantRepository.findByEid(entranDto.getEid());
 
 		if (entrant == null)
-			new ResponseEntity<String>("참가자 명단이 없습니다", HttpStatus.OK);
+			return new ResponseEntity<>("참가자 명단이 없습니다", HttpStatus.OK);
 
 		// Member member = memberRepository.findByUid(entrant.getUid());
 		// 엑세스 토큰을 받아서 개설자인지 확인을 해야될까?
@@ -143,8 +130,8 @@ public class EntrantController {
 		try {
 			entrantRepository.save(entrant);
 		} catch (Exception e) {
-			new ResponseEntity<String>("fail", HttpStatus.BAD_GATEWAY);
+			return new ResponseEntity<>("fail", HttpStatus.BAD_GATEWAY);
 		}
-		return new ResponseEntity<String>("success", HttpStatus.OK);
+		return new ResponseEntity<>("success", HttpStatus.OK);
 	}
 }
