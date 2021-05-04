@@ -164,6 +164,7 @@ export default {
       };
 
       this.connection.socketURL = 'https://rtcmulticonnection.herokuapp.com:443/';
+      // this.connection.socketURL = 'https://illeum-webRTC:9001/';
       this.connection.extra.userFullName = this.$store.state.name;
       this.connection.extra.userUUID = this.$store.state.uuid;
       this.connection.extra.type = 'cam';
@@ -171,6 +172,7 @@ export default {
         OfferToReceiveAudio: true,
         OfferToReceiveVideo: true,
       };
+      console.log(this.connection);
 
       // 콘솔로그 출력 해제
       this.connection.enableLogs = false; // to disable logs
