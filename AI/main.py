@@ -1,6 +1,8 @@
 from fastapi import FastAPI, Request
 from fastapi.openapi.utils import get_openapi
 
+from init import init
+
 from router import face_router
 
 from fastapi.openapi.docs import get_swagger_ui_html, get_redoc_html
@@ -19,3 +21,7 @@ async def get_swagger_documentation():
 @app.get("/api/redoc")
 async def get_redoc_documentation():
     return get_redoc_html(openapi_url=OPEN_API_URL, title="docs")
+
+@app.on_event("startup")
+async def startup_event():
+    init()
