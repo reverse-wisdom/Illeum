@@ -44,12 +44,6 @@ def face_detection(image: np.ndarray) -> Response:
     else:
         return Response(FDR.RESULT_TYPE_ATTENTION, '집중 중', result)
 
-
-# def face_detection_from_base64_string(base64_string: str) -> Response:
-#     image = data_uri_to_cv2_img(base64_string)
-#     return face_detection(image)
-
-
 # 각 결과에 따라 repository 함수 매핑
 repo_funcs = {
     FDR.RESULT_TYPE_AFK: repository.update_evaluation_increase_afk_by_eid,
