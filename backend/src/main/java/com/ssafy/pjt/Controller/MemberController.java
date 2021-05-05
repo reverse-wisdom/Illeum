@@ -73,7 +73,7 @@ public class MemberController {
     
     @ApiOperation(value = "로그인")
     @PostMapping(path = "/user/login")
-    public ResponseEntity<?> login(@RequestBody LoginDto login) throws Exception {
+    public ResponseEntity<?> login(@RequestBody LoginDto login) {
         final String email = login.getEmail();
         logger.info("test input username: " + email);
         try {
@@ -175,26 +175,26 @@ public class MemberController {
     @ApiOperation(value = "관리자용 회원탈퇴")
     @Transactional
     @DeleteMapping(path="/admin/delete")
-    public ResponseEntity<?> deleteAdminUser (@RequestParam String email) {
+    public ResponseEntity<Object> deleteAdminUser (@RequestParam String email) {
         logger.info("delete user: " +email);
         try {
         	 memberRepository.deleteByEmail(email);
         }catch (Exception e) {
-        	 return new ResponseEntity<String>("fail", HttpStatus.NO_CONTENT);
+        	 return new ResponseEntity<>("fail", HttpStatus.NO_CONTENT);
 		}      
-        return new ResponseEntity<String>("success",HttpStatus.OK);
+        return new ResponseEntity<>("success",HttpStatus.OK);
     }
     
     @ApiOperation(value = "회원탈퇴")
     @Transactional
     @DeleteMapping(path="/user/delete")
-    public ResponseEntity<?> deleteUser (@RequestBody String accessToken) {
+    public ResponseEntity<Object> deleteUser (@RequestBody String accessToken) {
     	String email = null; 
     	try {
     		email = jwtTokenUtil.getUsernameFromToken(accessToken);
          } catch (IllegalArgumentException e) {} catch (ExpiredJwtException e) { //expire됐을 때
         	 email = e.getClaims().getSubject();
-        	 return new ResponseEntity<String>("fail", HttpStatus.NO_CONTENT);
+        	 return new ResponseEntity<>("fail", HttpStatus.NO_CONTENT);
          }
     	    
         Member mem = memberRepository.findByEmail(email);
@@ -205,7 +205,7 @@ public class MemberController {
                 redisTemplate.delete(email);
             }
         } catch (IllegalArgumentException e) {
-        	return new ResponseEntity<String>("fail", HttpStatus.BAD_REQUEST);
+        	return new ResponseEntity<>("fail", HttpStatus.BAD_REQUEST);
         }
 
         String queueName = "member." + Integer.toString(mem.getUid());
@@ -219,10 +219,8 @@ public class MemberController {
         logger.info("delete user: " + email);
         Long result = memberRepository.deleteByEmail(email);
         logger.info("delete result: " + result);
-        
-        
-        
-        return new ResponseEntity<String>("success",HttpStatus.OK);
+               
+        return new ResponseEntity<>("success",HttpStatus.OK);
         
     }
     
@@ -235,7 +233,7 @@ public class MemberController {
     @ApiOperation(value = "맴버가 참여한 방목록")
     @GetMapping(path = "/user/room")
     //차후에 액세스 토큰으로 이름 찾고 이름으로 uid 찾고 그걸로 데이터 뺴자
-    public ResponseEntity<?> memberJoinRoom(@RequestParam int uid) throws Exception {
+    public ResponseEntity<Object> memberJoinRoom(@RequestParam int uid) {
     	List<findMemberRoom> list;
     	try {
     		list = memberMapper.mamberJoinRoom(uid);
@@ -249,7 +247,7 @@ public class MemberController {
     @ApiOperation(value = "맴버 출결기록")
     @GetMapping(path = "/user/attend")
     //차후에 액세스 토큰으로 이름 찾고 이름으로 uid 찾고 그걸로 데이터 뺴자
-    public ResponseEntity<?> memberAttend(@RequestParam int uid) throws Exception {
+    public ResponseEntity<Object> memberAttend(@RequestParam int uid) {
     	List<memberAttend> list;
     	try {
     		list = memberMapper.memberAttend(uid);
@@ -264,7 +262,7 @@ public class MemberController {
     @ApiOperation(value = "맴버가  개설한 방 목록")
     @GetMapping(path = "/user/founder")
     //차후에 액세스 토큰으로 이름 찾고 이름으로 uid 찾고 그걸로 데이터 뺴자
-    public ResponseEntity<?> founder(@RequestParam int uid) throws Exception {
+    public ResponseEntity<Object> founder(@RequestParam int uid) {
     	List<findFounder> list;
     	try {
     		list = memberMapper.founder(uid);
@@ -279,7 +277,7 @@ public class MemberController {
     @ApiOperation(value = "맴버의 평가 목록")
     @GetMapping(path = "/user/evaluation")
     //차후에 액세스 토큰으로 이름 찾고 이름으로 uid 찾고 그걸로 데이터 뺴자
-    public ResponseEntity<?> memberJoinEvaluation(@RequestParam int uid) throws Exception {
+    public ResponseEntity<Object> memberJoinEvaluation(@RequestParam int uid){
     	List<findMemberEvaluation> list;
     	try {
     		list = memberMapper.memberJoinEvaluation(uid);
@@ -293,32 +291,33 @@ public class MemberController {
     @ApiOperation(value = "회원정보수정")
     @Transactional
     @PutMapping(path="/user/update")
-    public ResponseEntity<?> UpdateMember(@RequestBody UpdateMemberDto update) {  	
+    public ResponseEntity<Object> UpdateMember(@RequestBody UpdateMemberDto update) {  	
     	Member member = memberRepository.findByEmail(update.getEmail());
     	if(member == null) new ResponseEntity<String>("fail",HttpStatus.NO_CONTENT);
     	
     	if(update.getPassword() != null) member.setPassword(bcryptEncoder.encode(update.getPassword()));
     	if(update.getName() != null) member.setName(update.getName());
-    	
-    	    	
+    	  	    	
     	try {
     		memberRepository.save(member);
     	}catch (Exception e) {
-    		new ResponseEntity<String>("fail",HttpStatus.BAD_REQUEST);
+    		return new ResponseEntity<>("fail",HttpStatus.BAD_REQUEST);
 		}
     	
-    	return new ResponseEntity<String>("success",HttpStatus.OK);
+    	return new ResponseEntity<>("success",HttpStatus.OK);
     }
     
     @ApiOperation(value = "이메일 중복 체크")
     @GetMapping(path="/user/checkemail")
-    public boolean checkEmail (@RequestParam String email) {
-        System.out.println("이메일체크 요청 이메일: " +email);
-        if (memberRepository.findByEmail(email) == null) return true;
-        else return false;
+    public ResponseEntity<Object> checkEmail (@RequestParam String email) {
+        try {
+        	if (memberRepository.findByEmail(email) == null) return new ResponseEntity<>(true,HttpStatus.OK);
+        	else return new ResponseEntity<>(false,HttpStatus.OK);
+        }catch (Exception e) {
+        	return new ResponseEntity<>("fail",HttpStatus.BAD_REQUEST);
+		}      
     }
-    	
-    
+    	    
     @ApiOperation(value = "로그인 연장")
     @PostMapping(path="/user/refresh")
     public Map<String, Object>  requestForNewAccessToken(@RequestBody Map<String, String> m) {
@@ -393,12 +392,5 @@ public class MemberController {
 //            map.put("success", false);
 //        }
 //        return map;
-//    }
-    
-//    @ApiOperation(value = "일반회원 이거 되나?용")
-//    @GetMapping(path="/user/normal")
-//    public ResponseEntity<?> onlyNormal() {
-//        return new ResponseEntity(HttpStatus.OK);
-//    }
-    
+//    }    
 }
