@@ -56,56 +56,56 @@ public class RoomController {
     
 	@ApiOperation(value = "방  리스트 조회")
 	@GetMapping(path = "/findAll")
-	public ResponseEntity<?> findAll() {
+	public ResponseEntity<Object> findAll() {
 		try {
 			return new ResponseEntity<>(roomMapper.roomAll(), HttpStatus.OK);
 		} catch (SQLException e) {
-			return new ResponseEntity<String>("fail", HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>("fail", HttpStatus.BAD_REQUEST);
 		}
 	}
 
 	@ApiOperation(value = "개설자 uid로 방 조회")
 	@GetMapping(path = "/findByUid")
-	public ResponseEntity<?> findByUid(@RequestParam int uid, @RequestParam String accessToken) {
+	public ResponseEntity<Object> findByUid(@RequestParam int uid, @RequestParam String accessToken) {
 		try {
 			String email = jwtTokenUtil.getUsernameFromToken(accessToken);
 			Member member = memberRepository.findByEmail(email);
 			if (uid == member.getUid()) {
 				return new ResponseEntity<>(roomRepository.findByUid(uid), HttpStatus.OK);
 			} else {
-				return new ResponseEntity<String>("토큰 uid랑 uid가 다릅니다", HttpStatus.NO_CONTENT);
+				return new ResponseEntity<>("토큰 uid랑 uid가 다릅니다", HttpStatus.NO_CONTENT);
 			}
 		} catch (Exception e) {
-			return new ResponseEntity<String>("fail", HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>("fail", HttpStatus.BAD_REQUEST);
 		}
 	}
 
 	@ApiOperation(value = "rid로 방 조회")
 	@GetMapping(path = "/findByRid")
-	public ResponseEntity<?> findByrid(@RequestParam int rid) {
+	public ResponseEntity<Object> findByrid(@RequestParam int rid) {
 		Room room = roomRepository.findByRid(rid);
 		try {
 			findRoom findroom = roomService.conversion(room);
 			return new ResponseEntity<>(findroom, HttpStatus.OK);
 		} catch (SQLException e) {
-			return new ResponseEntity<String>("fail", HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>("fail", HttpStatus.BAD_REQUEST);
 		}
 		
 	}
 
 	@ApiOperation(value = "room_name으로 방 조회")
 	@GetMapping(path = "/findByRoomName")
-	public ResponseEntity<?> findByRoomName(@RequestParam String roomName) {
+	public ResponseEntity<Object> findByRoomName(@RequestParam String roomName) {
 		try {
 			return new ResponseEntity<>(roomMapper.roomName(roomName), HttpStatus.OK);
 		} catch (SQLException e) {
-			return new ResponseEntity<String>("fail", HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>("fail", HttpStatus.BAD_REQUEST);
 		}
 	}
 
 	@ApiOperation(value = "방에 참여한 맴버 목록 조회")
 	@GetMapping(path = "/member")
-	public ResponseEntity<?> roomjoinMemeber(@RequestParam int rid) throws Exception {
+	public ResponseEntity<Object> roomjoinMemeber(@RequestParam int rid) {
 		List<Map<String, Object>> list;
 		try {
 			list = roomMapper.roomjoinMemeber(rid);
@@ -120,15 +120,13 @@ public class RoomController {
 
 	@ApiOperation(value = "방에 참여한 맴버의 평가 목록 조회")
 	@GetMapping(path = "/evaluation")
-	public ResponseEntity<?> roomJoinEvaluation(@RequestParam int rid) throws Exception {
+	public ResponseEntity<Object> roomJoinEvaluation(@RequestParam int rid) {
 		List<findRoomEvaluation> list;
 		try {
 			list = roomMapper.roomJoinEvaluation(rid);
-			System.out.println(list);
 			if (list.size() == 0)
 				return new ResponseEntity<>("평가가 없습니다.", HttpStatus.NO_CONTENT);
-		} catch (Exception e) {
-			System.out.println(e);
+		} catch (Exception e) {			
 			return new ResponseEntity<>("fail", HttpStatus.BAD_REQUEST);
 		}
 		return new ResponseEntity<>(list, HttpStatus.OK);
@@ -137,7 +135,7 @@ public class RoomController {
 	@ApiOperation(value = "방 생성")
 	@Transactional
 	@PostMapping(path = "/insert")
-	public ResponseEntity<?> insertByUid(@RequestBody insertRoomDto insertRoom) {
+	public ResponseEntity<Object> insertByUid(@RequestBody insertRoomDto insertRoom) {
 		Room room = new Room();
 		
 		if (insertRoom.getRoom_type().equals("비공개")) {
@@ -151,7 +149,7 @@ public class RoomController {
 		room.setRoomName(insertRoom.getRoom_name());
 		room.setStartTime(insertRoom.getStart_time());
 		room.setEndTime(insertRoom.getEnd_time());
-		room.setRoomState("진행");
+		room.setRoomState(insertRoom.getRoom_state());
 
 		try {
 			room = roomRepository.save(room);
@@ -159,11 +157,10 @@ public class RoomController {
 			String roomName = "room." + Integer.toString(room.getRid());
 			FanoutExchange fanout = new FanoutExchange(roomName);
 			admin.declareExchange(fanout);
-			return new ResponseEntity<findRoom>(find, HttpStatus.OK);
+			return new ResponseEntity<>(find, HttpStatus.OK);
 		} catch (Exception e) {
-			new ResponseEntity<String>("fail", HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>("fail", HttpStatus.BAD_REQUEST);
 		}
-		return new ResponseEntity<String>("fail", HttpStatus.NO_CONTENT);
 	}
 
 	@ApiOperation(value = "방 삭제")
@@ -178,19 +175,19 @@ public class RoomController {
 			roomRepository.deleteByRid(rid);
 		} catch (Exception e) {
 			System.out.println(e);
-			return new ResponseEntity<String>("fail", HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>("fail", HttpStatus.BAD_REQUEST);
 		}
-		return new ResponseEntity<String>("success", HttpStatus.OK);
+		return new ResponseEntity<>("success", HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "방 수정(rid만 필수)")
 	@Transactional
 	@PutMapping(path = "/updateByRid")
-	public ResponseEntity<?> updateTheRoom(@RequestBody updateRoomDto roomdto) {
+	public ResponseEntity<Object> updateTheRoom(@RequestBody updateRoomDto roomdto) {
 		Room room = roomRepository.findByRid(roomdto.getRid());
 
 		if (room == null)
-			new ResponseEntity<String>("room이 없습니다", HttpStatus.OK);
+			return new ResponseEntity<>("room이 없습니다", HttpStatus.OK);
 
 		if (roomdto.getRoom_name() != null)
 			room.setRoomName(roomdto.getRoom_name());
@@ -206,10 +203,11 @@ public class RoomController {
 			room.setEndTime(roomdto.getEnd_time());
 
 		try {
-			roomRepository.save(room);
+			room = roomRepository.save(room);
+			return new ResponseEntity<>(room, HttpStatus.OK);
 		} catch (Exception e) {
-			new ResponseEntity<String>("fail", HttpStatus.BAD_GATEWAY);
+			return new ResponseEntity<>("fail", HttpStatus.BAD_GATEWAY);
 		}
-		return new ResponseEntity<String>("success", HttpStatus.OK);
+		
 	}
 }

@@ -1,6 +1,9 @@
 package com.ssafy.pjt.Controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.ApplicationRunner;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -25,7 +28,7 @@ import com.ssafy.pjt.util.MediaUtils;
 @Controller
 @RequestMapping("/api")
 public class ImageController {
-
+    private Logger logger = LoggerFactory.getLogger(ApplicationRunner.class);
 	@Autowired
 	ImageService imageService;
 //	@Autowired
@@ -39,7 +42,7 @@ public class ImageController {
 	 */
 	@PostMapping({ "/data", "/image" })
 	@ResponseBody
-	public ResponseEntity<?> handleFileUpload(@RequestParam("file") MultipartFile file) {
+	public ResponseEntity<Object> handleFileUpload(@RequestParam("file") MultipartFile file) {
 		try {
 			UploadFile uploadedFile = imageService.store(file);
 			return ResponseEntity.ok().body("/api/data/" + uploadedFile.getId());
@@ -58,7 +61,7 @@ public class ImageController {
 	 */
 	@GetMapping({ "/data/{fileId}", "/image/{fileId}" })
 	@ResponseBody
-	public ResponseEntity<?> serveFile(@PathVariable int fileId) {
+	public ResponseEntity<Object> serveFile(@PathVariable int fileId) {
 		try {
 			UploadFile uploadedFile = imageService.load(fileId);
 			HttpHeaders headers = new HttpHeaders();
@@ -77,7 +80,7 @@ public class ImageController {
 			return ResponseEntity.ok().headers(headers).body(resource);
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.info(e.getMessage());
 			return ResponseEntity.badRequest().build();
 		}
 	}
@@ -87,87 +90,14 @@ public class ImageController {
 	 */
 	@PostMapping({ "/member/profile/{uid}" })
 	@ResponseBody
-	public ResponseEntity<?> handleProfileImageUpload(@PathVariable int uid, @RequestParam("file") MultipartFile file) {
+	public ResponseEntity<Object> handleProfileImageUpload(@PathVariable int uid, @RequestParam("file") MultipartFile file) {
 		try {
 			imageService.store(file, "/profile", String.valueOf(uid), true);
-//			Member member = memberRepository.findByUid(uid);
-//			member.setThumbnail(String.valueOf(uploadedFile.getId()));
-//			memberRepository.save(member);
 			return ResponseEntity.ok().body("/profile/" + uid);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.info(e.getMessage());		
 			return ResponseEntity.badRequest().body(e);
 		}
 	}
 
-	/**
-	 * 프로필 이미지 다운로드
-	 * 
-	 * @param 파일고유번호
-	 * 
-	 * @return HTTP프로토콜처리된파일
-	 */
-//	@Cacheable(value = "cacheProfileImage", key = "{ #uuid, #size.orElse(64) }")
-//	@GetMapping({ "/member/profile/{uid}", "/member/profile/{uid}/{size}" })
-//	@ResponseBody
-//	public ResponseEntity<?> serveProfileImage(@PathVariable int uid, @PathVariable Optional<Integer> size) {
-//		int imageSize = size.orElse(64);
-//		if (imageSize % 16 != 0 || imageSize / 256 > 1)
-//			imageSize = 64;
-//		try {
-//			Member member = memberRepository.findByUid(uid);
-//			if (member == null || member.getThumbnail() == null || member.getThumbnail().length() == 0) {
-//				return self.serveProfileDefaultImage(imageSize);
-//			}
-//			String ino = member.getThumbnail();
-//			if (ino.startsWith("http") || ino.chars().allMatch(Character::isDigit) == false) { // 숫자의 형태가 아니라면
-//				URI redirectUri = new URI(ino);
-//				HttpHeaders httpHeaders = new HttpHeaders();
-//				httpHeaders.setLocation(redirectUri);
-//				return new ResponseEntity<>(httpHeaders, HttpStatus.SEE_OTHER);
-//			}
-//			UploadFile uploadedFile = imageService.load(Integer.parseInt(ino));
-//
-//			HttpHeaders headers = new HttpHeaders();
-//			Resource resource = null;
-//
-//			String fileName = String.valueOf(uid); /* uploadedFile.getOriginFileName(); */
-//			headers.add(HttpHeaders.CONTENT_DISPOSITION,
-//					"attachment; filename=\"" + new String(member.getName().getBytes("UTF-8"), "ISO-8859-1") + "\"");
-//
-//			if (MediaUtils.containsImageMediaType(uploadedFile.getContentType())) {
-//				headers.setContentType(MediaType.valueOf(uploadedFile.getContentType()));
-//			} else {
-//				headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-//			}
-//			String filename = null;
-//			if (imageSize == 0)
-//				filename = uploadedFile.getSaveFileName();
-//			else
-//				filename = UploadFileUtils.getThumbnailFileName(uploadedFile.getSaveFileName(), imageSize);
-//			resource = imageService.loadAsResource(filename);
-//
-//			return self.serveProfileDefaultImage(imageSize);
-//			return ResponseEntity.ok().headers(headers).body(resource);
-//
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//			return ResponseEntity.badRequest().body(e);
-//		}
-//	}
-
-//	@ResponseBody
-//	@Cacheable(value = "defaultImage", key = "#imageSize")
-//	public ResponseEntity<?> serveProfileDefaultImage(int imageSize) {
-//		try {
-//			HttpHeaders headers = new HttpHeaders();
-//			headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"default\"");
-//			headers.setContentType(MediaType.IMAGE_PNG);
-//			ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
-//			Resource resource = resolver.getResource("classpath:static/user-" + imageSize + ".png");
-//			return ResponseEntity.ok().headers(headers).body(resource);
-//		} catch (Exception e) {
-//			return new ResponseEntity(e, HttpStatus.INTERNAL_SERVER_ERROR);
-//		}
-//	}
 }
