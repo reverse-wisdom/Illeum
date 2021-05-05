@@ -16,7 +16,7 @@ import java.util.function.Function;
 public class JwtTokenUtil implements Serializable {
 
     private static final long serialVersionUID = -2550185165626007488L;
-    public static final long JWT_ACCESS_TOKEN_VALIDITY = 10* 6; //1분
+    public static final long JWT_ACCESS_TOKEN_VALIDITY = 20* 60; //20분
     public static final long JWT_REFRESH_TOKEN_VALIDITY = 24 * 60 * 60 * 7; //일주일
     @Value("${jwt.secret}")
     private String secret;
