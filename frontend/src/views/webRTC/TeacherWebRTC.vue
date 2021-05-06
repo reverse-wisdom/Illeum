@@ -35,7 +35,6 @@
       </template>
 
       <v-btn class="mr-4" color="cyan" @click="screen">화면공유</v-btn>
-      <v-btn class="mr-4" color="cyan" @click="capture">화면캡쳐테스트</v-btn>
       <v-btn class="mr-4" color="cyan" @click="saveMessageLog">채팅기록저장</v-btn>
       <v-btn class="mr-4" color="cyan" @click="chatTest">채팅콘솔테스트</v-btn>
       <v-btn class="mr-4" color="error" @click="outRoom">종료</v-btn>
@@ -45,7 +44,6 @@
 
 <script>
 import push from 'push.js';
-import { faceAI } from '@/api/faceAI';
 import { updateClass } from '@/api/class';
 export default {
   data() {
@@ -98,26 +96,6 @@ export default {
   },
 
   methods: {
-    async capture() {
-      let video = document.querySelector('video');
-      let canvas = document.createElement('canvas');
-      canvas.width = video.videoWidth || video.clientWidth;
-      canvas.height = video.videoHeight || video.clientHeight;
-
-      var context = canvas.getContext('2d');
-      context.drawImage(video, 0, 0, canvas.width, canvas.height);
-
-      let img = canvas.toDataURL('image/png');
-
-      let userData = {
-        uid: this.$store.state.uuid,
-        rid: this.$route.query.rid,
-        snapshot: img,
-      };
-
-      const { data } = await faceAI(userData); // 추후 프로미스형태로 변경
-      console.log(data);
-    },
     offVideo() {
       let localStream = this.connection.attachStreams[0];
       localStream.mute('video');
@@ -215,17 +193,13 @@ export default {
       };
 
       // 콘솔로그 출력 해제
-      // this.connection.enableLogs = false; // to disable logs
-      this.connection.enableLogs = true; // to enable logs
-
-      console.log(this.connection);
+      this.connection.enableLogs = false; // to disable logs
+      // this.connection.enableLogs = true; // to enable logs
 
       this.connection.checkPresence(this.roomid, function(isRoomExist, roomid) {
         if (isRoomExist === true) {
-          console.log('present');
           ref.connection.join(roomid);
         } else {
-          console.log('open');
           ref.connection.onUserStatusChanged();
 
           push.create(ref.connection.extra.userFullName + '님이 ' + ref.roomid + '화상수업을 개설하였습니다');
@@ -236,7 +210,6 @@ export default {
       // 리스너 영역
       this.connection.onmessage = function(event) {
         if (event.data.chatMessage) {
-          console.log(event);
           ref.appendChatMessage(event, event.extra.userFullName, event.extra.userUUID);
           return;
         }
@@ -275,25 +248,21 @@ export default {
     screen() {
       var ref = this;
 
-      console.log(this.connection, '1');
       this.connection.extra.type = 'share';
       this.connection.extra.typeAlpha = 'share';
 
       this.connection.updateExtraData();
-      console.log(this.connection.extra, '바뀐 엑스트라');
 
       this.connection.addStream({
         screen: true,
       });
 
       this.connection.videosContainer = document.querySelector('.share-videos-container');
-      console.log('test when open', this.connection);
     },
     async outRoom() {
       var ref = this;
       await updateClass({ rid: this.$route.query.rid, room_state: '준비' })
         .then(({ data }) => {
-          console.log(data);
           if (data == 'success') {
             this.$swal({
               icon: 'success',

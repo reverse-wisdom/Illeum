@@ -35,7 +35,6 @@
       </template>
 
       <v-btn class="mr-4" color="cyan" @click="screen">화면공유</v-btn>
-      <v-btn class="mr-4" color="cyan" @click="capture">화면캡쳐테스트</v-btn>
       <v-btn class="mr-4" color="error" @click="outRoom">퇴장</v-btn>
       &nbsp;
     </div>
@@ -99,7 +98,7 @@ export default {
   },
 
   methods: {
-    async capture() {
+    async screenCapture() {
       let video = document.querySelector('video');
       let canvas = document.createElement('canvas');
       canvas.width = video.videoWidth || video.clientWidth;
@@ -204,6 +203,12 @@ export default {
 
       this.connection.autoCloseEntireSession = true;
 
+      // 4초후 5초당 한번씩
+      setTimeout(function() {
+        setInterval(ref.screenCapture, 5000);
+        console.log('캡쳐완료!');
+      }, 4000);
+
       this.connection.checkPresence(this.roomid, function(isRoomExist, roomid) {
         if (isRoomExist === true) {
           ref.checkEntrant().then((result) => {
@@ -290,21 +295,6 @@ export default {
 
         infoBar.innerHTML = '<b>Active users:</b> ' + names.join(', ');
       };
-
-      //   this.connection.onclose = function(event) {
-      //     if (!ref.isOutClicked) {
-      //       console.log('test');
-
-      //       console.log(ref.connection);
-
-      //       ref.$swal({
-      //         icon: 'warning',
-      //         title: '현재 화상수업이 종료 되었습니다.!!',
-      //       });
-
-      //       ref.$router.push({ name: 'WebRTCList' });
-      //     }
-      //   };
 
       this.connection.onEntireSessionClosed = function(event) {
         console.info('Entire session is closed: ', event.sessionid, event.extra);
