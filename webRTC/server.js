@@ -106,7 +106,7 @@ var iooptions = {
     pingTimeout: 9000,
     pingInterval: 3000,
     cors: {
-      origin: '*',
+      origin: 'http://localhost:8000',
       methods: ["GET", "POST"],
       credentials: true
     }
