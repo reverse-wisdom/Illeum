@@ -1,4 +1,4 @@
-package com.ssafy.pjt.Controller;
+package com.ssafy.pjt.controller;
 
 import java.util.HashMap;
 import java.util.List;
@@ -31,8 +31,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ssafy.pjt.Repository.MemberRepository;
-import com.ssafy.pjt.Repository.mapper.MemberMapper;
 import com.ssafy.pjt.dto.Member;
 import com.ssafy.pjt.dto.Token;
 import com.ssafy.pjt.dto.request.LoginDto;
@@ -43,6 +41,8 @@ import com.ssafy.pjt.dto.response.findMemberEvaluation;
 import com.ssafy.pjt.dto.response.findMemberRoom;
 import com.ssafy.pjt.dto.response.memberAttend;
 import com.ssafy.pjt.jwt.JwtTokenUtil;
+import com.ssafy.pjt.repository.MemberRepository;
+import com.ssafy.pjt.repository.mapper.MemberMapper;
 import com.ssafy.pjt.service.JwtUserDetailsService;
 
 import io.jsonwebtoken.ExpiredJwtException;
@@ -176,7 +176,6 @@ public class MemberController {
     @Transactional
     @DeleteMapping(path="/admin/delete")
     public ResponseEntity<Object> deleteAdminUser (@RequestParam String email) {
-        logger.info("delete user: " +email);
         try {
         	 memberRepository.deleteByEmail(email);
         }catch (Exception e) {
@@ -234,7 +233,7 @@ public class MemberController {
     @GetMapping(path = "/user/room")
     //차후에 액세스 토큰으로 이름 찾고 이름으로 uid 찾고 그걸로 데이터 뺴자
     public ResponseEntity<Object> memberJoinRoom(@RequestParam int uid) {
-    	List<findMemberRoom> list;
+    	List<findMemberRoom> list = null;
     	try {
     		list = memberMapper.mamberJoinRoom(uid);
     		if(list.size() == 0) return new ResponseEntity<>("수강 중인 강의가 없습니다.",HttpStatus.OK);
@@ -248,10 +247,10 @@ public class MemberController {
     @GetMapping(path = "/user/attend")
     //차후에 액세스 토큰으로 이름 찾고 이름으로 uid 찾고 그걸로 데이터 뺴자
     public ResponseEntity<Object> memberAttend(@RequestParam int uid) {
-    	List<memberAttend> list;
+    	List<memberAttend> list = null;
     	try {
     		list = memberMapper.memberAttend(uid);
-    		if(list.size() == 0) return new ResponseEntity<>("출결 기록이 없습니다.",HttpStatus.OK);
+    		if(list == null) return new ResponseEntity<>("출결 기록이 없습니다.",HttpStatus.OK);
     	}catch (Exception e) {
     		return new ResponseEntity<>("fail",HttpStatus.BAD_REQUEST);
 		}
@@ -262,7 +261,7 @@ public class MemberController {
     @GetMapping(path = "/user/founder")
     //차후에 액세스 토큰으로 이름 찾고 이름으로 uid 찾고 그걸로 데이터 뺴자
     public ResponseEntity<Object> founder(@RequestParam int uid) {
-    	List<findFounder> list;
+    	List<findFounder> list = null;
     	try {
     		list = memberMapper.founder(uid);
     		if(list.size() == 0) return new ResponseEntity<>("개설한 방이 없습니다.",HttpStatus.OK);

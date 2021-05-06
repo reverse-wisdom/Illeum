@@ -1,8 +1,8 @@
-package com.ssafy.pjt.Controller;
+package com.ssafy.pjt.controller;
 
-import com.ssafy.pjt.Repository.EntrantRepository;
 import com.ssafy.pjt.dto.Entrant;
 import com.ssafy.pjt.dto.request.insertEntrantDto;
+import com.ssafy.pjt.repository.EntrantRepository;
 
 import io.swagger.annotations.ApiOperation;
 
