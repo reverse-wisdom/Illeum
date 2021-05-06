@@ -11,11 +11,15 @@ import Sign from '../views/user/Sign.vue';
 //class
 import ClassTest from '../views/class/ClassTest.vue';
 import ClassSearch from '../views/class/ClassSearch.vue';
-import CreateClass from '../views/class/CreateClass.vue';
+import ClassCreate from '../views/class/ClassCreate.vue';
 import UserClasslist from '../views/class/UserClasslist.vue';
 import ClassList from '../views/class/ClassList.vue';
 import Class from '../views/class/Class.vue';
 import ClassMaster from '../views/class/ClassMaster.vue';
+import ClassJoin from '../views/class/ClassJoin.vue';
+
+//WebRTC
+import WebRTCList from '../views/webRTC/WebRTCList.vue';
 
 //evaluation
 import UserEval from '../views/evaluation/UserEval.vue';
@@ -77,8 +81,8 @@ const routes = [
   },
   {
     path: '/classcreate',
-    name: 'CreateClass',
-    components: { default: CreateClass },
+    name: 'ClassCreate',
+    components: { default: ClassCreate },
   },
   {
     path: '/userclasslist',
@@ -99,6 +103,17 @@ const routes = [
     path: '/classmaster',
     name: 'ClassMaster',
     components: { default: ClassMaster },
+  },
+  {
+    path: '/classjoin',
+    name: 'ClassJoin',
+    components: { default: ClassJoin },
+  },
+  //webRTC
+  {
+    path: '/webrtclist',
+    name: 'WebRTCList',
+    components: { default: WebRTCList },
   },
   //evaluation
   {
