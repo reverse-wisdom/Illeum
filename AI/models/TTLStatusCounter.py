@@ -79,7 +79,7 @@ class TTLStatusCounter:
         self._decrease(uid, status_mapping[status], count)
 
 
-global ttl_status_counter
+ttl_status_counter = TTLStatusCounter()
 
 
 def get_ttl_status_counter():
@@ -104,7 +104,7 @@ if __name__ == "__main__":
             break
     manager.shutdown()
 elif __name__ == "__mp_main__":  # SyncManager 프로세스가 다른 실행문을 참조하지 않도록 방지
-    ttl_status_counter = TTLStatusCounter()
+    pass
 else:
     manager = MySyncManager(("127.0.0.1", 5678), authkey=b"ttl_status_counter123@")
     manager.connect()
