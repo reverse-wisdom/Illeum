@@ -128,7 +128,7 @@ export default {
           const roomPartinUser = data[0].rid;
           const res = await evaluateList(roomPartinUser);
           const ridData = await findByRidClass(roomPartinUser);
-          this.saveTime = this.$moment(ridData.data.startTime).format('YYYY-MM-DD, h:mm:ss a');
+          this.saveTime = this.$moment(ridData.data.start_time).format('YYYY-MM-DD, h:mm:ss a');
           console.log(ridData.data.startTime);
           this.saveTime = this.$moment(this.saveTime).add('m', 10);
           this.saveTime = this.$moment(this.saveTime).format('YYYY-MM-DD, h:mm:ss a');
