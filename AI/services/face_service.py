@@ -9,7 +9,7 @@ import crud.evalutation_repository as repository
 import models.FaceDetectionResponse as FDR
 from models.FaceDetectionResponse import FaceDetectionResponse as Response
 
-from services import SimpleFaceModule, SimpleFaceDetectionResult
+from OpenVtuber import SimpleFaceModule, SimpleFaceDetectionResult
 
 # 서비스 코드 시작 ##
 module = SimpleFaceModule()
