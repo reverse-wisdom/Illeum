@@ -106,13 +106,13 @@ var iooptions = {
     pingTimeout: 9000,
     pingInterval: 3000,
     cors: {
-      origin: 'https://mydomain.com',
+      origin: '*',
       methods: ["GET", "POST"],
       credentials: true
     }
 };
 
-ioServer(httpApp).on('connection', function(socket) {
+ioServer(httpApp, iooptions).on('connection', function(socket) {
     RTCMultiConnectionServer.addSocket(socket, config);
 
     // ----------------------
