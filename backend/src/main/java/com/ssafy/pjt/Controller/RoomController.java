@@ -106,13 +106,12 @@ public class RoomController {
 	@ApiOperation(value = "방에 참여한 맴버 목록 조회")
 	@GetMapping(path = "/member")
 	public ResponseEntity<Object> roomjoinMemeber(@RequestParam int rid) {
-		List<Map<String, Object>> list;
+		List<Map<String, Object>> list = null;
 		try {
 			list = roomMapper.roomjoinMemeber(rid);
-			if (list.size() == 0)
+			if (list == null)
 				return new ResponseEntity<>("참가자가 없습니다.", HttpStatus.OK);
 		} catch (Exception e) {
-			System.out.println(e);
 			return new ResponseEntity<>("fail", HttpStatus.BAD_REQUEST);
 		}
 		return new ResponseEntity<>(list, HttpStatus.OK);
@@ -121,10 +120,10 @@ public class RoomController {
 	@ApiOperation(value = "방에 참여한 맴버의 평가 목록 조회")
 	@GetMapping(path = "/evaluation")
 	public ResponseEntity<Object> roomJoinEvaluation(@RequestParam int rid) {
-		List<findRoomEvaluation> list;
+		List<findRoomEvaluation> list = null;
 		try {
 			list = roomMapper.roomJoinEvaluation(rid);
-			if (list.size() == 0)
+			if (list == null)
 				return new ResponseEntity<>("평가가 없습니다.", HttpStatus.NO_CONTENT);
 		} catch (Exception e) {			
 			return new ResponseEntity<>("fail", HttpStatus.BAD_REQUEST);
@@ -166,7 +165,7 @@ public class RoomController {
 	@ApiOperation(value = "방 삭제")
 	@Transactional
 	@DeleteMapping(path = "/deleteByRid")
-	public ResponseEntity<?> deleteByUid(@RequestParam int rid) {
+	public ResponseEntity<Object> deleteByUid(@RequestParam int rid) {
 		Room room = roomRepository.findByRid(rid);
         String roomName = "room." + Integer.toString(room.getRid());
 
@@ -174,7 +173,6 @@ public class RoomController {
 			admin.deleteExchange(roomName);
 			roomRepository.deleteByRid(rid);
 		} catch (Exception e) {
-			System.out.println(e);
 			return new ResponseEntity<>("fail", HttpStatus.BAD_REQUEST);
 		}
 		return new ResponseEntity<>("success", HttpStatus.OK);
@@ -204,7 +202,7 @@ public class RoomController {
 
 		try {
 			room = roomRepository.save(room);
-			return new ResponseEntity<>(room, HttpStatus.OK);
+			return new ResponseEntity<>("success", HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<>("fail", HttpStatus.BAD_GATEWAY);
 		}

@@ -293,7 +293,7 @@ public class MemberController {
     @PutMapping(path="/user/update")
     public ResponseEntity<Object> UpdateMember(@RequestBody UpdateMemberDto update) {  	
     	Member member = memberRepository.findByEmail(update.getEmail());
-    	if(member == null) new ResponseEntity<String>("fail",HttpStatus.NO_CONTENT);
+    	if(member == null) return new ResponseEntity<>("fail",HttpStatus.NO_CONTENT);
     	
     	if(update.getPassword() != null) member.setPassword(bcryptEncoder.encode(update.getPassword()));
     	if(update.getName() != null) member.setName(update.getName());
