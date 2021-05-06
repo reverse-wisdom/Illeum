@@ -80,6 +80,7 @@ pipeline {
 			sh 'docker run -d --name illeum-webrtc \
 				-v /etc/localtime:/etc/localtime:ro \
 				-v /usr/share/zoneinfo/Asia/Seoul:/etc/timezone:ro \
+				-v /volumes/front_home/key:/volumes/key \
 				--network illeum-network \
 				-p 9001:9001 \
 				illeum-webrtc:latest' 
