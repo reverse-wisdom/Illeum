@@ -1,9 +1,17 @@
 <template>
   <div class="manage">
-    <span>{{ this.$store.state.uuid }}의 학생관리</span>
-    <v-row justify="center">
+    <v-row justify="">
+      <v-container>{{ this.$store.state.uuid }}의 학생관리</v-container>
       <v-date-picker v-model="date" @click:date="classNameFetch" :landscape="landscape" locale="ko-kr" :allowed-dates="allowedDates" class="mt-4" min="1900-04-01" max="2100-10-30"></v-date-picker>
-      <v-col class="d-flex" cols="12" sm="6">
+    </v-row>
+    <v-row>
+      <div style="margin-top: 100px;">
+        <h2>show Management</h2>
+        <h2>{{ date }}</h2>
+      </div>
+    </v-row>
+    <v-row>
+      <v-col cols="12" sm="6">
         <v-select :items="items" :label="date" solo @change="showManage"></v-select>
       </v-col>
     </v-row>
@@ -20,22 +28,17 @@
                 <th>NAME</th>
                 <th>E-MAIL</th>
                 <th>Evaluation</th>
-                <th>지각여부</th>
+                <th>Attendance</th>
               </tr>
             </thead>
 
             <tbody>
-              <EachUserManage v-for="(each, idx) in UsersEval" :key="idx" :each="each" :idx="idx" :rid="rid" :manageUsers="manageUsers"></EachUserManage>
+              <EachUserManage v-for="(each, idx) in UsersEval" :key="idx" :each="each" :idx="idx" :rid="rid" :evalUserCnt="evalUserCnt"></EachUserManage>
             </tbody>
           </table>
         </div>
       </div>
     </v-row>
-
-    <div style="margin-top: 100px;">
-      <h2>show Management</h2>
-      <h2>{{ date }}</h2>
-    </div>
   </div>
 </template>
 
@@ -66,6 +69,7 @@ export default {
       selectedRoomName: '',
       maxUser: '',
       firstUser: '',
+      evalUserCnt: '',
       fetchRoomlen: 0,
       manageUsers: [],
       UsersEval: [
@@ -140,6 +144,7 @@ export default {
             }
           }
         }
+        this.evalUserCnt = this.UsersEval.length;
       }
       console.log(this.UsersEval);
     },
@@ -148,9 +153,8 @@ export default {
 </script>
 <style scoped>
 .manage {
-  max-width: 700px;
   width: 100%;
-  margin: auto;
+  margin-left: 30%;
   padding: 25px 30px 30px 30px;
   border-radius: 5px;
   background: #fff;
@@ -161,15 +165,8 @@ export default {
   box-sizing: border-box;
 }
 
-.table-body {
-  display: flex;
-  font-family: 'Roboto', sans-serif;
-}
-
 .table_responsive {
-  max-width: 900px;
-
-  background-color: #efefef33;
+  width: 150%;
   padding: 15px;
   overflow: auto;
   margin: auto;

@@ -26,7 +26,10 @@
             <v-container>
               <v-card>
                 <v-toolbar flat color="primary" dark>
-                  <v-toolbar-title>User Profile</v-toolbar-title>
+                  <v-toolbar-title>
+                    <span>{{ name }}님의</span>
+                    Evaluation
+                  </v-toolbar-title>
                 </v-toolbar>
                 <v-tabs vertical>
                   <v-tab>
@@ -60,7 +63,7 @@
                   </v-tab-item>
                   <v-tab-item>
                     <v-card flat>
-                      <LecUserPartin :each="each" :roomData="roomData" :manageUsers="manageUsers" :rid="rid"></LecUserPartin>
+                      <LecUserPartin :each="each" :roomData="roomData" :evalUserCnt="evalUserCnt" :rid="rid"></LecUserPartin>
                     </v-card>
                   </v-tab-item>
                 </v-tabs>
@@ -113,8 +116,8 @@ export default {
     rid: {
       type: Number,
     },
-    manageUsers: {
-      type: Array,
+    evalUserCnt: {
+      type: Number,
     },
   },
   async created() {
