@@ -28,7 +28,7 @@ public class WebRtcController {
 	
 	@ApiOperation(value = "미팅  입장")
 	@GetMapping(path = "/entrance")
-	public ResponseEntity<Object> entrance(@RequestParam(value = "입장자 uid") int uid, @RequestParam(value = "입장하는 방 rid") int rid) {
+	public ResponseEntity<Object> entrance(@RequestParam int uid, @RequestParam int rid) {
 		
 		try {
 			Room room = roomRepository.findByRid(rid);
@@ -49,7 +49,7 @@ public class WebRtcController {
 
 	@ApiOperation(value = "미팅 퇴장")
 	@GetMapping(path = "/exit")
-	public ResponseEntity<Object> Exit(@RequestParam(value = "퇴장자 uid") int uid, @RequestParam(value = "퇴장하는 방 rid") int rid) {
+	public ResponseEntity<Object> Exit(@RequestParam int uid, @RequestParam int rid) {
 		
 		try {
 			Room room = roomRepository.findByRid(rid);
@@ -68,7 +68,7 @@ public class WebRtcController {
 	
 	@ApiOperation(value = "미팅 시작")
 	@GetMapping(path = "/start")
-	public ResponseEntity<Object> Start(@RequestParam(value = "미팅 시작하는 방 rid") int rid) {		
+	public ResponseEntity<Object> Start(@RequestParam int rid) {		
 		try {
 			Room room = roomRepository.findByRid(rid);
 
