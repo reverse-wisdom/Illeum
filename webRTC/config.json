@@ -1,5 +1,5 @@
 {
-  "socketURL": "/",
+  "socketURL": "http://k4d106.p.ssafy.io:9001/",
   "dirPath": "",
   "homePage": "/demos/index.html",
   "socketMessageEvent": "RTCMultiConnection-Message",
@@ -7,7 +7,7 @@
   "port": "9001",
   "enableLogs": "false",
   "autoRebootServerOnFailure": "false",
-  "isUseHTTPs": "false",
+  "isUseHTTPs": "true",
   "sslKey": "./volumes/key/privkey.pem",
   "sslCert": "./volumes/key/fullchain.pem",
   "sslCabundle": "",
