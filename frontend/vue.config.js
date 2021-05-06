@@ -11,9 +11,9 @@ module.exports = {
         target: 'https://k4d106.p.ssafy.io',
         // target: 'http://k4d106.p.ssafy.io:8080',
       },
-      'http://localhost:8000/': {
+      '/api/face': {
         target: 'http://k4d106.p.ssafy.io:8000',
-        changeOrigin: true,
+        // changeOrigin: true,
       },
     },
   },
