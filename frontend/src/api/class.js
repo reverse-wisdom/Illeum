@@ -10,7 +10,7 @@ function fetchRoomname(roomName) {
   return posts.get(`/room/findByRoomName?roomName=${roomName}`);
 }
 
-//방 참여 로직
+//클래스 참여
 function insertRoom(insertInfo) {
   return posts.post('/entrant/insert', insertInfo);
 }

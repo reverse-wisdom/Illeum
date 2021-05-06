@@ -281,13 +281,13 @@ export default {
     },
     async outRoom() {
       var ref = this;
-      await updateClass({ rid: this.$route.query.rid, room_state: '완료' })
+      await updateClass({ rid: this.$route.query.rid, room_state: '준비' })
         .then(({ data }) => {
           console.log(data);
           if (data == 'success') {
             this.$swal({
               icon: 'success',
-              title: '<h2>클래스가 종료되었습니다.!!</h2>',
+              title: '<h2>화상수업이 종료되었습니다.!!</h2>',
               toast: true,
               width: 600,
               padding: '2em',
