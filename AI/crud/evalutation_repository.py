@@ -6,6 +6,24 @@ from utils.CustomTTLCache import CustomTTLCache
 from database.db import db
 
 
+@cached(cache=CustomTTLCache(maxsize=1024, ttl=3600))
+def select_member_name_by_uid(uid: int) -> Optional[str]:
+    with db.query("SELECT name FROM member WHERE uid = %s", (uid,)) as cursor:
+        data = cursor.fetchone()
+        if data:
+            return data[0]
+    return None
+
+
+@cached(cache=CustomTTLCache(maxsize=1024, ttl=3600))
+def select_room_name_by_rid(rid: int) -> Optional[str]:
+    with db.query("SELECT room_name FROM room WHERE rid = %s", (rid,)) as cursor:
+        data = cursor.fetchone()
+        if data:
+            return data[0]
+    return None
+
+
 @cached(cache=CustomTTLCache(maxsize=1024, ttl=600))
 def select_entrant_eid_by_uid_and_rid(uid: int, rid: int) -> Optional[int]:
     with db.query("SELECT eid FROM entrant WHERE uid = %s AND rid = %s", (uid, rid,)) as cursor:
