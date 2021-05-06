@@ -32,9 +32,7 @@
 </template>
 <script>
 import { classAll, updateClass } from '@/api/class';
-import { findUidAndRid } from '@/api/entrant';
-import { start, entrance } from '@/api/rabbit';
-import { insertEvaluation } from '@/api/evaluation';
+import { start } from '@/api/rabbit';
 export default {
   data() {
     return {

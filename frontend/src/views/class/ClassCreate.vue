@@ -183,7 +183,6 @@ export default {
   },
   methods: {
     submit() {
-      console.log(this.room_type);
       this.$refs.observer.validate().then((result) => {
         if (result) {
           let start_time = this.start_room_date + 'T' + this.start_room_time + ':00Z';
@@ -238,7 +237,6 @@ export default {
         start = start - 24;
         start = '0' + start;
         this.end_room_date = new Date(new Date(this.end_room_date).setDate(new Date(this.start_room_date).getDate() + 1)).toISOString().split('T')[0];
-        console.log(this.end_room_date);
       }
       this.end_room_time = start + this.start_room_time.substring(2, 5);
     },
