@@ -157,7 +157,7 @@ export default {
       room_name: '',
       room_type: '',
       room_password: '',
-      room_state: '진행',
+      room_state: '준비',
       start_room_date: '',
       start_room_time: '',
       start_date_menu: false,
@@ -219,7 +219,7 @@ export default {
       this.$refs.observer.reset();
     },
     back() {
-      this.$router.push({ name: 'ClassList' });
+      this.$router.push({ name: 'Home' });
     },
     getDay(date) {
       return daysOfWeek[new Date(date).getDay(date)];

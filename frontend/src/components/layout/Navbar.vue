@@ -88,7 +88,17 @@
             </li>
             <li>
               <a href="/classcreate">
-                <span class="Navtext">CreateClass</span>
+                <span class="Navtext">클래스 오픈(강의자)</span>
+              </a>
+            </li>
+            <li>
+              <a href="/classjoin">
+                <span class="Navtext">클래스 목록페이지(수강자)</span>
+              </a>
+            </li>
+            <li>
+              <a href="/webrtclist">
+                <span class="Navtext">화상수업 목록페이지</span>
               </a>
             </li>
             <li>
