@@ -19,26 +19,13 @@
                 <th>PROFILE</th>
                 <th>NAME</th>
                 <th>E-MAIL</th>
-
                 <th>Evaluation</th>
                 <th>지각여부</th>
               </tr>
             </thead>
 
             <tbody>
-              <EachUserManage v-for="(each, idx) in UsersEval" :key="idx" :each="each" :idx="idx" :rid="rid"></EachUserManage>
-              <!-- <tr v-for="(each, idx) in UsersEval" :key="idx">
-                <td>{{ idx + 1 }}</td>
-                <td><img src="https://assets.codepen.io/2147066/internal/avatars/users/default.png?fit=crop&format=auto&height=100&version=1608664176&width=100" alt="" /></td>
-                <td>{{ each.name }}</td>
-                <td>{{ each.email }}</td>
-
-                <td>
-                  <span class="action_btn">
-                    <a href="#">자세히보기</a>
-                  </span>
-                </td>
-              </tr> -->
+              <EachUserManage v-for="(each, idx) in UsersEval" :key="idx" :each="each" :idx="idx" :rid="rid" :manageUsers="manageUsers"></EachUserManage>
             </tbody>
           </table>
         </div>
@@ -75,7 +62,7 @@ export default {
 
       arrayDates: [],
       roomName: [],
-      rid: Null,
+      rid: '',
       selectedRoomName: '',
       maxUser: '',
       firstUser: '',
@@ -132,11 +119,11 @@ export default {
       for (var i = 0; i < this.manageClass.length; i++) {
         if (this.manageClass[i].roomName === selected) {
           const { data } = await fetchRoomname(this.manageClass[i].roomName);
-          const rid = data[0].rid;
+          this.rid = data[0].rid;
           console.log('방번호', this.rid);
           const res = await partinAll();
           for (var j = 0; j < res.data.length; j++) {
-            if (res.data[j].rid === rid) {
+            if (res.data[j].rid === this.rid) {
               this.manageUsers.push({ uid: res.data[j].uid, eid: res.data[j].eid });
             }
           }
