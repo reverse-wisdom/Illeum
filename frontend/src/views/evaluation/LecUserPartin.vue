@@ -3,16 +3,15 @@
     <div>
       <div>{{ each.uid }}님</div>
       <div>{{ roomData.room_name }} 수업에서 수업참여도</div>
-      <div>총 수강생 {{ manageUsers.length }}명중에 {{ partuidRank }}위입니다</div>
-      <div>{{ selectedRoomName }} 수업에서 출석을</div>
-      <div>총 수강생 {{ manageUsers.length }}명중에 {{ attenduidRank }}위입니다</div>
+      <div>총 수강생 {{ evalUserCnt }}명중에 {{ partuidRank }}위입니다</div>
+      <div>{{ roomData.room_name }} 수업에서 출석을</div>
+      <div>총 수강생 {{ evalUserCnt }}명중에 {{ attenduidRank }}위입니다</div>
     </div>
   </div>
 </template>
 
 <script>
-import { userEvalList } from '@/api/auth';
-import { fetchRoomname, evaluateList } from '@/api/class';
+import { evaluateList } from '@/api/class';
 
 export default {
   data() {
@@ -24,8 +23,6 @@ export default {
       landscape: true,
       date: '',
       menu: false,
-      mindate: '2021-04-01',
-      maxdate: '2021-04-30',
 
       partinRank: [],
       partuidRank: '',
@@ -48,14 +45,15 @@ export default {
     roomData: {
       type: Object,
     },
-    manageUsers: {
-      type: Array,
+    evalUserCnt: {
+      type: Number,
     },
     rid: {
       type: Number,
     },
   },
   async created() {
+    console.log(this.evalUserCnt);
     console.log(this.roomData);
 
     this.evalcheck = true;
