@@ -19,7 +19,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.ssafy.pjt.dto.UploadFile;
 import com.ssafy.pjt.service.ImageService;
-//import com.ssafy.pjt.provider.service.MemberService;
 import com.ssafy.pjt.util.MediaUtils;
 
 /**
@@ -31,8 +30,6 @@ public class ImageController {
     private Logger logger = LoggerFactory.getLogger(ApplicationRunner.class);
 	@Autowired
 	ImageService imageService;
-//	@Autowired
-//	ImageController self;
 
 	/**
 	 * 파일 업로드
