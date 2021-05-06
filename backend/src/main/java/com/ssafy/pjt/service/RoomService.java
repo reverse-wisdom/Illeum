@@ -7,9 +7,9 @@ import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.ssafy.pjt.Repository.MemberRepository;
 import com.ssafy.pjt.dto.Room;
 import com.ssafy.pjt.dto.response.findRoom;
+import com.ssafy.pjt.repository.MemberRepository;
 
 @Service
 public class RoomService {

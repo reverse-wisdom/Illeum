@@ -1,4 +1,4 @@
-package com.ssafy.pjt.Repository;
+package com.ssafy.pjt.repository;
 
 import java.util.Optional;
 

@@ -1,8 +1,5 @@
-package com.ssafy.pjt.Controller;
+package com.ssafy.pjt.controller;
 
-import com.ssafy.pjt.Repository.MemberRepository;
-import com.ssafy.pjt.Repository.RoomRepository;
-import com.ssafy.pjt.Repository.mapper.RoomMapper;
 import com.ssafy.pjt.dto.Member;
 import com.ssafy.pjt.dto.Room;
 import com.ssafy.pjt.dto.request.insertRoomDto;
@@ -10,6 +7,9 @@ import com.ssafy.pjt.dto.request.updateRoomDto;
 import com.ssafy.pjt.dto.response.findRoom;
 import com.ssafy.pjt.dto.response.findRoomEvaluation;
 import com.ssafy.pjt.jwt.JwtTokenUtil;
+import com.ssafy.pjt.repository.MemberRepository;
+import com.ssafy.pjt.repository.RoomRepository;
+import com.ssafy.pjt.repository.mapper.RoomMapper;
 import com.ssafy.pjt.service.RoomService;
 
 import io.swagger.annotations.ApiOperation;
@@ -109,7 +109,7 @@ public class RoomController {
 		List<Map<String, Object>> list = null;
 		try {
 			list = roomMapper.roomjoinMemeber(rid);
-			if (list == null)
+			if (list.size() == 0)
 				return new ResponseEntity<>("참가자가 없습니다.", HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<>("fail", HttpStatus.BAD_REQUEST);
@@ -123,7 +123,7 @@ public class RoomController {
 		List<findRoomEvaluation> list = null;
 		try {
 			list = roomMapper.roomJoinEvaluation(rid);
-			if (list == null)
+			if (list.size() == 0)
 				return new ResponseEntity<>("평가가 없습니다.", HttpStatus.NO_CONTENT);
 		} catch (Exception e) {			
 			return new ResponseEntity<>("fail", HttpStatus.BAD_REQUEST);

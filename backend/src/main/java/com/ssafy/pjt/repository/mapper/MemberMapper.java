@@ -1,4 +1,4 @@
-package com.ssafy.pjt.Repository.mapper;
+package com.ssafy.pjt.repository.mapper;
 
 import java.sql.SQLException;
 import java.util.List;
