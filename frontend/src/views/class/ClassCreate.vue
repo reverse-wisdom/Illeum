@@ -123,7 +123,7 @@
         clear
       </v-btn>
       <v-btn @click="back">
-        뒤로가기
+        홈으로
       </v-btn>
     </form>
   </validation-observer>

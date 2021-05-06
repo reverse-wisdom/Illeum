@@ -4,4 +4,9 @@ import { instance, posts } from './index';
 function fetchEval() {
   return posts.get('/evaluation/findAll');
 }
-export { fetchEval };
+
+//평가 생성
+function insertEvaluation(evaluationData) {
+  return posts.post('/evaluation/insert', evaluationData);
+}
+export { fetchEval, insertEvaluation };
