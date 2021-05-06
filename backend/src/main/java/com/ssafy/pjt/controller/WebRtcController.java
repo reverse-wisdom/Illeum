@@ -1,9 +1,9 @@
-package com.ssafy.pjt.Controller;
+package com.ssafy.pjt.controller;
 
-import com.ssafy.pjt.Repository.MemberRepository;
-import com.ssafy.pjt.Repository.RoomRepository;
 import com.ssafy.pjt.dto.Member;
 import com.ssafy.pjt.dto.Room;
+import com.ssafy.pjt.repository.MemberRepository;
+import com.ssafy.pjt.repository.RoomRepository;
 
 import io.swagger.annotations.ApiOperation;
 
@@ -49,7 +49,7 @@ public class WebRtcController {
 
 	@ApiOperation(value = "미팅 퇴장")
 	@GetMapping(path = "/exit")
-	public ResponseEntity<Object> Exit(@RequestParam int uid, @RequestParam int rid) {
+	public ResponseEntity<Object> exit(@RequestParam int uid, @RequestParam int rid) {
 		
 		try {
 			Room room = roomRepository.findByRid(rid);
@@ -68,7 +68,7 @@ public class WebRtcController {
 	
 	@ApiOperation(value = "미팅 시작")
 	@GetMapping(path = "/start")
-	public ResponseEntity<Object> Start(@RequestParam int rid) {		
+	public ResponseEntity<Object> start(@RequestParam int rid) {		
 		try {
 			Room room = roomRepository.findByRid(rid);
 
