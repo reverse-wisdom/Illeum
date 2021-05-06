@@ -1,12 +1,10 @@
-import sys
-
 from collections import deque
 from typing import Deque, Dict, Tuple
 from multiprocessing.managers import SyncManager
 
 from bidict import bidict
 
-from time import time
+from time import time, sleep
 
 if "_main__" in __name__:
     from FaceResultType import RESULT_TYPE_AFK, RESULT_TYPE_ASLEEP, RESULT_TYPE_DISTRACTED, RESULT_TYPE_ATTENTION
@@ -97,7 +95,13 @@ if __name__ == "__main__":
     MySyncManager.register("TTLStatusCounter", get_ttl_status_counter)
     manager = MySyncManager(("127.0.0.1", 5678), authkey=b"ttl_status_counter123@")
     manager.start()
-    input()
+    while True:
+        try:
+            sleep(10)
+        except Exception as e:
+            from datetime import datetime
+            print(str(datetime.time(datetime.now()))[:8] + str(e))
+            break
     manager.shutdown()
 elif __name__ == "__mp_main__":  # SyncManager 프로세스가 다른 실행문을 참조하지 않도록 방지
     ttl_status_counter = TTLStatusCounter()
