@@ -14,6 +14,10 @@ function logoutUser(userData) {
 function registerUser(userData) {
   return instance.post('/member/user/signup', userData);
 }
+//관리자용 회원 전체조회
+function getUsers() {
+  return posts.get('/member/admin/getusers');
+}
 //이메일 중복체크
 function checkEmail(userData) {
   return instance.get('/member/user/checkemail', userData);
@@ -45,4 +49,4 @@ function createThumbnails(uid, frm) {
   return axios.post(`http://k4d106.p.ssafy.io:8080/api/member/profile/${uid}`, frm, { headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'multipart/form-data' } });
 }
 
-export { loginUser, registerUser, editUser, signout, checkEmail, logoutUser, usePartinClass, userClasslist, userEvalList, createThumbnails };
+export { getUsers, loginUser, registerUser, editUser, signout, checkEmail, logoutUser, usePartinClass, userClasslist, userEvalList, createThumbnails };

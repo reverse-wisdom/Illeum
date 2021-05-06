@@ -56,22 +56,20 @@ public class EvaluationController {
     @ApiOperation(value = "평가 생성(출석 체크)")
     @Transactional
     @PostMapping(path="/insert")
-    public ResponseEntity<?> insert(@RequestBody insertEvaluationDto insertDto) {
-    	Entrant entrant = entrantRepository.findByUidAndRid(insertDto.getUid(), insertDto.getRid());
-    	// 리스트가 없으면 생성   	
-
+    public ResponseEntity<Object> insert(@RequestBody insertEvaluationDto insertDto) {   	
 		try {
+			Entrant entrant = entrantRepository.findByUidAndRid(insertDto.getUid(), insertDto.getRid());	
 			if(evaluationMapper.seachEvaluation(entrant.getEid()) == null) {
 				Evaluation evaluation = new Evaluation();
 				evaluation.setEid(entrant.getEid());
 				evaluation.setRanking(1000);				
 				evaluation = evaluationRepository.save(evaluation);
-				return new ResponseEntity<Evaluation>(evaluation,HttpStatus.OK);
+				return new ResponseEntity<>(evaluation,HttpStatus.OK);
 			}else {
-				return new ResponseEntity<String>("이미 출석하였습니다.",HttpStatus.OK);
+				return new ResponseEntity<>("이미 출석하였습니다.",HttpStatus.OK);
 			}
 		} catch (SQLException e1) {
-			return new ResponseEntity<String>("fail",HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>("fail",HttpStatus.BAD_REQUEST);
 		}
 		
     	
@@ -80,27 +78,25 @@ public class EvaluationController {
     @ApiOperation(value = "평가 삭제")
     @Transactional
     @DeleteMapping(path="/deleteByVid")
-    public ResponseEntity<?> deleteByVid(@RequestParam int vid) {
+    public ResponseEntity<Object> deleteByVid(@RequestParam int vid) {
     	if(evaluationRepository.findByVid(vid) != null) {
     		try {
     			evaluationRepository.deleteByVid(vid);
             }catch (Exception e) {
-            	return new ResponseEntity<String>("fail",HttpStatus.BAD_REQUEST);
+            	return new ResponseEntity<>("fail",HttpStatus.BAD_REQUEST);
     		}   	
     	}    
-    	return new ResponseEntity<String>("success",HttpStatus.OK);
+    	return new ResponseEntity<>("success",HttpStatus.OK);
     }
     
     @ApiOperation(value = "평가 수정(vid만 필수)")
     @Transactional
     @PutMapping(path="/updateByVid")
-    public ResponseEntity<?> update(@RequestBody updateEvaluationDto evaluationDto) {
+    public ResponseEntity<Object> update(@RequestBody updateEvaluationDto evaluationDto) {
     	Evaluation evaluation = evaluationRepository.findByVid(evaluationDto.getVid());
     	
-        if(evaluation == null) new ResponseEntity<String>("평가가 없습니다.",HttpStatus.NO_CONTENT);
+        if(evaluation == null) return new ResponseEntity<>("평가가 없습니다.",HttpStatus.NO_CONTENT);
         
-        //Member member = memberRepository.findByUid(entrant.getUid());
-        //엑세스 토큰을 받아서 개설자인지 확인을 해야될까?
         if(evaluationDto.getEid() != null)evaluation.setEid(evaluationDto.getEid());
         if(evaluationDto.getEval_date() != null)evaluation.setEvalDate(Date.from(evaluationDto.getEval_date().atZone(ZoneId.systemDefault()).toInstant()));
         if(evaluationDto.getAttention() != null)evaluation.setAttention(evaluationDto.getAttention());
@@ -114,8 +110,8 @@ public class EvaluationController {
     	try {
     		evaluationRepository.save(evaluation);
     	}catch (Exception e) {
-    		new ResponseEntity<String>("fail",HttpStatus.BAD_GATEWAY);
+    		return new ResponseEntity<>("fail",HttpStatus.BAD_GATEWAY);
 		}
-    	return new ResponseEntity<String>("success",HttpStatus.OK);
+    	return new ResponseEntity<>("success",HttpStatus.OK);
     }
 }

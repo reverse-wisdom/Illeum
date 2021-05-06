@@ -1,19 +1,15 @@
 # 모듈을 gitpython 등을 사용해서 다운로드 후, import 연결.
-import os
-import sys
 from typing import Optional
 
-import git
 import cv2
 import numpy as np
 
 import crud.evalutation_repository as repository
-from services import BASE_REPO_DIR
 
-sys.path.insert(1, BASE_REPO_DIR)
-from OpenVtuber.SimpleFaceModule import SimpleFaceModule, SimpleFaceDetectionResult
 import models.FaceDetectionResponse as FDR
 from models.FaceDetectionResponse import FaceDetectionResponse as Response
+
+from services import SimpleFaceModule, SimpleFaceDetectionResult
 
 # 서비스 코드 시작 ##
 module = SimpleFaceModule()
@@ -35,6 +31,7 @@ def face_detection(image: np.ndarray) -> Response:
         return Response(FDR.RESULT_TYPE_DISTRACTED, '딴 짓을 하고 있는 상태 입니다. (하품, 시선, 고개)', result)
     else:
         return Response(FDR.RESULT_TYPE_ATTENTION, '집중 중', result)
+
 
 # 각 결과에 따라 repository 함수 매핑
 repo_funcs = {
