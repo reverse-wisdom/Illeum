@@ -109,7 +109,7 @@ export default {
         snapshot: img,
       };
 
-      const { data } = await faceAI(userData);
+      const { data } = await faceAI(userData); // 추후 프로미스형태로 변경
       console.log(data);
     },
     offVideo() {
