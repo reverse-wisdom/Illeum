@@ -188,6 +188,7 @@ export default {
 
       this.connection.socketURL = 'https://rtcmulticonnection.herokuapp.com:443/';
       // this.connection.socketURL = 'https://illeum-webRTC:9001/';
+
       this.connection.extra.userFullName = this.$store.state.name;
       this.connection.extra.userUUID = this.$store.state.uuid;
       this.connection.extra.type = 'cam';
@@ -195,7 +196,6 @@ export default {
         OfferToReceiveAudio: true,
         OfferToReceiveVideo: true,
       };
-      console.log(this.connection);
 
       // 콘솔로그 출력 해제
       this.connection.enableLogs = false; // to disable logs
@@ -236,7 +236,6 @@ export default {
       // 리스너 영역
       this.connection.onmessage = function(event) {
         if (event.data.chatMessage) {
-          console.log(event);
           ref.appendChatMessage(event, event.extra.userFullName, event.extra.userUUID);
           return;
         }
@@ -272,7 +271,6 @@ export default {
 
               ref.connection.closeSocket();
 
-              console.log(ref.connection);
               ref.$router.push({ name: 'WebRTCList' });
             }
           }
@@ -304,24 +302,21 @@ export default {
     screen() {
       var ref = this;
 
-      console.log(this.connection, '1');
       this.connection.extra.type = 'share';
       this.connection.extra.typeAlpha = 'share';
 
       this.connection.updateExtraData();
-      console.log(this.connection.extra, '바뀐 엑스트라');
 
       this.connection.addStream({
         screen: true,
       });
 
       this.connection.videosContainer = document.querySelector('.share-videos-container');
-      console.log('test when open', this.connection);
     },
     async outRoom() {
       var uid = this.$store.state.uuid;
       var rid = this.rid;
-      await exit(uid, rid)
+      await exit(uid, rid) // GET: /api/rtc/exit (rabbitMQ)
         .then(({ data }) => {
           if (data == 'success') {
             this.isOutClicked = true;
@@ -356,10 +351,13 @@ export default {
       var uid = this.$store.state.uuid;
       var rid = this.rid;
 
+      // GET: /api/entrant/findUidAndRid
       await findUidAndRid(uid, rid).then(async ({ data }) => {
         if (data != '') {
+          // POST: /api/evaluation/insert
           await insertEvaluation({ uid, rid }).then(async ({ data }) => {
             if (data != '') {
+              // GET: /api/rtc/entrance (rabbitMQ)
               await entrance(uid, rid).then(async ({ data }) => {
                 if (data != '') {
                   result = true;
