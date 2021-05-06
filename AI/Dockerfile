@@ -17,4 +17,6 @@ RUN pip install -r /app/requirements-linux.txt
 
 COPY . /app
 
+RUN chmod +x /app/run.sh
+
 CMD ["/app/run.sh"]
