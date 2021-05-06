@@ -1,15 +1,13 @@
-package com.ssafy.pjt.Controller;
+package com.ssafy.pjt.controller;
 
-import com.ssafy.pjt.Repository.EntrantRepository;
-import com.ssafy.pjt.Repository.EvaluationRepository;
-
-import com.ssafy.pjt.Repository.mapper.EvaluationMapper;
 import com.ssafy.pjt.dto.Entrant;
 import com.ssafy.pjt.dto.Evaluation;
 
 import com.ssafy.pjt.dto.request.insertEvaluationDto;
 import com.ssafy.pjt.dto.request.updateEvaluationDto;
-
+import com.ssafy.pjt.repository.EntrantRepository;
+import com.ssafy.pjt.repository.EvaluationRepository;
+import com.ssafy.pjt.repository.mapper.EvaluationMapper;
 
 import io.swagger.annotations.ApiOperation;
 

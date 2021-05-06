@@ -7,7 +7,7 @@ import org.springframework.cache.annotation.EnableCaching;
 
 @EnableCaching
 @SpringBootApplication
-@MapperScan(basePackages = "com.ssafy.pjt.Repository.mapper")
+@MapperScan(basePackages = "com.ssafy.pjt.repository.mapper")
 public class AuthApplication {
 
 	public static void main(String[] args) {
