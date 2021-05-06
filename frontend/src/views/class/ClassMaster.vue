@@ -187,8 +187,8 @@ export default {
 
       this.connection.autoCloseEntireSession = true;
 
-      this.connection.socketURL = 'https://rtcmulticonnection.herokuapp.com:443/';
-      // this.connection.socketURL = 'https://illeum-webRTC:9001/';
+      // this.connection.socketURL = 'https://rtcmulticonnection.herokuapp.com:443/';
+      this.connection.socketURL = 'https://illeum-webRTC:9001/';
       // this.connection.socketURL = 'https://k4d106.p.ssafy.io:9001/';
       this.connection.sdpConstraints.mandatory = {
         OfferToReceiveAudio: true,
