@@ -118,7 +118,6 @@ public class EntrantController {
 		if (entrant == null)
 			return new ResponseEntity<>("참가자 명단이 없습니다", HttpStatus.OK);
 
-		// Member member = memberRepository.findByUid(entrant.getUid());
 		// 엑세스 토큰을 받아서 개설자인지 확인을 해야될까?
 
 		entrant.setUid(entranDto.getUid());
