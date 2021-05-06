@@ -50,17 +50,17 @@
 
                   <v-tab-item>
                     <v-card flat>
-                      <LecUserAttend></LecUserAttend>
+                      <LecUserAttend :each="each"></LecUserAttend>
                     </v-card>
                   </v-tab-item>
                   <v-tab-item>
                     <v-card flat>
-                      <LecUserAttend></LecUserAttend>
+                      <LecUserEval :each="each"></LecUserEval>
                     </v-card>
                   </v-tab-item>
                   <v-tab-item>
                     <v-card flat>
-                      <LecUserAttend></LecUserAttend>
+                      <LecUserPartin :each="each"></LecUserPartin>
                     </v-card>
                   </v-tab-item>
                 </v-tabs>
