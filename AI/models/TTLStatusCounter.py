@@ -1,21 +1,26 @@
+import sys
+
 from collections import deque
 from typing import Deque, Dict, Tuple
+from multiprocessing.managers import SyncManager
 
 from bidict import bidict
 
 from time import time
 
-import models.FaceDetectionResponse as ty
-
+if "_main__" in __name__:
+    from FaceResultType import RESULT_TYPE_AFK, RESULT_TYPE_ASLEEP, RESULT_TYPE_DISTRACTED, RESULT_TYPE_ATTENTION
+else:
+    from .FaceResultType import RESULT_TYPE_AFK, RESULT_TYPE_ASLEEP, RESULT_TYPE_DISTRACTED, RESULT_TYPE_ATTENTION
 RESULT_TYPE_TOTAL = "total"
 RESULT_TYPE_TOTAL_SCODE = 0
 
 status_mapping = bidict({
     RESULT_TYPE_TOTAL: RESULT_TYPE_TOTAL_SCODE,
-    ty.RESULT_TYPE_ATTENTION: 1,
-    ty.RESULT_TYPE_DISTRACTED: 2,
-    ty.RESULT_TYPE_ASLEEP: 3,
-    ty.RESULT_TYPE_AFK: 4
+    RESULT_TYPE_ATTENTION: 1,
+    RESULT_TYPE_DISTRACTED: 2,
+    RESULT_TYPE_ASLEEP: 3,
+    RESULT_TYPE_AFK: 4
 })
 
 
@@ -74,3 +79,30 @@ class TTLStatusCounter:
             return
         self.decay()
         self._decrease(uid, status_mapping[status], count)
+
+
+global ttl_status_counter
+
+
+def get_ttl_status_counter():
+    global ttl_status_counter
+    return ttl_status_counter
+
+
+class MySyncManager(SyncManager):
+    pass
+
+
+if __name__ == "__main__":
+    MySyncManager.register("TTLStatusCounter", get_ttl_status_counter)
+    manager = MySyncManager(("127.0.0.1", 5678), authkey=b"ttl_status_counter123@")
+    manager.start()
+    input()
+    manager.shutdown()
+elif __name__ == "__mp_main__":  # SyncManager 프로세스가 다른 실행문을 참조하지 않도록 방지
+    ttl_status_counter = TTLStatusCounter()
+else:
+    manager = MySyncManager(("127.0.0.1", 5678), authkey=b"ttl_status_counter123@")
+    manager.connect()
+    MySyncManager.register("TTLStatusCounter")
+    ttl_status_counter = manager.TTLStatusCounter()
