@@ -109,12 +109,13 @@ export default {
     },
     onAudio() {
       let localStream = this.connection.attachStreams[0];
-      localStream.mute('audio');
+      localStream.unmute('audio');
       this.isAudio = true;
     },
     offAudio() {
       let localStream = this.connection.attachStreams[0];
       localStream.unmute('audio');
+      localStream.mute('audio');
       this.connection.streamEvents.selectFirst('local').mediaElement.muted = true;
       this.isAudio = false;
     },
