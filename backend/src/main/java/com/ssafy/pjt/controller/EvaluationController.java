@@ -57,6 +57,7 @@ public class EvaluationController {
     public ResponseEntity<Object> insert(@RequestBody insertEvaluationDto insertDto) {   	
 		try {
 			Entrant entrant = entrantRepository.findByUidAndRid(insertDto.getUid(), insertDto.getRid());	
+			if(entrant == null) return new ResponseEntity<>("방에 참가한 사람이 아닙니다.",HttpStatus.NO_CONTENT);
 			if(evaluationMapper.seachEvaluation(entrant.getEid()) == null) {
 				Evaluation evaluation = new Evaluation();
 				evaluation.setEid(entrant.getEid());
