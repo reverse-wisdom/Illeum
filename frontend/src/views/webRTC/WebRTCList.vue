@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2>클래스 리스트 목록</h2>
+    <h2>화상수업 리스트 목록</h2>
     <v-data-table
       :headers="headers"
       :items="rooms"
@@ -14,7 +14,7 @@
         lastIcon: 'mdi-arrow-collapse-right',
         prevIcon: 'mdi-minus',
         nextIcon: 'mdi-plus',
-        'items-per-page-text': '페이지당 클래스수',
+        'items-per-page-text': '페이지당 화상회의수',
       }"
     ></v-data-table>
   </div>
@@ -31,7 +31,6 @@ export default {
           value: 'room_name',
         },
         { text: '시작시간', value: 'start_time' },
-        { text: '방상태', value: 'room_state' },
         { text: '공개/비공개', value: 'room_type' },
       ],
       rooms: [],
@@ -40,7 +39,7 @@ export default {
   async created() {
     const { data } = await classAll();
     for (let index = 0; index < data.length; index++) {
-      if (data[index].room_state != '완료') {
+      if (data[index].room_state != '종료') {
         this.rooms.push(data[index]);
       }
     }
@@ -65,6 +64,7 @@ export default {
           input: 'text',
           showCancelButton: true,
         });
+
         if (room_password != undefined) {
           if (room_password != value.room_password) {
             this.$swal({
@@ -79,7 +79,7 @@ export default {
               } catch {
                 this.$swal({
                   icon: 'error',
-                  title: '클래스 참여 오류.!!',
+                  title: '화상수업 생성 오류.!!',
                 });
               }
             } else {
@@ -95,7 +95,7 @@ export default {
           } catch {
             this.$swal({
               icon: 'error',
-              title: '클래스 참여 오류.!!',
+              title: '화상수업 생성 오류.!!',
             });
           }
         } else {
