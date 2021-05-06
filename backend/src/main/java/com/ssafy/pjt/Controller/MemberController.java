@@ -251,7 +251,6 @@ public class MemberController {
     	List<memberAttend> list;
     	try {
     		list = memberMapper.memberAttend(uid);
-    		System.out.println(memberMapper.memberAttend(uid));
     		if(list.size() == 0) return new ResponseEntity<>("출결 기록이 없습니다.",HttpStatus.OK);
     	}catch (Exception e) {
     		return new ResponseEntity<>("fail",HttpStatus.BAD_REQUEST);
@@ -268,7 +267,6 @@ public class MemberController {
     		list = memberMapper.founder(uid);
     		if(list.size() == 0) return new ResponseEntity<>("개설한 방이 없습니다.",HttpStatus.OK);
     	}catch (Exception e) {
-    		System.out.println(e);
     		return new ResponseEntity<>("fail",HttpStatus.BAD_REQUEST);
 		}
         return new ResponseEntity<>(list,HttpStatus.OK);
@@ -291,7 +289,7 @@ public class MemberController {
     @ApiOperation(value = "회원정보수정")
     @Transactional
     @PutMapping(path="/user/update")
-    public ResponseEntity<Object> UpdateMember(@RequestBody UpdateMemberDto update) {  	
+    public ResponseEntity<Object> updateMember(@RequestBody UpdateMemberDto update) {  	
     	Member member = memberRepository.findByEmail(update.getEmail());
     	if(member == null) return new ResponseEntity<>("fail",HttpStatus.NO_CONTENT);
     	
