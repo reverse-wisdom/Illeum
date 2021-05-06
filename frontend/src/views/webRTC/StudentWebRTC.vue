@@ -39,7 +39,7 @@
 import push from 'push.js';
 import { faceAI } from '@/api/faceAI';
 import { findUidAndRid } from '@/api/entrant';
-import { start, entrance } from '@/api/rabbit';
+import { exit, entrance } from '@/api/rabbit';
 import { insertEvaluation } from '@/api/evaluation';
 
 export default {
@@ -234,6 +234,18 @@ export default {
                 icon: 'warning',
                 title: '현재 화상수업이 종료 되었습니다.!!',
               });
+
+              ref.connection.getAllParticipants().forEach((participantId) => {
+                ref.connection.disconnectWith(participantId);
+              });
+
+              ref.connection.attachStreams.forEach(function(localStream) {
+                localStream.stop();
+              });
+
+              ref.connection.closeSocket();
+
+              console.log(ref.connection);
               ref.$router.push({ name: 'WebRTCList' });
             }
           }
@@ -257,17 +269,20 @@ export default {
         infoBar.innerHTML = '<b>Active users:</b> ' + names.join(', ');
       };
 
-      this.connection.onclose = function(event) {
-        console.log(ref.isOutClicked);
-        if (!ref.isOutClicked) {
-          console.log('test');
-          ref.$swal({
-            icon: 'warning',
-            title: '현재 화상수업이 종료 되었습니다.!!',
-          });
-          ref.$router.push({ name: 'WebRTCList' });
-        }
-      };
+      //   this.connection.onclose = function(event) {
+      //     if (!ref.isOutClicked) {
+      //       console.log('test');
+
+      //       console.log(ref.connection);
+
+      //       ref.$swal({
+      //         icon: 'warning',
+      //         title: '현재 화상수업이 종료 되었습니다.!!',
+      //       });
+
+      //       ref.$router.push({ name: 'WebRTCList' });
+      //     }
+      //   };
 
       this.connection.onEntireSessionClosed = function(event) {
         console.info('Entire session is closed: ', event.sessionid, event.extra);
@@ -291,23 +306,37 @@ export default {
       this.connection.videosContainer = document.querySelector('.share-videos-container');
       console.log('test when open', this.connection);
     },
-    outRoom() {
-      this.isOutClicked = true;
-      this.connection.getAllParticipants().forEach((participantId) => {
-        this.connection.disconnectWith(participantId);
-      });
+    async outRoom() {
+      var uid = this.$store.state.uuid;
+      var rid = this.rid;
+      await exit(uid, rid)
+        .then(({ data }) => {
+          if (data == 'success') {
+            this.isOutClicked = true;
 
-      this.connection.attachStreams.forEach(function(localStream) {
-        localStream.stop();
-      });
+            this.connection.getAllParticipants().forEach((participantId) => {
+              this.connection.disconnectWith(participantId);
+            });
 
-      this.connection.closeSocket();
-      this.$swal({
-        icon: 'warning',
-        title: '화상수업 나가기.!!',
-      });
+            this.connection.attachStreams.forEach(function(localStream) {
+              localStream.stop();
+            });
 
-      this.$router.push({ name: 'WebRTCList' });
+            this.connection.closeSocket();
+            this.$swal({
+              icon: 'warning',
+              title: '화상수업 나가기.!!',
+            });
+
+            this.$router.push({ name: 'WebRTCList' });
+          }
+        })
+        .catch((err) => {
+          this.$swal({
+            icon: 'error',
+            title: '화상수업 나가기 오류.!!',
+          });
+        });
     },
     async checkEntrant() {
       var result = false;
