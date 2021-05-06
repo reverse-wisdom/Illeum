@@ -21,15 +21,22 @@
       </div>
     </div>
     <div class="panel-three">
-      <v-btn depressed color="primary" @click="onVideo">비디오 켜기</v-btn>
-      &nbsp;
-      <v-btn depressed color="warning" @click="offVideo">비디오 끄기</v-btn>
-      &nbsp;
-      <v-btn depressed color="warning" @click="screen">화면공유</v-btn>
-      &nbsp;
-      <v-btn depressed color="warning" @click="capture">화면캡쳐테스트</v-btn>
-      &nbsp;
-      <v-btn depressed color="warning" @click="outRoom">퇴장</v-btn>
+      <template v-if="isAudio">
+        <v-btn class="mr-4" color="error" @click="offAudio">오디오 끄기</v-btn>
+      </template>
+      <template v-else>
+        <v-btn class="mr-4" color="primary" @click="onAudio">오디오 켜기</v-btn>
+      </template>
+      <template v-if="isVideo">
+        <v-btn class="mr-4" color="error" @click="offVideo">비디오 끄기</v-btn>
+      </template>
+      <template v-else>
+        <v-btn class="mr-4" color="primary" @click="onVideo">비디오 켜기</v-btn>
+      </template>
+
+      <v-btn class="mr-4" color="cyan" @click="screen">화면공유</v-btn>
+      <v-btn class="mr-4" color="cyan" @click="capture">화면캡쳐테스트</v-btn>
+      <v-btn class="mr-4" color="error" @click="outRoom">퇴장</v-btn>
       &nbsp;
     </div>
   </div>
@@ -51,6 +58,8 @@ export default {
       message: '',
       rid: '',
       isOutClicked: true,
+      isAudio: true,
+      isVideo: true,
     };
   },
   created() {
@@ -113,11 +122,24 @@ export default {
     offVideo() {
       let localStream = this.connection.attachStreams[0];
       localStream.mute('video');
+      this.isVideo = false;
     },
     onVideo() {
       this.connection.session.video = true;
       let localStream = this.connection.attachStreams[0];
       localStream.unmute('video');
+      this.isVideo = true;
+    },
+    onAudio() {
+      let localStream = this.connection.attachStreams[0];
+      localStream.mute('audio');
+      this.isAudio = true;
+    },
+    offAudio() {
+      let localStream = this.connection.attachStreams[0];
+      localStream.unmute('audio');
+      this.connection.streamEvents.selectFirst('local').mediaElement.muted = true;
+      this.isAudio = false;
     },
     chat() {
       var chatMessage = this.message;
