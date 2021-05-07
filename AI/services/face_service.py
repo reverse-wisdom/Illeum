@@ -9,6 +9,8 @@ import crud.evalutation_repository as repository
 import models.FaceResultType as FRT
 from models.FaceDetectionResponse import FaceDetectionResponse as Response
 from models.TTLStatusCounter import ttl_status_counter
+from models.Message import Message
+from utils.rabbitmq_util import send_message
 from OpenVtuber import SimpleFaceModule, SimpleFaceDetectionResult
 
 # 서비스 코드 시작 ##
@@ -33,11 +35,28 @@ def face_detection(image: np.ndarray) -> Response:
         return Response(FRT.RESULT_TYPE_ATTENTION, '집중 중', result)
 
 
+def send_message_by_rid(rid: int, message: Message):
+    send_message(f'room.{rid}', message)
+
+
 def update_evaluation_increase_afk_by_eid(uid: int, rid: int, eid: int):
     repository.update_evaluation_increase_afk_by_eid(eid)
     scnt, total = ttl_status_counter.increase(uid, FRT.RESULT_TYPE_AFK)
     if total > 60 and scnt / total > 0.5:
         ttl_status_counter.decrease(uid, FRT.RESULT_TYPE_AFK, 10)
+        room_name: str = repository.select_room_name_by_rid(rid)
+        name: str = repository.select_member_name_by_uid(uid)
+        send_message_by_rid(rid, Message(result="user_stats_alert",
+                                         message="자리를 비웠습니다.",
+                                         data={"status": FRT.RESULT_TYPE_AFK,
+                                               "uid": uid,
+                                               "rid": rid,
+                                               "eid": eid,
+                                               "name": name,
+                                               "room_name": room_name
+                                               }
+                                         )
+                            )
 
 
 def update_evaluation_increase_asleep_by_eid(uid: int, rid: int, eid: int):
@@ -45,6 +64,19 @@ def update_evaluation_increase_asleep_by_eid(uid: int, rid: int, eid: int):
     scnt, total = ttl_status_counter.increase(uid, FRT.RESULT_TYPE_ASLEEP)
     if total > 60 and scnt / total > 0.5:
         ttl_status_counter.decrease(uid, FRT.RESULT_TYPE_ASLEEP, 5)
+        room_name: str = repository.select_room_name_by_rid(rid)
+        name: str = repository.select_member_name_by_uid(uid)
+        send_message_by_rid(rid, Message(result="user_stats_alert",
+                                         message="졸고 있습니다.",
+                                         data={"status": FRT.RESULT_TYPE_ASLEEP,
+                                               "uid": uid,
+                                               "rid": rid,
+                                               "eid": eid,
+                                               "name": name,
+                                               "room_name": room_name
+                                               }
+                                         )
+                            )
 
 
 def update_evaluation_increase_attention_by_eid(uid: int, rid: int, eid: int):
@@ -57,6 +89,19 @@ def update_evaluation_increase_distracted_by_eid(uid: int, rid: int, eid: int):
     scnt, total = ttl_status_counter.increase(uid, FRT.RESULT_TYPE_DISTRACTED)
     if total > 60 and scnt / total > 0.5:
         ttl_status_counter.decrease(uid, FRT.RESULT_TYPE_DISTRACTED, 8)
+        room_name: str = repository.select_room_name_by_rid(rid)
+        name: str = repository.select_member_name_by_uid(uid)
+        send_message_by_rid(rid, Message(result="user_stats_alert",
+                                         message="딴짓을 하고 있습니다.",
+                                         data={"status": FRT.RESULT_TYPE_DISTRACTED,
+                                               "uid": uid,
+                                               "rid": rid,
+                                               "eid": eid,
+                                               "name": name,
+                                               "room_name": room_name
+                                               }
+                                         )
+                            )
 
 
 # 각 결과에 따라 repository 함수 매핑
