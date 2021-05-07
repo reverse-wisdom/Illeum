@@ -45,6 +45,7 @@
 <script>
 import push from 'push.js';
 import { updateClass } from '@/api/class';
+import { updateByVid } from '@/api/evaluation';
 export default {
   data() {
     return {
@@ -264,6 +265,8 @@ export default {
       var ref = this;
       await updateClass({ rid: this.$route.query.rid, room_state: '준비' })
         .then(({ data }) => {
+          ref.chatTest();
+
           if (data == 'success') {
             this.$swal({
               icon: 'success',
@@ -280,6 +283,7 @@ export default {
                 toast.addEventListener('mouseleave', ref.$swal.resumeTimer);
               },
             });
+
             ref.connection.autoCloseEntireSession = true;
 
             ref.connection.getAllParticipants().forEach((participantId) => {
@@ -293,7 +297,7 @@ export default {
             ref.connection.closeSocket();
             ref.connection.disconnect();
 
-            this.$router.push({ name: 'WebRTCList' });
+            ref.$router.push({ name: 'WebRTCList' });
           }
         })
         .catch((err) => {
@@ -336,6 +340,16 @@ export default {
       }
 
       console.log(rankArr);
+
+      // for (let index = 0; index < rankArr.length; index++) {
+      //   var evaluationData =
+
+      //   {'participation': rankArr[i].participation,
+      //   'rank': rankArr[i].rank,
+
+      //   }
+      //       await updateByVid();
+      // }
     },
   },
 
