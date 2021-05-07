@@ -37,7 +37,24 @@
             </table>
           </div>
         </div> -->
-        <v-data-table :headers="headers" :items="each" :items-per-page="10" item-key="idx" class="elevation-1"></v-data-table>
+        <v-data-table :headers="headers" :items="UsersEval" :items-per-page="10" item-key="idx" class="elevation-1">
+          <template v-slot:[`item.name`]="{ item }">
+            <template>
+              <!-- <span :html="getEmail(item)"></span> -->
+              {{ getEmail(item) }}
+            </template>
+          </template>
+          <template v-slot:[`item.email`]>
+            <template>
+              <v-btn color="info">DETAIL</v-btn>
+            </template>
+          </template>
+          <template v-slot:[`item.detail`]>
+            <template>
+              <v-btn color="info">DETAIL</v-btn>
+            </template>
+          </template>
+        </v-data-table>
       </v-col>
       <v-col cols="12" sm="4" class="chip-search">
         <div>
@@ -71,7 +88,7 @@ export default {
         { text: 'PROFILE', value: '이미지' },
         { text: 'NAME', value: 'name' },
         { text: 'E-MAIL', value: 'email' },
-        { text: 'Evaluation', value: '' },
+        { text: 'Evaluation', value: 'detail' },
         { text: 'Attendance', value: '' },
       ],
       name: '',
@@ -119,6 +136,19 @@ export default {
   },
   async mounted() {},
   methods: {
+    getEmail(item) {
+      var result;
+      getUsers().then((res_3) => {
+        for (var p = 0; p < res_3.data.length; p++) {
+          if (item.uid === res_3.data[p].uid) {
+            console.log(res_3.data[p].name);
+            result = res_3.data[p].name;
+            break;
+          }
+        }
+      });
+      return result;
+    },
     classNameFetch() {
       this.roomName = [];
       for (var i = 0; i < this.manageClass.length; i++) {
