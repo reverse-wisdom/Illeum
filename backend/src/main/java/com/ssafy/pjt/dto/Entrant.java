@@ -7,6 +7,7 @@ import javax.persistence.*;
 
 @Data
 @Entity
+@SuppressWarnings("all")
 public class Entrant {
 
     @Id
