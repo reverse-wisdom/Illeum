@@ -1,5 +1,5 @@
 # 모듈을 gitpython 등을 사용해서 다운로드 후, import 연결.
-from typing import Optional
+from typing import Optional, List
 
 import cv2
 import numpy as np
@@ -10,14 +10,14 @@ import models.FaceResultType as FRT
 from models.FaceDetectionResponse import FaceDetectionResponse as Response
 from models.TTLStatusCounter import ttl_status_counter
 from models.QueueMessage import QueueMessage
-from utils.rabbitmq_util import send_message
+import utils.rabbitmq_util as rabbitmq
 from OpenVtuber import SimpleFaceModule, SimpleFaceDetectionResult
 
 # 서비스 코드 시작 ##
 module = SimpleFaceModule()
 
 
-# AFK : 인식 실패의 경우 *TODO: 조건을 강하게 체크할 필요가 있음
+# AFK : 인식 실패의 경우
 # ASLEEP : blink 값이 0.1 보다 작아지면
 # DISTRACTED : 얼굴과 눈 각도가 크게 뒤틀릴 때
 # ATTENTION : 위의 상황에 포함되지 않는다면
@@ -39,7 +39,12 @@ def face_detection(image: np.ndarray) -> Response:
 
 
 def send_message_by_rid(rid: int, message: QueueMessage):
-    send_message(f'room.{rid}', message)
+    rabbitmq.send_message_fanout(f'room.{rid}', message)
+
+
+def send_message_by_uids(uids: List[int], message: QueueMessage):
+    for uid in uids:
+        rabbitmq.send_message_direct(f'member.{uid}', message)
 
 
 def update_evaluation_increase_afk_by_eid(uid: int, rid: int, eid: int):
@@ -47,19 +52,21 @@ def update_evaluation_increase_afk_by_eid(uid: int, rid: int, eid: int):
     scnt, total = ttl_status_counter.increase(uid, FRT.RESULT_TYPE_AFK)
     if total > 60 and scnt / total > 0.5:
         ttl_status_counter.decrease(uid, FRT.RESULT_TYPE_AFK, 10)
-        room_name: str = repository.select_room_name_by_rid(rid)
+        room_name, founder_uid = repository.select_room_name_founder_uid_by_rid(rid)
         name: str = repository.select_member_name_by_uid(uid)
-        send_message_by_rid(rid, QueueMessage(result="user_stats_alert",
-                                              message="자리를 비웠습니다.",
-                                              data={"status": FRT.RESULT_TYPE_AFK,
-                                                    "uid": uid,
-                                                    "rid": rid,
-                                                    "eid": eid,
-                                                    "name": name,
-                                                    "room_name": room_name
-                                                    }
-                                              )
-                            )
+        send_message_by_uids([uid, founder_uid], QueueMessage(result="user_stats_alert",
+                                                                message=f"{name} 학생이 자리를 비웠습니다.",
+                                                                data={"status": FRT.RESULT_TYPE_AFK,
+                                                                      "uid": uid,
+                                                                      "publisher_id"
+                                                                      "rid": rid,
+                                                                      "eid": eid,
+                                                                      "name": name,
+                                                                      "room_name": room_name,
+                                                                      "founder_uid": founder_uid
+                                                                      }
+                                                                )
+                             )
 
 
 def update_evaluation_increase_asleep_by_eid(uid: int, rid: int, eid: int):
@@ -67,19 +74,20 @@ def update_evaluation_increase_asleep_by_eid(uid: int, rid: int, eid: int):
     scnt, total = ttl_status_counter.increase(uid, FRT.RESULT_TYPE_ASLEEP)
     if total > 60 and scnt / total > 0.5:
         ttl_status_counter.decrease(uid, FRT.RESULT_TYPE_ASLEEP, 5)
-        room_name: str = repository.select_room_name_by_rid(rid)
+        room_name, founder_uid = repository.select_room_name_founder_uid_by_rid(rid)
         name: str = repository.select_member_name_by_uid(uid)
-        send_message_by_rid(rid, QueueMessage(result="user_stats_alert",
-                                              message="졸고 있습니다.",
-                                              data={"status": FRT.RESULT_TYPE_ASLEEP,
-                                                    "uid": uid,
-                                                    "rid": rid,
-                                                    "eid": eid,
-                                                    "name": name,
-                                                    "room_name": room_name
-                                                    }
-                                              )
-                            )
+        send_message_by_uids([uid, founder_uid], QueueMessage(result="user_stats_alert",
+                                                                message=f"{name} 학생이 졸고 있습니다.",
+                                                                data={"status": FRT.RESULT_TYPE_ASLEEP,
+                                                                      "uid": uid,
+                                                                      "rid": rid,
+                                                                      "eid": eid,
+                                                                      "name": name,
+                                                                      "room_name": room_name,
+                                                                      "founder_uid": founder_uid
+                                                                      }
+                                                                )
+                             )
 
 
 def update_evaluation_increase_attention_by_eid(uid: int, rid: int, eid: int):
@@ -92,19 +100,20 @@ def update_evaluation_increase_distracted_by_eid(uid: int, rid: int, eid: int):
     scnt, total = ttl_status_counter.increase(uid, FRT.RESULT_TYPE_DISTRACTED)
     if total > 60 and scnt / total > 0.5:
         ttl_status_counter.decrease(uid, FRT.RESULT_TYPE_DISTRACTED, 8)
-        room_name: str = repository.select_room_name_by_rid(rid)
+        room_name, founder_uid = repository.select_room_name_founder_uid_by_rid(rid)
         name: str = repository.select_member_name_by_uid(uid)
-        send_message_by_rid(rid, QueueMessage(result="user_stats_alert",
-                                              message="딴짓을 하고 있습니다.",
-                                              data={"status": FRT.RESULT_TYPE_DISTRACTED,
-                                                    "uid": uid,
-                                                    "rid": rid,
-                                                    "eid": eid,
-                                                    "name": name,
-                                                    "room_name": room_name
-                                                    }
-                                              )
-                            )
+        send_message_by_uids([uid, founder_uid], QueueMessage(result="user_stats_alert",
+                                                                message=f"{name} 학생이 딴짓을 하고 있습니다.",
+                                                                data={"status": FRT.RESULT_TYPE_DISTRACTED,
+                                                                      "uid": uid,
+                                                                      "rid": rid,
+                                                                      "eid": eid,
+                                                                      "name": name,
+                                                                      "room_name": room_name,
+                                                                      "founder_uid": founder_uid
+                                                                      }
+                                                                )
+                             )
 
 
 # 각 결과에 따라 repository 함수 매핑
