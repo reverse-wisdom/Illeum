@@ -33,4 +33,6 @@ set root=C:\ProgramData\Miniconda3
 call %root%\Scripts\activate.bat %root%
 call conda activate AI
 REM call uvicorn main:app --reload --host=0.0.0.0 --port=8000
+start /b python .\models\TTLStatusCounter.py
+timeout 3 > NUL
 call uvicorn main:app --workers=4 --host=0.0.0.0 --port=8000 --no-access-log --http=httptools
