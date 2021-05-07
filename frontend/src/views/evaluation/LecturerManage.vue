@@ -1,6 +1,6 @@
 <template>
   <div class="manage">
-    <v-row justify="">
+    <v-row>
       <v-container>{{ this.$store.state.uuid }}의 학생관리</v-container>
       <v-date-picker v-model="date" @click:date="classNameFetch" :landscape="landscape" locale="ko-kr" :allowed-dates="allowedDates" class="mt-4" min="1900-04-01" max="2100-10-30"></v-date-picker>
     </v-row>
