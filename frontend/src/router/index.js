@@ -7,6 +7,7 @@ import Navbar from '../components/layout/Navbar.vue';
 
 //user
 import Sign from '../views/user/Sign.vue';
+import MyClass from '../views/MyClass.vue';
 
 //class
 import ClassTest from '../views/class/ClassTest.vue';
@@ -34,7 +35,6 @@ import webrtcTest2 from '../views/testpage/webrtcTest2.vue';
 import webrtcTest3 from '../views/testpage/webrtcTest3.vue';
 import webrtcTest4 from '../views/testpage/webrtcTest4.vue';
 import componentTest from '../views/testpage/componentTest.vue';
-import chartTest from '../views/testpage/chartTest.vue';
 import navTest from '../views/testpage/navTest.vue';
 import calendarTest from '../views/testpage/calendarTest.vue';
 Vue.use(VueRouter);
@@ -69,6 +69,11 @@ const routes = [
     path: '/sign',
     name: 'Sign',
     components: { default: Sign },
+  },
+  {
+    path: '/myclass',
+    name: 'MyClass',
+    components: { default: MyClass, header: Navbar },
   },
   //class
   {
@@ -165,11 +170,7 @@ const routes = [
     name: 'componentTest',
     component: componentTest,
   },
-  {
-    path: '/chartTest',
-    name: 'chartTest',
-    component: chartTest,
-  },
+
   {
     path: '/navTest',
     name: 'navTest',
