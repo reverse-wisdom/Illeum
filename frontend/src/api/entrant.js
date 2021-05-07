@@ -6,4 +6,9 @@ function partinAll() {
   return instance.get('/entrant/findAll');
 }
 
-export { partinAll };
+//참여자 테이블 참여여부 조회
+function findUidAndRid(uid, rid) {
+  return posts.get(`/entrant/findUidAndRid?uid=${uid}&rid=${rid}`);
+}
+
+export { partinAll, findUidAndRid };

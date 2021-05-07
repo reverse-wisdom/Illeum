@@ -21,6 +21,8 @@ import ClassJoin from '../views/class/ClassJoin.vue';
 
 //WebRTC
 import WebRTCList from '../views/webRTC/WebRTCList.vue';
+import TeacherWebRTC from '../views/webRTC/TeacherWebRTC.vue';
+import StudentWebRTC from '../views/webRTC/StudentWebRTC.vue';
 
 //evaluation
 import UserEval from '../views/evaluation/UserEval.vue';
@@ -119,6 +121,16 @@ const routes = [
     path: '/webrtclist',
     name: 'WebRTCList',
     components: { default: WebRTCList },
+  },
+  {
+    path: '/teacherwebrtc',
+    name: 'TeacherWebRTC',
+    components: { default: TeacherWebRTC },
+  },
+  {
+    path: '/studentwebrtc',
+    name: 'StudentWebRTC',
+    components: { default: StudentWebRTC },
   },
   //evaluation
   {
