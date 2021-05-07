@@ -17,6 +17,9 @@
         'items-per-page-text': '페이지당 클래스수',
       }"
     ></v-data-table>
+    <v-btn @click="main">
+      홈으로
+    </v-btn>
   </div>
 </template>
 <script>
@@ -57,6 +60,9 @@ export default {
     document.body.appendChild(cdn2);
   },
   methods: {
+    main() {
+      this.$router.push({ name: 'Home' });
+    },
     async detailClass(value) {
       if (value.room_type == '비공개') {
         const { value: room_password } = await this.$swal({

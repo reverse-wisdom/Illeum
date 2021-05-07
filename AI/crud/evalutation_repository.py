@@ -1,9 +1,27 @@
-from typing import Optional
+from typing import Optional, Tuple
 
 from cachetools import cached
 from utils.CustomTTLCache import CustomTTLCache
 
 from database.db import db
+
+
+@cached(cache=CustomTTLCache(maxsize=1024, ttl=3600))
+def select_member_name_by_uid(uid: int) -> Optional[str]:
+    with db.query("SELECT name FROM member WHERE uid = %s", (uid,)) as cursor:
+        data = cursor.fetchone()
+        if data:
+            return data[0]
+    return None
+
+
+@cached(cache=CustomTTLCache(maxsize=1024, ttl=3600))
+def select_room_name_founder_uid_by_rid(rid: int) -> Optional[Tuple[str, int]]:
+    with db.query("SELECT room_name, uid FROM room WHERE rid = %s", (rid,)) as cursor:
+        data = cursor.fetchone()
+        if data:
+            return data
+    return None
 
 
 @cached(cache=CustomTTLCache(maxsize=1024, ttl=600))

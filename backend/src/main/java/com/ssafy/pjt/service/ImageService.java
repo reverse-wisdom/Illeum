@@ -17,8 +17,8 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.ssafy.pjt.Repository.FileRepository;
 import com.ssafy.pjt.dto.UploadFile;
+import com.ssafy.pjt.repository.FileRepository;
 import com.ssafy.pjt.util.UploadFileUtils;
 
 /**

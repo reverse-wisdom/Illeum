@@ -13,6 +13,7 @@ import java.util.Date;
 
 @Data
 @Entity
+@SuppressWarnings("all")
 public class Evaluation {
 
     @Id
