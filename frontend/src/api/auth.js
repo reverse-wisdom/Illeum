@@ -42,7 +42,7 @@ function userEvalList(userData) {
 }
 //멤버가 개설한방 목록
 function userClasslist(userData) {
-  return posts.get('/member/user/founder', userData);
+  return posts.get(`/member/user/founder?uid=${userData}`);
 }
 //프로필이미지 넣기
 function createThumbnails(uid, frm) {
