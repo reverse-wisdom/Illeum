@@ -34,14 +34,14 @@ class Node:
 
 
 class TTLStatusCounter:
-    TTL: float
+    ttl: float
     queue: Deque[Node]
     map: Dict[int, list]
 
     def __init__(self, TTL: float = 600.0):
         self.queue = deque()
         self.map = dict()
-        self.TTL = TTL
+        self.ttl = TTL
 
     def clear(self):
         self.queue = deque()
@@ -58,13 +58,13 @@ class TTLStatusCounter:
             = self.map[uid][scode] - count if self.map[uid][scode] >= count else 0
 
     def decay(self):
-        while len(self.queue) > 0 and (self.queue[0].reg_time + self.TTL) < time():
+        while len(self.queue) > 0 and (self.queue[0].reg_time + self.ttl) < time():
             node = self.queue.popleft()
             self._decrease(node.uid, node.scode)
 
     def increase(self, uid: int, status: str) -> Tuple[int, int]:
         if uid not in self.map:  # uid에 해당하는 값이 없다면 초기화 리스트 할당
-            self.map[uid] = [0 for i in range(len(status_mapping))]
+            self.map[uid] = [0 for _ in range(len(status_mapping))]
         self.decay()  # 먼저 TTL로 소멸될 값들이 있나 체크
         self.map[uid][RESULT_TYPE_TOTAL_SCODE] += 1
         scode: int = status_mapping[status]
