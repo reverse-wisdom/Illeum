@@ -130,20 +130,22 @@ export default {
     }
     const { data } = await findByRidClass(this.rid);
     this.roomData = data;
-    console.log(data);
+
     console.log(this.roomData.start_time);
-    this.saveTime = this.$moment(this.roomData.start_time).format('YYYY-MM-DD h:mm:ss ');
-    this.saveTime = this.$moment(this.saveTime).add('m', 10);
-    this.saveTime = this.$moment(this.saveTime).format('YYYY-MM-DD h:mm:ss ');
+    this.saveTime = this.$moment(this.roomData.start_time)
+      .add(10, 'm')
+      .format('YYYY-MM-DD HH:mm:ss');
+
     console.log(this.saveTime);
     console.log(this.each.attendTime);
-    if (this.each.attendTime <= this.saveTime) {
+    if (this.each.attendTime > this.saveTime) {
       this.attend = '지각';
-    } else if (this.each.attendTime == '') {
-      this.attend = '조퇴';
+    } else if (this.each.attendTime == '' || this.each.attendTime == undefined || this.each.attendTime == null) {
+      this.attend = '결석';
     } else {
       this.attend = '정상';
     }
+    this.$emit('goSearch', this.attend);
   },
   methods: {},
 };

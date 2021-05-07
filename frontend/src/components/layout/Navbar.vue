@@ -82,6 +82,11 @@
               </a>
             </li>
             <li>
+              <a href="/myclass">
+                <span class="Navtext">MY CLASS</span>
+              </a>
+            </li>
+            <li>
               <a href="/classlist">
                 <span class="Navtext">class</span>
               </a>
@@ -119,11 +124,6 @@
             <li>
               <a href="/componentTest">
                 <span class="Navtext">component Test</span>
-              </a>
-            </li>
-            <li>
-              <a href="/chartTest">
-                <span class="Navtext">Chart Test</span>
               </a>
             </li>
           </ul>

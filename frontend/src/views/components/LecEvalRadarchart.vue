@@ -58,9 +58,9 @@ export default {
     this.renderChart(this.chartData, {
       scale: {
         ticks: {
-          max: 10,
+          max: 100,
           min: 0,
-          stepsize: 1,
+          stepsize: 10,
           beginAtZero: true,
         },
       },
