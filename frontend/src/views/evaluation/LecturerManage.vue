@@ -17,7 +17,7 @@
     </v-row>
     <v-row>
       <v-col cols="12" sm="4">
-        <!-- <div class="table-body">
+        <div class="table-body">
           <div class="table_responsive">
             <table>
               <thead>
@@ -36,13 +36,66 @@
               </tbody>
             </table>
           </div>
-        </div> -->
-        <v-data-table :headers="headers" :items="each" :items-per-page="10" item-key="idx" class="elevation-1"></v-data-table>
-      </v-col>
-      <v-col cols="12" sm="4" class="chip-search">
-        <div>
-          <ChipSearch></ChipSearch>
         </div>
+      </v-col>
+      <!-- 필터검색 -->
+      <v-col cols="12" sm="4" class="chip-search">
+        <v-card class="mx-auto" max-width="300">
+          <v-toolbar flat color="transparent">
+            <v-toolbar-title>빠른검색</v-toolbar-title>
+            <v-spacer></v-spacer>
+            <v-btn icon @click="$refs.search.focus()">
+              <v-icon>mdi-magnify</v-icon>
+            </v-btn>
+          </v-toolbar>
+
+          <v-container class="py-0">
+            <v-row align="center" justify="start">
+              <v-col v-for="(selection, i) in selections" :key="selection.text" class="shrink">
+                <v-chip :disabled="loading" close @click:close="selected.splice(i, 1)">
+                  <v-icon left v-text="selection.icon"></v-icon>
+                  {{ selection.text }}
+                </v-chip>
+              </v-col>
+
+              <v-chip :disabled="loading" :input-value="isLate" filter filter-icon="mdi-plus" @click:close="selected.splice(0, 1)" @click="test">
+                <v-icon left v-text="`mdi-nature`"></v-icon>
+                지각
+              </v-chip>
+              <v-chip :disabled="loading" :input-value="isAbsent" filter filter-icon="mdi-plus" @click="test1">
+                <v-icon left v-text="`mdi-nature`"></v-icon>
+                결석
+              </v-chip>
+              <v-chip :disabled="loading" :input-value="isAttendFirst" filter filter-icon="mdi-plus" @click="test2">
+                <v-icon left v-text="`mdi-nature`"></v-icon>
+                출석1등
+              </v-chip>
+              <v-chip :disabled="loading" :input-value="isChatFirst" filter filter-icon="mdi-plus" @click="test3">
+                <v-icon left v-text="`mdi-nature`"></v-icon>
+                채팅참여도1등
+              </v-chip>
+
+              <v-col v-if="!allSelected" cols="12">
+                <v-text-field ref="search" v-model="search" full-width hide-details label="Search" single-line></v-text-field>
+              </v-col>
+            </v-row>
+          </v-container>
+
+          <v-divider v-if="!allSelected"></v-divider>
+
+          <v-list>
+            <template v-for="item in categories">
+              <v-list-item v-if="!selected.includes(item)" :key="item.text" :disabled="loading" @click="showSelected(item)">
+                <v-list-item-avatar>
+                  <v-icon :disabled="loading" v-text="item.icon"></v-icon>
+                </v-list-item-avatar>
+                <v-list-item-title v-text="item.text"></v-list-item-title>
+              </v-list-item>
+            </template>
+          </v-list>
+
+          <v-divider></v-divider>
+        </v-card>
       </v-col>
       <v-col cols="12" sm="4"></v-col>
     </v-row>
@@ -55,25 +108,13 @@ import { fetchEval } from '@/api/evaluation';
 import { partinAll } from '@/api/entrant';
 import { getUsers } from '@/api/auth';
 import EachUserManage from '@/views/evaluation/EachUserManage.vue';
-import ChipSearch from '@/views/evaluation/ChipSearch.vue';
+// import ChipSearch from '@/views/evaluation/ChipSearch.vue';
 export default {
   components: {
     EachUserManage,
-    ChipSearch,
   },
   data() {
     return {
-      headers: [
-        {
-          text: 'No',
-          value: 'idx',
-        },
-        { text: 'PROFILE', value: '이미지' },
-        { text: 'NAME', value: 'name' },
-        { text: 'E-MAIL', value: 'email' },
-        { text: 'Evaluation', value: '' },
-        { text: 'Attendance', value: '' },
-      ],
       name: '',
       manageClass: [],
       items: [],
@@ -99,9 +140,63 @@ export default {
         // },
       ],
       manageClasscheck: false,
+      chips: [
+        {
+          text: '지각',
+          icon: 'mdi-nature',
+        },
+        {
+          text: '결석',
+          icon: 'mdi-glass-wine',
+        },
+        {
+          text: '출석1등',
+          icon: 'mdi-calendar-range',
+        },
+        {
+          text: '채팅참여1등',
+          icon: 'mdi-bike',
+        },
+      ],
+      loading: false,
+      search: '',
+      selected: [],
+      isLate: false,
+      isAbsent: false,
+      isAttendFirst: false,
+      isChatFirst: false,
     };
   },
+  computed: {
+    allSelected() {
+      return this.selected.length === this.chips.length;
+    },
+    categories() {
+      const search = this.search.toLowerCase();
 
+      if (!search) return this.chips;
+
+      return this.chips.filter((item) => {
+        const text = item.text.toLowerCase();
+
+        return text.indexOf(search) > -1;
+      });
+    },
+    selections() {
+      const selections = [];
+
+      for (const selection of this.selected) {
+        selections.push(selection);
+      }
+
+      return selections;
+    },
+  },
+  watch: {
+    selected() {
+      this.search = '';
+    },
+  },
   async created() {
     const token = this.$store.state.token;
     const uuid = this.$store.state.uuid;
@@ -119,6 +214,23 @@ export default {
   },
   async mounted() {},
   methods: {
+    test() {
+      // console.log(val);
+      this.isLate = !this.isLate;
+    },
+    test1() {
+      // console.log(val);
+      this.isAbsent = !this.isAbsent;
+    },
+    test2() {
+      // console.log(val);
+      this.isAttendFirst = !this.isAttendFirst;
+    },
+    test3() {
+      // console.log(val);
+      this.isChatFirst = !this.isChatFirst;
+    },
+
     classNameFetch() {
       this.roomName = [];
       for (var i = 0; i < this.manageClass.length; i++) {
@@ -167,6 +279,20 @@ export default {
         this.evalUserCnt = this.UsersEval.length;
       }
       console.log(this.UsersEval);
+    },
+    //chip
+    next() {
+      this.loading = true;
+
+      setTimeout(() => {
+        this.search = '';
+        this.selected = [];
+        this.loading = false;
+      }, 2000);
+    },
+    showSelected(item) {
+      this.selected.push(item);
+      this.$emit('selected', this.selected);
     },
   },
 };
