@@ -7,6 +7,7 @@ import java.io.Serializable;
 
 @Data
 @RedisHash
+@SuppressWarnings("all")
 public class Token implements Serializable {
 
     private static final long serialVersionUID = -7353484588260422449L;

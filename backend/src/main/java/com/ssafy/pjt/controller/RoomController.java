@@ -109,7 +109,7 @@ public class RoomController {
 		List<Map<String, Object>> list = null;
 		try {
 			list = roomMapper.roomjoinMemeber(rid);
-			if (list.size() == 0)
+			if (list.isEmpty())
 				return new ResponseEntity<>("참가자가 없습니다.", HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<>("fail", HttpStatus.BAD_REQUEST);
@@ -123,7 +123,7 @@ public class RoomController {
 		List<findRoomEvaluation> list = null;
 		try {
 			list = roomMapper.roomJoinEvaluation(rid);
-			if (list.size() == 0)
+			if (list.isEmpty())
 				return new ResponseEntity<>("평가가 없습니다.", HttpStatus.NO_CONTENT);
 		} catch (Exception e) {			
 			return new ResponseEntity<>("fail", HttpStatus.BAD_REQUEST);
@@ -201,7 +201,7 @@ public class RoomController {
 			room.setEndTime(roomdto.getEnd_time());
 
 		try {
-			room = roomRepository.save(room);
+			roomRepository.save(room);
 			return new ResponseEntity<>("success", HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<>("fail", HttpStatus.BAD_GATEWAY);

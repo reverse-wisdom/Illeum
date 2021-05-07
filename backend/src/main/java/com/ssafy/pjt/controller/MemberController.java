@@ -236,7 +236,7 @@ public class MemberController {
     	List<findMemberRoom> list = null;
     	try {
     		list = memberMapper.mamberJoinRoom(uid);
-    		if(list.size() == 0) return new ResponseEntity<>("수강 중인 강의가 없습니다.",HttpStatus.OK);
+    		if(list.isEmpty()) return new ResponseEntity<>("수강 중인 강의가 없습니다.",HttpStatus.NO_CONTENT);
     	}catch (Exception e) {
     		return new ResponseEntity<>("fail",HttpStatus.BAD_REQUEST);
 		}
@@ -250,7 +250,7 @@ public class MemberController {
     	List<memberAttend> list = null;
     	try {
     		list = memberMapper.memberAttend(uid);
-    		if(list == null) return new ResponseEntity<>("출결 기록이 없습니다.",HttpStatus.OK);
+    		if(list.isEmpty()) return new ResponseEntity<>("출결 기록이 없습니다.",HttpStatus.NO_CONTENT);
     	}catch (Exception e) {
     		return new ResponseEntity<>("fail",HttpStatus.BAD_REQUEST);
 		}
@@ -264,7 +264,7 @@ public class MemberController {
     	List<findFounder> list = null;
     	try {
     		list = memberMapper.founder(uid);
-    		if(list.size() == 0) return new ResponseEntity<>("개설한 방이 없습니다.",HttpStatus.OK);
+    		if(list.isEmpty()) return new ResponseEntity<>("개설한 방이 없습니다.",HttpStatus.NO_CONTENT);
     	}catch (Exception e) {
     		return new ResponseEntity<>("fail",HttpStatus.BAD_REQUEST);
 		}
@@ -278,7 +278,7 @@ public class MemberController {
     	List<findMemberEvaluation> list;
     	try {
     		list = memberMapper.memberJoinEvaluation(uid);
-    		if(list.size() == 0) return new ResponseEntity<>("평가가 없습니다",HttpStatus.OK);
+    		if(list.isEmpty()) return new ResponseEntity<>("평가가 없습니다",HttpStatus.NO_CONTENT);
     	}catch (Exception e) {
     		return new ResponseEntity<>("fail",HttpStatus.BAD_REQUEST);
 		}
