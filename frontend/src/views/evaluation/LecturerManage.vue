@@ -17,9 +17,7 @@
     </v-row>
     <v-row>
       <v-col cols="12" sm="4">
-        <!-- <div v-for="(each, idx) in UsersEval" :key="idx">
-      </div> -->
-        <div class="table-body">
+        <!-- <div class="table-body">
           <div class="table_responsive">
             <table>
               <thead>
@@ -38,7 +36,8 @@
               </tbody>
             </table>
           </div>
-        </div>
+        </div> -->
+        <v-data-table :headers="headers" :items="each" :items-per-page="10" item-key="idx" class="elevation-1"></v-data-table>
       </v-col>
       <v-col cols="12" sm="4" class="chip-search">
         <div>
@@ -64,6 +63,17 @@ export default {
   },
   data() {
     return {
+      headers: [
+        {
+          text: 'No',
+          value: 'idx',
+        },
+        { text: 'PROFILE', value: '이미지' },
+        { text: 'NAME', value: 'name' },
+        { text: 'E-MAIL', value: 'email' },
+        { text: 'Evaluation', value: '' },
+        { text: 'Attendance', value: '' },
+      ],
       name: '',
       manageClass: [],
       items: [],
