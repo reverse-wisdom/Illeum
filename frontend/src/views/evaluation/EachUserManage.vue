@@ -145,6 +145,7 @@ export default {
     } else {
       this.attend = '정상';
     }
+    this.$emit('goSearch', this.attend);
   },
   methods: {},
 };

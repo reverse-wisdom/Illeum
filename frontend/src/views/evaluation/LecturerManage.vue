@@ -16,28 +16,36 @@
       </v-col>
     </v-row>
     <v-row>
-      <!-- <div v-for="(each, idx) in UsersEval" :key="idx">
+      <v-col cols="12" sm="4">
+        <!-- <div v-for="(each, idx) in UsersEval" :key="idx">
       </div> -->
-      <div class="table-body">
-        <div class="table_responsive">
-          <table>
-            <thead>
-              <tr>
-                <th>No</th>
-                <th>PROFILE</th>
-                <th>NAME</th>
-                <th>E-MAIL</th>
-                <th>Evaluation</th>
-                <th>Attendance</th>
-              </tr>
-            </thead>
+        <div class="table-body">
+          <div class="table_responsive">
+            <table>
+              <thead>
+                <tr>
+                  <th>No</th>
+                  <th>PROFILE</th>
+                  <th>NAME</th>
+                  <th>E-MAIL</th>
+                  <th>Evaluation</th>
+                  <th>Attendance</th>
+                </tr>
+              </thead>
 
-            <tbody>
-              <EachUserManage v-for="(each, idx) in UsersEval" :key="idx" :each="each" :idx="idx" :rid="rid" :evalUserCnt="evalUserCnt"></EachUserManage>
-            </tbody>
-          </table>
+              <tbody>
+                <EachUserManage v-for="(each, idx) in UsersEval" :key="idx" :each="each" :idx="idx" :rid="rid" :evalUserCnt="evalUserCnt"></EachUserManage>
+              </tbody>
+            </table>
+          </div>
         </div>
-      </div>
+      </v-col>
+      <v-col cols="12" sm="4" class="chip-search">
+        <div>
+          <ChipSearch></ChipSearch>
+        </div>
+      </v-col>
+      <v-col cols="12" sm="4"></v-col>
     </v-row>
   </div>
 </template>
@@ -48,9 +56,11 @@ import { fetchEval } from '@/api/evaluation';
 import { partinAll } from '@/api/entrant';
 import { getUsers } from '@/api/auth';
 import EachUserManage from '@/views/evaluation/EachUserManage.vue';
+import ChipSearch from '@/views/evaluation/ChipSearch.vue';
 export default {
   components: {
     EachUserManage,
+    ChipSearch,
   },
   data() {
     return {
@@ -62,7 +72,7 @@ export default {
       menu: false,
       mindate: '2021-04-01',
       maxdate: '2021-04-30',
-
+      attend: '',
       arrayDates: [],
       roomName: [],
       rid: '',
@@ -247,5 +257,8 @@ table > tbody > tr:nth-child(even) {
 
 table > tbody > tr:hover {
   filter: drop-shadow(0px 2px 6px #0002);
+}
+.chip-search {
+  margin-left: 10em;
 }
 </style>
