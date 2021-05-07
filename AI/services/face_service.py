@@ -29,7 +29,10 @@ def face_detection(image: np.ndarray) -> Response:
         return Response(FRT.RESULT_TYPE_AFK, '자리를 비웠거나, 얼굴이 인식되지 않는 상황입니다.', None)
     elif result.blink[0] < 0.1 and result.blink[1] < 0.1:
         return Response(FRT.RESULT_TYPE_ASLEEP, '눈을 감고 있거나, 자고 있는 상태 입니다.', result)
-    elif result.mouth > 0.5:  # TODO: 시선과 고개에 따른 딴짓 여부에 대해 데이터가 아직 안들어가 있는 상태
+    elif result.mouth > 0.5 \
+            or 25.0 < result.euler[0] or -25.0 > result.euler[0] \
+            or 30.0 < result.euler[1] or -30.0 > result.euler[1] \
+            or 0.2 < result.eye[0] or -0.2 > result.eye[0]:  # (or 0.03 < result.eye[1] or -0.03 > result.eye[1])
         return Response(FRT.RESULT_TYPE_DISTRACTED, '딴 짓을 하고 있는 상태 입니다. (하품, 시선, 고개)', result)
     else:
         return Response(FRT.RESULT_TYPE_ATTENTION, '집중 중', result)
@@ -49,12 +52,12 @@ def update_evaluation_increase_afk_by_eid(uid: int, rid: int, eid: int):
         send_message_by_rid(rid, QueueMessage(result="user_stats_alert",
                                               message="자리를 비웠습니다.",
                                               data={"status": FRT.RESULT_TYPE_AFK,
-                                               "uid": uid,
-                                               "rid": rid,
-                                               "eid": eid,
-                                               "name": name,
-                                               "room_name": room_name
-                                               }
+                                                    "uid": uid,
+                                                    "rid": rid,
+                                                    "eid": eid,
+                                                    "name": name,
+                                                    "room_name": room_name
+                                                    }
                                               )
                             )
 
@@ -69,12 +72,12 @@ def update_evaluation_increase_asleep_by_eid(uid: int, rid: int, eid: int):
         send_message_by_rid(rid, QueueMessage(result="user_stats_alert",
                                               message="졸고 있습니다.",
                                               data={"status": FRT.RESULT_TYPE_ASLEEP,
-                                               "uid": uid,
-                                               "rid": rid,
-                                               "eid": eid,
-                                               "name": name,
-                                               "room_name": room_name
-                                               }
+                                                    "uid": uid,
+                                                    "rid": rid,
+                                                    "eid": eid,
+                                                    "name": name,
+                                                    "room_name": room_name
+                                                    }
                                               )
                             )
 
@@ -94,12 +97,12 @@ def update_evaluation_increase_distracted_by_eid(uid: int, rid: int, eid: int):
         send_message_by_rid(rid, QueueMessage(result="user_stats_alert",
                                               message="딴짓을 하고 있습니다.",
                                               data={"status": FRT.RESULT_TYPE_DISTRACTED,
-                                               "uid": uid,
-                                               "rid": rid,
-                                               "eid": eid,
-                                               "name": name,
-                                               "room_name": room_name
-                                               }
+                                                    "uid": uid,
+                                                    "rid": rid,
+                                                    "eid": eid,
+                                                    "name": name,
+                                                    "room_name": room_name
+                                                    }
                                               )
                             )
 
