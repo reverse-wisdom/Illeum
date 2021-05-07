@@ -6,6 +6,7 @@ import javax.persistence.*;
 
 @Data
 @Entity
+@SuppressWarnings("all")
 public class Member {
 
     @Id
