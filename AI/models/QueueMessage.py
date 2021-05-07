@@ -1,7 +1,7 @@
 import json
 
 
-class Message:
+class QueueMessage:
     result: str
     message: str
     data: str
@@ -17,5 +17,5 @@ class Message:
     def __repr__(self) -> str:
         return self.__str__()
 
-    def toJSON(self):
+    def to_json(self):
         return json.dumps(self, default=lambda o: o.__dict__, sort_keys=True,  ensure_ascii=False)
