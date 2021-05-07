@@ -229,6 +229,17 @@ public class MemberController {
     public Iterable<Member> getAllMember() {
         return memberRepository.findAll();
     }
+    @ApiOperation(value = "uid로 회원정보 조회")
+    @GetMapping(path="/user/findByUid")
+    public ResponseEntity<Object> findByUid(@RequestParam int uid) {
+    	try {
+    		Member member = memberRepository.findByUid(uid);
+    		if(member == null) return new ResponseEntity<>("해당  uid가 잘못되었습니다.",HttpStatus.NO_CONTENT);
+    		return new ResponseEntity<>(member,HttpStatus.OK);
+    	}catch (Exception e) {
+    		return new ResponseEntity<>("fail",HttpStatus.BAD_REQUEST);
+		}  	  	
+    }
     
     @ApiOperation(value = "맴버가 참여한 방목록")
     @GetMapping(path = "/user/room")
