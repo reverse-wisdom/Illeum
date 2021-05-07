@@ -53,6 +53,7 @@ import io.swagger.annotations.ApiOperation;
 @CrossOrigin
 @RequestMapping("/api/member") // This means URL's start with /demo (after Application path)
 public class MemberController {
+	private static final String ACCESSTOKEN = "accessToken";
     private Logger logger = LoggerFactory.getLogger(ApplicationRunner.class);
     @Autowired
     private MemberRepository memberRepository;
@@ -73,7 +74,7 @@ public class MemberController {
     
     @ApiOperation(value = "로그인")
     @PostMapping(path = "/user/login")
-    public ResponseEntity<?> login(@RequestBody LoginDto login) {
+    public ResponseEntity<?> login(@RequestBody LoginDto login) { //NOSONAR
         final String email = login.getEmail();
         logger.info("test input username: " + email);
         try {
@@ -97,7 +98,7 @@ public class MemberController {
         logger.info("generated access token: " + accessToken);
         logger.info("generated refresh token: " + refreshToken);
         Map<String, Object> map = new HashMap<>();
-        map.put("accessToken", accessToken);
+        map.put(ACCESSTOKEN, accessToken);
         map.put("refreshToken", refreshToken);
         try {
         	Member member =  memberRepository.findByEmail(email);
@@ -324,7 +325,7 @@ public class MemberController {
         String email = null;
         Map<String, Object> map = new HashMap<>();
         try {
-            accessToken = m.get("accessToken");
+            accessToken = m.get(ACCESSTOKEN);
             refreshToken = m.get("refreshToken");
             logger.info("access token in rnat: " + accessToken);
             try {
@@ -352,7 +353,7 @@ public class MemberController {
                     final UserDetails userDetails = userDetailsService.loadUserByUsername(email);
                     String newtok =  jwtTokenUtil.generateAccessToken(userDetails);
                     map.put("success", true);
-                    map.put("accessToken", newtok);
+                    map.put(ACCESSTOKEN, newtok);
                 } else {
                     map.put("success", false);
                     map.put("msg", "refresh token is expired.");
