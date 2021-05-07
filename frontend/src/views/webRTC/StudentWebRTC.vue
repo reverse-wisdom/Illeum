@@ -59,6 +59,8 @@ export default {
       isOutClicked: true,
       isAudio: true,
       isVideo: true,
+      isLive: false, // for AI server interval vue watch value
+      time: null, // for AI server interval
     };
   },
   created() {
@@ -95,6 +97,14 @@ export default {
     });
 
     this.openRoom();
+  },
+  watch: {
+    isLive: function() {
+      var ref = this;
+      setTimeout(function() {
+        ref.time = setInterval(ref.screenCapture, 5000);
+      }, 4000);
+    },
   },
 
   methods: {
@@ -203,12 +213,6 @@ export default {
 
       this.connection.autoCloseEntireSession = true;
 
-      // 4초후 5초당 한번씩
-      setTimeout(function() {
-        setInterval(ref.screenCapture, 5000);
-        console.log('캡쳐완료!');
-      }, 4000);
-
       this.connection.checkPresence(this.roomid, function(isRoomExist, roomid) {
         if (isRoomExist === true) {
           ref.checkEntrant().then((result) => {
@@ -222,6 +226,7 @@ export default {
             }
             ref.connection.onUserStatusChanged();
             push.create(ref.connection.extra.userFullName + '님이 ' + ref.roomid + '수업에 입장했습니다');
+            ref.isLive = true;
             ref.connection.join(roomid);
           });
         } else {
@@ -268,6 +273,9 @@ export default {
               ref.connection.attachStreams.forEach(function(localStream) {
                 localStream.stop();
               });
+
+              ref.isLive = false;
+              clearInterval(ref.time);
 
               ref.connection.closeSocket();
 
@@ -334,6 +342,10 @@ export default {
               icon: 'warning',
               title: '화상수업 나가기.!!',
             });
+
+            this.isLive = false;
+            console.log('멈춤');
+            clearInterval(this.time);
 
             this.$router.push({ name: 'WebRTCList' });
           }
