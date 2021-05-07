@@ -1,9 +1,17 @@
 <template>
   <div class="manage">
-    <span>{{ this.$store.state.uuid }}의 학생관리</span>
-    <v-row justify="center">
+    <v-row justify="">
+      <v-container>{{ this.$store.state.uuid }}의 학생관리</v-container>
       <v-date-picker v-model="date" @click:date="classNameFetch" :landscape="landscape" locale="ko-kr" :allowed-dates="allowedDates" class="mt-4" min="1900-04-01" max="2100-10-30"></v-date-picker>
-      <v-col class="d-flex" cols="12" sm="6">
+    </v-row>
+    <v-row>
+      <div style="margin-top: 100px;">
+        <h2>show Management</h2>
+        <h2>{{ date }}</h2>
+      </div>
+    </v-row>
+    <v-row>
+      <v-col cols="12" sm="6">
         <v-select :items="items" :label="date" solo @change="showManage"></v-select>
       </v-col>
     </v-row>
@@ -19,35 +27,18 @@
                 <th>PROFILE</th>
                 <th>NAME</th>
                 <th>E-MAIL</th>
-
                 <th>Evaluation</th>
+                <th>Attendance</th>
               </tr>
             </thead>
 
             <tbody>
-              <EachUserManage v-for="(each, idx) in UsersEval" :key="idx" :each="each" :idx="idx"></EachUserManage>
-              <!-- <tr v-for="(each, idx) in UsersEval" :key="idx">
-                <td>{{ idx + 1 }}</td>
-                <td><img src="https://assets.codepen.io/2147066/internal/avatars/users/default.png?fit=crop&format=auto&height=100&version=1608664176&width=100" alt="" /></td>
-                <td>{{ each.name }}</td>
-                <td>{{ each.email }}</td>
-
-                <td>
-                  <span class="action_btn">
-                    <a href="#">자세히보기</a>
-                  </span>
-                </td>
-              </tr> -->
+              <EachUserManage v-for="(each, idx) in UsersEval" :key="idx" :each="each" :idx="idx" :rid="rid" :evalUserCnt="evalUserCnt"></EachUserManage>
             </tbody>
           </table>
         </div>
       </div>
     </v-row>
-
-    <div style="margin-top: 100px;">
-      <h2>show Management</h2>
-      <h2>{{ date }}</h2>
-    </div>
   </div>
 </template>
 
@@ -74,10 +65,11 @@ export default {
 
       arrayDates: [],
       roomName: [],
-
+      rid: '',
       selectedRoomName: '',
       maxUser: '',
       firstUser: '',
+      evalUserCnt: '',
       fetchRoomlen: 0,
       manageUsers: [],
       UsersEval: [
@@ -99,6 +91,7 @@ export default {
       var dates = data[i].startTime.slice(0, 10);
       this.arrayDates.push(dates);
     }
+    console.log(this.arrayDates);
     this.manageClass = data;
     console.log(this.manageClass);
     this.items = [];
@@ -130,10 +123,11 @@ export default {
       for (var i = 0; i < this.manageClass.length; i++) {
         if (this.manageClass[i].roomName === selected) {
           const { data } = await fetchRoomname(this.manageClass[i].roomName);
-          const rid = data[0].rid;
+          this.rid = data[0].rid;
+          console.log('방번호', this.rid);
           const res = await partinAll();
           for (var j = 0; j < res.data.length; j++) {
-            if (res.data[j].rid === rid) {
+            if (res.data[j].rid === this.rid) {
               this.manageUsers.push({ uid: res.data[j].uid, eid: res.data[j].eid });
             }
           }
@@ -150,6 +144,7 @@ export default {
             }
           }
         }
+        this.evalUserCnt = this.UsersEval.length;
       }
       console.log(this.UsersEval);
     },
@@ -158,9 +153,8 @@ export default {
 </script>
 <style scoped>
 .manage {
-  max-width: 700px;
   width: 100%;
-  margin: auto;
+  margin-left: 30%;
   padding: 25px 30px 30px 30px;
   border-radius: 5px;
   background: #fff;
@@ -171,15 +165,8 @@ export default {
   box-sizing: border-box;
 }
 
-.table-body {
-  display: flex;
-  font-family: 'Roboto', sans-serif;
-}
-
 .table_responsive {
-  max-width: 900px;
-
-  background-color: #efefef33;
+  width: 150%;
   padding: 15px;
   overflow: auto;
   margin: auto;

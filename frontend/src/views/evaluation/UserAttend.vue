@@ -23,10 +23,10 @@
       <h2>{{ dayLabel }}</h2>
     </div>
     <div>
-      <p>
+      <!-- <p>
         출석왕
         <span>{{ firstUser }}</span>
-      </p>
+      </p> -->
     </div>
     <div>
       <div>유저이름:{{ this.$store.state.name }}님</div>
@@ -128,63 +128,35 @@ export default {
           const roomPartinUser = data[0].rid;
           const res = await evaluateList(roomPartinUser);
           const ridData = await findByRidClass(roomPartinUser);
-          this.saveTime = this.$moment(ridData.data.startTime).format('YYYY-MM-DD, h:mm:ss a');
-          console.log(ridData.data.startTime);
-          this.saveTime = this.$moment(this.saveTime).add('m', 10);
-          this.saveTime = this.$moment(this.saveTime).format('YYYY-MM-DD, h:mm:ss a');
-          console.log(this.saveTime);
-          //채팅참여도1등, 출석1등 구하기
-          console.log(res.data);
+          // this.saveTime._i = this.$moment(ridData.data.start_time).format('YYYY-MM-DD, h:mm:ss');
+          console.log('수업시작', ridData.data.start_time);
+          this.saveTime = this.$moment(ridData.data.start_time)
+            .add(10, 'm')
+            .format('YYYY-MM-DD, HH:mm:ss');
+          console.log('+10분', this.saveTime);
+          // this.saveTime = this.$moment(this.saveTime).format('YYYY-MM-DD, h:mm:ss');
+
           for (var j = 0; j < res.data.length; j++) {
-            this.partinRank.push({ uid: res.data[j].uid, participation: res.data[j].participation });
-            // attendRank push 메소드 시간순으로 정렬됨
             this.attendRank.push({ uid: res.data[j].uid, attend_time: res.data[j].attend_time });
             console.log(this.attendRank);
             this.attendRank.sort(function(a, b) {
               return a.attend_time < b.attend_time ? -1 : a.attend_time > b.attend_time ? 1 : 0;
             });
-            // if (maxPartin < res.data[j].participation) {
-            //   var maxPartin = res.data[j].participation;
-            //   this.maxUser = res.data[j].name;
-            // }
-
-            // if (first > res.data[j].ranking) {
-            //   var first = res.data[j].ranking;
-            //   this.firstUser = res.data[j].name;
-            // }
-            // if (this.$store.state.uuid === res.data[j].uid) {
-            //   this.name = this.$store.state.name;
-            //   this.fetchRoomlen = res.data.length;
-            // }
           }
-          //채팅참여도 배열 제일 많은순으로 정렬하기
-          // this.partinRank.sort(function(a, b) {
-          //   if (a.participation < b.participation) {
-          //     return 1;
-          //   }
-          //   if (a.participation > b.participation) {
-          //     return -1;
-          //   }
 
-          //   return 0;
-          // });
-
-          //로그인한 청강자 채팅참여도 순위 구하기
-          // for (var k = 0; k < this.partinRank.length; k++) {
-          //   if (this.partinRank[k].uid === this.$store.state.uuid) {
-          //     this.partuidRank = this.partinRank.indexOf(this.partinRank[k]) + 1;
-          //   }
-          // }
-          //로그인한 청강자 출석시간 순위 구하기
           console.log(this.attendRank);
           for (var m = 0; m < this.attendRank.length; m++) {
             // var test1 = this.$moment(this.attendRank[0].attend_time).format('YYYY-MM-DD, h:mm:ss a');
 
             if (this.attendRank[m].uid === this.$store.state.uuid) {
-              this.attenduidTime = this.$moment(this.attendRank[m].attend_time).format('h:mm:ss A');
-              if (this.attenduidTime < this.saveTime) {
+              this.attenduidTime = this.$moment(this.attendRank[m].attend_time).format('YYYY-MM-DD, HH:mm:ss');
+              console.log(this.attenduidTime);
+              console.log(this.saveTime);
+              if (this.attenduidTime > this.saveTime) {
                 this.lateCheck = true;
                 this.attend = '지각';
+              } else if (this.attenduidTime == '' || this.attenduidTime == undefined || this.attenduidTime == null) {
+                this.attend = '결석';
               } else {
                 this.attend = '정상';
               }

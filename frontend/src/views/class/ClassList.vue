@@ -4,7 +4,7 @@
     <v-data-table
       :headers="headers"
       :items="rooms"
-      :items-per-page="5"
+      :items-per-page="10"
       item-key="rid"
       class="elevation-1"
       @click:row="detailClass"
@@ -17,6 +17,9 @@
         'items-per-page-text': '페이지당 클래스수',
       }"
     ></v-data-table>
+    <v-btn @click="main">
+      홈으로
+    </v-btn>
   </div>
 </template>
 <script>
@@ -40,7 +43,7 @@ export default {
   async created() {
     const { data } = await classAll();
     for (let index = 0; index < data.length; index++) {
-      if (data[index].room_state != '종료') {
+      if (data[index].room_state != '완료') {
         this.rooms.push(data[index]);
       }
     }
@@ -57,6 +60,9 @@ export default {
     document.body.appendChild(cdn2);
   },
   methods: {
+    main() {
+      this.$router.push({ name: 'Home' });
+    },
     async detailClass(value) {
       if (value.room_type == '비공개') {
         const { value: room_password } = await this.$swal({
