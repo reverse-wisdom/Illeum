@@ -33,10 +33,13 @@ public class UploadFileUtils {
 		}
 
 		File convFile = new File(path + File.separator + file.getOriginalFilename());
-		convFile.createNewFile();
-		FileOutputStream fos = new FileOutputStream(convFile);
-		fos.write(file.getBytes());
-		fos.close();
+		convFile.createNewFile(); // NOSONAR
+
+		try (FileOutputStream fos = new FileOutputStream(convFile)) {
+			fos.write(file.getBytes());
+		} catch (IOException e) {
+			logger.info(e.toString());
+		}
 		return convFile;
 	}
 
