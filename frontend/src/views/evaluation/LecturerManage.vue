@@ -52,13 +52,14 @@
           <v-container class="py-0">
             <v-row align="center" justify="start">
               <v-col v-for="(selection, i) in selections" :key="selection.text" class="shrink">
-                <v-chip :disabled="loading" close @click:close="selected.splice(i, 1)">
+                <!-- <v-chip :disabled="loading" close @click:close="selected.splice(i, 1)"> -->
+                <v-chip :disabled="loading" close @click:close="chipClose(selection, i)">
                   <v-icon left v-text="selection.icon"></v-icon>
                   {{ selection.text }}
                 </v-chip>
               </v-col>
 
-              <v-chip :disabled="loading" :input-value="isLate" filter filter-icon="mdi-plus" @click:close="selected.splice(0, 1)" @click="test">
+              <!-- <v-chip :disabled="loading" :input-value="isLate" filter filter-icon="mdi-plus" @click:close="selected.splice(0, 1)" @click="test">
                 <v-icon left v-text="`mdi-nature`"></v-icon>
                 지각
               </v-chip>
@@ -73,11 +74,7 @@
               <v-chip :disabled="loading" :input-value="isChatFirst" filter filter-icon="mdi-plus" @click="test3">
                 <v-icon left v-text="`mdi-nature`"></v-icon>
                 채팅참여도1등
-              </v-chip>
-
-              <v-col v-if="!allSelected" cols="12">
-                <v-text-field ref="search" v-model="search" full-width hide-details label="Search" single-line></v-text-field>
-              </v-col>
+              </v-chip> -->
             </v-row>
           </v-container>
 
@@ -214,6 +211,14 @@ export default {
   },
   async mounted() {},
   methods: {
+    chipClose(selection, i) {
+      this.selected.splice(i, 1);
+      console.log(selection);
+      if (selection.text == '지각') this.isLate = false;
+      if (selection.text == '결석') this.isAbsent = false;
+      if (selection.text == '출석1등') this.isAttendFirst = false;
+      if (selection.text == '채팅참여1등') this.isChatFirst = false;
+    },
     test() {
       // console.log(val);
       this.isLate = !this.isLate;
@@ -292,6 +297,14 @@ export default {
     },
     showSelected(item) {
       this.selected.push(item);
+
+      if (item.text == '지각') this.isLate = true;
+      if (item.text == '결석') this.isAbsent = true;
+      if (item.text == '출석1등') this.isAttendFirst = true;
+      if (item.text == '채팅참여1등') this.isChatFirst = true;
+
+      console.log(this.isLate);
+      console.log(this.isAbsent);
       this.$emit('selected', this.selected);
     },
   },
