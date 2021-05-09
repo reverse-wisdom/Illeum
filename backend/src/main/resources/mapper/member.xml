@@ -5,7 +5,7 @@
 	namespace="com.ssafy.pjt.repository.mapper.MemberMapper">
 	<!--맴버가 수강 중인 강의(방) 목록 -->
 	<select id="mamberJoinRoom" parameterType="int" resultType="findMemberRoom">
-		select m.uid, m.name , r.rid, r.room_name,(select m.name from member m where m.uid = r.uid) as founder , r.start_time, r.end_time, r.room_state, r.room_type
+		select m.uid, m.name , r.rid, r.room_name,(select m.name from member m where m.uid = r.uid) as founder , r.start_time, r.end_time, r.room_state, r.room_type, r.room_password
 		from member m join entrant e 
 		on m.uid = e.uid
 		right join room r
@@ -23,7 +23,7 @@
 	
 	<!--맴버 평가 목록  -->
 	<select id="memberJoinEvaluation" parameterType="int" resultType="findMemberEvaluation">
-		select ev.vid, e.eid,r.uid as founderUid, m.name, r.room_name,(select m.name from member m where m.uid = r.uid) as founder ,ev.eval_date, ev.attention, ev.participation, ev.distracted, ev.asleep, ev.afk, ev.attend_time, ev.ranking
+		select ev.vid, e.eid,r.uid as founderUid, m.name, r.room_name, r.room_type, r.start_time, r.end_time, r.room_state, (select m.name from member m where m.uid = r.uid) as founder ,ev.eval_date, ev.attention, ev.participation, ev.distracted, ev.asleep, ev.afk, ev.attend_time, ev.ranking
 		from member m join entrant e 
 		on m.uid = e.uid
 		right join evaluation ev
