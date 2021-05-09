@@ -35,6 +35,8 @@
       </template>
 
       <v-btn class="mr-4" color="cyan" @click="screen">화면공유</v-btn>
+      <v-btn class="mr-4" color="cyan" @click="saveMessageLog">채팅기록저장</v-btn>
+      <v-btn class="mr-4" color="cyan" @click="chatTest">채팅콘솔테스트</v-btn>
       <v-btn class="mr-4" color="error" @click="outRoom">퇴장</v-btn>
       &nbsp;
     </div>
@@ -46,7 +48,7 @@ import push from 'push.js';
 import { faceAI } from '@/api/faceAI';
 import { findUidAndRid } from '@/api/entrant';
 import { exit, entrance } from '@/api/rabbit';
-import { insertEvaluation } from '@/api/evaluation';
+import { insertEvaluation, updateByVid } from '@/api/evaluation';
 
 export default {
   data() {
@@ -55,7 +57,10 @@ export default {
       userName: '',
       connection: null,
       message: '',
+      chatLog: '',
+      chatResult: [],
       rid: '',
+      vid: '',
       isOutClicked: true,
       isAudio: true,
       isVideo: true,
@@ -173,11 +178,16 @@ export default {
       var date = new Date();
       var timestamp = date.toLocaleTimeString();
       div.className = 'message';
+      var uid = this.$store.state.uuid;
 
       if (event.data) {
         div.innerHTML = '<b>' + userName + '&nbsp;' + timestamp + ':</b><br>' + event.data.chatMessage;
+        this.chatLog += userName + ' ' + uuid + ' ' + event.data.chatMessage + ' ' + timestamp + '\r\n';
+        div.innerHTML = '<b>' + userName + '&nbsp;' + timestamp + ':</b><br>' + event.data.chatMessage;
       } else {
         div.innerHTML = '<b>' + this.userName + '(당신)&nbsp;' + timestamp + '</b> <br>' + event;
+        this.chatLog += userName + ' ' + uid + ' ' + event + ' ' + timestamp + '\r\n';
+        this.chatResult.push({ uid: uid, userName: userName, chatMessage: event, timestamp: timestamp });
         div.style.background = '#cbffcb';
       }
 
@@ -308,8 +318,6 @@ export default {
     },
 
     screen() {
-      var ref = this;
-
       this.connection.extra.type = 'share';
       this.connection.extra.typeAlpha = 'share';
 
@@ -324,6 +332,7 @@ export default {
     async outRoom() {
       var uid = this.$store.state.uuid;
       var rid = this.rid;
+      this.chatTest();
       await exit(uid, rid) // GET: /api/rtc/exit (rabbitMQ)
         .then(({ data }) => {
           if (data == 'success') {
@@ -357,17 +366,72 @@ export default {
           });
         });
     },
+    saveMessageLog() {
+      var fileName = this.roomid;
+      var content = this.chatLog;
+      var blob = new Blob([content], { type: 'text/plain' });
+      var objURL = window.URL.createObjectURL(blob);
+
+      // 이전에 생성된 메모리 해제
+      if (window.__Xr_objURL_forCreatingFile__) {
+        window.URL.revokeObjectURL(window.__Xr_objURL_forCreatingFile__);
+      }
+
+      window.__Xr_objURL_forCreatingFile__ = objURL;
+      // a링크로 다운로드 바로실행
+      var a = document.createElement('a');
+      a.download = fileName;
+      a.href = objURL;
+      a.click();
+    },
+    async chatTest() {
+      var rankArr = [];
+      var ranking = 1;
+      for (let index = 0; index < this.chatResult.length; index++) {
+        var indexOfchatResult = rankArr.findIndex((i) => i.uid == this.chatResult[index].uid);
+        if (indexOfchatResult == -1) {
+          rankArr.push({ uid: this.chatResult[index].uid, participation: 1, ranking: ranking });
+          ranking++;
+        } else {
+          var indexOfObj = rankArr.findIndex((i) => i.uid == this.chatResult[index].uid);
+          rankArr[indexOfObj].participation++;
+        }
+      }
+
+      for (let index = 0; index < rankArr.length; index++) {
+        if (rankArr[index].uid == this.$store.state.uuid) {
+          var evaluationData = {
+            participation: rankArr[index].participation,
+            ranking: rankArr[index].ranking,
+            vid: this.vid,
+          };
+          console.log(evaluationData);
+          await updateByVid(evaluationData)
+            .then(({ data }) => {
+              console.log(data);
+              if (data == 'success') console.log(evaluationData + '수정 성공');
+            })
+            .catch((err) => {
+              console.log('수정실패.!!');
+            });
+        }
+        break;
+      }
+    },
     async checkEntrant() {
       var result = false;
 
       var uid = this.$store.state.uuid;
       var rid = this.rid;
 
+      var ref = this;
+
       // GET: /api/entrant/findUidAndRid
       await findUidAndRid(uid, rid).then(async ({ data }) => {
         if (data != '') {
           // POST: /api/evaluation/insert
           await insertEvaluation({ uid, rid }).then(async ({ data }) => {
+            ref.vid = data.vid;
             if (data != '') {
               // GET: /api/rtc/entrance (rabbitMQ)
               await entrance(uid, rid).then(async ({ data }) => {
