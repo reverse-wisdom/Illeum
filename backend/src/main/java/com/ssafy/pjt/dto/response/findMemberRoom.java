@@ -35,4 +35,7 @@ public class findMemberRoom {
     @Column(name = "room_type")
     private String room_type;
     
+    @Column(name = "room_password")
+    private String room_password;
+    
 }
