@@ -5,12 +5,13 @@
       <p>강의완료중인 강좌가 있음</p>
       <div v-for="(item, idx) in classLi" :key="idx">
         <div v-if="new Date(item.end_time) < Date.now() && item.room_state == '준비'">
-          <p>{{ item.rid }}</p>
-          <p>{{ $store.state.name }}</p>
-          <p>{{ item.room_name }}</p>
-          <p>{{ item.room_state }}</p>
-          <p>{{ item.room_type }}</p>
-          <p>{{ item.start_time }}</p>
+          <h3>RID:{{ item.rid }}</h3>
+          <h3>{{ $store.state.name }}</h3>
+          <h3>{{ item.room_name }}</h3>
+          <h3>{{ item.room_state }}</h3>
+          <h3>{{ item.room_type }}</h3>
+          <h3>{{ item.start_time }}</h3>
+          <v-btn color="primary" @click="learnerDataGo(item)">학생평가보기</v-btn>
         </div>
       </div>
     </div>
@@ -35,8 +36,10 @@ export default {
     if (data) {
       this.lecturerReady = true;
       this.classLi = data;
-    } else {
     }
+  },
+  methods: {
+    learnerDataGo(value) {},
   },
 };
 </script>
