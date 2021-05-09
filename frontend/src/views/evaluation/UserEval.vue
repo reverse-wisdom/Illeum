@@ -11,7 +11,7 @@
       <h2>show evaluation</h2>
       <h2>{{ date }}</h2>
       <EvalPieChart :learnData="learnData" :key="change" />
-      <EvalRadarchart :learnData="learnData" :averageData="averageData" :key="renderKey" />
+      <EvalRadarChart :learnData="learnData" :averageData="averageData" :key="renderKey" />
     </v-row>
   </div>
 </template>
@@ -20,11 +20,11 @@
 import { userEvalList } from '@/api/auth';
 import { fetchRoomname, evaluateList } from '@/api/class';
 import EvalPieChart from '@/views/components/EvalPieChart';
-import EvalRadarchart from '@/views/components/EvalRadarchart';
+import EvalRadarChart from '@/views/components/EvalRadarChart';
 export default {
   components: {
     EvalPieChart,
-    EvalRadarchart,
+    EvalRadarChart,
   },
 
   data() {
