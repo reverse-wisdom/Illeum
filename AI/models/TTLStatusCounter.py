@@ -35,48 +35,59 @@ class Node:
 
 class TTLStatusCounter:
     ttl: float
-    queue: Deque[Node]
+    queues: Dict[int, Deque[Node]]
     map: Dict[int, list]
 
-    def __init__(self, TTL: float = 600.0):
-        self.queue = deque()
+    def __init__(self, ttl: float = 600.0):
+        self.queues = dict()
         self.map = dict()
-        self.ttl = TTL
+        self.ttl = ttl
 
     def clear(self):
-        self.queue = deque()
+        self.queues = dict()
         self.map = dict()
 
     def get_total(self, uid: int) -> int:
-        self.decay()
+        self.decay(uid)
         return self.map[uid][RESULT_TYPE_TOTAL_SCODE]
 
-    def _decrease(self, uid: int, scode: int, count: int = 1) -> None:
+    def _decrease_map_count(self, uid: int, scode: int, count: int = 1) -> None:
         self.map[uid][RESULT_TYPE_TOTAL_SCODE] \
             = self.map[uid][RESULT_TYPE_TOTAL_SCODE] - count if self.map[uid][RESULT_TYPE_TOTAL_SCODE] >= count else 0
         self.map[uid][scode] \
             = self.map[uid][scode] - count if self.map[uid][scode] >= count else 0
 
-    def decay(self):
-        while len(self.queue) > 0 and (self.queue[0].reg_time + self.ttl) < time():
-            node = self.queue.popleft()
-            self._decrease(node.uid, node.scode)
+    def _decrease_queue_element(self, uid: int, scode: int, count: int = 1) -> None:
+        for el in self.queues[uid]:
+            if count <= 0:
+                break
+            if scode == el.scode:  # type을 ATTENTION으로 변환
+                el.scode = RESULT_TYPE_ATTENTION
+                count -= 1
+
+    def decay(self, uid: int):
+        while len(self.queues[uid]) > 0 and (self.queues[uid][0].reg_time + self.ttl) < time():
+            node = self.queues[uid].popleft()
+            self._decrease_map_count(node.uid, node.scode)
 
     def increase(self, uid: int, status: str) -> Tuple[int, int]:
         if uid not in self.map:  # uid에 해당하는 값이 없다면 초기화 리스트 할당
             self.map[uid] = [0 for _ in range(len(status_mapping))]
-        self.decay()  # 먼저 TTL로 소멸될 값들이 있나 체크
+            self.queues[uid] = deque()
+        self.decay(uid)  # 먼저 TTL로 소멸될 값들이 있나 체크
         self.map[uid][RESULT_TYPE_TOTAL_SCODE] += 1
         scode: int = status_mapping[status]
         self.map[uid][scode] += 1
-        self.queue.append(Node(uid, scode))
+        self.queues[uid].append(Node(uid, scode))
         return self.map[uid][scode], self.map[uid][RESULT_TYPE_TOTAL_SCODE]
 
     def decrease(self, uid: int, status: str, count: int = 1) -> None:
         if uid not in self.map:  # 존재하지 않는 유저라면 skip
             return
-        self.decay()
-        self._decrease(uid, status_mapping[status], count)
+        self.decay(uid)
+        scode: int = status_mapping[status]
+        self._decrease_map_count(uid, scode, count)
+        self._decrease_queue_element(uid, scode, count)
 
 
 ttl_status_counter = TTLStatusCounter()
@@ -100,6 +111,7 @@ if __name__ == "__main__":
             sleep(10)
         except Exception as e:
             from datetime import datetime
+
             print(str(datetime.time(datetime.now()))[:8] + str(e))
             break
     manager.shutdown()
