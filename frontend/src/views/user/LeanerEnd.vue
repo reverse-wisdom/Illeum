@@ -5,13 +5,15 @@
       <p>수강진행중인 강좌가 있음</p>
       <div v-for="(item, idx) in classLi" :key="idx">
         <div v-if="new Date(item.end_time) < Date.now() && item.room_state == '완료'">
-          <p>{{ item.rid }}</p>
-          <p>{{ item.founder }}</p>
-          <p>{{ item.room_name }}</p>
+          <h3>{{ item.vid }}</h3>
+          <h3>강의자:{{ item.founder }}</h3>
+          <h3>강의명:{{ item.room_name }}</h3>
 
-          <p>{{ item.room_type }}</p>
-          <p>{{ item.start_time }}</p>
-          <p>{{ item.end_time }}</p>
+          <h3>공개/비공개:{{ item.room_type }}</h3>
+          <h3>진행여부:{{ item.room_state }}</h3>
+          <h3>시작시간{{ item.start_time }}</h3>
+          <h3>종료시간{{ item.end_time }}</h3>
+          <hr />
         </div>
       </div>
     </div>

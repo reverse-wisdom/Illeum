@@ -3,20 +3,20 @@
     <h2>평가</h2>
     <v-row v-if="evalcheck">
       <LecEvalPieChart :LeclearnData="LeclearnData" :key="change" />
-      <LecEvalRadarchart :LeclearnData="LeclearnData" :LecAverageData="LecAverageData" :key="renderKey" />
+      <LecEvalRadarChart :LeclearnData="LeclearnData" :LecAverageData="LecAverageData" :key="renderKey" />
     </v-row>
   </div>
 </template>
 
 <script>
 import LecEvalPieChart from '@/views/components/LecEvalPieChart';
-import LecEvalRadarchart from '@/views/components/LecEvalRadarchart';
+import LecEvalRadarChart from '@/views/components/LecEvalRadarChart';
 
 import { evaluateList } from '@/api/class';
 export default {
   components: {
     LecEvalPieChart,
-    LecEvalRadarchart,
+    LecEvalRadarChart,
   },
   data() {
     return {
