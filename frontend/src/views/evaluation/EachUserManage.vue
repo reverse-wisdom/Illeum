@@ -1,7 +1,7 @@
 <template>
   <tr>
     <td>{{ idx + 1 }}</td>
-    <td><img src="http://www.foodnmed.com/news/photo/201903/18296_3834_4319.jpg" style="width:50px; height:50px;" alt="" /></td>
+    <td><v-img :src="url" id="preview" style="width:50px; height:50px;"></v-img></td>
     <td>{{ name }}</td>
     <td>{{ email }}</td>
 
@@ -98,6 +98,7 @@ export default {
   data() {
     return {
       name: '',
+      url: null,
       email: '',
       eachli: [],
       dialog: false,
@@ -128,6 +129,9 @@ export default {
         this.email = res_3.data[p].email;
       }
     }
+
+    this.url = 'https://k4d106.p.ssafy.io/profile/' + this.each.uid + '/256';
+
     const { data } = await findByRidClass(this.rid);
     this.roomData = data;
 

@@ -17,10 +17,12 @@
       <p>
         출석왕
         <span>{{ firstUser }}</span>
+        <v-img :src="'https://k4d106.p.ssafy.io/profile/' + firstUserUid + '/256'" id="preview" style="width:100px; height:100px; left:45%;"></v-img>
       </p>
       <p>
         채팅참여왕
         <span>{{ maxUser }}</span>
+        <v-img :src="'https://k4d106.p.ssafy.io/profile/' + maxUserUid + '/256'" id="preview" style="width:100px; height:100px; left:45%;"></v-img>
       </p>
     </div>
     <div>
@@ -63,6 +65,8 @@ export default {
       firstUser: '',
       fetchRoomlen: 0,
       evalcheck: false,
+      maxUserUid: '',
+      firstUserUid: '',
     };
   },
   // props: {
@@ -119,7 +123,7 @@ export default {
           var maxPartin = 0;
           var first = 100000;
           //채팅참여도1등, 출석1등 구하기
-          console.log(res.data);
+          console.log('1등', res.data);
           for (var j = 0; j < res.data.length; j++) {
             this.partinRank.push({ uid: res.data[j].uid, participation: res.data[j].participation });
             // attendRank push 메소드 시간순으로 정렬됨
@@ -131,11 +135,13 @@ export default {
             if (maxPartin < res.data[j].participation) {
               var maxPartin = res.data[j].participation;
               this.maxUser = res.data[j].name;
+              this.maxUserUid = res.data[j].uid;
             }
 
             if (first > res.data[j].ranking) {
               var first = res.data[j].ranking;
               this.firstUser = res.data[j].name;
+              this.firstUserUid = res.data[j].uid;
             }
             if (this.$store.state.uuid === res.data[j].uid) {
               this.name = this.$store.state.name;
