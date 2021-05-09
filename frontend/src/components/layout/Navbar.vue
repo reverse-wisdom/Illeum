@@ -52,7 +52,24 @@
                     <label for="">이름:</label>
                     {{ this.$store.state.name }}
                   </v-col>
-                  <v-col cols="12" sm="6"></v-col>
+                  <v-col cols="12" sm="6">
+                    <v-row>
+                      <label for="password">비밀번호:</label>
+                      <input type="password" id="password" v-model="password" disabled placeholder="*********" />
+                    </v-row>
+                    <v-row>
+                      <label for="passwordcheck">비밀번호확인:</label>
+                      <input type="password" id="passwordcheck" v-model="passwordchk" disabled value="" />
+                    </v-row>
+                    <v-row>
+                      <template v-if="correspond">
+                        <v-btn id="completed" @click="editPassword">수정완료</v-btn>
+                      </template>
+                      <template v-else>
+                        <v-btn @click="updatePassword">수정하기</v-btn>
+                      </template>
+                    </v-row>
+                  </v-col>
                   <v-col cols="12" sm="6"></v-col>
                 </v-row>
               </v-container>
@@ -142,11 +159,22 @@ export default {
       image: null,
       url: null,
       loginchk: this.$store.state.token,
+      password: '',
+      passwordchk: '',
+      correspond: false,
     };
   },
   created() {
     this.url = 'https://k4d106.p.ssafy.io/profile/' + this.$store.state.uuid + '/256';
     console.log(this.loginchk);
+  },
+  watch: {
+    passwordchk(value) {
+      this.passwordchk = value;
+      if (this.password == this.passwordchk && this.password != '' && this.passwordchk != '') {
+        this.correspond = true;
+      }
+    },
   },
   methods: {
     Preview_image() {
@@ -175,6 +203,45 @@ export default {
         console.log('로그아웃 성공');
       } else {
         console.log('로그아웃실패');
+      }
+    },
+    updatePassword() {
+      const password = document.querySelector('#password');
+      const passwordcheck = document.querySelector('#passwordcheck');
+      password.disabled = false;
+      password.focus();
+      passwordcheck.disabled = false;
+      passwordcheck.classList.add('pwdchk-input');
+      // const update = {
+      //   email: this.$store.state.email,
+      //   name: this.$store.state.name,
+      //   password,
+      // };
+      // if (passwordcheck != password) {
+      //   this.$swal({
+      //     icon: 'error',
+      //     title: '비밀번호가 일치하지 않습니다.',
+      //   });
+      // } else {
+      //   this.$swal({
+      //     icon: 'success',
+      //     title: '비밀번호가 일치합니다.',
+      //   });
+      //   const { data } = await editUser();
+      // }
+    },
+    async editPassword() {
+      const userData = {
+        email: this.$store.state.email,
+        name: this.$store.state.name,
+        paswword: this.password,
+      };
+      const { data } = await editUser(userData);
+      if (data == 'success') {
+        this.$swal({
+          icon: 'success',
+          title: '수정완료되었습니다',
+        });
       }
     },
   },
@@ -261,5 +328,11 @@ hr {
 
 .click_collapse .sidebar {
   transition: all 0.2s ease;
+}
+/* password-check */
+.pwdchk-input {
+  border: 0;
+  margin: 5px 0;
+  border-bottom: 1px solid #000;
 }
 </style>
