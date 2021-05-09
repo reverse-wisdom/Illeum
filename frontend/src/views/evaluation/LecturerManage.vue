@@ -13,6 +13,7 @@
     <v-row>
       <v-col cols="12" sm="6">
         <v-select :items="items" :label="date" solo @change="showManage"></v-select>
+        <!-- <v-select :items="items" :label="date" solo @change="selectDay"></v-select> -->
       </v-col>
     </v-row>
     <v-row>
@@ -32,7 +33,7 @@
               </thead>
 
               <tbody>
-                <EachUserManage v-for="(each, idx) in UsersEval" :key="idx" :each="each" :idx="idx" :rid="rid" :evalUserCnt="evalUserCnt"></EachUserManage>
+                <EachUserManage v-for="(each, idx) in UsersEval" :key="idx" :each="each" :idx="idx" :rid="rid" :evalUserCnt="evalUserCnt" :chipCheck="chipCheck"></EachUserManage>
               </tbody>
             </table>
           </div>
@@ -58,23 +59,6 @@
                   {{ selection.text }}
                 </v-chip>
               </v-col>
-
-              <!-- <v-chip :disabled="loading" :input-value="isLate" filter filter-icon="mdi-plus" @click:close="selected.splice(0, 1)" @click="test">
-                <v-icon left v-text="`mdi-nature`"></v-icon>
-                지각
-              </v-chip>
-              <v-chip :disabled="loading" :input-value="isAbsent" filter filter-icon="mdi-plus" @click="test1">
-                <v-icon left v-text="`mdi-nature`"></v-icon>
-                결석
-              </v-chip>
-              <v-chip :disabled="loading" :input-value="isAttendFirst" filter filter-icon="mdi-plus" @click="test2">
-                <v-icon left v-text="`mdi-nature`"></v-icon>
-                출석1등
-              </v-chip>
-              <v-chip :disabled="loading" :input-value="isChatFirst" filter filter-icon="mdi-plus" @click="test3">
-                <v-icon left v-text="`mdi-nature`"></v-icon>
-                채팅참여도1등
-              </v-chip> -->
             </v-row>
           </v-container>
 
@@ -158,10 +142,17 @@ export default {
       loading: false,
       search: '',
       selected: [],
-      isLate: false,
-      isAbsent: false,
-      isAttendFirst: false,
-      isChatFirst: false,
+      // isLate: false,
+      // isAbsent: false,
+      // isAttendFirst: false,
+      // isChatFirst: false,
+
+      chipCheck: {
+        isLate: false,
+        isAbsent: false,
+        isAttendFirst: false,
+        isChatFirst: false,
+      },
     };
   },
   computed: {
@@ -209,31 +200,14 @@ export default {
     this.items = [];
     this.manageClasscheck = false;
   },
-  async mounted() {},
   methods: {
     chipClose(selection, i) {
       this.selected.splice(i, 1);
       console.log(selection);
-      if (selection.text == '지각') this.isLate = false;
-      if (selection.text == '결석') this.isAbsent = false;
-      if (selection.text == '출석1등') this.isAttendFirst = false;
-      if (selection.text == '채팅참여1등') this.isChatFirst = false;
-    },
-    test() {
-      // console.log(val);
-      this.isLate = !this.isLate;
-    },
-    test1() {
-      // console.log(val);
-      this.isAbsent = !this.isAbsent;
-    },
-    test2() {
-      // console.log(val);
-      this.isAttendFirst = !this.isAttendFirst;
-    },
-    test3() {
-      // console.log(val);
-      this.isChatFirst = !this.isChatFirst;
+      if (selection.text == '지각') this.chipCheck.isLate = false;
+      if (selection.text == '결석') this.chipCheck.isAbsent = false;
+      if (selection.text == '출석1등') this.chipCheck.isAttendFirst = false;
+      if (selection.text == '채팅참여1등') this.chipCheck.isChatFirst = false;
     },
 
     classNameFetch() {
@@ -252,6 +226,12 @@ export default {
           return true;
         }
       }
+    },
+
+    async selectDay(selected) {
+      this.manageClasscheck = true;
+      this.manageUsers = [];
+      this.UsersEval = [];
     },
     async showManage(selected) {
       this.manageClasscheck = true;
@@ -298,13 +278,13 @@ export default {
     showSelected(item) {
       this.selected.push(item);
 
-      if (item.text == '지각') this.isLate = true;
-      if (item.text == '결석') this.isAbsent = true;
-      if (item.text == '출석1등') this.isAttendFirst = true;
-      if (item.text == '채팅참여1등') this.isChatFirst = true;
+      if (item.text == '지각') this.chipCheck.isLate = true;
+      if (item.text == '결석') this.chipCheck.isAbsent = true;
+      if (item.text == '출석1등') this.chipCheck.isAttendFirst = true;
+      if (item.text == '채팅참여1등') this.chipCheck.isChatFirst = true;
 
-      console.log(this.isLate);
-      console.log(this.isAbsent);
+      console.log(this.chipCheck);
+      // console.log(this.isAbsent);
       this.$emit('selected', this.selected);
     },
   },
