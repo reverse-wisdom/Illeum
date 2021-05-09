@@ -248,8 +248,6 @@ export default {
     },
 
     screen() {
-      var ref = this;
-
       this.connection.extra.type = 'share';
       this.connection.extra.typeAlpha = 'share';
 
