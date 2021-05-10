@@ -37,4 +37,6 @@ public class Evaluation {
     private Date attendTime;
     
     private int ranking;
+    
+    private String attend;
 }

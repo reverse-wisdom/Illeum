@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import lombok.Data;
 
 @Data
+@SuppressWarnings("all")
 public class updateEvaluationDto {
 	private Integer vid;
 	private Integer eid;
@@ -15,4 +16,5 @@ public class updateEvaluationDto {
 	private Integer afk;
 	private LocalDateTime attend_time;
 	private Integer ranking;
+	private String attend;
 }

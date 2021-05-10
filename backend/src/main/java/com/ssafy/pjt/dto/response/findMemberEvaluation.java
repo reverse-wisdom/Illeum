@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import java.util.Date;
 
 @Data
+@SuppressWarnings("all")
 public class findMemberEvaluation {
 
     private int vid;
@@ -45,5 +46,7 @@ public class findMemberEvaluation {
     private Date end_time;
     
     private String room_state;
+    
+    private String attend;
     
 }
