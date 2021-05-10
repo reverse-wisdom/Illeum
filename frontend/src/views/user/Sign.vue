@@ -16,10 +16,10 @@
         <div class="form-inner">
           <form action="#" class="login">
             <div class="field">
-              <input type="text" placeholder="Email" v-model="Lemail" required />
+              <input ref="loginId" type="text" placeholder="Email" v-model="Lemail" @keyup.enter="$refs.loginPassword.focus()" required />
             </div>
             <div class="field">
-              <input type="password" placeholder="Password" v-model="Lpassword" required />
+              <input ref="loginPassword" type="password" placeholder="Password" v-model="Lpassword" required @keyup.enter="signinUser" />
             </div>
             <div class="pass-link">
               <!-- <a href="#">Forgot password?</a> -->
@@ -174,12 +174,12 @@ export default {
       }
     },
     async signinUser() {
-      if (this.Lemail == null) {
+      if (this.Lemail == '') {
         this.$swal({
           icon: 'error',
           title: '아이디를 입력해 주세요!',
         });
-      } else if (this.Lpassword == null) {
+      } else if (this.Lpassword == '') {
         this.$swal({
           icon: 'error',
           title: '비밀번호를 입력해 주세요!',
