@@ -92,7 +92,8 @@ export default {
     //validation check
     validateEmail(value) {
       if (
-        /^([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x22([^\x0d\x22\x5c\x80-\xff]|\x5c[\x00-\x7f])*\x22)(\x2e([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x22([^\x0d\x22\x5c\x80-\xff]|\x5c[\x00-\x7f])*\x22))*\x40([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x5b([^\x0d\x5b-\x5d\x80-\xff]|\x5c[\x00-\x7f])*\x5d)(\x2e([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x5b([^\x0d\x5b-\x5d\x80-\xff]|\x5c[\x00-\x7f])*\x5d))*$/.test(
+        /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$/.test(
+          // NOSONAR
           value
         )
       ) {
@@ -103,6 +104,7 @@ export default {
     },
     validatePassword(value) {
       if (/^(?=.*\d)(?=.*[a-z])(?=.*[^\w\d\s:])([^\s]){8,16}$/.test(value)) {
+        // NOSONAR
         this.msg['password'] = true;
       } else {
         this.msg['password'] = false;
@@ -110,46 +112,6 @@ export default {
     },
     //통신
     async signup() {
-      // if (!this.msg['email']) {
-      //   this.$swal({
-      //     icon: 'error',
-      //     title: '이메일 형식이 잘못되었습니다.!',
-      //   });
-      // } else if (this.nickname == null) {
-      //   this.$swal({
-      //     icon: 'error',
-      //     title: '닉네임을 입력해주세요!',
-      //   });
-      // } else if (!this.msg['password']) {
-      //   this.$swal({
-      //     icon: 'error',
-      //     title: '비밀번호 입력시 8자리이상, 특수문자를 포함해주세요!',
-      //   });
-      // } else {
-      //   const userData = {
-      //     name: this.name,
-      //     email: this.email,
-      //     password: this.password,
-      //   };
-      //   const { data } = await register(userData);
-
-      //   if (data == 'SUCCESS') {
-      //     this.$swal({
-      //       position: 'top-end',
-      //       icon: 'success',
-      //       title: '회원가입성공!!',
-      //       showConfirmButton: false,
-      //       timer: 1500,
-      //     });
-      //     this.$router.push('/');
-      //   } else {
-      //     this.$swal({
-      //       icon: 'error',
-      //       title: '회원가입 실패 관리자에게 문의해주세요',
-      //     });
-      //   }
-      // }
-
       const userData = {
         email: this.email,
         name: this.name,
