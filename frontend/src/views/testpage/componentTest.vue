@@ -17,6 +17,7 @@
     <br />
     <br />
     <br />
+    {{ now }}
     <template>
       <v-sheet class="mx-auto" elevation="8" max-width="800">
         <v-slide-group v-model="model" class="pa-4" center-active show-arrows>
@@ -41,7 +42,12 @@ export default {
   data() {
     return {
       model: null,
+      now: '',
     };
+  },
+  created() {
+    this.now = new Date(new Date().toString().split('GMT')[0] + ' UTC').toISOString().split('.')[0] + '.000Z';
+    console.log(this.now);
   },
   methods: {
     sweetalertTest1() {
