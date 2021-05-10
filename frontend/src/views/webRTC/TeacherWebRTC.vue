@@ -3,6 +3,7 @@
     <div class="class-name">
       <h2>{{ this.$route.query.room_name }}</h2>
     </div>
+
     <div class="drag-container">
       <div class="panel-one" id="drag-left">
         <div class="videos-container"></div>
@@ -35,10 +36,40 @@
       </template>
 
       <v-btn class="mr-4" color="cyan" @click="screen">화면공유</v-btn>
+      <v-btn class="mr-4" color="cyan" @click="whiteBoard">화이트보드</v-btn>
+      <!-- 화이트보드 모달 영역 -->
+      <!-- <v-dialog v-model="dialog" width="500">
+        <template v-slot:activator="{ on, attrs }">
+                <v-btn class="mr-4" color="cyan" v-bind="attrs" v-on="on">화이트보드</v-btn>
+        </template>
+
+        <v-card>
+          <v-card-title class="headline grey lighten-2">
+            화이트보드
+          </v-card-title>
+
+          <div id="widget-container" style="position: fixed;bottom: 0;right: 0;left: 20%;height: 100%;border: 1px solid black; border-top:0; border-bottom: 0;"></div>
+
+          <v-btn color="primary" text @click="dialog = false">
+            닫기
+          </v-btn>
+        </v-card>
+      </v-dialog> -->
+
       <v-btn class="mr-4" color="cyan" @click="saveMessageLog">채팅기록저장</v-btn>
       <v-btn class="mr-4" color="cyan" @click="chatTest">채팅콘솔테스트</v-btn>
       <v-btn class="mr-4" color="error" @click="outRoom">종료</v-btn>
     </div>
+
+    <div id="modal">
+      <div class="modal_content">
+        <div id="widget-container"></div>
+        가나다
+        <v-btn class="mr-4 mb-4" color="error" @click="closeModal">닫기</v-btn>
+        <!-- <div id="widget-container" style="height: 80%;border: 1px solid black; border-top:0; border-bottom: 0;"></div> -->
+      </div>
+    </div>
+    <div class="modal_layer"></div>
   </div>
 </template>
 
@@ -52,13 +83,14 @@ export default {
       roomid: '',
       userName: '',
       connection: null,
+      designer: null,
       message: '',
       chatLog: '',
       chatResult: [],
       isAudio: true,
       isVideo: true,
       userUIDList: [],
-      // classUIDList:[],
+      dialog: false,
     };
   },
   created() {
@@ -94,6 +126,42 @@ export default {
 
     bar.addEventListener('mouseup', () => {
       document.removeEventListener('mousemove', drag);
+    });
+
+    // canvas designer section
+    this.designer = new window.CanvasDesigner();
+    this.designer.widgetHtmlURL = 'https://www.webrtc-experiment.com/Canvas-Designer/widget.html'; // you can place this file anywhere
+    this.designer.widgetJsURL = 'https://www.webrtc-experiment.com/Canvas-Designer/widget.js';
+
+    this.designer.setSelected('pencil');
+
+    this.designer.setTools({
+      pencil: true,
+      text: true,
+      image: true,
+      pdf: true,
+      eraser: true,
+      line: true,
+      arrow: true,
+      dragSingle: true,
+      dragMultiple: true,
+      arc: true,
+      rectangle: true,
+      quadratic: false,
+      bezier: true,
+      marker: true,
+      zoom: false,
+      lineWidth: false,
+      colorsPicker: false,
+      extraOptions: false,
+      code: false,
+      undo: true,
+    });
+    this.designer.appendTo(document.getElementById('widget-container'));
+
+    this.designer.addSyncListener(function(data) {
+      console.log('sync canvas');
+      ref.connection.send(data);
     });
 
     this.openRoom();
@@ -214,10 +282,20 @@ export default {
 
       // 리스너 영역
       this.connection.onmessage = function(event) {
+        // chatting
         if (event.data.chatMessage) {
           ref.appendChatMessage(event, event.extra.userFullName, event.extra.userUUID);
           return;
         }
+
+        // canvas
+        if (event.data === 'plz-sync-points') {
+          console.log(ref.designer);
+          ref.designer.sync();
+          return;
+        }
+
+        ref.designer.syncData(event.data);
       };
 
       this.connection.onstream = function(event) {
@@ -367,6 +445,18 @@ export default {
 
       console.log(rankArr);
     },
+    whiteBoard() {
+      document.querySelector('#modal').style.display = 'block';
+      // document.querySelector('.modal_wrap').style.display = 'block';
+      // document.querySelector('.black_bg').style.display = 'block';
+      // document.querySelector('#widget-container').style.display = 'block';
+    },
+    closeModal() {
+      document.querySelector('#modal').style.display = 'none';
+      // document.querySelector('.modal_wrap').style.display = 'none';
+      // document.querySelector('.black_bg').style.display = 'none';
+      // document.querySelector('#widget-container').style.display = 'none';
+    },
   },
 
   destroyed() {
@@ -466,5 +556,43 @@ body::-webkit-scrollbar {
   width: 80%;
   border: 1px solid;
   /* pointer-events: none; */
+}
+
+/* 모달 */
+#modal {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  display: none;
+}
+
+#modal h2 {
+  margin: 0;
+}
+
+#modal button {
+  display: inline-block;
+  width: 100px;
+  margin-left: calc(100% - 100px - 10px);
+}
+
+#modal .modal_content {
+  width: 100%;
+  height: 100%;
+  margin: 100px auto;
+  padding: 20px 10px;
+  background: #fff;
+  border: 2px solid #666;
+}
+
+#modal .modal_layer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: -1;
 }
 </style>
