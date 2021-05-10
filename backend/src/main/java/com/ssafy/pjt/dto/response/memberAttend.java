@@ -23,4 +23,5 @@ public class memberAttend {
     @Column(name = "attend_time")
     private Date attend_time;
     
+    private String attend;
 }

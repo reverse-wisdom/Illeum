@@ -47,4 +47,6 @@ public class findMemberEvaluation {
     
     private String room_state;
     
+    private String attend;
+    
 }

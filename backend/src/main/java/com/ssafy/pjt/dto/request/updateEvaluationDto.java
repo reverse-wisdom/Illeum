@@ -16,4 +16,5 @@ public class updateEvaluationDto {
 	private Integer afk;
 	private LocalDateTime attend_time;
 	private Integer ranking;
+	private String attend;
 }

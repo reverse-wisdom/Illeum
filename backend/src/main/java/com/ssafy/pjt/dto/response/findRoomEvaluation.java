@@ -36,4 +36,5 @@ public class findRoomEvaluation {
     
     private int ranking;
     
+    private String attend;
 }
