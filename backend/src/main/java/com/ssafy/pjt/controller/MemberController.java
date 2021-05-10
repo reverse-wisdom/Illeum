@@ -142,10 +142,11 @@ public class MemberController {
     
     @ApiOperation(value = "회원가입")
     @PostMapping(path="/user/signup")
-    public Map<String, Object> addNewUser (@RequestBody SignUpDto signup) {
+    public ResponseEntity<Object> addNewUser (@RequestBody SignUpDto signup) {
+        String regExp = "(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])";
         String email = signup.getEmail();
+        if(!email.matches(regExp)) return new ResponseEntity<>("fail",HttpStatus.BAD_REQUEST);
         Map<String, Object> map = new HashMap<>();
-        System.out.println("회원가입요청 아이디: "+email + "비번: " + signup.getPassword());
         if (memberRepository.findByEmail(email) == null) {        	            
         	Member member = new Member();        	
         	if (signup.getRole() != null && signup.getRole().equals("admin")) {
@@ -164,12 +165,12 @@ public class MemberController {
 			Queue queue = new Queue(queueName, false);
             admin.declareQueue(queue);
             
-            return map;
+            return new ResponseEntity<>(map,HttpStatus.OK);
         } else {
             map.put("success", false);
             map.put("message", "duplicated email");
         }
-        return map;
+        return new ResponseEntity<>(map,HttpStatus.OK);
     }
     
     
