@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import java.util.Date;
 
 @Data
+@SuppressWarnings("all")
 public class findRoomEvaluation {
 
     private int vid;
