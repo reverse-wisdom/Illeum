@@ -8,10 +8,11 @@
           <h3>RID:{{ item.rid }}</h3>
           <h3>강의자:{{ item.founder }}</h3>
           <h3>클래스명:{{ item.room_name }}</h3>
-
+          <v-img :src="'https://k4d106.p.ssafy.io/profile/' + item.founderUid + '/256'" id="preview" style="width:100px; height:100px; left:45%;"></v-img>
           <h3>공개여부:{{ item.room_type }}</h3>
           <h3>시작시간:{{ item.start_time }}</h3>
           <h3>종료시간:{{ item.end_time }}</h3>
+
           <v-btn color="primary" @click="attendClass(item)">수업참여</v-btn>
         </div>
       </div>

@@ -7,6 +7,7 @@
         <div v-if="new Date(item.end_time) < Date.now() && item.room_state == '준비'">
           <h3>VID:{{ item.vid }}</h3>
           <h3>강의자:{{ item.founder }}</h3>
+          <v-img :src="'https://k4d106.p.ssafy.io/profile/' + item.founderUid + '/256'" id="preview" style="width:100px; height:100px; left:45%;"></v-img>
           <h3>클래스명:{{ item.room_name }}</h3>
 
           <h3>공개여부:{{ item.room_type }}</h3>
