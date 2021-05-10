@@ -72,7 +72,11 @@
                       </v-tab-item>
                       <v-tab-item>
                         <v-card flat>
-                          <LecUserPartin></LecUserPartin>
+                          <div>{{ name }}님</div>
+                          <div>{{ item.room_name }} 수업에서 수업참여도</div>
+                          <div>총 수강생 {{ evalUserCnt }}명중에 {{ partuidRank }}위입니다</div>
+                          <div>{{ item.room_name }} 수업에서 출석을</div>
+                          <div>총 수강생 {{ evalUserCnt }}명중에 {{ attenduidRank }}위입니다</div>
                         </v-card>
                       </v-tab-item>
                     </v-tabs>
@@ -115,6 +119,12 @@ export default {
       attend: '',
       change: 0,
       renderKey: 1,
+      evalUserCnt: '',
+      partinRank: [],
+      partuidRank: '',
+      attendRank: [],
+      attenduidRank: '',
+      fetchRoomlen: 0,
       averageData: [
         {
           data: '집중',
@@ -178,6 +188,7 @@ export default {
       this.classLi = data;
     }
   },
+
   methods: {
     async evalShow(value) {
       //출결
@@ -194,7 +205,6 @@ export default {
         this.attend = '정상';
       }
       //평가
-
       this.learnData[0].per = value.attention;
       this.learnData[1].per = value.distracted;
       this.learnData[2].per = value.asleep;
@@ -206,13 +216,14 @@ export default {
       console.log(roomPartinUser);
       const res = await evaluateList(roomPartinUser);
 
-      for (var j = 0; j < res.data.length; j++) {
-        this.per1 += res.data[j].attention;
-        this.per2 += res.data[j].distracted;
-        this.per3 += res.data[j].asleep;
-        this.per4 += res.data[j].afk;
-        this.per5 += res.data[j].participation;
+      for (var i = 0; i < res.data.length; j++) {
+        this.per1 += res.data[i].attention;
+        this.per2 += res.data[i].distracted;
+        this.per3 += res.data[i].asleep;
+        this.per4 += res.data[i].afk;
+        this.per5 += res.data[i].participation;
       }
+
       //소수둘째자리에서 반올림해서 소수첫째자리까지 보여줌
       this.averageData[0].per = (this.per1 / res.data.length).toFixed(1);
       this.averageData[1].per = (this.per2 / res.data.length).toFixed(1);
@@ -221,6 +232,64 @@ export default {
       this.averageData[4].per = (this.per5 / res.data.length).toFixed(1);
       this.change++;
       this.renderKey++;
+
+      //-------------참여도구하기
+      // this.evalcheck = true;
+      this.partinRank = [];
+      this.attendRank = [];
+      this.fetchRoomlen = 0;
+
+      var maxPartin = 0;
+      var first = 100000;
+      //채팅참여도1등, 출석1등 구하기
+      console.log(res.data);
+      for (var j = 0; j < res.data.length; j++) {
+        this.partinRank.push({ uid: res.data[j].uid, participation: res.data[j].participation });
+        // attendRank push 메소드 시간순으로 정렬됨
+        this.attendRank.push({ uid: res.data[j].uid, attend_time: res.data[j].attend_time });
+        console.log(this.attendRank);
+        this.attendRank.sort(function(a, b) {
+          return a.attend_time < b.attend_time ? -1 : a.attend_time > b.attend_time ? 1 : 0;
+        });
+        if (maxPartin < res.data[j].participation) {
+          var maxPartin = res.data[j].participation;
+          this.maxUser = res.data[j].name;
+        }
+
+        if (first > res.data[j].ranking) {
+          var first = res.data[j].ranking;
+          this.firstUser = res.data[j].name;
+        }
+        if (this.each.uid === res.data[j].uid) {
+          this.name = this.$store.state.name;
+          this.fetchRoomlen = res.data.length;
+        }
+      }
+      //채팅참여도 배열 제일 많은순으로 정렬하기
+      this.partinRank.sort(function(a, b) {
+        if (a.participation < b.participation) {
+          return 1;
+        }
+        if (a.participation > b.participation) {
+          return -1;
+        }
+
+        return 0;
+      });
+
+      //로그인한 청강자 채팅참여도 순위 구하기
+      for (var k = 0; k < this.partinRank.length; k++) {
+        if (this.partinRank[k].uid === this.each.uid) {
+          this.partuidRank = this.partinRank.indexOf(this.partinRank[k]) + 1;
+        }
+      }
+      //로그인한 청강자 출석시간 순위 구하기
+      console.log(this.attendRank);
+      for (var m = 0; m < this.attendRank.length; m++) {
+        if (this.attendRank[m].uid === this.each.uid) {
+          this.attenduidRank = this.attendRank.indexOf(this.attendRank[m]) + 1;
+        }
+      }
     },
   },
 };

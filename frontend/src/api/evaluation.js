@@ -14,4 +14,8 @@ function insertEvaluation(evaluationData) {
 function updateByVid(evaluationData) {
   return posts.put('/evaluation/updateByVid', evaluationData);
 }
-export { fetchEval, insertEvaluation, updateByVid };
+//조건으로 평가조회
+function fetchCondition(roomData) {
+  return posts.post('/evaluation/roomEntrantInfo', roomData);
+}
+export { fetchEval, insertEvaluation, updateByVid, fetchCondition };

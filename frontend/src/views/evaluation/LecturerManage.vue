@@ -189,7 +189,6 @@ export default {
     const token = this.$store.state.token;
     const uuid = this.$store.state.uuid;
     const { data } = await findByUidClass(token, uuid);
-    console.log(data);
     for (var i = 0; i < data.length; i++) {
       var dates = data[i].startTime.slice(0, 10);
       this.arrayDates.push(dates);
