@@ -31,16 +31,16 @@
           </form>
           <form action="#" class="signup">
             <div class="field">
-              <input type="text" placeholder="Name" v-model="name" required />
+              <input ref="signupInput1" type="text" placeholder="Name" v-model="name" @keyup.enter="$refs.signupInput2.focus()" required />
             </div>
             <div class="field">
-              <input type="text" placeholder="Email Address" v-model="email" required />
+              <input ref="signupInput2" type="text" placeholder="Email Address" v-model="email" @keyup.enter="$refs.signupInput3.focus()" required />
             </div>
             <div class="field">
-              <input type="password" placeholder="Password" v-model="password" required />
+              <input ref="signupInput3" type="password" placeholder="Password" v-model="password" @keyup.enter="$refs.signupInput4.focus()" required />
             </div>
             <div class="field">
-              <input type="password" placeholder="Confirm password" v-model="pwdcheck" required />
+              <input ref="signupInput4" type="password" placeholder="Confirm password" v-model="pwdcheck" @keyup.enter="signup" required />
             </div>
             <div class="field btn">
               <div class="btn-layer"></div>
@@ -165,7 +165,8 @@ export default {
           showConfirmButton: false,
           timer: 1500,
         });
-        this.$router.push('/sign');
+        // this.$router.push('/sign');
+        this.$router.go();
       } else {
         this.$swal({
           icon: 'error',
