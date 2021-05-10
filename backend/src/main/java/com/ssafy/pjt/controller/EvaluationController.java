@@ -1,29 +1,38 @@
 package com.ssafy.pjt.controller;
 
+import java.sql.SQLException;
+import java.time.ZoneId;
+import java.util.Date;
+import java.util.List;
+import javax.transaction.Transactional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.ssafy.pjt.dto.Entrant;
 import com.ssafy.pjt.dto.Evaluation;
 import com.ssafy.pjt.dto.Room;
 import com.ssafy.pjt.dto.request.insertEvaluationDto;
+import com.ssafy.pjt.dto.request.insertRoomEvaluationDto;
 import com.ssafy.pjt.dto.request.updateEvaluationDto;
+import com.ssafy.pjt.dto.response.findEntrantInfo;
 import com.ssafy.pjt.repository.EntrantRepository;
 import com.ssafy.pjt.repository.EvaluationRepository;
 import com.ssafy.pjt.repository.RoomRepository;
 import com.ssafy.pjt.repository.mapper.EvaluationMapper;
 
 import io.swagger.annotations.ApiOperation;
-
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.sql.SQLException;
-import java.time.ZoneId;
-import java.util.Date;
-
-import javax.transaction.Transactional;
 
 @RestController
 @CrossOrigin
@@ -55,6 +64,19 @@ public class EvaluationController {
         return evaluationRepository.findByVid(vid);
     }
     
+    @ApiOperation(value = "조건으로 평가 조회")
+    @PostMapping(path="/roomEntrantInfo")
+    public ResponseEntity<Object> roomEntrantInfo(@RequestBody insertRoomEvaluationDto dto){
+    	try {
+    		List<findEntrantInfo> evaluation = evaluationMapper.roomEntrantInfo(dto);
+    		if(evaluation.isEmpty()) return new ResponseEntity<>("없음",HttpStatus.NO_CONTENT);
+    		return new ResponseEntity<>(evaluation,HttpStatus.OK);
+    	}
+    	catch (Exception e) {
+    		return new ResponseEntity<>("fail",HttpStatus.BAD_REQUEST);
+		}
+    	
+    }
     @ApiOperation(value = "평가 생성(출석 체크)")
     @Transactional
     @PostMapping(path="/insert")
@@ -79,9 +101,7 @@ public class EvaluationController {
 			}
 		} catch (SQLException e1) {
 			return new ResponseEntity<>("fail",HttpStatus.BAD_REQUEST);
-		}
-		
-    	
+		}   	
     }
     
     @ApiOperation(value = "평가 삭제")
