@@ -2,11 +2,12 @@ package com.ssafy.pjt.controller;
 
 import com.ssafy.pjt.dto.Entrant;
 import com.ssafy.pjt.dto.Evaluation;
-
+import com.ssafy.pjt.dto.Room;
 import com.ssafy.pjt.dto.request.insertEvaluationDto;
 import com.ssafy.pjt.dto.request.updateEvaluationDto;
 import com.ssafy.pjt.repository.EntrantRepository;
 import com.ssafy.pjt.repository.EvaluationRepository;
+import com.ssafy.pjt.repository.RoomRepository;
 import com.ssafy.pjt.repository.mapper.EvaluationMapper;
 
 import io.swagger.annotations.ApiOperation;
@@ -38,6 +39,9 @@ public class EvaluationController {
     private EntrantRepository entrantRepository;
     
     @Autowired
+    private RoomRepository roomRepository;
+    
+    @Autowired
     RedisTemplate<String, Object> redisTemplate;
     
     @ApiOperation(value = "평가 전체조회")
@@ -59,9 +63,15 @@ public class EvaluationController {
 			Entrant entrant = entrantRepository.findByUidAndRid(insertDto.getUid(), insertDto.getRid());	
 			if(entrant == null) return new ResponseEntity<>("방에 참가한 사람이 아닙니다.",HttpStatus.NO_CONTENT);
 			if(evaluationMapper.seachEvaluation(entrant.getEid()) == null) {
-				Evaluation evaluation = new Evaluation();
+				Room room = roomRepository.findByRid(insertDto.getRid());
+				Evaluation evaluation = new Evaluation();	
+				if(room.getStartTime().plusMinutes(10).isAfter(insertDto.getNow())) {
+					evaluation.setAttend("정상");
+				}else {
+					evaluation.setAttend("지각");
+				}
 				evaluation.setEid(entrant.getEid());
-				evaluation.setRanking(1000);				
+				evaluation.setRanking(1000);	
 				evaluation = evaluationRepository.save(evaluation);
 				return new ResponseEntity<>(evaluation,HttpStatus.OK);
 			}else {
@@ -105,7 +115,7 @@ public class EvaluationController {
         if(evaluationDto.getAfk() != null)evaluation.setAfk(evaluationDto.getAfk());
         if(evaluationDto.getAttend_time() != null)evaluation.setAttendTime(Date.from(evaluationDto.getAttend_time().atZone(ZoneId.systemDefault()).toInstant()));
         if(evaluationDto.getRanking() != null)evaluation.setRanking(evaluationDto.getRanking());
-        
+        if(evaluationDto.getAttend() != null)evaluation.setAttend(evaluationDto.getAttend());
     	try {
     		evaluationRepository.save(evaluation);
     	}catch (Exception e) {
