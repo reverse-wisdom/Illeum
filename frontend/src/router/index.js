@@ -4,6 +4,7 @@ import LandingComp from '../views/LandingComp.vue';
 import Landing from '../views/Landing.vue';
 import About from '../views/About.vue';
 import Navbar from '../components/layout/Navbar.vue';
+import Guide from '../views/components/Guide.vue';
 
 //user
 import Sign from '../views/user/Sign.vue';
@@ -51,6 +52,11 @@ const routes = [
     path: '/home',
     name: 'Home',
     components: { default: About, header: Navbar },
+  },
+  {
+    path: '/guide',
+    name: 'Guide',
+    components: { default: Guide },
   },
   {
     path: '/landingcomp',

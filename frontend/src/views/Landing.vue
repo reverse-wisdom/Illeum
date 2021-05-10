@@ -5,7 +5,7 @@
         <img src="@/assets/img/finallogo.png" class="logo" alt="logo" />
 
         <h1>
-          '일름'이 원격수업의 질을 체계적으로 높이겠습니다
+          일름에서 원격수업의 해답을 찾다.
         </h1>
         <div class="text-box">
           <p>
