@@ -29,8 +29,8 @@ function deleteClass(classData) {
   return posts.delete('/room/deleteByRid', classData);
 }
 //방에참여한 멤버목록조회
-function getStudents(studentData) {
-  return posts.get('/room/member', studentData);
+function getStudents(rid) {
+  return posts.get(`/room/member?rid=${rid}`);
 }
 
 //방에 참여한 멤버의 평가 목록 조회

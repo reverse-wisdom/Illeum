@@ -44,8 +44,8 @@
 
 <script>
 import push from 'push.js';
-import { updateClass } from '@/api/class';
-import { updateByVid } from '@/api/evaluation';
+import { updateClass, getStudents } from '@/api/class';
+import { insertAbsent } from '@/api/evaluation';
 export default {
   data() {
     return {
@@ -57,6 +57,8 @@ export default {
       chatResult: [],
       isAudio: true,
       isVideo: true,
+      userUIDList: [],
+      // classUIDList:[],
     };
   },
   created() {
@@ -64,6 +66,7 @@ export default {
     const room_name = this.$route.query.room_name;
     this.roomid = room_name;
     this.userName = name;
+    this.getStudentList();
   },
   mounted() {
     let cdn1 = document.createElement('script');
@@ -231,8 +234,12 @@ export default {
         var infoBar = document.getElementById('onUserStatusChanged');
         var names = [];
         ref.connection.getAllParticipants().forEach(function(participantId) {
-          var user = ref.connection.peers[participantId];
-          names.push(user.extra.userFullName);
+          if (ref.userUIDList.includes(event.extra.userUUID)) {
+            const index = ref.userUIDList.indexOf(event.extra.userUUID);
+            if (index > -1) {
+              ref.userUIDList.splice(index, 1);
+            }
+          }
         });
         if (!names.length) {
           names = ['Only You'];
@@ -259,8 +266,28 @@ export default {
 
       this.connection.videosContainer = document.querySelector('.share-videos-container');
     },
+
+    async getStudentList() {
+      await getStudents(this.$route.query.rid).then(({ data }) => {
+        for (let index = 0; index < data.length; index++) {
+          this.userUIDList.push(data[index].uid);
+        }
+      });
+    },
+
     async outRoom() {
       var ref = this;
+
+      if (!this.userUIDList.empty) {
+        for (let index = 0; index < this.userUIDList.length; index++) {
+          await insertAbsent({ rid: this.$route.query.rid, uid: this.userUIDList[index] }).then(({ data }) => {
+            if (data != null) {
+              console.log(data.eid + ' 결석처리완료');
+            }
+          });
+        }
+      }
+
       var end_time = new Date(new Date().toString().split('GMT')[0] + ' UTC').toISOString().split('.')[0] + '.000Z';
       await updateClass({ rid: this.$route.query.rid, room_state: '준비', end_time })
         .then(({ data }) => {
@@ -339,16 +366,6 @@ export default {
       }
 
       console.log(rankArr);
-
-      // for (let index = 0; index < rankArr.length; index++) {
-      //   var evaluationData =
-
-      //   {'participation': rankArr[i].participation,
-      //   'rank': rankArr[i].rank,
-
-      //   }
-      //       await updateByVid();
-      // }
     },
   },
 
