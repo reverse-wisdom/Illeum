@@ -94,7 +94,8 @@ export default {
             });
           } else {
             try {
-              const { data } = await updateClass({ rid: value.rid, room_state: '진행' }); // PUT: /api/room/updateByRid
+              var start_time = new Date(new Date().toString().split('GMT')[0] + ' UTC').toISOString().split('.')[0] + '.000Z';
+              const { data } = await updateClass({ rid: value.rid, room_state: '진행', start_time }); // PUT: /api/room/updateByRid
               if (data == 'success') {
                 const { data } = await start(value.rid); // GET: /api/rtc/start (rabbitMQ)
                 console.log(data);
@@ -110,7 +111,8 @@ export default {
         }
       } else {
         try {
-          const { data } = await updateClass({ rid: value.rid, room_state: '진행' }); // PUT: /api/room/updateByRid
+          var start_time = new Date(new Date().toString().split('GMT')[0] + ' UTC').toISOString().split('.')[0] + '.000Z';
+          const { data } = await updateClass({ rid: value.rid, room_state: '진행', start_time }); // PUT: /api/room/updateByRid
           if (data == 'success') {
             const { data } = await start(value.rid); // GET: /api/rtc/start (rabbitMQ)
             if (data == 'success') this.$router.push({ name: 'TeacherWebRTC', query: { room_name: value.room_name, rid: value.rid } });
@@ -144,53 +146,6 @@ export default {
         }
       } else {
         this.$router.push({ name: 'StudentWebRTC', query: { room_name: value.room_name, rid: value.rid } });
-      }
-    },
-    async openOrClose(value) {
-      if (value.room_type == '비공개') {
-        const { value: room_password } = await this.$swal({
-          icon: 'question',
-          title: '비밀번호를 입력해 주세요',
-          input: 'text',
-          showCancelButton: true,
-        });
-
-        if (room_password != undefined) {
-          if (room_password != value.room_password) {
-            this.$swal({
-              icon: 'error',
-              title: '클래스 비밀번호가 일치하지 않습니다.!!',
-            });
-          } else {
-            if (value.uid == this.$store.state.uuid) {
-              try {
-                const { data } = await updateClass({ rid: value.rid, room_state: '진행' });
-                if (data == 'success') this.$router.push({ name: 'ClassMaster', query: { room_name: value.room_name, rid: value.rid } });
-              } catch {
-                this.$swal({
-                  icon: 'error',
-                  title: '화상수업 생성 오류.!!',
-                });
-              }
-            } else {
-              this.$router.push({ name: 'Class', query: { room_name: value.room_name, rid: value.rid } });
-            }
-          }
-        }
-      } else {
-        if (value.uid == this.$store.state.uuid) {
-          try {
-            const { data } = await updateClass({ rid: value.rid, room_state: '진행' });
-            if (data == 'success') this.$router.push({ name: 'ClassMaster', query: { room_name: value.room_name, rid: value.rid } });
-          } catch {
-            this.$swal({
-              icon: 'error',
-              title: '화상수업 생성 오류.!!',
-            });
-          }
-        } else {
-          this.$router.push({ name: 'Class', query: { room_name: value.room_name, rid: value.rid } });
-        }
       }
     },
   },

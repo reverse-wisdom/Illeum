@@ -261,7 +261,8 @@ export default {
     },
     async outRoom() {
       var ref = this;
-      await updateClass({ rid: this.$route.query.rid, room_state: '준비' })
+      var end_time = new Date(new Date().toString().split('GMT')[0] + ' UTC').toISOString().split('.')[0] + '.000Z';
+      await updateClass({ rid: this.$route.query.rid, room_state: '준비', end_time })
         .then(({ data }) => {
           ref.chatTest();
 
