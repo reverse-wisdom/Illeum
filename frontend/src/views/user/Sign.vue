@@ -198,7 +198,7 @@ export default {
           password: this.Lpassword,
         };
         // console.log(userData);
-        this.$store.dispatch('LOGIN', userData);
+        await this.$store.dispatch('LOGIN', userData);
         console.log(this.$store.state.token);
         console.log(this.$store.state.name);
         console.log(this.$store.state.role);
