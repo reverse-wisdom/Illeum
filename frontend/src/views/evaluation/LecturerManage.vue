@@ -88,6 +88,7 @@ import { fetchRoomname, findByUidClass } from '@/api/class';
 import { fetchEval } from '@/api/evaluation';
 import { partinAll } from '@/api/entrant';
 import { getUsers } from '@/api/auth';
+import { fetchCondition } from '@/api/evaluation';
 import EachUserManage from '@/views/evaluation/EachUserManage.vue';
 // import ChipSearch from '@/views/evaluation/ChipSearch.vue';
 export default {
@@ -210,14 +211,11 @@ export default {
     },
 
     classNameFetch() {
-      this.roomName = [];
       for (var i = 0; i < this.manageClass.length; i++) {
-        if (this.manageClass[i].startTime.slice(0, 10) === this.date && !this.roomName.includes(this.manageClass[i].roomName)) {
-          this.roomName.push(this.manageClass[i].roomName);
+        if (this.manageClass[i].startTime.slice(0, 10) === this.date && !this.items.includes(this.manageClass[i].roomName)) {
+          this.items.push(this.manageClass[i].roomName);
         }
       }
-
-      this.items = this.roomName;
     },
     allowedDates(val) {
       for (var i = 0; i < this.arrayDates.length; i++) {
@@ -241,28 +239,19 @@ export default {
           const { data } = await fetchRoomname(this.manageClass[i].roomName);
           this.rid = data[0].rid;
           console.log('방번호', this.rid);
-          const res = await partinAll();
-          for (var j = 0; j < res.data.length; j++) {
-            if (res.data[j].rid === this.rid) {
-              this.manageUsers.push({ uid: res.data[j].uid, eid: res.data[j].eid });
-            }
-          }
-          console.log(this.manageUsers);
-          const res_2 = await fetchEval();
-          console.log(res_2);
-          for (var k = 0; k < this.manageUsers.length; k++) {
-            for (var m = 0; m < res_2.data.length; m++) {
-              if (res_2.data[m].eid == this.manageUsers[k].eid) {
-                //나중에 entrant 유저 정보도 객체형태로 넣어야함
-                this.UsersEval.push(res_2.data[m]);
-                this.UsersEval[this.UsersEval.length - 1]['uid'] = this.manageUsers[k].uid;
-              }
-            }
-          }
+          const roomData = {
+            isAbsent: 0,
+            isAttendFist: 0,
+            isChatFirst: 0,
+            isLate: 0,
+            rid: data[0].rid,
+          };
+          const res = await fetchCondition(roomData);
+          console.log(res.data);
+          this.UsersEval = res.data;
+          this.evalUserCnt = this.UsersEval.length;
         }
-        this.evalUserCnt = this.UsersEval.length;
       }
-      console.log(this.UsersEval);
     },
     //chip
     next() {
