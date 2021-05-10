@@ -2,8 +2,8 @@
   <tr>
     <td>{{ idx + 1 }}</td>
     <td><v-img :src="url" id="preview" style="width:50px; height:50px;"></v-img></td>
-    <td>{{ name }}</td>
-    <td>{{ email }}</td>
+    <td>{{ each.name }}</td>
+    <td>{{ each.email }}</td>
 
     <td>
       <v-dialog v-if="this.$store.state.token" v-model="dialog" persistent max-width="1200px">
@@ -15,7 +15,7 @@
         <v-card>
           <v-card-title>
             <span class="headline">
-              <span>{{ name }}님의</span>
+              <span>{{ each.name }}님의</span>
               Evaluation
             </span>
           </v-card-title>
@@ -24,7 +24,7 @@
               <v-card>
                 <v-toolbar flat color="primary" dark>
                   <v-toolbar-title>
-                    <span>{{ name }}님의</span>
+                    <span>{{ each.name }}님의</span>
                     Evaluation
                   </v-toolbar-title>
                 </v-toolbar>
@@ -50,7 +50,9 @@
 
                   <v-tab-item>
                     <v-card flat>
-                      <LecUserAttend :each="each" :attend="attend"></LecUserAttend>
+                      <h2>출결</h2>
+                      <h3>출석시간:{{ each.attend_time }}</h3>
+                      <h3>지각여부:{{ each.attend }}</h3>
                     </v-card>
                   </v-tab-item>
                   <v-tab-item>
@@ -77,29 +79,25 @@
       </v-dialog>
     </td>
 
-    <td>{{ attend }}</td>
+    <td>{{ each.attend }}</td>
   </tr>
 </template>
 
 <script>
-import LecUserAttend from '@/views/evaluation/LecUserAttend';
 import LecUserEval from '@/views/evaluation/LecUserEval';
 import LecUserPartin from '@/views/evaluation/LecUserPartin';
-import EachUserManageTableData from '@/views/evaluation/EachUserManageTableData';
-import { getUsers } from '@/api/auth';
+
 import { findByRidClass } from '@/api/class';
+
 export default {
   components: {
-    LecUserAttend,
     LecUserEval,
     LecUserPartin,
-    EachUserManageTableData,
   },
   data() {
     return {
-      name: '',
       url: null,
-      email: '',
+
       eachli: [],
       dialog: false,
       attend: '',
@@ -125,34 +123,11 @@ export default {
     },
   },
   async created() {
-    const res_3 = await getUsers();
-    for (var p = 0; p < res_3.data.length; p++) {
-      if (this.each.uid === res_3.data[p].uid) {
-        this.name = res_3.data[p].name;
-        this.email = res_3.data[p].email;
-      }
-    }
-
     this.url = 'https://k4d106.p.ssafy.io/profile/' + this.each.uid + '/256';
 
     const { data } = await findByRidClass(this.rid);
     this.roomData = data;
-
-    console.log(this.roomData.start_time);
-    this.saveTime = this.$moment(this.roomData.start_time)
-      .add(10, 'm')
-      .format('YYYY-MM-DD HH:mm:ss');
-
-    console.log(this.saveTime);
-    console.log(this.each.attendTime);
-    if (this.each.attendTime > this.saveTime) {
-      this.attend = '지각';
-    } else if (this.each.attendTime == '' || this.each.attendTime == undefined || this.each.attendTime == null) {
-      this.attend = '결석';
-    } else {
-      this.attend = '정상';
-    }
-    this.$emit('goSearch', this.attend);
+    this.$emit('goSearch', this.each.attend);
   },
   methods: {},
 };
