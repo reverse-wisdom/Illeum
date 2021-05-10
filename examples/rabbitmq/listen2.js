@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
-// var amqp = require('amqplib/callback_api');
-import amqp from('amqplib/callback_api');
+var amqp = require('amqplib/callback_api');
+// import amqp from('amqplib/callback_api');
 
 amqp.connect('amqp://illeum:illeum123@k4d106.p.ssafy.io:5672', function(error0, connection) {
     if (error0) {
@@ -12,10 +12,10 @@ amqp.connect('amqp://illeum:illeum123@k4d106.p.ssafy.io:5672', function(error0, 
             throw error1;
         }
 
-        var queue = 'member.2';
+        var queue = 'member.12';
 
         channel.assertQueue(queue, {
-            durable: false
+            durable: true
         });
 
         console.log(" [*] Waiting for messages in %s. To exit press CTRL+C", queue);

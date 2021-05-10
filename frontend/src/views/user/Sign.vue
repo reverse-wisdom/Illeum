@@ -54,7 +54,38 @@
 </template>
 
 <script>
+class AlertRabbitMQSocket {
+  constructor(uid) {
+    this.uid = uid;
+    let ws = new WebSocket('ws://k4d106.p.ssafy.io:15674/ws');
+    this.client = Stomp.over(ws);
+    this.client.debug = () => {};
+    this.login = 'illeum-guest';
+    this.passcode = 'illeum-guest';
+  }
+
+  connect() {
+    this.client.connect(
+      this.login,
+      this.passcode,
+      () => {
+        this.client.subscribe(`/amq/queue/member.${this.uid}`, (res) => {
+          console.log('구독으로 받은 메시지', res.body);
+          push.create(res.body);
+
+        }); //큐명을 지정한경우 시 사용
+      },
+      (error) => {
+        console.log('소켓 연결 실패', error);
+        console.dir(error);
+      },
+      '/'
+    );
+  }
+}
 import { registerUser } from '@/api/auth';
+import push from 'push.js';
+
 export default {
   name: 'Sign',
   data() {
@@ -194,6 +225,8 @@ export default {
         console.log(this.$store.state.token);
         console.log(this.$store.state.name);
         console.log(this.$store.state.role);
+        const mqSocket = new AlertRabbitMQSocket(this.$store.state.uuid);
+        mqSocket.connect();
       }
     },
   },
