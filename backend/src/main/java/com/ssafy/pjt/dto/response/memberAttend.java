@@ -8,6 +8,7 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Data
+@SuppressWarnings("all")
 public class memberAttend {
 
     private int uid;
