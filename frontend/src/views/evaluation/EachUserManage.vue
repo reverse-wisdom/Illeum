@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <tr>
     <td>{{ idx + 1 }}</td>
     <td><v-img :src="url" id="preview" style="width:50px; height:50px;"></v-img></td>
     <td>{{ name }}</td>
@@ -78,7 +78,7 @@
     </td>
 
     <td>{{ attend }}</td>
-  </div>
+  </tr>
 </template>
 
 <script>
