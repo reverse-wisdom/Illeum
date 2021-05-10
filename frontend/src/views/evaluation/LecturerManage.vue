@@ -85,9 +85,6 @@
 
 <script>
 import { fetchRoomname, findByUidClass } from '@/api/class';
-import { fetchEval } from '@/api/evaluation';
-import { partinAll } from '@/api/entrant';
-import { getUsers } from '@/api/auth';
 import { fetchCondition } from '@/api/evaluation';
 import EachUserManage from '@/views/evaluation/EachUserManage.vue';
 // import ChipSearch from '@/views/evaluation/ChipSearch.vue';
@@ -191,7 +188,16 @@ export default {
     const uuid = this.$store.state.uuid;
     const { data } = await findByUidClass(token, uuid);
     for (var i = 0; i < data.length; i++) {
-      var dates = data[i].startTime.slice(0, 10);
+      const rid = data[i].rid;
+      const roomData = {
+        isAbsent: 0,
+        isAttendFist: 0,
+        isChatFirst: 0,
+        isLate: 0,
+        rid,
+      };
+      const res = await fetchCondition(roomData);
+      var dates = res.data[0].eval_date.slice(0, 10);
       this.arrayDates.push(dates);
     }
     console.log(this.arrayDates);
