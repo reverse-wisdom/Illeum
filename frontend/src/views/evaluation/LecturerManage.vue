@@ -2,7 +2,8 @@
   <div class="manage">
     <v-row>
       <v-container>{{ this.$store.state.uuid }}의 학생관리</v-container>
-      <v-date-picker v-model="date" @click:date="classNameFetch" :landscape="landscape" locale="ko-kr" :allowed-dates="allowedDates" class="mt-4" min="1900-04-01" max="2100-10-30"></v-date-picker>
+      <v-date-picker v-model="date" @click:date="classNameFetch" :landscape="true" locale="ko-kr" :allowed-dates="allowedDates" class="mt-4" min="1900-04-01" max="2100-10-30"></v-date-picker>
+      <!-- <v-date-picker v-model="date" :landscape="true" locale="ko-kr" :allowed-dates="allowedDates" class="mt-4" min="1900-04-01" max="2100-10-30"></v-date-picker> -->
     </v-row>
     <v-row>
       <div style="margin-top: 100px;">
@@ -12,8 +13,8 @@
     </v-row>
     <v-row>
       <v-col cols="12" sm="6">
-        <v-select :items="items" :label="date" solo @change="showManage"></v-select>
-        <!-- <v-select :items="items" :label="date" solo @change="selectDay"></v-select> -->
+        <v-select :items="roomNameList" :label="roomNameList[0]" solo @change="showAll"></v-select>
+        <!-- <v-select :items="roomNameList" :label="date" solo></v-select> -->
       </v-col>
     </v-row>
     <v-row>
@@ -29,11 +30,26 @@
                   <th>E-MAIL</th>
                   <th>Evaluation</th>
                   <th>Attendance</th>
+                  <th>date</th>
+                  <th>attend</th>
+                  <th>ranking</th>
+                  <th>participation</th>
                 </tr>
               </thead>
 
               <tbody>
-                <EachUserManage v-for="(each, idx) in UsersEval" :key="idx" :each="each" :idx="idx" :rid="rid" :evalUserCnt="evalUserCnt" :chipCheck="chipCheck"></EachUserManage>
+                <tr v-for="(each, idx) in userEval" :key="idx">
+                  <td>{{ idx + 1 }}</td>
+                  <td>이미지공간</td>
+                  <td>{{ each.name }}</td>
+                  <td>{{ each.email }}</td>
+                  <td>Evaluation</td>
+                  <td>Attendance</td>
+                  <td>{{ each.eval_date }}</td>
+                  <td>{{ each.attend }}</td>
+                  <td>{{ each.ranking }}</td>
+                  <td>{{ each.participation }}</td>
+                </tr>
               </tbody>
             </table>
           </div>
@@ -78,49 +94,37 @@
           <v-divider></v-divider>
         </v-card>
       </v-col>
-      <v-col cols="12" sm="4"></v-col>
     </v-row>
   </div>
 </template>
 
 <script>
-import { fetchRoomname, findByUidClass } from '@/api/class';
-import { fetchEval } from '@/api/evaluation';
-import { partinAll } from '@/api/entrant';
-import { getUsers } from '@/api/auth';
-import EachUserManage from '@/views/evaluation/EachUserManage.vue';
-// import ChipSearch from '@/views/evaluation/ChipSearch.vue';
+import { fetchCondition } from '@/api/evaluation';
+import { userClasslist } from '@/api/auth';
+import { findByUidClass } from '@/api/class';
 export default {
-  components: {
-    EachUserManage,
-  },
   data() {
     return {
-      name: '',
-      manageClass: [],
-      items: [],
-      landscape: true,
+      chipCheck: {
+        isLate: false,
+        isAbsent: false,
+        isAttendFirst: false,
+        isChatFirst: false,
+      },
       date: '',
-      menu: false,
-      mindate: '2021-04-01',
-      maxdate: '2021-04-30',
-      attend: '',
-      arrayDates: [],
-      roomName: [],
-      rid: '',
-      selectedRoomName: '',
-      maxUser: '',
-      firstUser: '',
-      evalUserCnt: '',
-      fetchRoomlen: 0,
-      manageUsers: [],
-      UsersEval: [
-        // {
-        //   userEval: null,
-        //   user: null,
-        // },
-      ],
-      manageClasscheck: false,
+
+      dateList: [], // rid date pair list
+      classList: [], // for rid list
+      roomNameList: [], // for select box list
+      userEval: [], // for table list
+
+      userEvalAll: [],
+
+      ridSelected: '',
+
+      loading: false,
+      selected: [],
+      search: '',
       chips: [
         {
           text: '지각',
@@ -139,20 +143,6 @@ export default {
           icon: 'mdi-bike',
         },
       ],
-      loading: false,
-      search: '',
-      selected: [],
-      // isLate: false,
-      // isAbsent: false,
-      // isAttendFirst: false,
-      // isChatFirst: false,
-
-      chipCheck: {
-        isLate: false,
-        isAbsent: false,
-        isAttendFirst: false,
-        isChatFirst: false,
-      },
     };
   },
   computed: {
@@ -184,87 +174,75 @@ export default {
     selected() {
       this.search = '';
     },
+    // chipCheck() {
+    //   this.getList(this.selected);
+    // },
   },
   async created() {
     const token = this.$store.state.token;
     const uuid = this.$store.state.uuid;
-    const { data } = await findByUidClass(token, uuid);
-    for (var i = 0; i < data.length; i++) {
-      var dates = data[i].startTime.slice(0, 10);
-      this.arrayDates.push(dates);
+    await findByUidClass(token, uuid).then(({ data }) => {
+      for (let index = 0; index < data.length; index++) {
+        // this.classList.push({ rid: data[index].rid, room_name: data[index] });
+        this.classList.push(data[index]);
+      }
+    });
+    for (let i = 0; i < this.classList.length; i++) {
+      await fetchCondition({ rid: this.classList[i].rid }).then(({ data }) => {
+        this.userEvalAll.push(data);
+        for (let j = 0; j < data.length; j++) {
+          this.dateList.push({ date: data[j].eval_date.slice(0, 10), classInfo: this.classList[i], data });
+        }
+      });
     }
-    console.log(this.arrayDates);
-    this.manageClass = data;
-    console.log(this.manageClass);
-    this.items = [];
-    this.manageClasscheck = false;
   },
   methods: {
-    chipClose(selection, i) {
-      this.selected.splice(i, 1);
-      console.log(selection);
-      if (selection.text == '지각') this.chipCheck.isLate = false;
-      if (selection.text == '결석') this.chipCheck.isAbsent = false;
-      if (selection.text == '출석1등') this.chipCheck.isAttendFirst = false;
-      if (selection.text == '채팅참여1등') this.chipCheck.isChatFirst = false;
-    },
-
-    classNameFetch() {
-      this.roomName = [];
-      for (var i = 0; i < this.manageClass.length; i++) {
-        if (this.manageClass[i].startTime.slice(0, 10) === this.date && !this.roomName.includes(this.manageClass[i].roomName)) {
-          this.roomName.push(this.manageClass[i].roomName);
-        }
-      }
-
-      this.items = this.roomName;
-    },
     allowedDates(val) {
-      for (var i = 0; i < this.arrayDates.length; i++) {
-        if (this.arrayDates[i] == val) {
+      for (var i = 0; i < this.dateList.length; i++) {
+        // console.log(this.dateList[i]);
+        if (this.dateList[i].date == val) {
           return true;
         }
       }
     },
 
-    async selectDay(selected) {
-      this.manageClasscheck = true;
-      this.manageUsers = [];
-      this.UsersEval = [];
+    classNameFetch() {
+      this.roomNameList = [];
+      this.ridSelected = '';
+      // this.userEval = [];
+      for (let index = 0; index < this.dateList.length; index++) {
+        if (this.dateList[index].date == this.date) {
+          console.log(this.dateList[index].classInfo.roomName);
+          this.roomNameList.push(this.dateList[index].classInfo.roomName);
+          this.ridSelected = this.dateList[index].classInfo.rid;
+        }
+      }
     },
-    async showManage(selected) {
-      this.manageClasscheck = true;
-      this.manageUsers = [];
-      this.UsersEval = [];
-      for (var i = 0; i < this.manageClass.length; i++) {
-        if (this.manageClass[i].roomName === selected) {
-          const { data } = await fetchRoomname(this.manageClass[i].roomName);
-          this.rid = data[0].rid;
-          console.log('방번호', this.rid);
-          const res = await partinAll();
-          for (var j = 0; j < res.data.length; j++) {
-            if (res.data[j].rid === this.rid) {
-              this.manageUsers.push({ uid: res.data[j].uid, eid: res.data[j].eid });
-            }
-          }
-          console.log(this.manageUsers);
-          const res_2 = await fetchEval();
-          console.log(res_2);
-          for (var k = 0; k < this.manageUsers.length; k++) {
-            for (var m = 0; m < res_2.data.length; m++) {
-              if (res_2.data[m].eid == this.manageUsers[k].eid) {
-                //나중에 entrant 유저 정보도 객체형태로 넣어야함
-                this.UsersEval.push(res_2.data[m]);
-                this.UsersEval[this.UsersEval.length - 1]['uid'] = this.manageUsers[k].uid;
+
+    showAll(roomName) {
+      this.userEval = [];
+      for (let i = 0; i < this.dateList.length; i++) {
+        if (this.dateList[i].date == this.date) {
+          if (this.dateList[i].classInfo.roomName == roomName) {
+            for (let j = 0; j < this.dateList[i].data.length; j++) {
+              console.log(this.dateList[i].data[j]);
+              if (this.dateList[i].data[j].eval_date.slice(0, 10) == this.date) {
+                this.userEval.push(this.dateList[i].data[j]);
               }
             }
           }
         }
-        this.evalUserCnt = this.UsersEval.length;
       }
-      console.log(this.UsersEval);
+      console.log(this.userEval);
     },
-    //chip
+    chipClose(selection, i) {
+      this.selected.splice(i, 1);
+      if (selection.text == '지각') this.chipCheck.isLate = false;
+      if (selection.text == '결석') this.chipCheck.isAbsent = false;
+      if (selection.text == '출석1등') this.chipCheck.isAttendFirst = false;
+      if (selection.text == '채팅참여1등') this.chipCheck.isChatFirst = false;
+      this.getList(this.chipCheck);
+    },
     next() {
       this.loading = true;
 
@@ -282,9 +260,23 @@ export default {
       if (item.text == '출석1등') this.chipCheck.isAttendFirst = true;
       if (item.text == '채팅참여1등') this.chipCheck.isChatFirst = true;
 
-      console.log(this.chipCheck);
-      // console.log(this.isAbsent);
+      this.getList(this.chipCheck);
       this.$emit('selected', this.selected);
+    },
+    async getList(chipCheck) {
+      this.userEval = [];
+      var isAbsent = chipCheck.isAbsent ? 1 : 0;
+      var isLate = chipCheck.isLate ? 1 : 0;
+      var isAttendFirst = chipCheck.isAttendFirst ? 1 : 0;
+      var isChatFirst = chipCheck.isChatFirst ? 1 : 0;
+      await fetchCondition({ rid: this.ridSelected, isAbsent, isLate, isAttendFirst, isChatFirst }).then(({ data }) => {
+        for (let i = 0; i < data.length; i++) {
+          if (this.date == data.eval_date) {
+            this.userEval.push(data[i]);
+          }
+        }
+      });
+      console.log(this.userEval);
     },
   },
 };
