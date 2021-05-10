@@ -25,16 +25,16 @@
 		on m.uid = e.uid and e.rid = #{rid}
 		join evaluation ev
 		on e.eid = ev.eid
-		<trim prefix="where" suffixOverrides="or"  suffix=";">
-			<if test= "isLate == 1">ev.attend = "정상" or</if>
-			<if test= "isAbsent == 1">ev.attend = "지각" or</if>
-			<if test= "isAttendFist == 1">ev.ranking=1 or</if>
+		<trim prefix="where" suffixOverrides="and"  suffix=";">
+			<if test= "isLate == 1">ev.attend = "정상" and</if>
+			<if test= "isAbsent == 1">ev.attend = "지각" and</if>
+			<if test= "isAttendFist == 1">ev.ranking=1 and</if>
 			<if test= "isChatFirst == 1">ev.participation = (select max(evv.participation) 
 										from room rr join entrant ee 
 										on ee.rid = rr.rid
 										join evaluation evv 
 										on ee.eid = evv.eid
-										where rr.rid = #{rid}) or</if>
+										where rr.rid = #{rid}) and</if>
 		</trim>
 	</select>
 
