@@ -221,7 +221,7 @@ export default {
   height: 100%;
   width: 100%;
   place-items: center;
-  /* background: no-repeat center/100% url('../../assets/img/signbg.jpg'); */
+  background: no-repeat center/100% url('../../assets/img/e-learningBG2.jpg');
   /* background: -webkit-linear-gradient(90deg, #0162c8, #55e7fc); */
 }
 ::selection {
@@ -234,7 +234,7 @@ export default {
   background: #fff;
   padding: 30px;
   border-radius: 40px;
-  box-shadow: 13px 13px 20px #cbced1, -13px -13px 20px #ffffff;
+  box-shadow: 13px 13px 20px #cbced1, -13px -13px 20px #0000;
 }
 .wrapper .title-text {
   display: flex;
@@ -242,8 +242,8 @@ export default {
 }
 .wrapper .title {
   width: 50%;
-  font-size: 35px;
-  font-weight: 600;
+  font-size: 50px;
+  font-weight: 900;
   text-align: center;
   transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
