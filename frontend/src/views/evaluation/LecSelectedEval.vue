@@ -1,14 +1,18 @@
 <template>
   <div class="seletedManage">
-    <h2>myPage에서 넘긴 수강데이터</h2>
+    <div
+      style="display:flex; flex-direction:column; align-items:center; margin-left:-40%; 
+    "
+    >
+      <h2>myPage에서 넘긴 수강데이터</h2>
+      <h4>{{ this.$store.state.name }}의 학생관리</h4>
+      <h4>넘겨준 RID:{{ this.$route.query.roomData.rid }}</h4>
+      <h4>클래스명:{{ this.$route.query.roomData.room_name }}의 평가데이터</h4>
+    </div>
     <v-row>
-      <v-container>{{ this.$store.state.name }}의 학생관리</v-container>
-      <v-container>넘겨준 RID:{{ this.$route.query.roomData.rid }}</v-container>
-      <v-container>클래스명:{{ this.$route.query.roomData.room_name }}의 평가데이터</v-container>
-      <v-row justify="center">
-        <v-date-picker v-model="date" @click:date="showManage" :landscape="landscape" locale="ko-kr" :allowed-dates="allowedDates" class="mt-4" min="1900-04-01" max="2100-10-30"></v-date-picker>
-      </v-row>
+      <v-date-picker v-model="date" @click:date="showManage" :landscape="landscape" locale="ko-kr" :allowed-dates="allowedDates" class="mt-4" min="1900-04-01" max="2100-10-30"></v-date-picker>
     </v-row>
+
     <v-row>
       <div>
         <h2>{{ date }}</h2>
@@ -39,7 +43,7 @@
               <tbody>
                 <tr v-for="(each, idx) in UsersEval" :key="idx">
                   <td>{{ idx + 1 }}</td>
-                  <td><v-img :src="url" id="preview" style="width:50px; height:50px;"></v-img></td>
+                  <td><v-img :src="'https://k4d106.p.ssafy.io/profile/' + each.uid + '/256'" id="preview" style="width:50px; height:50px; "></v-img></td>
                   <td>
                     {{ each.name }}
                   </td>
@@ -47,7 +51,7 @@
                     {{ each.email }}
                   </td>
                   <td>
-                    <v-btn color="primary" dark v-bind="attrs" v-on="on">
+                    <v-btn color="primary" dark>
                       DETAIL
                     </v-btn>
                   </td>
@@ -126,8 +130,6 @@ export default {
       UsersEval: [],
       url: null,
       landscape: true,
-      mindate: '2021-04-01',
-      maxdate: '2021-04-30',
       chipCheck: {
         isLate: false,
         isAbsent: false,

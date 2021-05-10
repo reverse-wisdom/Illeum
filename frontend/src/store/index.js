@@ -70,18 +70,20 @@ export default new Vuex.Store({
 
   actions: {
     async LOGIN({ commit }, userData) {
-      const { data } = await loginUser(userData);
-      // console.log(data.accessToken);
-      console.log(data);
-      if (data.accessToken !== '') {
-        commit('setToken', data.accessToken);
-        commit('setUuid', data.member.uid);
-        commit('setEmail', data.member.email);
-        commit('setName', data.member.name);
-        commit('setRole', data.member.role);
+      try {
+        const { data } = await loginUser(userData);
+        // console.log(data.accessToken);
+        console.log(data);
+        if (data.accessToken !== '') {
+          commit('setToken', data.accessToken);
+          commit('setUuid', data.member.uid);
+          commit('setEmail', data.member.email);
+          commit('setName', data.member.name);
+          commit('setRole', data.member.role);
 
-        router.push('/home');
-      } else {
+          router.push('/home');
+        }
+      } catch (error) {
         Vue.swal({
           icon: 'error',
           title: '로그인 실패! 이메일 및 비밀번호를 확인해 주세요!',

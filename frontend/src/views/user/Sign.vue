@@ -16,10 +16,10 @@
         <div class="form-inner">
           <form action="#" class="login">
             <div class="field">
-              <input type="text" placeholder="Email" v-model="Lemail" required />
+              <input ref="loginId" type="text" placeholder="Email" v-model="Lemail" @keyup.enter="$refs.loginPassword.focus()" required />
             </div>
             <div class="field">
-              <input type="password" placeholder="Password" v-model="Lpassword" required />
+              <input ref="loginPassword" type="password" placeholder="Password" v-model="Lpassword" required @keyup.enter="signinUser" />
             </div>
             <div class="pass-link">
               <!-- <a href="#">Forgot password?</a> -->
@@ -31,16 +31,16 @@
           </form>
           <form action="#" class="signup">
             <div class="field">
-              <input type="text" placeholder="Name" v-model="name" required />
+              <input ref="signupInput1" type="text" placeholder="Name" v-model="name" @keyup.enter="$refs.signupInput2.focus()" required />
             </div>
             <div class="field">
-              <input type="text" placeholder="Email Address" v-model="email" required />
+              <input ref="signupInput2" type="text" placeholder="Email Address" v-model="email" @keyup.enter="$refs.signupInput3.focus()" required />
             </div>
             <div class="field">
-              <input type="password" placeholder="Password" v-model="password" required />
+              <input ref="signupInput3" type="password" placeholder="Password" v-model="password" @keyup.enter="$refs.signupInput4.focus()" required />
             </div>
             <div class="field">
-              <input type="password" placeholder="Confirm password" v-model="pwdcheck" required />
+              <input ref="signupInput4" type="password" placeholder="Confirm password" v-model="pwdcheck" @keyup.enter="signup" required />
             </div>
             <div class="field btn">
               <div class="btn-layer"></div>
@@ -118,17 +118,25 @@ export default {
         thumbnail: 'string',
         password: this.password,
       };
-      const { data } = await registerUser(userData);
-      console.log(data);
-      if (data.success === true) {
-        this.$swal({
-          icon: 'success',
-          title: '회원가입성공!!',
-          showConfirmButton: false,
-          timer: 1500,
-        });
-        this.$router.push('/sign');
-      } else {
+      try {
+        const { data } = await registerUser(userData);
+        console.log(data);
+        if (data.success === true) {
+          this.$swal({
+            icon: 'success',
+            title: '회원가입성공!!',
+            showConfirmButton: false,
+            timer: 1500,
+          });
+          // this.$router.push('/sign');
+          this.$router.go();
+        } else {
+          this.$swal({
+            icon: 'error',
+            title: '회원가입 실패 관리자에게 문의해주세요',
+          });
+        }
+      } catch (error) {
         this.$swal({
           icon: 'error',
           title: '회원가입 실패 관리자에게 문의해주세요',
@@ -136,12 +144,12 @@ export default {
       }
     },
     async signinUser() {
-      if (this.Lemail == null) {
+      if (this.Lemail == '') {
         this.$swal({
           icon: 'error',
           title: '아이디를 입력해 주세요!',
         });
-      } else if (this.Lpassword == null) {
+      } else if (this.Lpassword == '') {
         this.$swal({
           icon: 'error',
           title: '비밀번호를 입력해 주세요!',
@@ -152,7 +160,7 @@ export default {
           password: this.Lpassword,
         };
         // console.log(userData);
-        this.$store.dispatch('LOGIN', userData);
+        await this.$store.dispatch('LOGIN', userData);
         console.log(this.$store.state.token);
         console.log(this.$store.state.name);
         console.log(this.$store.state.role);
@@ -175,7 +183,7 @@ export default {
   height: 100%;
   width: 100%;
   place-items: center;
-  /* background: no-repeat center/100% url('../../assets/img/signbg.jpg'); */
+  background: no-repeat center/100% url('../../assets/img/e-learningBG2.jpg');
   /* background: -webkit-linear-gradient(90deg, #0162c8, #55e7fc); */
 }
 ::selection {
@@ -188,7 +196,7 @@ export default {
   background: #fff;
   padding: 30px;
   border-radius: 40px;
-  box-shadow: 13px 13px 20px #cbced1, -13px -13px 20px #ffffff;
+  box-shadow: 13px 13px 20px #cbced1, -13px -13px 20px #0000;
 }
 .wrapper .title-text {
   display: flex;
@@ -196,8 +204,8 @@ export default {
 }
 .wrapper .title {
   width: 50%;
-  font-size: 35px;
-  font-weight: 600;
+  font-size: 50px;
+  font-weight: 900;
   text-align: center;
   transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
