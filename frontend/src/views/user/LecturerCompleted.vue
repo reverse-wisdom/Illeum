@@ -11,6 +11,7 @@
           <h3>{{ item.room_state }}</h3>
           <h3>{{ item.room_type }}</h3>
           <h3>{{ item.start_time }}</h3>
+          <v-img :src="url" id="preview" style="width:100px; height:100px; left:45%;"></v-img>
           <v-btn color="primary" @click="learnerDataGo(item)">학생평가보기</v-btn>
         </div>
       </div>
@@ -28,9 +29,11 @@ export default {
     return {
       lecturerReady: false,
       classLi: [],
+      url: null,
     };
   },
   async created() {
+    this.url = 'https://k4d106.p.ssafy.io/profile/' + this.$store.state.uuid + '/256';
     const { data } = await userClasslist(this.$store.state.uuid);
     console.log(data);
     if (data) {

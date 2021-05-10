@@ -37,6 +37,7 @@ import webrtcTest4 from '../views/testpage/webrtcTest4.vue';
 import componentTest from '../views/testpage/componentTest.vue';
 import navTest from '../views/testpage/navTest.vue';
 import calendarTest from '../views/testpage/calendarTest.vue';
+
 Vue.use(VueRouter);
 
 const routes = [

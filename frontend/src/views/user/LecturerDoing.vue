@@ -11,6 +11,7 @@
           <p>{{ item.room_state }}</p>
           <p>{{ item.room_type }}</p>
           <p>{{ item.start_time }}</p>
+          <v-img :src="url" id="preview" style="width:100px; height:100px; left:45%;"></v-img>
         </div>
       </div>
     </div>
@@ -27,9 +28,11 @@ export default {
     return {
       lecturerReady: false,
       classLi: [],
+      url: null,
     };
   },
   async created() {
+    this.url = 'https://k4d106.p.ssafy.io/profile/' + this.$store.state.uuid + '/256';
     const { data } = await userClasslist(this.$store.state.uuid);
     console.log(data);
     if (data) {

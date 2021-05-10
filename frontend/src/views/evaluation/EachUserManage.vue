@@ -1,11 +1,9 @@
 <template>
-  <div v-if="chipCheck.isLate && attend == '지각'">
-    <EachUserManageTableData :idx="idx" :roomData="roomData" :name="name" :email="email" :evalUserCnt="evalUserCnt" :rid="rid" :each="each" :attend="attend" />
-    <!-- <td>{{ idx + 1 }}</td>
-    <td><img src="http://www.foodnmed.com/news/photo/201903/18296_3834_4319.jpg" style="width:50px; height:50px;" alt="" /></td>
+  <div>
+    <td>{{ idx + 1 }}</td>
+    <td><v-img :src="url" id="preview" style="width:50px; height:50px;"></v-img></td>
     <td>{{ name }}</td>
     <td>{{ email }}</td>
-
 
     <td>
       <v-dialog v-if="this.$store.state.token" v-model="dialog" persistent max-width="1200px">
@@ -77,8 +75,9 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
-    </td> -->
-    <!-- <td>{{ attend }}</td> -->
+    </td>
+
+    <td>{{ attend }}</td>
   </div>
 </template>
 
@@ -99,6 +98,7 @@ export default {
   data() {
     return {
       name: '',
+      url: null,
       email: '',
       eachli: [],
       dialog: false,
@@ -132,6 +132,9 @@ export default {
         this.email = res_3.data[p].email;
       }
     }
+
+    this.url = 'https://k4d106.p.ssafy.io/profile/' + this.each.uid + '/256';
+
     const { data } = await findByRidClass(this.rid);
     this.roomData = data;
 
