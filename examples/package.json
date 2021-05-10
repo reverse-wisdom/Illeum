@@ -9,9 +9,11 @@
     "amqplib": "^0.7.1",
     "mqtt": "^4.2.6",
     "sockjs-client": "^1.5.1",
+    "stomp-websocket": "^2.3.4-next",
     "stompjs": "^2.3.3",
     "websocket": "^1.0.34",
-    "webstomp-client": "^1.2.6"
+    "webstomp-client": "^1.2.6",
+    "ws": "^7.4.5"
   },
   "devDependencies": {},
   "scripts": {

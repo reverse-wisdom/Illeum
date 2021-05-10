@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
-var amqp = require('amqplib/callback_api');
+// var amqp = require('amqplib/callback_api');
+import amqp from('amqplib/callback_api');
 
 amqp.connect('amqp://illeum:illeum123@k4d106.p.ssafy.io:5672', function(error0, connection) {
     if (error0) {
