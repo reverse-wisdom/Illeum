@@ -426,11 +426,13 @@ export default {
 
       var ref = this;
 
+      var now = new Date(new Date().toString().split('GMT')[0] + ' UTC').toISOString().split('.')[0] + '.000Z';
+
       // GET: /api/entrant/findUidAndRid
       await findUidAndRid(uid, rid).then(async ({ data }) => {
         if (data != '') {
           // POST: /api/evaluation/insert
-          await insertEvaluation({ uid, rid }).then(async ({ data }) => {
+          await insertEvaluation({ uid, rid, now }).then(async ({ data }) => {
             ref.vid = data.vid;
             if (data != '') {
               // GET: /api/rtc/entrance (rabbitMQ)
