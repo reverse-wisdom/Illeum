@@ -1,10 +1,9 @@
 <template>
-  <tr>
+  <div>
     <td>{{ idx + 1 }}</td>
     <td><v-img :src="url" id="preview" style="width:50px; height:50px;"></v-img></td>
     <td>{{ name }}</td>
     <td>{{ email }}</td>
-
 
     <td>
       <v-dialog v-if="this.$store.state.token" v-model="dialog" persistent max-width="1200px">
@@ -76,8 +75,9 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
-    </td> -->
-    <!-- <td>{{ attend }}</td> -->
+    </td>
+
+    <td>{{ attend }}</td>
   </div>
 </template>
 
