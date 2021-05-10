@@ -5,27 +5,38 @@
   </v-app>
 </template>
 
+<!--
 <script>
+  class AlertRabbitMQSocket {
+    constructor(uid) {
+      this.uid = uid;
+      let ws = new WebSocket('ws://k4d106.p.ssafy.io:15674/ws');
+      this.client = Stomp.over(ws);
+      this.client.debug = () => {};
+      this.login = 'illeum-guest';
+      this.passcode = 'illeum-guest';
+    }
 
-var ws = new WebSocket('ws://k4d106.p.ssafy.io:15674/ws');
-var client = Stomp.over(ws);
-
-var connectCallback = function() {
-  client.subscribe('/amq/queue/member.10', (res) => {
-    console.log('구독으로 받은 메시지', res.body);
-  }); //큐명을 지정한경우 시 사용
-};
-
-var errorCallback = function(error) {
-  console.log('소켓 연결 실패', error);
-  //alert(error.headers.message);
-};
-
-var id = 'illeum';
-var pass = 'illeum123';
-
-client.connect(id, pass, connectCallback, errorCallback, '/');
+    connect() {
+      this.client.connect(
+        this.login,
+        this.passcode,
+        () => {
+          this.client.subscribe(`/amq/queue/member.${this.uid}`, (res) => {
+            console.log('구독으로 받은 메시지', res.body);
+          }); //큐명을 지정한경우 시 사용
+        },
+        (error) => {
+          console.log('소켓 연결 실패', error);
+        },
+        '/'
+      );
+    }
+  }
+  var mqSocket = new AlertRabbitMQSocket(10);
+  mqSocket.connect();
 </script>
+-->
 
 <style>
 body {
