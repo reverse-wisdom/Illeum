@@ -16,21 +16,21 @@
     <div>
       <p>
         출석왕
-        <span>{{ firstUser }}</span>
-        <v-img :src="'https://k4d106.p.ssafy.io/profile/' + firstUserUid + '/256'" id="preview" style="width:100px; height:100px; left:45%;"></v-img>
+        <span>이름:{{ attendFirst }}</span>
+        <v-img :src="'https://k4d106.p.ssafy.io/profile/' + attendFirstUid + '/256'" id="preview" style="width:100px; height:100px; left:45%;"></v-img>
       </p>
       <p>
         채팅참여왕
-        <span>{{ maxUser }}</span>
-        <v-img :src="'https://k4d106.p.ssafy.io/profile/' + maxUserUid + '/256'" id="preview" style="width:100px; height:100px; left:45%;"></v-img>
+        <span>이름{{ partinFirst }}</span>
+        <v-img :src="'https://k4d106.p.ssafy.io/profile/' + partinFirstUid + '/256'" id="preview" style="width:100px; height:100px; left:45%;"></v-img>
       </p>
     </div>
     <div>
       <div>{{ this.$store.state.name }}님</div>
       <div>{{ selectedRoomName }} 수업에서 수업참여도</div>
-      <div>총 수강생 {{ fetchRoomlen }}명중에 {{ partuidRank }}위입니다</div>
+      <div>총 수강생 {{ fetchRoomlen }}명중에 {{ UserPartinRank }}위입니다</div>
       <div>{{ selectedRoomName }} 수업에서 출석을</div>
-      <div>총 수강생 {{ fetchRoomlen }}명중에 {{ attenduidRank }}위입니다</div>
+      <div>총 수강생 {{ fetchRoomlen }}명중에 {{ UserAttendRank }}위입니다</div>
     </div>
   </div>
 </template>
@@ -49,37 +49,27 @@ export default {
       landscape: true,
       date: '',
       menu: false,
-      mindate: '2021-04-01',
-      maxdate: '2021-04-30',
 
-      partinRank: [],
-      partuidRank: '',
-      attendRank: [],
-      attenduidRank: '',
-      arrayDates: [],
-      roomName: [],
-      partData: [],
+      attendFirst: '',
+      attendFirstUid: '',
       attendData: [],
+
+      partinFirst: '',
+      partinFirstUid: '',
+      partData: [],
+
+      UserPartinRank: '',
+      UserAttendRank: '',
+
+      arrayDates: [],
+
       selectedRoomName: '',
-      maxUser: '',
-      firstUser: '',
       fetchRoomlen: 0,
       evalcheck: false,
-      maxUserUid: '',
-      firstUserUid: '',
     };
   },
-  // props: {
-  //   date: {
-  //     type: String,
-  //   },
-  //   items: {
-  //     type: [],
-  //   },
-  // },
+
   async created() {
-    // const uuid = this.$store.state.uuid;
-    // console.log(this.uuid);
     const { data } = await userEvalList(this.uuid);
     for (var i = 0; i < data.length; i++) {
       var eval_date = data[i].eval_date.slice(0, 10);
@@ -91,14 +81,11 @@ export default {
   },
   methods: {
     classNameFetch() {
-      this.roomName = [];
       for (var i = 0; i < this.eval.length; i++) {
-        if (this.eval[i].eval_date.slice(0, 10) === this.date && !this.roomName.includes(this.eval[i].room_name)) {
-          this.roomName.push(this.eval[i].room_name);
+        if (this.eval[i].eval_date.slice(0, 10) === this.date && !this.items.includes(this.eval[i].room_name)) {
+          this.items.push(this.eval[i].room_name);
         }
       }
-
-      this.items = this.roomName;
     },
     allowedDates(val) {
       for (var i = 0; i < this.arrayDates.length; i++) {
@@ -108,7 +95,6 @@ export default {
       }
     },
     async showPartin(selected) {
-      // console.log(selected);
       this.evalcheck = true;
       this.partinRank = [];
       this.attendRank = [];
@@ -119,36 +105,28 @@ export default {
           const { data } = await fetchRoomname(this.eval[i].room_name);
           const roomPartinUser = data[0].rid;
           const res = await evaluateList(roomPartinUser);
-
           var maxPartin = 0;
-          var first = 100000;
-          //채팅참여도1등, 출석1등 구하기
-          console.log('1등', res.data);
+          this.fetchRoomlen = res.data.length;
           for (var j = 0; j < res.data.length; j++) {
-            this.partinRank.push({ uid: res.data[j].uid, participation: res.data[j].participation });
-            // attendRank push 메소드 시간순으로 정렬됨
-            this.attendRank.push({ uid: res.data[j].uid, attend_time: res.data[j].attend_time });
-            console.log(this.attendRank);
-            this.attendRank.sort(function(a, b) {
-              return a.attend_time < b.attend_time ? -1 : a.attend_time > b.attend_time ? 1 : 0;
-            });
+            this.partData.push({ uid: res.data[j].uid, participation: res.data[j].participation });
+            this.attendData.push({ uid: res.data[j].uid, attend_time: res.data[j].attend_time });
+            //출석1등 청강생 구하기
+            if (res.data[j].ranking === 1) {
+              this.attendFirst = res.data[j].name;
+              this.attendFirstUid = res.data[j].uid;
+            }
+            //채팅참여도 1위 청강생 구하기
             if (maxPartin < res.data[j].participation) {
               var maxPartin = res.data[j].participation;
-              this.maxUser = res.data[j].name;
-              this.maxUserUid = res.data[j].uid;
+              this.partinFirst = res.data[j].name;
+              this.partinFirstUid = res.data[j].uid;
             }
 
-            if (first > res.data[j].ranking) {
-              var first = res.data[j].ranking;
-              this.firstUser = res.data[j].name;
-              this.firstUserUid = res.data[j].uid;
-            }
-            if (this.$store.state.uuid === res.data[j].uid) {
-              this.name = this.$store.state.name;
-              this.fetchRoomlen = res.data.length;
+            //로그인한 유저 출석 순위 구하기
+            if (this.uuid == res.data[j].uid) {
+              this.UserAttendRank = res.data[j].ranking;
             }
           }
-          //채팅참여도 배열 제일 많은순으로 정렬하기
           this.partinRank.sort(function(a, b) {
             if (a.participation < b.participation) {
               return 1;
@@ -159,27 +137,14 @@ export default {
 
             return 0;
           });
-
-          //로그인한 청강자 채팅참여도 순위 구하기
-          for (var k = 0; k < this.partinRank.length; k++) {
-            if (this.partinRank[k].uid === this.$store.state.uuid) {
-              this.partuidRank = this.partinRank.indexOf(this.partinRank[k]) + 1;
-            }
-          }
-          //로그인한 청강자 출석시간 순위 구하기
-          console.log(this.attendRank);
-          for (var m = 0; m < this.attendRank.length; m++) {
-            // var test1 = this.$moment(this.attendRank[0].attend_time).format('YYYY-MM-DD, h:mm:ss a');
-
-            if (this.attendRank[m].uid === this.$store.state.uuid) {
-              this.attenduidRank = this.attendRank.indexOf(this.attendRank[m]) + 1;
+          //로그인한 유저 채팅참여도 순위 구하기
+          for (var k = 0; k < this.partData.length; k++) {
+            if (this.partData[k].uid === this.$store.state.uuid) {
+              this.UserPartinRank = this.partData.indexOf(this.partData[k]) + 1;
             }
           }
         }
       }
-
-      this.change++;
-      this.renderKey++;
     },
   },
 };
