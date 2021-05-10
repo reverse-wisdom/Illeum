@@ -156,18 +156,25 @@ export default {
         thumbnail: 'string',
         password: this.password,
       };
-      const { data } = await registerUser(userData);
-      console.log(data);
-      if (data.success === true) {
-        this.$swal({
-          icon: 'success',
-          title: '회원가입성공!!',
-          showConfirmButton: false,
-          timer: 1500,
-        });
-        // this.$router.push('/sign');
-        this.$router.go();
-      } else {
+      try {
+        const { data } = await registerUser(userData);
+        console.log(data);
+        if (data.success === true) {
+          this.$swal({
+            icon: 'success',
+            title: '회원가입성공!!',
+            showConfirmButton: false,
+            timer: 1500,
+          });
+          // this.$router.push('/sign');
+          this.$router.go();
+        } else {
+          this.$swal({
+            icon: 'error',
+            title: '회원가입 실패 관리자에게 문의해주세요',
+          });
+        }
+      } catch (error) {
         this.$swal({
           icon: 'error',
           title: '회원가입 실패 관리자에게 문의해주세요',
