@@ -9,7 +9,7 @@
 
             <div class="inner-part">
               <label for="imgTap" class="img">
-                <!-- founderUId -->
+                <!-- founderUid -->
                 <v-img :src="'https://k4d106.p.ssafy.io/profile/' + item.founderUid + '/256'" id="preview" style="width:100px; height:100px; left:45%;"></v-img>
               </label>
               <div class="content content-1">
