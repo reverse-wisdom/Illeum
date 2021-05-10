@@ -42,7 +42,11 @@ export default {
     }
   },
   methods: {
-    learnerDataGo(value) {},
+    learnerDataGo(value) {
+      const roomData = value;
+      console.log(roomData);
+      this.$router.push({ name: 'LecSelectedEval', query: { roomData: roomData } });
+    },
   },
 };
 </script>
