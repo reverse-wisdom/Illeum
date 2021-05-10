@@ -196,9 +196,9 @@ export default {
         isLate: 0,
         rid,
       };
-      const res = await fetchCondition(roomData);
-      var dates = res.data[0].eval_date.slice(0, 10);
-      this.arrayDates.push(dates);
+      // const res = await fetchCondition(roomData);
+      // var dates = res.data[0].eval_date.slice(0, 10);
+      // this.arrayDates.push(dates);
     }
     console.log(this.arrayDates);
     this.manageClass = data;
