@@ -9,12 +9,7 @@
 
 var ws = new WebSocket('ws://k4d106.p.ssafy.io:15674/ws');
 var client = Stomp.over(ws);
-var headers = {
-  login: 'illeum-guest',
-  passcode: 'illeum-guest',
-  // additional header
-  // 'client-id': 'my-client-id'
-};
+
 var connectCallback = function() {
   client.subscribe('/amq/queue/member.10', (res) => {
     console.log('구독으로 받은 메시지', res.body);
