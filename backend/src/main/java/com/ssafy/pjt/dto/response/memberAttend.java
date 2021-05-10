@@ -8,6 +8,7 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Data
+@SuppressWarnings("all")
 public class memberAttend {
 
     private int uid;
@@ -22,4 +23,5 @@ public class memberAttend {
     @Column(name = "attend_time")
     private Date attend_time;
     
+    private String attend;
 }
