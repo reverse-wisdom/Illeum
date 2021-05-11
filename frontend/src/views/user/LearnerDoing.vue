@@ -10,7 +10,7 @@
             <div class="inner-part">
               <label for="imgTap" class="img">
                 <!-- founderUid -->
-                <v-img :src="'https://k4d106.p.ssafy.io/profile/' + item.founderUid + '/256'" id="preview" style="width:100px; height:100px; left:45%;"></v-img>
+                <v-img :src="'https://k4d106.p.ssafy.io/profile/' + item.founder_uid + '/256'" id="preview" style="width:100px; height:100px; left:45%;"></v-img>
               </label>
               <div class="content content-1">
                 <span>클래스명:{{ item.room_name }}</span>

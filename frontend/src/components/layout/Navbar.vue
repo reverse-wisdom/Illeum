@@ -189,7 +189,6 @@ export default {
     },
     async signoutUser() {
       const userData = this.$store.state.token;
-
       const { data } = await logoutUser(userData);
       localStorage.clear();
       sessionStorage.clear();
