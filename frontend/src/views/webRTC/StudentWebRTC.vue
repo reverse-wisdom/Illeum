@@ -10,7 +10,12 @@
       </div>
       <div class="dragbar" id="dragbar"></div>
       <div class="panel-two" id="drag-right">
-        <div id="onUserStatusChanged"></div>
+        <div id="onUserStatusChanged">
+          참여자 목록
+          <template v-for="name in names">
+            {{ name }}
+          </template>
+        </div>
         <div id="conversation-panel"></div>
         <div id="key-press" style="text-align: right; display: none; font-size: 11px;">
           <span style="vertical-align: middle;"></span>
@@ -104,6 +109,7 @@ export default {
       isLive: false, // for AI server interval vue watch value
       time: null, // for AI server interval
       search: '',
+      names: [], // name list
     };
   },
   created() {
@@ -274,8 +280,8 @@ export default {
         div.innerHTML = '<b>' + userName + '&nbsp;' + timestamp + ':</b><br>' + event.data.chatMessage;
       } else {
         div.innerHTML = '<b>' + this.userName + '(당신)&nbsp;' + timestamp + '</b> <br>' + event;
-        this.chatLog += userName + ' ' + uid + ' ' + event + ' ' + timestamp + '\r\n';
-        this.chatResult.push({ uid: uid, userName: userName, chatMessage: event, timestamp: timestamp });
+        this.chatLog += userName + ' ' + uuid + ' ' + event + ' ' + timestamp + '\r\n';
+        this.chatResult.push({ uid: uuid, userName: userName, chatMessage: event, timestamp: timestamp });
         div.style.background = '#cbffcb';
       }
 
@@ -300,6 +306,8 @@ export default {
       this.connection.extra.userFullName = this.$store.state.name;
       this.connection.extra.userUUID = this.$store.state.uuid;
       this.connection.extra.type = 'cam';
+      // this.connection.extra.type = 'cam';
+      this.connection.extra.status = '입장';
       this.connection.sdpConstraints.mandatory = {
         OfferToReceiveAudio: true,
         OfferToReceiveVideo: true,
@@ -326,6 +334,8 @@ export default {
             push.create(ref.connection.extra.userFullName + '님이 ' + ref.roomid + '수업에 입장했습니다');
             ref.isLive = true;
             ref.connection.join(roomid);
+            console.log(ref.connection.extra.userFullName);
+            console.log(ref.roomid);
           });
         } else {
           ref.$swal({
@@ -403,20 +413,32 @@ export default {
           console.log(event);
         }
 
-        var infoBar = document.getElementById('onUserStatusChanged');
-        var names = [];
+        ref.names = [];
         ref.connection.getAllParticipants().forEach(function(participantId) {
           var user = ref.connection.peers[participantId];
-          names.push(user.extra.userFullName);
+          ref.names.push(user.extra.userFullName);
         });
 
-        if (!names.length) {
-          names = ['Only You'];
+        if (!ref.names.length) {
+          ref.names = ['Only You'];
         } else {
-          names = [ref.connection.extra.userFullName || 'You'].concat(names);
+          ref.names.push(ref.connection.extra.userFullName);
         }
+      };
 
-        infoBar.innerHTML = '<b>Active users:</b> ' + names.join(', ');
+      this.connection.onleave = function(event) {
+        const idx = ref.names.indexOf(event.extra.userFullName);
+        console.log(idx);
+        if (idx > -1) {
+          ref.names.splice(idx, 1);
+        }
+        var temp = ref.names;
+
+        console.log(event);
+        ref.connection.extra.status = '퇴장';
+        ref.connection.onUserStatusChanged(event);
+        if (temp.length == 1) ref.names = ['Only You'];
+        else ref.names = temp;
       };
 
       this.connection.onEntireSessionClosed = function(event) {
@@ -439,6 +461,7 @@ export default {
     async outRoom() {
       var uid = this.$store.state.uuid;
       var rid = this.rid;
+      this.connection.extra.status = '퇴장';
       this.chatTest();
       await exit(uid, rid) // GET: /api/rtc/exit (rabbitMQ)
         .then(({ data }) => {
