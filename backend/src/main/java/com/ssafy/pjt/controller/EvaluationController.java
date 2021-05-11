@@ -4,6 +4,8 @@ import java.sql.SQLException;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +28,6 @@ import com.ssafy.pjt.dto.Room;
 import com.ssafy.pjt.dto.request.insertEvaluationDto;
 import com.ssafy.pjt.dto.request.insertRoomEvaluationDto;
 import com.ssafy.pjt.dto.request.updateEvaluationDto;
-import com.ssafy.pjt.dto.response.findEntrantInfo;
 import com.ssafy.pjt.repository.EntrantRepository;
 import com.ssafy.pjt.repository.EvaluationRepository;
 import com.ssafy.pjt.repository.RoomRepository;
@@ -69,7 +70,7 @@ public class EvaluationController {
 	@PostMapping(path = "/roomEntrantInfo")
 	public ResponseEntity<Object> roomEntrantInfo(@RequestBody insertRoomEvaluationDto dto) {
 		try {
-			List<findEntrantInfo> evaluation = evaluationMapper.roomEntrantInfo(dto);
+			List<Map<String, Object>> evaluation = evaluationMapper.roomEntrantInfo(dto);
 			if (evaluation.isEmpty())
 				return new ResponseEntity<>("없음", HttpStatus.NO_CONTENT);
 			return new ResponseEntity<>(evaluation, HttpStatus.OK);

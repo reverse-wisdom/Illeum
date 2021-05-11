@@ -74,35 +74,6 @@ public class UploadFileUtils {
 
 		return makeFilePath(uploadPath, savePath, saveFileName);
 	}
-
-//	/**
-//	 * @param filePath
-//	 * @param filename
-//	 * @param multipartFile
-//	 * @return 생성된 파일 명(유일한 값)
-//	 * @throws IllegalStateException
-//	 * @throws IOException
-//	 */
-//	public static String fileSave(String uploadPath, String savePath, String filename, MultipartFile file)
-//			throws IllegalStateException, IOException {
-//
-//		File uploadPathDir = new File(uploadPath);
-//
-//		if (!uploadPathDir.exists()) {
-//			uploadPathDir.mkdirs();
-//		}
-//
-//		String originalfileName = file.getOriginalFilename();
-//		String fileExtension = getExtension(originalfileName);
-//		String saveFileName = filename + "." + fileExtension;
-//
-//		File target = new File(uploadPath, saveFileName);
-//
-//		FileCopyUtils.copy(file.getBytes(), target);
-//
-//		return makeFilePath(uploadPath, savePath, saveFileName);
-//	}
-
 	/**
 	 * @param filePath
 	 * @param filename
@@ -200,7 +171,7 @@ public class UploadFileUtils {
 
 	private static void makeDir(String uploadPath, String... paths) {
 
-		System.out.println(paths[paths.length - 1] + " : " + new File(paths[paths.length - 1]).exists());
+		logger.info(paths[paths.length - 1] + " : " + new File(paths[paths.length - 1]).exists());
 		if (new File(paths[paths.length - 1]).exists()) {
 			return;
 		}
@@ -223,7 +194,6 @@ public class UploadFileUtils {
 
 		BufferedImage sourceImg = ImageIO.read(new File(uploadPath + path, fileName));
 
-//		BufferedImage destImg = Scalr.resize(sourceImg, Scalr.Method.AUTOMATIC, Scalr.Mode.FIT_TO_HEIGHT, 100);
 		BufferedImage destImg = Scalr.resize(sourceImg, 128, 128);
 
 		String thumbnailName = uploadPath + path + File.separator + "s_" + fileName;
@@ -262,7 +232,6 @@ public class UploadFileUtils {
 
 		BufferedImage sourceImg = ImageIO.read(new File(uploadPath + path, fileName));
 
-//		BufferedImage destImg = Scalr.resize(sourceImg, width, height);
 		BufferedImage destImg = resizeAndCrop(sourceImg, width, height);
 
 		String thumbnailName = uploadPath + path + File.separator + "s_" + saveName;
