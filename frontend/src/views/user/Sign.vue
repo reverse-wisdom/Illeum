@@ -70,9 +70,7 @@ class AlertRabbitMQSocket {
       this.passcode,
       () => {
         this.client.subscribe(`/amq/queue/member.${this.uid}`, (res) => {
-          console.log('구독으로 받은 메시지', res.body);
           push.create(res.body);
-
         }); //큐명을 지정한경우 시 사용
       },
       (error) => {
@@ -82,6 +80,11 @@ class AlertRabbitMQSocket {
       '/'
     );
   }
+  disconnect() {
+    this.client.disconnect();
+    // this.client.close();
+  }
+
 }
 import { registerUser } from '@/api/auth';
 import push from 'push.js';
@@ -221,11 +224,12 @@ export default {
           password: this.Lpassword,
         };
         // console.log(userData);
-        this.$store.dispatch('LOGIN', userData);
+        await this.$store.dispatch('LOGIN', userData);
         console.log(this.$store.state.token);
         console.log(this.$store.state.name);
         console.log(this.$store.state.role);
         const mqSocket = new AlertRabbitMQSocket(this.$store.state.uuid);
+        this.$store.commit('setAlertSocket', mqSocket);
         mqSocket.connect();
       }
     },
