@@ -36,37 +36,17 @@
       </template>
 
       <v-btn class="mr-4" color="cyan" @click="screen">화면공유</v-btn>
-      <v-btn class="mr-4" color="cyan" @click="whiteBoard">화이트보드</v-btn>
-      <!-- 화이트보드 모달 영역 -->
-      <!-- <v-dialog v-model="dialog" width="500">
-        <template v-slot:activator="{ on, attrs }">
-                <v-btn class="mr-4" color="cyan" v-bind="attrs" v-on="on">화이트보드</v-btn>
-        </template>
-
-        <v-card>
-          <v-card-title class="headline grey lighten-2">
-            화이트보드
-          </v-card-title>
-
-          <div id="widget-container" style="position: fixed;bottom: 0;right: 0;left: 20%;height: 100%;border: 1px solid black; border-top:0; border-bottom: 0;"></div>
-
-          <v-btn color="primary" text @click="dialog = false">
-            닫기
-          </v-btn>
-        </v-card>
-      </v-dialog> -->
-
+      <v-btn class="mr-4" color="cyan" @click="openWhiteBoard">화이트보드</v-btn>
       <v-btn class="mr-4" color="cyan" @click="saveMessageLog">채팅기록저장</v-btn>
       <v-btn class="mr-4" color="cyan" @click="chatTest">채팅콘솔테스트</v-btn>
       <v-btn class="mr-4" color="error" @click="outRoom">종료</v-btn>
     </div>
 
+    <!-- 화이트보드 모달 영역 -->
     <div id="modal">
-      <div class="modal_content">
-        <div id="widget-container"></div>
-        가나다
-        <v-btn class="mr-4 mb-4" color="error" @click="closeModal">닫기</v-btn>
-        <!-- <div id="widget-container" style="height: 80%;border: 1px solid black; border-top:0; border-bottom: 0;"></div> -->
+      <div class="modal_content text-center">
+        <v-btn class="mr-4 mb-4" color="error" @click="closeWhiteBoard">닫기</v-btn>
+        <div id="widget-container" style="height: 80%; width: 80%; border: 1px solid black; border-top:0; border-bottom: 0;"></div>
       </div>
     </div>
     <div class="modal_layer"></div>
@@ -90,7 +70,6 @@ export default {
       isAudio: true,
       isVideo: true,
       userUIDList: [],
-      dialog: false,
     };
   },
   created() {
@@ -100,6 +79,7 @@ export default {
     this.userName = name;
     this.getStudentList();
   },
+
   mounted() {
     let cdn1 = document.createElement('script');
     cdn1.setAttribute('src', 'https://cdn.jsdelivr.net/npm/rtcmulticonnection@latest/dist/RTCMultiConnection.min.js');
@@ -127,42 +107,49 @@ export default {
     bar.addEventListener('mouseup', () => {
       document.removeEventListener('mousemove', drag);
     });
+    var ref = this;
+    // canvas
+    this.$nextTick(function() {
+      this.designer = new window.CanvasDesigner();
+      this.designer.widgetHtmlURL = 'https://www.webrtc-experiment.com/Canvas-Designer/widget.html'; // you can place this file anywhere
+      this.designer.widgetJsURL = 'https://www.webrtc-experiment.com/Canvas-Designer/widget.js';
 
-    // canvas designer section
-    this.designer = new window.CanvasDesigner();
-    this.designer.widgetHtmlURL = 'https://www.webrtc-experiment.com/Canvas-Designer/widget.html'; // you can place this file anywhere
-    this.designer.widgetJsURL = 'https://www.webrtc-experiment.com/Canvas-Designer/widget.js';
+      this.designer.setSelected('pencil');
 
-    this.designer.setSelected('pencil');
-
-    this.designer.setTools({
-      pencil: true,
-      text: true,
-      image: true,
-      pdf: true,
-      eraser: true,
-      line: true,
-      arrow: true,
-      dragSingle: true,
-      dragMultiple: true,
-      arc: true,
-      rectangle: true,
-      quadratic: false,
-      bezier: true,
-      marker: true,
-      zoom: false,
-      lineWidth: false,
-      colorsPicker: false,
-      extraOptions: false,
-      code: false,
-      undo: true,
+      this.designer.setTools({
+        pencil: true,
+        text: true,
+        image: true,
+        pdf: true,
+        eraser: true,
+        line: true,
+        arrow: true,
+        dragSingle: true,
+        dragMultiple: true,
+        arc: true,
+        rectangle: true,
+        quadratic: false,
+        bezier: true,
+        marker: true,
+        zoom: false,
+        lineWidth: false,
+        colorsPicker: false,
+        extraOptions: false,
+        code: false,
+        undo: true,
+        isLoad: false,
+      });
+      this.designer.appendTo(document.getElementById('widget-container'));
+      this.designer.addSyncListener(function(data) {
+        console.log('sync canvas');
+        ref.connection.send(data);
+      });
     });
-    this.designer.appendTo(document.getElementById('widget-container'));
 
-    this.designer.addSyncListener(function(data) {
-      console.log('sync canvas');
-      ref.connection.send(data);
-    });
+    window.onload = function() {
+      document.querySelector('#modal').style.display = 'none';
+      document.querySelector('#modal').style.top = 0;
+    };
 
     this.openRoom();
   },
@@ -190,6 +177,14 @@ export default {
       localStream.mute('audio');
       this.connection.streamEvents.selectFirst('local').mediaElement.muted = true;
       this.isAudio = false;
+    },
+    openWhiteBoard() {
+      document.querySelector('#modal').style.top = 0;
+      document.querySelector('#modal').style.display = 'block';
+    },
+    closeWhiteBoard() {
+      console.log(document.querySelector('#modal').style.display);
+      document.querySelector('#modal').style.display = 'none';
     },
     chat() {
       var chatMessage = this.message;
@@ -281,6 +276,15 @@ export default {
       });
 
       // 리스너 영역
+      this.connection.onopen = function() {
+        if (ref.designer.pointsLength <= 0) {
+          // you seems having data to be synced with new user!
+          setTimeout(function() {
+            ref.connection.send('plz-sync-points');
+          }, 1000);
+        }
+      };
+
       this.connection.onmessage = function(event) {
         // chatting
         if (event.data.chatMessage) {
@@ -445,18 +449,6 @@ export default {
 
       console.log(rankArr);
     },
-    whiteBoard() {
-      document.querySelector('#modal').style.display = 'block';
-      // document.querySelector('.modal_wrap').style.display = 'block';
-      // document.querySelector('.black_bg').style.display = 'block';
-      // document.querySelector('#widget-container').style.display = 'block';
-    },
-    closeModal() {
-      document.querySelector('#modal').style.display = 'none';
-      // document.querySelector('.modal_wrap').style.display = 'none';
-      // document.querySelector('.black_bg').style.display = 'none';
-      // document.querySelector('#widget-container').style.display = 'none';
-    },
   },
 
   destroyed() {
@@ -558,13 +550,13 @@ body::-webkit-scrollbar {
   /* pointer-events: none; */
 }
 
-/* 모달 */
+/* mordal */
 #modal {
-  position: relative;
+  position: fixed;
+  top: 200%;
   width: 100%;
   height: 100%;
-  z-index: 1;
-  display: none;
+  z-index: 9999;
 }
 
 #modal h2 {
@@ -579,7 +571,7 @@ body::-webkit-scrollbar {
 
 #modal .modal_content {
   width: 100%;
-  height: 100%;
+  height: 80%;
   margin: 100px auto;
   padding: 20px 10px;
   background: #fff;
