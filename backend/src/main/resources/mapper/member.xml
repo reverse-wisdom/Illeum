@@ -4,8 +4,8 @@
 <mapper
 	namespace="com.ssafy.pjt.repository.mapper.MemberMapper">
 	<!--맴버가 수강 중인 강의(방) 목록 -->
-	<select id="mamberJoinRoom" parameterType="int" resultType="findMemberRoom">
-		select m.uid, m.name , r.rid, r.room_name,(select m.name from member m where m.uid = r.uid) as founder , r.start_time, r.end_time, r.room_state, r.room_type, r.room_password
+	<select id="memberJoinRoom" parameterType="int" resultType="findMemberRoom">
+		select m.uid, m.name , r.rid, r.room_name, r.uid as founder_uid,(select m.name from member m where m.uid = r.uid) as founder , r.start_time, r.end_time, r.room_state, r.room_type, r.room_password
 		from member m join entrant e 
 		on m.uid = e.uid
 		right join room r
