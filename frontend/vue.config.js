@@ -15,7 +15,7 @@ module.exports = {
         target: 'http://k4d106.p.ssafy.io:8000',
         // changeOrigin: true,
       },
-      '/': {
+      '/profile': {
         target: 'https://k4d106.p.ssafy.io',
       },
     },
