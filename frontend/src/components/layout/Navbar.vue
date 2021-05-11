@@ -165,7 +165,7 @@ export default {
     };
   },
   created() {
-    this.url = 'https://k4d106.p.ssafy.io/profile/' + this.$store.state.uuid + '/256';
+    this.url = `/profile/${this.$store.state.uuid}/256?t=${Date.now()}`;
     console.log(this.loginchk);
   },
   watch: {
@@ -178,7 +178,7 @@ export default {
   },
   methods: {
     Preview_image() {
-      this.url = URL.createObjectURL(this.image);
+      if (this.image != null) this.url = URL.createObjectURL(this.image);
     },
     async userUpdate() {
       const uuid = this.$store.state.uuid;
