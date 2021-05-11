@@ -11,21 +11,22 @@
       <div id="login-form">
         <form>
           <div class="input-each">
-            <input type="text" placeholder="E-MAIL" />
+            <input ref="loginId" type="text" placeholder="E-MAIL" v-model="Lemail" @keyup.enter="$refs.loginPassword.focus()" required />
           </div>
           <div class="input-each">
-            <input type="password" placeholder="PASSWORD" />
+            <input ref="loginPassword" type="password" placeholder="PASSWORD" v-model="Lpassword" required @keyup.enter="signinUser" />
           </div>
-          <button type="button" class="btn login">LOGIN</button>
+          <button type="button" class="btn login" @click="signinUser">LOGIN</button>
         </form>
       </div>
 
       <div id="signup-form">
         <form>
-          <input type="email" placeholder="E-MAIL" />
-          <input type="text" placeholder="NAME" />
-          <input type="password" placeholder="PASSWORD" />
-          <button type="button" class="btn signup">SIGN UP</button>
+          <input ref="signupInput2" type="text" placeholder="E-MAIL" v-model="email" @keyup.enter="$refs.signupInput3.focus()" required />
+          <input ref="signupInput1" type="text" placeholder="NAME" v-model="name" @keyup.enter="$refs.signupInput2.focus()" required />
+          <input ref="signupInput3" type="password" placeholder="PASSWORD" v-model="password" @keyup.enter="$refs.signupInput4.focus()" required />
+          <input ref="signupInput4" type="password" placeholder="CONFIRM PASSWORD" v-model="pwdcheck" @keyup.enter="signup" required />
+          <button type="button" class="btn signup" @click="signup">SIGN UP</button>
         </form>
       </div>
     </div>
