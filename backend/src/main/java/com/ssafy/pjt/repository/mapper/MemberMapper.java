@@ -9,7 +9,7 @@ import com.ssafy.pjt.dto.response.findMemberRoom;
 import com.ssafy.pjt.dto.response.memberAttend;
 
 public interface MemberMapper {
-	public List<findMemberRoom> mamberJoinRoom(int uid) throws SQLException;
+	public List<findMemberRoom> memberJoinRoom(int uid) throws SQLException;
 	public List<findFounder> founder(int uid) throws SQLException;
 	public List<findMemberEvaluation> memberJoinEvaluation(int uid) throws SQLException;
 	public List<memberAttend> memberAttend(int uid) throws SQLException;

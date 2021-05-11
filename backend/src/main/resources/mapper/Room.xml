@@ -29,7 +29,7 @@
 	
 	<!--방의 평가 목록 조회   -->
 	<select id="roomJoinEvaluation" parameterType="int" resultType="findRoomEvaluation">
-		select ev.vid, r.rid, m.uid, m.name, r.room_name, (select m.name from member m where m.uid = r.uid) as founder,  ev.eval_date, ev.attention, ev.participation, ev.distracted, ev.asleep, ev.afk, ev.attend_time, ev.ranking
+		select ev.vid, r.rid, m.uid, m.name, r.room_name, (select m.name from member m where m.uid = r.uid) as founder,  ev.eval_date, ev.attention, ev.participation, ev.distracted, ev.asleep, ev.afk, ev.attend_time, ev.ranking, ev.attend
 		from room r join entrant e
 		on r.rid = e.rid
 		right join evaluation ev

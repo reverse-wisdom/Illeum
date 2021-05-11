@@ -1,5 +1,7 @@
 package com.ssafy.pjt.controller;
 
+import java.nio.charset.StandardCharsets;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +46,7 @@ public class ImageController {
 			UploadFile uploadedFile = imageService.store(file);
 			return ResponseEntity.ok().body("/api/data/" + uploadedFile.getId());
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.toString());
 			return ResponseEntity.badRequest().build();
 		}
 	}
@@ -65,7 +67,7 @@ public class ImageController {
 
 			String fileName = uploadedFile.getOriginFileName();
 			headers.add(HttpHeaders.CONTENT_DISPOSITION,
-					"attachment; filename=\"" + new String(fileName.getBytes("UTF-8"), "ISO-8859-1") + "\"");
+					"attachment; filename=\"" + new String(fileName.getBytes(StandardCharsets.UTF_8), StandardCharsets.ISO_8859_1) + "\"");
 
 			if (MediaUtils.containsImageMediaType(uploadedFile.getContentType())) {
 				headers.setContentType(MediaType.valueOf(uploadedFile.getContentType()));

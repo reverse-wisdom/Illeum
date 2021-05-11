@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 
 @Data
 @Entity
+@SuppressWarnings("all")
 public class Room {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

@@ -22,15 +22,10 @@
       <h2>eval_date:{{ date }}</h2>
       <h2>{{ dayLabel }}</h2>
     </div>
-    <div>
-      <!-- <p>
-        출석왕
-        <span>{{ firstUser }}</span>
-      </p> -->
-    </div>
+
     <div>
       <div>유저이름:{{ this.$store.state.name }}님</div>
-      <div>출석시간:{{ attenduidTime }}</div>
+      <div>출석시간:{{ attend_time }}</div>
       <div>지각여부:{{ attend }}</div>
     </div>
   </div>
@@ -39,6 +34,7 @@
 <script>
 import { userEvalList } from '@/api/auth';
 import { fetchRoomname, evaluateList, findByRidClass } from '@/api/class';
+import { fetchConditions } from '@/api/evaluation';
 
 export default {
   data() {
@@ -55,11 +51,7 @@ export default {
       maxdate: '2021-04-30',
       lateCheck: false,
       attend: '',
-      saveTime: '',
-      partinRank: [],
-      partuidRank: '',
-      attendRank: [],
-      attenduidTime: '',
+      attend_time: '',
       arrayDates: [],
       roomName: [],
       partData: [],
@@ -72,22 +64,13 @@ export default {
       selected: true,
     };
   },
-  // props: {
-  //   date: {
-  //     type: String,
-  //   },
-  //   items: {
-  //     type: [],
-  //   },
-  // },
+
   computed: {
     dayLabel: function(date) {
       return this.week[new Date(this.date).getDay()];
     },
   },
   async created() {
-    // const uuid = this.$store.state.uuid;
-    // console.log(this.uuid);
     const { data } = await userEvalList(this.uuid);
     for (var i = 0; i < data.length; i++) {
       var eval_date = data[i].eval_date.slice(0, 10);
@@ -116,6 +99,7 @@ export default {
       }
     },
     async showPartin(selected) {
+      console.log('this eval', this.eval);
       this.evalcheck = true;
       this.partinRank = [];
       this.attendRank = [];
@@ -127,46 +111,14 @@ export default {
           const { data } = await fetchRoomname(this.eval[i].room_name);
           const roomPartinUser = data[0].rid;
           const res = await evaluateList(roomPartinUser);
-          const ridData = await findByRidClass(roomPartinUser);
-          // this.saveTime._i = this.$moment(ridData.data.start_time).format('YYYY-MM-DD, h:mm:ss');
-          console.log('수업시작', ridData.data.start_time);
-          this.saveTime = this.$moment(ridData.data.start_time)
-            .add(10, 'm')
-            .format('YYYY-MM-DD, HH:mm:ss');
-          console.log('+10분', this.saveTime);
-          // this.saveTime = this.$moment(this.saveTime).format('YYYY-MM-DD, h:mm:ss');
-
           for (var j = 0; j < res.data.length; j++) {
-            this.attendRank.push({ uid: res.data[j].uid, attend_time: res.data[j].attend_time });
-            console.log(this.attendRank);
-            this.attendRank.sort(function(a, b) {
-              return a.attend_time < b.attend_time ? -1 : a.attend_time > b.attend_time ? 1 : 0;
-            });
-          }
-
-          console.log(this.attendRank);
-          for (var m = 0; m < this.attendRank.length; m++) {
-            // var test1 = this.$moment(this.attendRank[0].attend_time).format('YYYY-MM-DD, h:mm:ss a');
-
-            if (this.attendRank[m].uid === this.$store.state.uuid) {
-              this.attenduidTime = this.$moment(this.attendRank[m].attend_time).format('YYYY-MM-DD, HH:mm:ss');
-              console.log(this.attenduidTime);
-              console.log(this.saveTime);
-              if (this.attenduidTime > this.saveTime) {
-                this.lateCheck = true;
-                this.attend = '지각';
-              } else if (this.attenduidTime == '' || this.attenduidTime == undefined || this.attenduidTime == null) {
-                this.attend = '결석';
-              } else {
-                this.attend = '정상';
-              }
+            if (this.uuid === res.data[j].uid) {
+              this.attend_time = res.data[j].attend_time;
+              this.attend = res.data[j].attend;
             }
           }
         }
       }
-
-      this.change++;
-      this.renderKey++;
     },
   },
 };

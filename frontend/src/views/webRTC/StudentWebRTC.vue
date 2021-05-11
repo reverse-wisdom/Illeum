@@ -16,7 +16,7 @@
           <span style="vertical-align: middle;"></span>
           <img src="https://www.webrtc-experiment.com/images/key-press.gif" style="height: 12px; vertical-align: middle;" />
         </div>
-        <v-text-field id="txt-chat-message" sold v-model="message" dense label="채팅"></v-text-field>
+        <v-text-field id="txt-chat-message" sold v-model="message" dense label="채팅" @keyup.enter="chat"></v-text-field>
         <button class="btn btn-primary" id="btn-chat-message" @click="chat">Send</button>
       </div>
     </div>
@@ -35,6 +35,8 @@
       </template>
 
       <v-btn class="mr-4" color="cyan" @click="screen">화면공유</v-btn>
+      <v-btn class="mr-4" color="cyan" @click="saveMessageLog">채팅기록저장</v-btn>
+      <v-btn class="mr-4" color="cyan" @click="chatTest">채팅콘솔테스트</v-btn>
       <v-btn class="mr-4" color="error" @click="outRoom">퇴장</v-btn>
       &nbsp;
     </div>
@@ -46,7 +48,7 @@ import push from 'push.js';
 import { faceAI } from '@/api/faceAI';
 import { findUidAndRid } from '@/api/entrant';
 import { exit, entrance } from '@/api/rabbit';
-import { insertEvaluation } from '@/api/evaluation';
+import { insertEvaluation, updateByVid } from '@/api/evaluation';
 
 export default {
   data() {
@@ -55,10 +57,15 @@ export default {
       userName: '',
       connection: null,
       message: '',
+      chatLog: '',
+      chatResult: [],
       rid: '',
+      vid: '',
       isOutClicked: true,
       isAudio: true,
       isVideo: true,
+      isLive: false, // for AI server interval vue watch value
+      time: null, // for AI server interval
     };
   },
   created() {
@@ -95,6 +102,14 @@ export default {
     });
 
     this.openRoom();
+  },
+  watch: {
+    isLive: function() {
+      var ref = this;
+      setTimeout(function() {
+        ref.time = setInterval(ref.screenCapture, 5000);
+      }, 4000);
+    },
   },
 
   methods: {
@@ -163,11 +178,16 @@ export default {
       var date = new Date();
       var timestamp = date.toLocaleTimeString();
       div.className = 'message';
+      var uid = this.$store.state.uuid;
 
       if (event.data) {
         div.innerHTML = '<b>' + userName + '&nbsp;' + timestamp + ':</b><br>' + event.data.chatMessage;
+        this.chatLog += userName + ' ' + uuid + ' ' + event.data.chatMessage + ' ' + timestamp + '\r\n';
+        div.innerHTML = '<b>' + userName + '&nbsp;' + timestamp + ':</b><br>' + event.data.chatMessage;
       } else {
         div.innerHTML = '<b>' + this.userName + '(당신)&nbsp;' + timestamp + '</b> <br>' + event;
+        this.chatLog += userName + ' ' + uid + ' ' + event + ' ' + timestamp + '\r\n';
+        this.chatResult.push({ uid: uid, userName: userName, chatMessage: event, timestamp: timestamp });
         div.style.background = '#cbffcb';
       }
 
@@ -203,12 +223,6 @@ export default {
 
       this.connection.autoCloseEntireSession = true;
 
-      // 4초후 5초당 한번씩
-      setTimeout(function() {
-        setInterval(ref.screenCapture, 5000);
-        console.log('캡쳐완료!');
-      }, 4000);
-
       this.connection.checkPresence(this.roomid, function(isRoomExist, roomid) {
         if (isRoomExist === true) {
           ref.checkEntrant().then((result) => {
@@ -222,6 +236,7 @@ export default {
             }
             ref.connection.onUserStatusChanged();
             push.create(ref.connection.extra.userFullName + '님이 ' + ref.roomid + '수업에 입장했습니다');
+            ref.isLive = true;
             ref.connection.join(roomid);
           });
         } else {
@@ -269,6 +284,9 @@ export default {
                 localStream.stop();
               });
 
+              ref.isLive = false;
+              clearInterval(ref.time);
+
               ref.connection.closeSocket();
 
               ref.$router.push({ name: 'WebRTCList' });
@@ -300,8 +318,6 @@ export default {
     },
 
     screen() {
-      var ref = this;
-
       this.connection.extra.type = 'share';
       this.connection.extra.typeAlpha = 'share';
 
@@ -316,6 +332,7 @@ export default {
     async outRoom() {
       var uid = this.$store.state.uuid;
       var rid = this.rid;
+      this.chatTest();
       await exit(uid, rid) // GET: /api/rtc/exit (rabbitMQ)
         .then(({ data }) => {
           if (data == 'success') {
@@ -335,6 +352,10 @@ export default {
               title: '화상수업 나가기.!!',
             });
 
+            this.isLive = false;
+            console.log('멈춤');
+            clearInterval(this.time);
+
             this.$router.push({ name: 'WebRTCList' });
           }
         })
@@ -345,17 +366,74 @@ export default {
           });
         });
     },
+    saveMessageLog() {
+      var fileName = this.roomid;
+      var content = this.chatLog;
+      var blob = new Blob([content], { type: 'text/plain' });
+      var objURL = window.URL.createObjectURL(blob);
+
+      // 이전에 생성된 메모리 해제
+      if (window.__Xr_objURL_forCreatingFile__) {
+        window.URL.revokeObjectURL(window.__Xr_objURL_forCreatingFile__);
+      }
+
+      window.__Xr_objURL_forCreatingFile__ = objURL;
+      // a링크로 다운로드 바로실행
+      var a = document.createElement('a');
+      a.download = fileName;
+      a.href = objURL;
+      a.click();
+    },
+    async chatTest() {
+      var rankArr = [];
+      var ranking = 1;
+      for (let index = 0; index < this.chatResult.length; index++) {
+        var indexOfchatResult = rankArr.findIndex((i) => i.uid == this.chatResult[index].uid);
+        if (indexOfchatResult == -1) {
+          rankArr.push({ uid: this.chatResult[index].uid, participation: 1, ranking: ranking });
+          ranking++;
+        } else {
+          var indexOfObj = rankArr.findIndex((i) => i.uid == this.chatResult[index].uid);
+          rankArr[indexOfObj].participation++;
+        }
+      }
+
+      for (let index = 0; index < rankArr.length; index++) {
+        if (rankArr[index].uid == this.$store.state.uuid) {
+          var evaluationData = {
+            participation: rankArr[index].participation,
+            ranking: rankArr[index].ranking,
+            vid: this.vid,
+          };
+          console.log(evaluationData);
+          await updateByVid(evaluationData)
+            .then(({ data }) => {
+              console.log(data);
+              if (data == 'success') console.log(evaluationData + '수정 성공');
+            })
+            .catch((err) => {
+              console.log('수정실패.!!');
+            });
+        }
+        break;
+      }
+    },
     async checkEntrant() {
       var result = false;
 
       var uid = this.$store.state.uuid;
       var rid = this.rid;
 
+      var ref = this;
+
+      var now = new Date(new Date().toString().split('GMT')[0] + ' UTC').toISOString().split('.')[0] + '.000Z';
+
       // GET: /api/entrant/findUidAndRid
       await findUidAndRid(uid, rid).then(async ({ data }) => {
         if (data != '') {
           // POST: /api/evaluation/insert
-          await insertEvaluation({ uid, rid }).then(async ({ data }) => {
+          await insertEvaluation({ uid, rid, now }).then(async ({ data }) => {
+            ref.vid = data.vid;
             if (data != '') {
               // GET: /api/rtc/entrance (rabbitMQ)
               await entrance(uid, rid).then(async ({ data }) => {

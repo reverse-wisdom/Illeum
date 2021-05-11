@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import lombok.Data;
 
 @Data
+@SuppressWarnings("all")
 public class insertRoomDto {
 	private int uid;
 	private String room_name;

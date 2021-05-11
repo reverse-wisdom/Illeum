@@ -3,6 +3,7 @@
     <div class="class-name">
       <h2>{{ this.$route.query.room_name }}</h2>
     </div>
+
     <div class="drag-container">
       <div class="panel-one" id="drag-left">
         <div class="videos-container"></div>
@@ -16,7 +17,7 @@
           <span style="vertical-align: middle;"></span>
           <img src="https://www.webrtc-experiment.com/images/key-press.gif" style="height: 12px; vertical-align: middle;" />
         </div>
-        <v-text-field id="txt-chat-message" sold v-model="message" dense label="채팅"></v-text-field>
+        <v-text-field id="txt-chat-message" sold v-model="message" dense label="채팅" @keyup.enter="chat"></v-text-field>
         <button class="btn btn-primary" id="btn-chat-message" @click="chat">Send</button>
       </div>
     </div>
@@ -35,27 +36,61 @@
       </template>
 
       <v-btn class="mr-4" color="cyan" @click="screen">화면공유</v-btn>
+      <v-btn class="mr-4" color="cyan" @click="whiteBoard">화이트보드</v-btn>
+      <!-- 화이트보드 모달 영역 -->
+      <!-- <v-dialog v-model="dialog" width="500">
+        <template v-slot:activator="{ on, attrs }">
+                <v-btn class="mr-4" color="cyan" v-bind="attrs" v-on="on">화이트보드</v-btn>
+        </template>
+
+        <v-card>
+          <v-card-title class="headline grey lighten-2">
+            화이트보드
+          </v-card-title>
+
+          <div id="widget-container" style="position: fixed;bottom: 0;right: 0;left: 20%;height: 100%;border: 1px solid black; border-top:0; border-bottom: 0;"></div>
+
+          <v-btn color="primary" text @click="dialog = false">
+            닫기
+          </v-btn>
+        </v-card>
+      </v-dialog> -->
+
       <v-btn class="mr-4" color="cyan" @click="saveMessageLog">채팅기록저장</v-btn>
       <v-btn class="mr-4" color="cyan" @click="chatTest">채팅콘솔테스트</v-btn>
       <v-btn class="mr-4" color="error" @click="outRoom">종료</v-btn>
     </div>
+
+    <div id="modal">
+      <div class="modal_content">
+        <div id="widget-container"></div>
+        가나다
+        <v-btn class="mr-4 mb-4" color="error" @click="closeModal">닫기</v-btn>
+        <!-- <div id="widget-container" style="height: 80%;border: 1px solid black; border-top:0; border-bottom: 0;"></div> -->
+      </div>
+    </div>
+    <div class="modal_layer"></div>
   </div>
 </template>
 
 <script>
 import push from 'push.js';
-import { updateClass } from '@/api/class';
+import { updateClass, getStudents } from '@/api/class';
+import { insertAbsent } from '@/api/evaluation';
 export default {
   data() {
     return {
       roomid: '',
       userName: '',
       connection: null,
+      designer: null,
       message: '',
       chatLog: '',
       chatResult: [],
       isAudio: true,
       isVideo: true,
+      userUIDList: [],
+      dialog: false,
     };
   },
   created() {
@@ -63,6 +98,7 @@ export default {
     const room_name = this.$route.query.room_name;
     this.roomid = room_name;
     this.userName = name;
+    this.getStudentList();
   },
   mounted() {
     let cdn1 = document.createElement('script');
@@ -90,6 +126,42 @@ export default {
 
     bar.addEventListener('mouseup', () => {
       document.removeEventListener('mousemove', drag);
+    });
+
+    // canvas designer section
+    this.designer = new window.CanvasDesigner();
+    this.designer.widgetHtmlURL = 'https://www.webrtc-experiment.com/Canvas-Designer/widget.html'; // you can place this file anywhere
+    this.designer.widgetJsURL = 'https://www.webrtc-experiment.com/Canvas-Designer/widget.js';
+
+    this.designer.setSelected('pencil');
+
+    this.designer.setTools({
+      pencil: true,
+      text: true,
+      image: true,
+      pdf: true,
+      eraser: true,
+      line: true,
+      arrow: true,
+      dragSingle: true,
+      dragMultiple: true,
+      arc: true,
+      rectangle: true,
+      quadratic: false,
+      bezier: true,
+      marker: true,
+      zoom: false,
+      lineWidth: false,
+      colorsPicker: false,
+      extraOptions: false,
+      code: false,
+      undo: true,
+    });
+    this.designer.appendTo(document.getElementById('widget-container'));
+
+    this.designer.addSyncListener(function(data) {
+      console.log('sync canvas');
+      ref.connection.send(data);
     });
 
     this.openRoom();
@@ -210,10 +282,20 @@ export default {
 
       // 리스너 영역
       this.connection.onmessage = function(event) {
+        // chatting
         if (event.data.chatMessage) {
           ref.appendChatMessage(event, event.extra.userFullName, event.extra.userUUID);
           return;
         }
+
+        // canvas
+        if (event.data === 'plz-sync-points') {
+          console.log(ref.designer);
+          ref.designer.sync();
+          return;
+        }
+
+        ref.designer.syncData(event.data);
       };
 
       this.connection.onstream = function(event) {
@@ -230,8 +312,12 @@ export default {
         var infoBar = document.getElementById('onUserStatusChanged');
         var names = [];
         ref.connection.getAllParticipants().forEach(function(participantId) {
-          var user = ref.connection.peers[participantId];
-          names.push(user.extra.userFullName);
+          if (ref.userUIDList.includes(event.extra.userUUID)) {
+            const index = ref.userUIDList.indexOf(event.extra.userUUID);
+            if (index > -1) {
+              ref.userUIDList.splice(index, 1);
+            }
+          }
         });
         if (!names.length) {
           names = ['Only You'];
@@ -247,8 +333,6 @@ export default {
     },
 
     screen() {
-      var ref = this;
-
       this.connection.extra.type = 'share';
       this.connection.extra.typeAlpha = 'share';
 
@@ -260,10 +344,33 @@ export default {
 
       this.connection.videosContainer = document.querySelector('.share-videos-container');
     },
+
+    async getStudentList() {
+      await getStudents(this.$route.query.rid).then(({ data }) => {
+        for (let index = 0; index < data.length; index++) {
+          this.userUIDList.push(data[index].uid);
+        }
+      });
+    },
+
     async outRoom() {
       var ref = this;
-      await updateClass({ rid: this.$route.query.rid, room_state: '준비' })
+
+      if (!this.userUIDList.empty) {
+        for (let index = 0; index < this.userUIDList.length; index++) {
+          await insertAbsent({ rid: this.$route.query.rid, uid: this.userUIDList[index] }).then(({ data }) => {
+            if (data != null) {
+              console.log(data.eid + ' 결석처리완료');
+            }
+          });
+        }
+      }
+
+      var end_time = new Date(new Date().toString().split('GMT')[0] + ' UTC').toISOString().split('.')[0] + '.000Z';
+      await updateClass({ rid: this.$route.query.rid, room_state: '준비', end_time })
         .then(({ data }) => {
+          ref.chatTest();
+
           if (data == 'success') {
             this.$swal({
               icon: 'success',
@@ -280,6 +387,7 @@ export default {
                 toast.addEventListener('mouseleave', ref.$swal.resumeTimer);
               },
             });
+
             ref.connection.autoCloseEntireSession = true;
 
             ref.connection.getAllParticipants().forEach((participantId) => {
@@ -293,7 +401,7 @@ export default {
             ref.connection.closeSocket();
             ref.connection.disconnect();
 
-            this.$router.push({ name: 'WebRTCList' });
+            ref.$router.push({ name: 'WebRTCList' });
           }
         })
         .catch((err) => {
@@ -336,6 +444,18 @@ export default {
       }
 
       console.log(rankArr);
+    },
+    whiteBoard() {
+      document.querySelector('#modal').style.display = 'block';
+      // document.querySelector('.modal_wrap').style.display = 'block';
+      // document.querySelector('.black_bg').style.display = 'block';
+      // document.querySelector('#widget-container').style.display = 'block';
+    },
+    closeModal() {
+      document.querySelector('#modal').style.display = 'none';
+      // document.querySelector('.modal_wrap').style.display = 'none';
+      // document.querySelector('.black_bg').style.display = 'none';
+      // document.querySelector('#widget-container').style.display = 'none';
     },
   },
 
@@ -436,5 +556,43 @@ body::-webkit-scrollbar {
   width: 80%;
   border: 1px solid;
   /* pointer-events: none; */
+}
+
+/* 모달 */
+#modal {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  display: none;
+}
+
+#modal h2 {
+  margin: 0;
+}
+
+#modal button {
+  display: inline-block;
+  width: 100px;
+  margin-left: calc(100% - 100px - 10px);
+}
+
+#modal .modal_content {
+  width: 100%;
+  height: 100%;
+  margin: 100px auto;
+  padding: 20px 10px;
+  background: #fff;
+  border: 2px solid #666;
+}
+
+#modal .modal_layer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: -1;
 }
 </style>

@@ -53,6 +53,7 @@ import io.swagger.annotations.ApiOperation;
 @CrossOrigin
 @RequestMapping("/api/member") // This means URL's start with /demo (after Application path)
 public class MemberController {
+	private static final String ACCESSTOKEN = "accessToken";
     private Logger logger = LoggerFactory.getLogger(ApplicationRunner.class);
     @Autowired
     private MemberRepository memberRepository;
@@ -73,7 +74,7 @@ public class MemberController {
     
     @ApiOperation(value = "로그인")
     @PostMapping(path = "/user/login")
-    public ResponseEntity<?> login(@RequestBody LoginDto login) {
+    public ResponseEntity<?> login(@RequestBody LoginDto login) { //NOSONAR
         final String email = login.getEmail();
         logger.info("test input username: " + email);
         try {
@@ -97,7 +98,7 @@ public class MemberController {
         logger.info("generated access token: " + accessToken);
         logger.info("generated refresh token: " + refreshToken);
         Map<String, Object> map = new HashMap<>();
-        map.put("accessToken", accessToken);
+        map.put(ACCESSTOKEN, accessToken);
         map.put("refreshToken", refreshToken);
         try {
         	Member member =  memberRepository.findByEmail(email);
@@ -141,10 +142,11 @@ public class MemberController {
     
     @ApiOperation(value = "회원가입")
     @PostMapping(path="/user/signup")
-    public Map<String, Object> addNewUser (@RequestBody SignUpDto signup) {
+    public ResponseEntity<Object> addNewUser (@RequestBody SignUpDto signup) {
+        String regExp = "(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])";
         String email = signup.getEmail();
+        if(!email.matches(regExp)) return new ResponseEntity<>("fail",HttpStatus.BAD_REQUEST);
         Map<String, Object> map = new HashMap<>();
-        System.out.println("회원가입요청 아이디: "+email + "비번: " + signup.getPassword());
         if (memberRepository.findByEmail(email) == null) {        	            
         	Member member = new Member();        	
         	if (signup.getRole() != null && signup.getRole().equals("admin")) {
@@ -163,12 +165,12 @@ public class MemberController {
 			Queue queue = new Queue(queueName, false);
             admin.declareQueue(queue);
             
-            return map;
+            return new ResponseEntity<>(map,HttpStatus.OK);
         } else {
             map.put("success", false);
             map.put("message", "duplicated email");
         }
-        return map;
+        return new ResponseEntity<>(map,HttpStatus.OK);
     }
     
     
@@ -228,6 +230,17 @@ public class MemberController {
     public Iterable<Member> getAllMember() {
         return memberRepository.findAll();
     }
+    @ApiOperation(value = "uid로 회원정보 조회")
+    @GetMapping(path="/user/findByUid")
+    public ResponseEntity<Object> findByUid(@RequestParam int uid) {
+    	try {
+    		Member member = memberRepository.findByUid(uid);
+    		if(member == null) return new ResponseEntity<>("해당  uid가 잘못되었습니다.",HttpStatus.NO_CONTENT);
+    		return new ResponseEntity<>(member,HttpStatus.OK);
+    	}catch (Exception e) {
+    		return new ResponseEntity<>("fail",HttpStatus.BAD_REQUEST);
+		}  	  	
+    }
     
     @ApiOperation(value = "맴버가 참여한 방목록")
     @GetMapping(path = "/user/room")
@@ -235,8 +248,8 @@ public class MemberController {
     public ResponseEntity<Object> memberJoinRoom(@RequestParam int uid) {
     	List<findMemberRoom> list = null;
     	try {
-    		list = memberMapper.mamberJoinRoom(uid);
-    		if(list.size() == 0) return new ResponseEntity<>("수강 중인 강의가 없습니다.",HttpStatus.OK);
+    		list = memberMapper.memberJoinRoom(uid);
+    		if(list.isEmpty()) return new ResponseEntity<>("수강 중인 강의가 없습니다.",HttpStatus.NO_CONTENT);
     	}catch (Exception e) {
     		return new ResponseEntity<>("fail",HttpStatus.BAD_REQUEST);
 		}
@@ -250,7 +263,7 @@ public class MemberController {
     	List<memberAttend> list = null;
     	try {
     		list = memberMapper.memberAttend(uid);
-    		if(list == null) return new ResponseEntity<>("출결 기록이 없습니다.",HttpStatus.OK);
+    		if(list.isEmpty()) return new ResponseEntity<>("출결 기록이 없습니다.",HttpStatus.NO_CONTENT);
     	}catch (Exception e) {
     		return new ResponseEntity<>("fail",HttpStatus.BAD_REQUEST);
 		}
@@ -264,7 +277,7 @@ public class MemberController {
     	List<findFounder> list = null;
     	try {
     		list = memberMapper.founder(uid);
-    		if(list.size() == 0) return new ResponseEntity<>("개설한 방이 없습니다.",HttpStatus.OK);
+    		if(list.isEmpty()) return new ResponseEntity<>("개설한 방이 없습니다.",HttpStatus.NO_CONTENT);
     	}catch (Exception e) {
     		return new ResponseEntity<>("fail",HttpStatus.BAD_REQUEST);
 		}
@@ -278,7 +291,7 @@ public class MemberController {
     	List<findMemberEvaluation> list;
     	try {
     		list = memberMapper.memberJoinEvaluation(uid);
-    		if(list.size() == 0) return new ResponseEntity<>("평가가 없습니다",HttpStatus.OK);
+    		if(list.isEmpty()) return new ResponseEntity<>("평가가 없습니다",HttpStatus.NO_CONTENT);
     	}catch (Exception e) {
     		return new ResponseEntity<>("fail",HttpStatus.BAD_REQUEST);
 		}
@@ -324,7 +337,7 @@ public class MemberController {
         String email = null;
         Map<String, Object> map = new HashMap<>();
         try {
-            accessToken = m.get("accessToken");
+            accessToken = m.get(ACCESSTOKEN);
             refreshToken = m.get("refreshToken");
             logger.info("access token in rnat: " + accessToken);
             try {
@@ -352,7 +365,7 @@ public class MemberController {
                     final UserDetails userDetails = userDetailsService.loadUserByUsername(email);
                     String newtok =  jwtTokenUtil.generateAccessToken(userDetails);
                     map.put("success", true);
-                    map.put("accessToken", newtok);
+                    map.put(ACCESSTOKEN, newtok);
                 } else {
                     map.put("success", false);
                     map.put("msg", "refresh token is expired.");

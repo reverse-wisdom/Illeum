@@ -45,12 +45,6 @@ export default {
     UserPartin,
     UserAttend,
   },
-  data() {
-    UserPartin;
-    return {
-      showcheck2: false,
-    };
-  },
 };
 </script>
 

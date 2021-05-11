@@ -8,6 +8,7 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Data
+@SuppressWarnings("all")
 public class findMemberRoom {
 
     private int rid;
@@ -15,6 +16,8 @@ public class findMemberRoom {
     private int uid;
     
     private String name;
+   
+    private int founder_uid;
     
     private String founder;
     
@@ -34,5 +37,8 @@ public class findMemberRoom {
     
     @Column(name = "room_type")
     private String room_type;
+    
+    @Column(name = "room_password")
+    private String room_password;
     
 }
