@@ -63,10 +63,10 @@ public class ImageService {
 			if (resource.exists() || resource.isReadable()) {
 				return resource;
 			} else {
-				throw new Exception("Could not read file: " + fileName);
+				throw new IOException("Could not read file: " + fileName);
 			}
 		} catch (Exception e) {
-			throw new Exception("Could not read file: " + fileName);
+			throw new IOException("Could not read file: " + fileName);
 		}
 	}
 	
@@ -77,7 +77,7 @@ public class ImageService {
 	public UploadFile store(MultipartFile file) throws Exception {
 		try {
 			if (file.isEmpty()) {
-				throw new Exception("Failed to store empty file " + file.getOriginalFilename());
+				throw new IOException("Failed to store empty file " + file.getOriginalFilename());
 			}
 
 			String saveFileName = UploadFileUtils.fileSave(rootLocation.toString(), file);
@@ -95,12 +95,11 @@ public class ImageService {
 			saveFile.setFilePath(rootLocation.toString().replace(File.separatorChar, '/') + '/' + saveFileName);
 			saveFile.setSize(resource.contentLength());
 			saveFile.setRegDate(new Date());
-			System.out.println(saveFile);
 			saveFile = fileRepository.save(saveFile);
 
 			return saveFile;
 		} catch (IOException e) {
-			throw new Exception("Failed to store file " + file.getOriginalFilename(), e);
+			throw new IOException("Failed to store file " + file.getOriginalFilename(), e);
 		}
 	}
 
@@ -115,7 +114,6 @@ public class ImageService {
 			if (saveFileName.toCharArray()[0] == '/') {
 				saveFileName = saveFileName.substring(1);
 			}
-			System.out.println(saveFileName);
 			Resource resource = loadAsResource(saveFileName);
 
 			UploadFile saveFile = new UploadFile();
@@ -125,12 +123,11 @@ public class ImageService {
 			saveFile.setFilePath(rootLocation.toString().replace('\\', '/') + '/' + saveFileName);
 			saveFile.setSize(resource.contentLength());
 			saveFile.setRegDate(new Date());
-			System.out.println(saveFile);
 			saveFile = fileRepository.save(saveFile);
 
 			return saveFile;
 		} catch (IOException e) {
-			throw new Exception("Failed to store file " + file.getOriginalFilename(), e);
+			throw new IOException("Failed to store file " + file.getOriginalFilename(), e);
 		}
 	}
 }

@@ -26,6 +26,9 @@ public class WebRtcController {
 	@Autowired
 	private AmqpTemplate amqpTemplate;
 	
+	private final String success = "success";
+	private final String fail = "fail";
+	
 	@ApiOperation(value = "미팅  입장")
 	@GetMapping(path = "/entrance")
 	public ResponseEntity<Object> entrance(@RequestParam int uid, @RequestParam int rid) {
@@ -41,9 +44,9 @@ public class WebRtcController {
 			amqpTemplate.convertAndSend(queueName, message);
 
 			//
-			return new ResponseEntity<>("success", HttpStatus.OK);			
+			return new ResponseEntity<>(success, HttpStatus.OK);			
 		} catch (Exception e) {
-			return new ResponseEntity<>("fail", HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(fail, HttpStatus.BAD_REQUEST);
 		}
 	}
 
@@ -60,9 +63,9 @@ public class WebRtcController {
 
 			amqpTemplate.convertAndSend(queueName, message);
 			
-			return new ResponseEntity<>("success", HttpStatus.OK);
+			return new ResponseEntity<>(success, HttpStatus.OK);
 		} catch (Exception e) {
-			return new ResponseEntity<>("fail", HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(fail, HttpStatus.BAD_REQUEST);
 		}
 	}
 	
@@ -76,9 +79,9 @@ public class WebRtcController {
             String message = room.getRoomName() + "의 강의가 시작되었습니다.";
 			amqpTemplate.convertAndSend(roomName, "", message);
 			
-			return new ResponseEntity<>("success", HttpStatus.OK);
+			return new ResponseEntity<>(success, HttpStatus.OK);
 		} catch (Exception e) {
-			return new ResponseEntity<>("fail", HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(fail, HttpStatus.BAD_REQUEST);
 		}
 	}
 

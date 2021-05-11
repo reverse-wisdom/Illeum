@@ -19,8 +19,12 @@
 		AND DATE(NOW()) = DATE(e.attend_time);
 	</select>
 	<select id="roomEntrantInfo" parameterType="insertRoomEvaluationDto"
-		resultType="findEntrantInfo">
-		select m.uid, m.name, m.email, ev.vid, ev.eid, ev.eval_date, ev.attention, ev.participation, ev.distracted, ev.asleep, ev.afk, ev.attend_time, ev.ranking, ev.attend
+		resultType="map">
+		select m.uid, m.name, m.email, ev.vid, ev.eid
+		, DATE_FORMAT(ev.eval_date,'%Y-%m-%d %H:%i:%s') as eval_date
+		, ev.attention, ev.participation, ev.distracted, ev.asleep, ev.afk
+		,  DATE_FORMAT(ev.attend_time,'%Y-%m-%d %H:%i:%s') as attend_time
+		, ev.ranking, ev.attend
 		from member m join entrant e
 		on m.uid = e.uid and e.rid = #{rid}
 		join evaluation ev
