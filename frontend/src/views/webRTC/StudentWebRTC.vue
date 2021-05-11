@@ -276,11 +276,11 @@ export default {
 
       if (event.data) {
         div.innerHTML = '<b>' + userName + '&nbsp;' + timestamp + ':</b><br>' + event.data.chatMessage;
-        this.chatLog += userName + ' ' + uuid + ' ' + event.data.chatMessage + ' ' + timestamp + '\r\n';
+        this.chatLog += userName + ' ' + uuid + ' ' + event.data.chatMessage.replaceAll('\n', '') + ' ' + timestamp + '\r\n';
         div.innerHTML = '<b>' + userName + '&nbsp;' + timestamp + ':</b><br>' + event.data.chatMessage;
       } else {
         div.innerHTML = '<b>' + this.userName + '(당신)&nbsp;' + timestamp + '</b> <br>' + event;
-        this.chatLog += userName + ' ' + uuid + ' ' + event + ' ' + timestamp + '\r\n';
+        this.chatLog += userName + ' ' + uuid + ' ' + event.replaceAll('\n', '') + ' ' + timestamp + '\r\n';
         this.chatResult.push({ uid: uuid, userName: userName, chatMessage: event, timestamp: timestamp });
         div.style.background = '#cbffcb';
       }
