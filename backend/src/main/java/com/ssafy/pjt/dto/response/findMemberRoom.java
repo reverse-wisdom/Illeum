@@ -16,6 +16,8 @@ public class findMemberRoom {
     private int uid;
     
     private String name;
+   
+    private int founder_uid;
     
     private String founder;
     
