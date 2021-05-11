@@ -13,6 +13,7 @@ export default new Vuex.Store({
     name: '',
     uuid: '',
     role: '',
+    alertSocket: '',
   },
   getters: {
     isLogin(state) {
@@ -20,6 +21,13 @@ export default new Vuex.Store({
     },
   },
   mutations: {
+    // allert rabbitmq socket
+    setAlertSocket(state, alertSocket) {
+      state.alertSocket = alertSocket;
+    },
+    clearAlertSocket(state) {
+      state.alertSocket.close();
+    },
     //토큰
     setToken(state, token) {
       state.token = token;
@@ -88,5 +96,10 @@ export default new Vuex.Store({
         });
       }
     },
+    async TEST({commit}, test) {
+      const data = test;
+      console.log(date);
+      commit('setTest', data);
+    }
   },
 });

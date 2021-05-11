@@ -166,6 +166,7 @@ export default {
       localStorage.clear();
       sessionStorage.clear();
       this.$router.push('/sign');
+
       if (data == 'success') {
         this.$store.commit('clearToken');
         this.$store.commit('clearUuid');
@@ -173,6 +174,9 @@ export default {
         this.$store.commit('clearRole');
         this.$store.commit('clearName');
         console.log('로그아웃 성공');
+
+        this.$store.state.alertSocket.disconnect();
+
       } else {
         console.log('로그아웃실패');
       }
