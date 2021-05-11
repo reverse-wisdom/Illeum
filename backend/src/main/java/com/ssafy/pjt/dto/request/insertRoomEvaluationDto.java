@@ -8,6 +8,6 @@ public class insertRoomEvaluationDto {
 	private int rid;
 	private int isLate;
 	private int isAbsent;
-	private int isAttendFist;
+	private int isAttendFirst;
 	private int isChatFirst;
 }
