@@ -35,11 +35,20 @@
       </template>
 
       <v-btn class="mr-4" color="cyan" @click="screen">화면공유</v-btn>
+      <v-btn class="mr-4" color="cyan" @click="openWhiteBoard">화이트보드</v-btn>
       <v-btn class="mr-4" color="cyan" @click="saveMessageLog">채팅기록저장</v-btn>
       <v-btn class="mr-4" color="cyan" @click="chatTest">채팅콘솔테스트</v-btn>
       <v-btn class="mr-4" color="error" @click="outRoom">퇴장</v-btn>
-      &nbsp;
     </div>
+
+    <!-- 화이트보드 모달 영역 -->
+    <div id="modal">
+      <div class="modal_content text-center">
+        <v-btn class="mr-4 mb-4" color="error" @click="closeWhiteBoard">닫기</v-btn>
+        <div id="widget-container" style="height: 80%; width: 80%; border: 1px solid black; border-top:0; border-bottom: 0;"></div>
+      </div>
+    </div>
+    <div class="modal_layer"></div>
   </div>
 </template>
 
@@ -100,6 +109,49 @@ export default {
     bar.addEventListener('mouseup', () => {
       document.removeEventListener('mousemove', drag);
     });
+    var ref = this;
+    // canvas
+    this.$nextTick(function() {
+      this.designer = new window.CanvasDesigner();
+      this.designer.widgetHtmlURL = 'https://www.webrtc-experiment.com/Canvas-Designer/widget.html'; // you can place this file anywhere
+      this.designer.widgetJsURL = 'https://www.webrtc-experiment.com/Canvas-Designer/widget.js';
+
+      this.designer.setSelected('pencil');
+
+      this.designer.setTools({
+        pencil: true,
+        text: true,
+        image: true,
+        pdf: true,
+        eraser: true,
+        line: true,
+        arrow: true,
+        dragSingle: true,
+        dragMultiple: true,
+        arc: true,
+        rectangle: true,
+        quadratic: false,
+        bezier: true,
+        marker: true,
+        zoom: false,
+        lineWidth: false,
+        colorsPicker: false,
+        extraOptions: false,
+        code: false,
+        undo: true,
+        isLoad: false,
+      });
+      this.designer.appendTo(document.getElementById('widget-container'));
+      this.designer.addSyncListener(function(data) {
+        console.log('sync canvas');
+        ref.connection.send(data);
+      });
+    });
+
+    window.onload = function() {
+      document.querySelector('#modal').style.display = 'none';
+      document.querySelector('#modal').style.top = 0;
+    };
 
     this.openRoom();
   },
@@ -154,6 +206,13 @@ export default {
       localStream.mute('audio');
       this.connection.streamEvents.selectFirst('local').mediaElement.muted = true;
       this.isAudio = false;
+    },
+    openWhiteBoard() {
+      document.querySelector('#modal').style.top = 0;
+      document.querySelector('#modal').style.display = 'block';
+    },
+    closeWhiteBoard() {
+      document.querySelector('#modal').style.display = 'none';
     },
     chat() {
       var chatMessage = this.message;
@@ -249,11 +308,30 @@ export default {
       });
 
       // 리스너 영역
+      this.connection.onopen = function() {
+        if (ref.designer.pointsLength <= 0) {
+          // you seems having data to be synced with new user!
+          setTimeout(function() {
+            ref.connection.send('plz-sync-points');
+          }, 1000);
+        }
+      };
+
       this.connection.onmessage = function(event) {
+        // chatting
         if (event.data.chatMessage) {
           ref.appendChatMessage(event, event.extra.userFullName, event.extra.userUUID);
           return;
         }
+
+        // canvas
+        if (event.data === 'plz-sync-points') {
+          console.log(ref.designer);
+          ref.designer.sync();
+          return;
+        }
+
+        ref.designer.syncData(event.data);
       };
 
       this.connection.onstream = function(event) {
@@ -547,5 +625,43 @@ body::-webkit-scrollbar {
   width: 80%;
   border: 1px solid;
   /* pointer-events: none; */
+}
+
+/* mordal */
+#modal {
+  position: fixed;
+  top: 200%;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+#modal h2 {
+  margin: 0;
+}
+
+#modal button {
+  display: inline-block;
+  width: 100px;
+  margin-left: calc(100% - 100px - 10px);
+}
+
+#modal .modal_content {
+  width: 100%;
+  height: 80%;
+  margin: 100px auto;
+  padding: 20px 10px;
+  background: #fff;
+  border: 2px solid #666;
+}
+
+#modal .modal_layer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: -1;
 }
 </style>
