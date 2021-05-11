@@ -64,7 +64,6 @@ class AlertRabbitMQSocket {
     this.client.disconnect();
     // this.client.close();
   }
-
 }
 import { registerUser } from '@/api/auth';
 import push from 'push.js';
@@ -206,7 +205,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 @import url('https://fonts.googleapis.com/css?family=Montserrat|Quicksand');
 * {
   margin: 0;

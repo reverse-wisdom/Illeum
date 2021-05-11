@@ -11,7 +11,12 @@
       </div>
       <div class="dragbar" id="dragbar"></div>
       <div class="panel-two" id="drag-right">
-        <div id="onUserStatusChanged"></div>
+        <div id="onUserStatusChanged">
+          참여자 목록
+          <template v-for="name in names">
+            {{ name }}
+          </template>
+        </div>
         <div id="conversation-panel"></div>
         <div id="key-press" style="text-align: right; display: none; font-size: 11px;">
           <span style="vertical-align: middle;"></span>
@@ -99,6 +104,7 @@ export default {
       isVideo: true,
       userUIDList: [],
       search: '',
+      names: [], // name list
     };
   },
   created() {
@@ -246,6 +252,8 @@ export default {
         this.chatLog += userName + ' ' + uuid + ' ' + event.data.chatMessage + ' ' + timestamp + '\r\n';
       } else {
         div.innerHTML = '<b>' + this.userName + '(당신)&nbsp;' + timestamp + '</b> <br>' + event;
+        this.chatLog += userName + ' ' + uuid + ' ' + event + ' ' + timestamp + '\r\n';
+        this.chatResult.push({ uid: uuid, userName: userName, chatMessage: event, timestamp: timestamp });
         div.style.background = '#cbffcb';
       }
 
@@ -342,9 +350,10 @@ export default {
       };
 
       this.connection.onUserStatusChanged = function(event) {
-        var infoBar = document.getElementById('onUserStatusChanged');
-        var names = [];
+        ref.names = [];
         ref.connection.getAllParticipants().forEach(function(participantId) {
+          var user = ref.connection.peers[participantId];
+          ref.names.push(user.extra.userFullName);
           if (ref.userUIDList.includes(event.extra.userUUID)) {
             const index = ref.userUIDList.indexOf(event.extra.userUUID);
             if (index > -1) {
@@ -352,15 +361,30 @@ export default {
             }
           }
         });
-        if (!names.length) {
-          names = ['Only You'];
+        if (!ref.names.length) {
+          ref.names = ['Only You'];
         } else {
-          names = [ref.connection.extra.userFullName || 'You'].concat(names);
+          ref.names.push(ref.connection.extra.userFullName);
         }
-        infoBar.innerHTML = '<b>참여자 목록:</b> ' + names.join(', ');
+      };
+
+      this.connection.onleave = function(event) {
+        const idx = ref.names.indexOf(event.extra.userFullName);
+        console.log(idx);
+        if (idx > -1) {
+          ref.names.splice(idx, 1);
+        }
+        var temp = ref.names;
+
+        console.log(event);
+        ref.connection.extra.status = '퇴장';
+        ref.connection.onUserStatusChanged(event);
+        if (temp.length == 1) ref.names = ['Only You'];
+        else ref.names = temp;
       };
 
       this.connection.onclose = function(event) {
+        ref.names = [];
         console.log('close');
       };
     },
