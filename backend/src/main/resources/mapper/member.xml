@@ -4,8 +4,12 @@
 <mapper
 	namespace="com.ssafy.pjt.repository.mapper.MemberMapper">
 	<!--맴버가 수강 중인 강의(방) 목록 -->
-	<select id="memberJoinRoom" parameterType="int" resultType="findMemberRoom">
-		select m.uid, m.name , r.rid, r.room_name, r.uid as founder_uid,(select m.name from member m where m.uid = r.uid) as founder , r.start_time, r.end_time, r.room_state, r.room_type, r.room_password
+	<select id="memberJoinRoom" parameterType="int" resultType="map">
+		select m.uid, m.name , r.rid, r.room_name, r.uid as founder_uid
+		,(select m.name from member m where m.uid = r.uid) as founder 
+		, DATE_FORMAT(r.start_time,'%Y-%m-%d %H:%i:%s') as start_time
+		, DATE_FORMAT(r.end_time,'%Y-%m-%d %H:%i:%s') as end_time
+		, r.room_state, r.room_type, r.room_password
 		from member m join entrant e 
 		on m.uid = e.uid
 		right join room r
@@ -14,16 +18,26 @@
 	</select>
 	
 	<!--맴버가 개설한 방 목록  -->
-	<select id="founder" parameterType="int" resultType="findFounder">
-		select m.uid, m.name , r.rid, r.room_name, r.start_time, r.end_time, r.room_state, r.room_type 
+	<select id="founder" parameterType="int" resultType="map">
+		select m.uid, m.name , r.rid, r.room_name
+		, DATE_FORMAT(r.start_time,'%Y-%m-%d %H:%i:%s') as start_time
+		, DATE_FORMAT(r.end_time,'%Y-%m-%d %H:%i:%s') as end_time
+		, r.room_state, r.room_type ,r.room_password
 		from member m right join room r 
 		on m.uid = r.uid
 		where m.uid = #{uid}; 
 	</select>
 	
 	<!--맴버 평가 목록  -->
-	<select id="memberJoinEvaluation" parameterType="int" resultType="findMemberEvaluation">
-		select ev.vid, e.eid,r.uid as founderUid, m.name, r.room_name, r.room_type, r.start_time, r.end_time, r.room_state, (select m.name from member m where m.uid = r.uid) as founder ,ev.eval_date, ev.attention, ev.participation, ev.distracted, ev.asleep, ev.afk, ev.attend_time, ev.ranking, ev.attend
+	<select id="memberJoinEvaluation" parameterType="int" resultType="map">
+		select ev.vid, e.eid,r.uid as founderUid, m.name, r.room_name, r.room_type
+		, DATE_FORMAT(r.start_time,'%Y-%m-%d %H:%i:%s') as start_time
+		, DATE_FORMAT(r.end_time,'%Y-%m-%d %H:%i:%s') as end_time
+		, r.room_state, (select m.name from member m where m.uid = r.uid) as founder 
+		, DATE_FORMAT(ev.eval_date,'%Y-%m-%d %H:%i:%s') as eval_date
+		, ev.attention, ev.participation, ev.distracted, ev.asleep, ev.afk
+		, DATE_FORMAT(ev.attend_time,'%Y-%m-%d %H:%i:%s') as attend_time
+		, ev.ranking, ev.attend
 		from member m join entrant e 
 		on m.uid = e.uid
 		right join evaluation ev
@@ -34,8 +48,10 @@
 	</select>
 	
 	<!-- 맴버 출석 현황 -->
-	<select id="memberAttend" parameterType="int" resultType="memberAttend">
-		select m.uid,m.name, r.room_name,ev.attend_time, ev.attend
+	<select id="memberAttend" parameterType="int" resultType="map">
+		select m.uid,m.name, r.room_name
+		, DATE_FORMAT(ev.attend_time,'%Y-%m-%d %H:%i:%s') as attend_time
+		, ev.attend
 		from member m join entrant e 
 		on m.uid = e.uid
 		right join evaluation ev

@@ -36,10 +36,6 @@ import com.ssafy.pjt.dto.Token;
 import com.ssafy.pjt.dto.request.LoginDto;
 import com.ssafy.pjt.dto.request.SignUpDto;
 import com.ssafy.pjt.dto.request.UpdateMemberDto;
-import com.ssafy.pjt.dto.response.findFounder;
-import com.ssafy.pjt.dto.response.findMemberEvaluation;
-import com.ssafy.pjt.dto.response.findMemberRoom;
-import com.ssafy.pjt.dto.response.memberAttend;
 import com.ssafy.pjt.jwt.JwtTokenUtil;
 import com.ssafy.pjt.repository.MemberRepository;
 import com.ssafy.pjt.repository.mapper.MemberMapper;
@@ -246,7 +242,7 @@ public class MemberController {
     @GetMapping(path = "/user/room")
     //차후에 액세스 토큰으로 이름 찾고 이름으로 uid 찾고 그걸로 데이터 뺴자
     public ResponseEntity<Object> memberJoinRoom(@RequestParam int uid) {
-    	List<findMemberRoom> list = null;
+    	List<Map<String, Object>> list = null;
     	try {
     		list = memberMapper.memberJoinRoom(uid);
     		if(list.isEmpty()) return new ResponseEntity<>("수강 중인 강의가 없습니다.",HttpStatus.NO_CONTENT);
@@ -260,7 +256,7 @@ public class MemberController {
     @GetMapping(path = "/user/attend")
     //차후에 액세스 토큰으로 이름 찾고 이름으로 uid 찾고 그걸로 데이터 뺴자
     public ResponseEntity<Object> memberAttend(@RequestParam int uid) {
-    	List<memberAttend> list = null;
+    	List<Map<String, Object>> list = null;
     	try {
     		list = memberMapper.memberAttend(uid);
     		if(list.isEmpty()) return new ResponseEntity<>("출결 기록이 없습니다.",HttpStatus.NO_CONTENT);
@@ -274,7 +270,7 @@ public class MemberController {
     @GetMapping(path = "/user/founder")
     //차후에 액세스 토큰으로 이름 찾고 이름으로 uid 찾고 그걸로 데이터 뺴자
     public ResponseEntity<Object> founder(@RequestParam int uid) {
-    	List<findFounder> list = null;
+    	List<Map<String, Object>> list = null;
     	try {
     		list = memberMapper.founder(uid);
     		if(list.isEmpty()) return new ResponseEntity<>("개설한 방이 없습니다.",HttpStatus.NO_CONTENT);
@@ -288,7 +284,7 @@ public class MemberController {
     @GetMapping(path = "/user/evaluation")
     //차후에 액세스 토큰으로 이름 찾고 이름으로 uid 찾고 그걸로 데이터 뺴자
     public ResponseEntity<Object> memberJoinEvaluation(@RequestParam int uid){
-    	List<findMemberEvaluation> list;
+    	List<Map<String, Object>> list;
     	try {
     		list = memberMapper.memberJoinEvaluation(uid);
     		if(list.isEmpty()) return new ResponseEntity<>("평가가 없습니다",HttpStatus.NO_CONTENT);

@@ -5,7 +5,6 @@ import com.ssafy.pjt.dto.Room;
 import com.ssafy.pjt.dto.request.insertRoomDto;
 import com.ssafy.pjt.dto.request.updateRoomDto;
 import com.ssafy.pjt.dto.response.findRoom;
-import com.ssafy.pjt.dto.response.findRoomEvaluation;
 import com.ssafy.pjt.jwt.JwtTokenUtil;
 import com.ssafy.pjt.repository.MemberRepository;
 import com.ssafy.pjt.repository.RoomRepository;
@@ -82,7 +81,7 @@ public class RoomController {
 
 	@ApiOperation(value = "rid로 방 조회")
 	@GetMapping(path = "/findByRid")
-	public ResponseEntity<Object> findByrid(@RequestParam int rid) {
+	public ResponseEntity<Object> findByRid(@RequestParam int rid) {
 		Room room = roomRepository.findByRid(rid);
 		try {
 			findRoom findroom = roomService.conversion(room);
@@ -120,7 +119,7 @@ public class RoomController {
 	@ApiOperation(value = "방에 참여한 맴버의 평가 목록 조회")
 	@GetMapping(path = "/evaluation")
 	public ResponseEntity<Object> roomJoinEvaluation(@RequestParam int rid) {
-		List<findRoomEvaluation> list = null;
+		List<Map<String, Object>> list = null;
 		try {
 			list = roomMapper.roomJoinEvaluation(rid);
 			if (list.isEmpty())
