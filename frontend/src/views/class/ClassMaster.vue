@@ -16,7 +16,7 @@
           <span style="vertical-align: middle;"></span>
           <img src="https://www.webrtc-experiment.com/images/key-press.gif" style="height: 12px; vertical-align: middle;" />
         </div>
-        <v-text-field id="txt-chat-message" sold v-model="message" dense label="채팅"></v-text-field>
+        <v-text-field id="txt-chat-message" sold v-model="message" dense label="채팅" @keyup.enter="chat"></v-text-field>
         <button class="btn btn-primary" id="btn-chat-message" @click="chat">Send</button>
       </div>
     </div>

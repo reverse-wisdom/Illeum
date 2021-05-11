@@ -11,7 +11,7 @@
       <h2>show evaluation</h2>
       <h2>{{ date }}</h2>
       <EvalPieChart :learnData="learnData" :key="change" />
-      <EvalRadarchart :learnData="learnData" :averageData="averageData" :key="renderKey" />
+      <EvalRadarChart :learnData="learnData" :averageData="averageData" :key="renderKey" />
     </v-row>
   </div>
 </template>
@@ -20,11 +20,11 @@
 import { userEvalList } from '@/api/auth';
 import { fetchRoomname, evaluateList } from '@/api/class';
 import EvalPieChart from '@/views/components/EvalPieChart';
-import EvalRadarchart from '@/views/components/EvalRadarchart';
+import EvalRadarChart from '@/views/components/EvalRadarChart';
 export default {
   components: {
     EvalPieChart,
-    EvalRadarchart,
+    EvalRadarChart,
   },
 
   data() {
@@ -35,13 +35,8 @@ export default {
       date: '',
       landscape: true,
       menu: false,
-      // date: '2018-03-02',
-      mindate: '2021-04-01',
-      maxdate: '2021-04-30',
-      // arrayDates: ['2021-04-27', '2021-04-23'],
       arrayDates: [],
       roomName: [],
-
       evalcheck: false,
       averageData: [
         {
@@ -97,17 +92,8 @@ export default {
       renderKey: -1,
     };
   },
-  // props: {
-  //   date: {
-  //     type: String,
-  //   },
-  //   items: {
-  //     type: [],
-  //   },
-  // },
+
   async created() {
-    // const uuid = this.$store.state.uuid;
-    // console.log(this.uuid);
     const { data } = await userEvalList(this.uuid);
     console.log(data);
     for (var i = 0; i < data.length; i++) {
@@ -155,7 +141,6 @@ export default {
           this.learnData[3].per = this.eval[i].afk;
           this.learnData[4].per = this.eval[i].participation;
           const { data } = await fetchRoomname(this.eval[i].room_name);
-          console.log(data);
           const roomPartinUser = data[0].rid;
           console.log(roomPartinUser);
           const res = await evaluateList(roomPartinUser);

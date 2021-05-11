@@ -7,6 +7,7 @@ import store from './store';
 import VueSweetalert2 from 'vue-sweetalert2';
 import 'sweetalert2/dist/sweetalert2.min.css';
 import VueMoment from 'vue-moment';
+import VueFullPage from 'vue-fullpage.js';
 Vue.config.productionTip = false;
 
 const sweetalert2_options = {
@@ -20,6 +21,7 @@ Vue.use(VueMoment); // vue-moment
 
 Vue.use(Vuetify); // Vuetify
 
+Vue.use(VueFullPage); //VueFullPage
 new Vue({
   router,
   store,

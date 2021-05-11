@@ -1,53 +1,33 @@
 <template>
   <div class="sign">
-    <div class="wrapper">
-      <div class="title-text">
-        <div class="title login">LOGIN</div>
-        <div class="title signup">SIGN UP</div>
+    <img src="@/assets/img/textlogo.png" alt="logo" />
+    <p>서비스 이용을 위해 해당 양식을 입력해주세요.</p>
+    <div class="form-modal">
+      <div class="form-toggle">
+        <button id="login-toggle" @click="toggleLogin">LOGIN</button>
+        <button id="signup-toggle" @click="toggleSignup">SIGNUP</button>
       </div>
-      <div class="form-container">
-        <div class="slide-controls">
-          <input type="radio" name="slide" id="login" checked />
-          <input type="radio" name="slide" id="signup" />
-          <label @click="loginClick" for="login" class="slide login">LOGIN</label>
-          <label @click="signupClick" for="signup" class="slide signup">REGISTER</label>
-          <div class="slider-tab"></div>
-        </div>
-        <div class="form-inner">
-          <form action="#" class="login">
-            <div class="field">
-              <input type="text" placeholder="Email" v-model="Lemail" required />
-            </div>
-            <div class="field">
-              <input type="password" placeholder="Password" v-model="Lpassword" required />
-            </div>
-            <div class="pass-link">
-              <!-- <a href="#">Forgot password?</a> -->
-            </div>
-            <div class="field btn">
-              <div class="btn-layer" @click="signinUser"></div>
-              <input type="text" value="LOGIN" @click="signinUser" />
-            </div>
-          </form>
-          <form action="#" class="signup">
-            <div class="field">
-              <input type="text" placeholder="Name" v-model="name" required />
-            </div>
-            <div class="field">
-              <input type="text" placeholder="Email Address" v-model="email" required />
-            </div>
-            <div class="field">
-              <input type="password" placeholder="Password" v-model="password" required />
-            </div>
-            <div class="field">
-              <input type="password" placeholder="Confirm password" v-model="pwdcheck" required />
-            </div>
-            <div class="field btn">
-              <div class="btn-layer"></div>
-              <input type="text" value="SIGN UP" @click="signup" />
-            </div>
-          </form>
-        </div>
+
+      <div id="login-form">
+        <form>
+          <div class="input-each">
+            <input ref="loginId" type="text" placeholder="E-MAIL" v-model="Lemail" @keyup.enter="$refs.loginPassword.focus()" required />
+          </div>
+          <div class="input-each">
+            <input ref="loginPassword" type="password" placeholder="PASSWORD" v-model="Lpassword" required @keyup.enter="signinUser" />
+          </div>
+          <button type="button" class="btn login" @click="signinUser">LOGIN</button>
+        </form>
+      </div>
+
+      <div id="signup-form">
+        <form>
+          <input ref="signupInput2" type="text" placeholder="E-MAIL" v-model="email" @keyup.enter="$refs.signupInput3.focus()" required />
+          <input ref="signupInput1" type="text" placeholder="NAME" v-model="name" @keyup.enter="$refs.signupInput2.focus()" required />
+          <input ref="signupInput3" type="password" placeholder="PASSWORD" v-model="password" @keyup.enter="$refs.signupInput4.focus()" required />
+          <input ref="signupInput4" type="password" placeholder="CONFIRM PASSWORD" v-model="pwdcheck" @keyup.enter="signup" required />
+          <button type="button" class="btn signup" @click="signup">SIGN UP</button>
+        </form>
       </div>
     </div>
   </div>
@@ -93,6 +73,7 @@ export default {
   name: 'Sign',
   data() {
     return {
+      url: '',
       Lemail: '',
       Lpassword: '',
       name: '',
@@ -104,29 +85,48 @@ export default {
   },
   methods: {
     //toggle
-    signupClick() {
-      const loginText = document.querySelector('.title-text .login');
-      const loginForm = document.querySelector('form.login');
-      loginForm.style.marginLeft = '-50%';
-      loginText.style.marginLeft = '-50%';
+    // signupClick() {
+    //   const loginText = document.querySelector('.title-text .login');
+    //   const loginForm = document.querySelector('form.login');
+    //   loginForm.style.marginLeft = '-50%';
+    //   loginText.style.marginLeft = '-50%';
+    // },
+
+    // loginClick() {
+    //   const loginText = document.querySelector('.title-text .login');
+    //   const loginForm = document.querySelector('form.login');
+    //   loginForm.style.marginLeft = '0%';
+    //   loginText.style.marginLeft = '0%';
+    // },
+
+    // signuplink() {
+    //   const signupBtn = document.querySelector('label.signup');
+    //   signupBtn.click();
+    //   return false;
+    // },
+    toggleSignup() {
+      document.getElementById('login-toggle').style.backgroundColor = '#fff';
+      document.getElementById('login-toggle').style.color = '#222';
+      document.getElementById('signup-toggle').style.backgroundColor = '#38A897';
+      document.getElementById('signup-toggle').style.color = '#fff';
+      document.getElementById('login-form').style.display = 'none';
+      document.getElementById('signup-form').style.display = 'block';
     },
 
-    loginClick() {
-      const loginText = document.querySelector('.title-text .login');
-      const loginForm = document.querySelector('form.login');
-      loginForm.style.marginLeft = '0%';
-      loginText.style.marginLeft = '0%';
+    toggleLogin() {
+      document.getElementById('login-toggle').style.backgroundColor = '#38A897';
+      document.getElementById('login-toggle').style.color = '#fff';
+      document.getElementById('signup-toggle').style.backgroundColor = '#fff';
+      document.getElementById('signup-toggle').style.color = '#222';
+      document.getElementById('signup-form').style.display = 'none';
+      document.getElementById('login-form').style.display = 'block';
     },
 
-    signuplink() {
-      const signupBtn = document.querySelector('label.signup');
-      signupBtn.click();
-      return false;
-    },
     //validation check
     validateEmail(value) {
       if (
-        /^([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x22([^\x0d\x22\x5c\x80-\xff]|\x5c[\x00-\x7f])*\x22)(\x2e([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x22([^\x0d\x22\x5c\x80-\xff]|\x5c[\x00-\x7f])*\x22))*\x40([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x5b([^\x0d\x5b-\x5d\x80-\xff]|\x5c[\x00-\x7f])*\x5d)(\x2e([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x5b([^\x0d\x5b-\x5d\x80-\xff]|\x5c[\x00-\x7f])*\x5d))*$/.test(
+        /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$/.test(
+          // NOSONAR
           value
         )
       ) {
@@ -137,6 +137,7 @@ export default {
     },
     validatePassword(value) {
       if (/^(?=.*\d)(?=.*[a-z])(?=.*[^\w\d\s:])([^\s]){8,16}$/.test(value)) {
+        // NOSONAR
         this.msg['password'] = true;
       } else {
         this.msg['password'] = false;
@@ -144,63 +145,31 @@ export default {
     },
     //통신
     async signup() {
-      // if (!this.msg['email']) {
-      //   this.$swal({
-      //     icon: 'error',
-      //     title: '이메일 형식이 잘못되었습니다.!',
-      //   });
-      // } else if (this.nickname == null) {
-      //   this.$swal({
-      //     icon: 'error',
-      //     title: '닉네임을 입력해주세요!',
-      //   });
-      // } else if (!this.msg['password']) {
-      //   this.$swal({
-      //     icon: 'error',
-      //     title: '비밀번호 입력시 8자리이상, 특수문자를 포함해주세요!',
-      //   });
-      // } else {
-      //   const userData = {
-      //     name: this.name,
-      //     email: this.email,
-      //     password: this.password,
-      //   };
-      //   const { data } = await register(userData);
-
-      //   if (data == 'SUCCESS') {
-      //     this.$swal({
-      //       position: 'top-end',
-      //       icon: 'success',
-      //       title: '회원가입성공!!',
-      //       showConfirmButton: false,
-      //       timer: 1500,
-      //     });
-      //     this.$router.push('/');
-      //   } else {
-      //     this.$swal({
-      //       icon: 'error',
-      //       title: '회원가입 실패 관리자에게 문의해주세요',
-      //     });
-      //   }
-      // }
-
       const userData = {
         email: this.email,
         name: this.name,
         thumbnail: 'string',
         password: this.password,
       };
-      const { data } = await registerUser(userData);
-      console.log(data);
-      if (data.success === true) {
-        this.$swal({
-          icon: 'success',
-          title: '회원가입성공!!',
-          showConfirmButton: false,
-          timer: 1500,
-        });
-        this.$router.push('/sign');
-      } else {
+      try {
+        const { data } = await registerUser(userData);
+        console.log(data);
+        if (data.success === true) {
+          this.$swal({
+            icon: 'success',
+            title: '회원가입성공!!',
+            showConfirmButton: false,
+            timer: 1500,
+          });
+          // this.$router.push('/sign');
+          this.$router.go();
+        } else {
+          this.$swal({
+            icon: 'error',
+            title: '회원가입 실패 관리자에게 문의해주세요',
+          });
+        }
+      } catch (error) {
         this.$swal({
           icon: 'error',
           title: '회원가입 실패 관리자에게 문의해주세요',
@@ -208,12 +177,12 @@ export default {
       }
     },
     async signinUser() {
-      if (this.Lemail == null) {
+      if (this.Lemail == '') {
         this.$swal({
           icon: 'error',
           title: '아이디를 입력해 주세요!',
         });
-      } else if (this.Lpassword == null) {
+      } else if (this.Lpassword == '') {
         this.$swal({
           icon: 'error',
           title: '비밀번호를 입력해 주세요!',
@@ -238,188 +207,182 @@ export default {
 </script>
 
 <style>
-@import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Montserrat|Quicksand');
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Poppins', sans-serif;
+  font-family: 'quicksand', Arial, Helvetica, sans-serif;
 }
+
 .sign {
-  display: grid;
+  /* display: grid; */
   height: 100%;
   width: 100%;
   place-items: center;
-  /* background: no-repeat center/100% url('../../assets/img/signbg.jpg'); */
+  background: no-repeat center/100% url('../../assets/img/bg4.jpg');
   /* background: -webkit-linear-gradient(90deg, #0162c8, #55e7fc); */
 }
 ::selection {
-  background: #fa4299;
+  background: #6173ff;
   color: #fff;
 }
-.wrapper {
-  overflow: hidden;
-  max-width: 390px;
-  background: #fff;
-  padding: 30px;
-  border-radius: 40px;
-  box-shadow: 13px 13px 20px #cbced1, -13px -13px 20px #ffffff;
+
+img {
+  margin-top: 5%;
+  width: 15vw;
 }
-.wrapper .title-text {
-  display: flex;
-  width: 200%;
+.sign p {
+  font-weight: 900;
+  margin: 10px 0px;
 }
-.wrapper .title {
-  width: 50%;
-  font-size: 35px;
-  font-weight: 600;
-  text-align: center;
-  transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-}
-.wrapper .slide-controls {
+.form-modal {
   position: relative;
-  display: flex;
-  height: 50px;
-  width: 100%;
-  overflow: hidden;
-  margin: 30px 0 10px 0;
-  justify-content: space-between;
-  border: 1px solid lightgrey;
-  border-radius: 5px;
+  width: 450px;
+  height: auto;
+  margin-top: 2%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #fff;
+  border-top-right-radius: 20px;
+  border-top-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+  box-shadow: 0 3px 20px 0px rgba(0, 0, 0, 0.1);
 }
-.slide-controls .slide {
-  height: 100%;
-  width: 100%;
-  color: #000;
-  font-size: 15px;
-  font-weight: 500;
-  text-align: center;
-  line-height: 48px;
+
+.form-modal button {
   cursor: pointer;
-  z-index: 1;
-  transition: all 0.6s ease;
+  position: relative;
+  text-transform: capitalize;
+  font-size: 1em;
+  z-index: 2;
+  outline: none;
+  background: #fff;
+  transition: 0.2s;
 }
-.slide-controls label.signup {
-  color: #000;
+
+.form-modal .btn {
+  border-radius: 20px;
+  border: none;
+  font-weight: bold;
+  font-size: 1.2em;
+  padding: 0.8em 1em 0.8em 1em !important;
+  transition: 0.5s;
+  border: 1px solid #ebebeb;
+  margin-bottom: 0.5em;
+  margin-top: 0.5em;
+  letter-spacing: 5px;
 }
-.slide-controls .slider-tab {
-  position: absolute;
-  height: 100%;
+
+.form-modal .login,
+.form-modal .signup {
+  background: #38a897;
+  color: #fff;
+}
+
+.form-modal .login:hover,
+.form-modal .signup:hover {
+  background: #6173ff;
+}
+
+.form-toggle {
+  position: relative;
+  width: 100%;
+  height: auto;
+}
+
+.form-toggle button {
   width: 50%;
-  left: 0;
-  z-index: 0;
-  border-radius: 5px;
-  background: #1cbd8f;
-  transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  float: left;
+  padding: 1.5em;
+  margin-bottom: 1.5em;
+  border: none;
+  transition: 0.2s;
+  font-size: 1.1em;
+  font-weight: bold;
+  border-top-right-radius: 20px;
+  border-top-left-radius: 20px;
 }
-input[type='radio'] {
+
+.form-toggle button:nth-child(1) {
+  border-bottom-right-radius: 20px;
+}
+
+.form-toggle button:nth-child(2) {
+  border-bottom-left-radius: 20px;
+}
+
+#login-toggle {
+  background: #38a897;
+  color: #ffff;
+  letter-spacing: 3px;
+}
+#signup-toggle {
+  /* background: #38a897; */
+  color: #000;
+  letter-spacing: 3px;
+}
+
+.form-modal form {
+  position: relative;
+  width: 90%;
+  height: auto;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+#login-form,
+#signup-form {
+  position: relative;
+  width: 100%;
+  height: auto;
+  padding-bottom: 1em;
+}
+
+#signup-form {
   display: none;
 }
-#signup:checked ~ .slider-tab {
-  left: 50%;
-}
-#signup:checked ~ label.signup {
-  color: #000;
-  cursor: default;
-  user-select: none;
-}
-#signup:checked ~ label.login {
-  color: #000;
-}
-#login:checked ~ label.signup {
-  color: #000;
-}
-#login:checked ~ label.login {
-  cursor: default;
-  user-select: none;
-}
-.wrapper .form-container {
+
+#login-form button,
+#signup-form button {
   width: 100%;
-  overflow: hidden;
+  margin-top: 0.5em;
+  padding: 0.6em;
 }
-.form-container .form-inner {
-  display: flex;
-  width: 200%;
-}
-.form-container .form-inner form {
-  width: 50%;
-  transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-}
-.form-inner form .field {
-  height: 50px;
-  width: 100%;
-  margin-top: 20px;
-}
-.form-inner form .field input {
-  height: 100%;
-  width: 100%;
-  outline: none;
-  padding-left: 15px;
-  border-radius: 5px;
-  border: 1px solid lightgrey;
-  border-bottom-width: 2px;
-  font-size: 12px;
-  transition: all 0.3s ease;
-}
-.form-inner form .field input:focus {
-  border-color: #3a7bd5;
-  /* box-shadow: inset 0 0 3px #fb6aae; */
-}
-.form-inner form .field input::placeholder {
-  color: #999;
-  transition: all 0.3s ease;
-}
-form .field input:focus::placeholder {
-  color: #b3b3b3;
-}
-.form-inner form .pass-link {
-  margin-top: 5px;
-}
-.form-inner form .signup-link {
-  text-align: center;
-  margin-top: 30px;
-}
-.form-inner form .pass-link a,
-.form-inner form .signup-link a {
-  color: #3a7bd5;
-  text-decoration: none;
-}
-.form-inner form .pass-link a:hover,
-.form-inner form .signup-link a:hover {
-  text-decoration: underline;
-}
-form .btn {
-  height: 50px;
-  width: 100%;
-  border-radius: 5px;
+
+.form-modal input {
   position: relative;
-  overflow: hidden;
-}
-form .btn .btn-layer {
-  height: 100%;
-  width: 300%;
-  position: absolute;
-  left: -100%;
-  background: #1cbd8f;
-  border-radius: 5px;
-  transition: all 0.4s ease;
-}
-form .btn:hover .btn-layer {
-  left: 0;
-}
-form .btn input[type='text'] {
-  height: 100%;
   width: 100%;
-  z-index: 1;
-  position: relative;
-  background: none;
+  font-size: 1em;
+  padding: 1.2em 1.7em 1.2em 1.7em;
+  margin-top: 0.6em;
+  margin-bottom: 0.6em;
+  border-radius: 20px;
   border: none;
-  caret-color: transparent;
-  color: #fff;
-  text-align: center;
-  border-radius: 5px;
-  font-size: 20px;
-  font-weight: 500;
-  cursor: pointer;
+  background: #ebebeb;
+  outline: none;
+  font-weight: bold;
+  transition: 0.4s;
+}
+
+.form-modal input:focus,
+.form-modal input:active {
+  transform: scaleX(1.02);
+}
+
+.form-modal input::-webkit-input-placeholder {
+  color: #777777;
+}
+
+@media only screen and (max-width: 500px) {
+  .form-modal {
+    width: 100%;
+  }
+}
+
+@media only screen and (max-width: 400px) {
+  i {
+    display: none !important;
+  }
 }
 </style>

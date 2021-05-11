@@ -55,10 +55,10 @@ export default {
 .box {
   width: 95vw;
   height: 50vh;
-  background-color: #fff;
+  /* background-color: #fff; */
   /* float: right; */
   /* margin: 10% 0 10% 20%; */
-  margin: 5% 0%;
+  margin: 3% 5%;
   perspective: 1700px;
   transform: translateY(10%);
   transition: all ease 300ms;

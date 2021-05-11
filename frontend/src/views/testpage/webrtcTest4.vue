@@ -6,7 +6,6 @@
     <div class="drag-container">
       <div class="panel-one" id="drag-left">
         <div class="videos-container"></div>
-        <div class="share-videos-container"></div>
         <v-text-field v-model="roomid" label="방번호 입력"></v-text-field>
         <br />
         <v-text-field v-model="userName" label="닉네임 입력"></v-text-field>
@@ -27,8 +26,9 @@
     <div class="panel-three">
       <v-btn depressed color="primary" @click="onVideo">비디오 켜기</v-btn>
       <v-btn depressed color="warning" @click="offVideo">비디오 끄기</v-btn>
-      <v-btn depressed color="warning" @click="screen">화면공유</v-btn>
     </div>
+    <!-- <div id="widget-container" style="position: fixed;bottom: 0;right: 0;left: 20%;height: 100%;border: 1px solid black; border-top:0; border-bottom: 0;"></div> -->
+    <div id="widget-container"></div>
   </div>
 </template>
 
@@ -37,6 +37,7 @@ import push from 'push.js';
 
 export default {
   mounted() {
+    var ref = this;
     let cdn1 = document.createElement('script');
     cdn1.setAttribute('src', 'https://cdn.jsdelivr.net/npm/rtcmulticonnection@latest/dist/RTCMultiConnection.min.js');
     cdn1.setAttribute('id', 'cdn1');
@@ -48,7 +49,7 @@ export default {
     document.body.appendChild(cdn2);
 
     // let cdn3 = document.createElement('script');
-    // cdn2.setAttribute('src', 'https://cdn.WebRTC-Experiment.com/getScreenId.js');
+    // cdn2.setAttribute('src', 'https://www.webrtc-experiment.com/Canvas-Designer/canvas-designer-widget.js');
     // cdn2.setAttribute('id', 'cdn3');
     // document.body.appendChild(cdn3);
 
@@ -68,13 +69,50 @@ export default {
     bar.addEventListener('mouseup', () => {
       document.removeEventListener('mousemove', drag);
     });
+
+    this.designer = new window.CanvasDesigner();
+    this.designer.widgetHtmlURL = 'https://www.webrtc-experiment.com/Canvas-Designer/widget.html'; // you can place this file anywhere
+    this.designer.widgetJsURL = 'https://www.webrtc-experiment.com/Canvas-Designer/widget.js';
+
+    this.designer.setSelected('pencil');
+
+    this.designer.setTools({
+      pencil: true,
+      text: true,
+      image: true,
+      pdf: true,
+      eraser: true,
+      line: true,
+      arrow: true,
+      dragSingle: true,
+      dragMultiple: true,
+      arc: true,
+      rectangle: true,
+      quadratic: false,
+      bezier: true,
+      marker: true,
+      zoom: false,
+      lineWidth: false,
+      colorsPicker: false,
+      extraOptions: false,
+      code: false,
+      undo: true,
+    });
+    this.designer.appendTo(document.getElementById('widget-container'));
+
+    this.designer.addSyncListener(function(data) {
+      console.log('sync canvas');
+      ref.connection.send(data);
+    });
   },
+  created() {},
   data() {
     return {
       roomid: '',
       userName: '',
       connection: null,
       message: '',
+      designer: null,
     };
   },
   methods: {
@@ -122,7 +160,10 @@ export default {
       conversationPanel.scrollTop = conversationPanel.scrollHeight - conversationPanel.scrollTop;
     },
     openRoom() {
+      var ref = this;
+
       this.connection = new RTCMultiConnection();
+      this.connection.socketMessageEvent = 'canvas-test';
 
       this.connection.session = {
         audio: true,
@@ -149,97 +190,36 @@ export default {
       push.create(this.connection.extra.userFullName + '님이 ' + this.roomid + '방에 입장했습니다');
 
       // 채팅부분영역 시작
-      var ref = this;
 
+      this.connection.onopen = function() {
+        if (ref.designer.pointsLength <= 0) {
+          // you seems having data to be synced with new user!
+          setTimeout(function() {
+            ref.connection.send('plz-sync-points');
+          }, 1000);
+        }
+      };
       this.connection.onmessage = function(event) {
-        // 현재 타이핑 중인 이벤트처리 미구현
-        // if (event.data.typing === true) {
-        //   var key = document.getElementById('key-press');
-        //   key.style.display = 'block';
-        //   console.log(event.extra.userFullName + ' is typing');
-        //   key.querySelector('span').innerHTML(event.extra.userFullName + ' is typing');
-        //   return;
-        // }
+        if (event.data === 'plz-sync-points') {
+          console.log(ref.designer);
+          ref.designer.sync();
+          return;
+        }
 
-        // if (event.data.typing === false) {
-        //   var key = document.getElementById('key-press');
-        //   key.style.display = 'none';
-        //   key.querySelector('span').innerHTML('');
-        //   return;
-        // }
+        ref.designer.syncData(event.data);
 
         if (event.data.chatMessage) {
           ref.appendChatMessage(event, event.extra.userFullName);
           return;
         }
       };
-      getScreenStream(function(screenStream) {
-        var container = document.querySelector('.share-videos-container');
-        var video = document.createElement('video');
-        video.srcObject = screenStream;
-        video.onloadedmetadata = function(e) {
-          video.play();
-        };
-        console.log(screenStream);
-        console.log(video);
-        container.appendChild(video);
-      });
 
-      function getScreenStream(callback) {
-        window.getScreenId(function(error, sourceId, screen_constraints) {
-          navigator.mediaDevices.getUserMedia(screen_constraints).then(function(screenStream) {
-            callback(screenStream);
-          });
-        });
-      }
+      // this.designer.addSyncListener(function(data) {
+      //   console.log("sync canvas")
+      //   ref.connection.send(data);
+      // });
     },
-    screen() {
-      var ref = this;
-      this.connection.session = {
-        audio: true,
-        video: true,
-        data: true,
-        screen: true,
-        // oneway: true,
-      };
-      getScreenStream(function(screenStream) {
-        var container = document.querySelector('.share-videos-container');
-        var video = document.createElement('video');
-        video.srcObject = screenStream;
-        video.onloadedmetadata = function(e) {
-          video.play();
-        };
-        console.log(screenStream);
-        console.log(video);
-        container.appendChild(video);
-      });
 
-      function getScreenStream(callback) {
-        if (navigator.getDisplayMedia) {
-          navigator
-            .getDisplayMedia({
-              video: true,
-            })
-            .then((screenStream) => {
-              callback(screenStream);
-            });
-        } else if (navigator.mediaDevices.getDisplayMedia) {
-          navigator.mediaDevices
-            .getDisplayMedia({
-              video: true,
-            })
-            .then((screenStream) => {
-              callback(screenStream);
-            });
-        } else {
-          windowgetScreenId(function(error, sourceId, screen_constraints) {
-            navigator.mediaDevices.getUserMedia(screen_constraints).then(function(screenStream) {
-              callback(screenStream);
-            });
-          });
-        }
-      }
-    },
     outRoom() {
       this.connection.getAllParticipants().forEach((participantId) => {
         this.connection.disconnectWith(participantId);

@@ -17,6 +17,7 @@ import lombok.Data;
  */
 @Entity
 @Data
+@SuppressWarnings("all")
 @Table(name="uploadfile")
 public class UploadFile {
     

@@ -13,6 +13,7 @@ import java.util.Date;
 
 @Data
 @Entity
+@SuppressWarnings("all")
 public class Evaluation {
 
     @Id
@@ -36,4 +37,6 @@ public class Evaluation {
     private Date attendTime;
     
     private int ranking;
+    
+    private String attend;
 }

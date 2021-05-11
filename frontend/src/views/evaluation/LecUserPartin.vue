@@ -1,7 +1,7 @@
 <template>
   <div>
     <div>
-      <div>{{ each.uid }}님</div>
+      <div>{{ each.name }}님</div>
       <div>{{ roomData.room_name }} 수업에서 수업참여도</div>
       <div>총 수강생 {{ evalUserCnt }}명중에 {{ partuidRank }}위입니다</div>
       <div>{{ roomData.room_name }} 수업에서 출석을</div>

@@ -1,14 +1,11 @@
 <template>
   <tr>
     <td>{{ idx + 1 }}</td>
-    <td><img src="http://www.foodnmed.com/news/photo/201903/18296_3834_4319.jpg" style="width:50px; height:50px;" alt="" /></td>
-    <td>{{ name }}</td>
-    <td>{{ email }}</td>
+    <td><v-img :src="url" id="preview" style="width:50px; height:50px;"></v-img></td>
+    <td>{{ each.name }}</td>
+    <td>{{ each.email }}</td>
 
     <td>
-      <!-- <span class="action_btn">
-        <a href="#" @click="eachShow">자세히보기</a>
-      </span> -->
       <v-dialog v-if="this.$store.state.token" v-model="dialog" persistent max-width="1200px">
         <template v-slot:activator="{ on, attrs }">
           <v-btn color="primary" dark v-bind="attrs" v-on="on">
@@ -18,7 +15,7 @@
         <v-card>
           <v-card-title>
             <span class="headline">
-              <span>{{ name }}님의</span>
+              <span>{{ each.name }}님의</span>
               Evaluation
             </span>
           </v-card-title>
@@ -27,7 +24,7 @@
               <v-card>
                 <v-toolbar flat color="primary" dark>
                   <v-toolbar-title>
-                    <span>{{ name }}님의</span>
+                    <span>{{ each.name }}님의</span>
                     Evaluation
                   </v-toolbar-title>
                 </v-toolbar>
@@ -53,7 +50,9 @@
 
                   <v-tab-item>
                     <v-card flat>
-                      <LecUserAttend :each="each" :attend="attend"></LecUserAttend>
+                      <h2>출결</h2>
+                      <h3>출석시간:{{ each.attend_time }}</h3>
+                      <h3>지각여부:{{ each.attend }}</h3>
                     </v-card>
                   </v-tab-item>
                   <v-tab-item>
@@ -79,26 +78,26 @@
         </v-card>
       </v-dialog>
     </td>
-    <td>{{ attend }}</td>
+
+    <td>{{ each.attend }}</td>
   </tr>
 </template>
 
 <script>
-import LecUserAttend from '@/views/evaluation/LecUserAttend';
 import LecUserEval from '@/views/evaluation/LecUserEval';
 import LecUserPartin from '@/views/evaluation/LecUserPartin';
-import { getUsers } from '@/api/auth';
+
 import { findByRidClass } from '@/api/class';
+
 export default {
   components: {
-    LecUserAttend,
     LecUserEval,
     LecUserPartin,
   },
   data() {
     return {
-      name: '',
-      email: '',
+      url: null,
+
       eachli: [],
       dialog: false,
       attend: '',
@@ -119,31 +118,16 @@ export default {
     evalUserCnt: {
       type: Number,
     },
+    chipCheck: {
+      type: Object,
+    },
   },
   async created() {
-    const res_3 = await getUsers();
-    for (var p = 0; p < res_3.data.length; p++) {
-      if (this.each.uid === res_3.data[p].uid) {
-        this.name = res_3.data[p].name;
-        this.email = res_3.data[p].email;
-      }
-    }
+    this.url = 'https://k4d106.p.ssafy.io/profile/' + this.each.uid + '/256';
+
     const { data } = await findByRidClass(this.rid);
     this.roomData = data;
-    console.log(data);
-    console.log(this.roomData.start_time);
-    this.saveTime = this.$moment(this.roomData.start_time).format('YYYY-MM-DD h:mm:ss ');
-    this.saveTime = this.$moment(this.saveTime).add('m', 10);
-    this.saveTime = this.$moment(this.saveTime).format('YYYY-MM-DD h:mm:ss ');
-    console.log(this.saveTime);
-    console.log(this.each.attendTime);
-    if (this.each.attendTime <= this.saveTime) {
-      this.attend = '지각';
-    } else if (this.each.attendTime == '') {
-      this.attend = '조퇴';
-    } else {
-      this.attend = '정상';
-    }
+    this.$emit('goSearch', this.each.attend);
   },
   methods: {},
 };

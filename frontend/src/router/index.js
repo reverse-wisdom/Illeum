@@ -4,9 +4,11 @@ import LandingComp from '../views/LandingComp.vue';
 import Landing from '../views/Landing.vue';
 import About from '../views/About.vue';
 import Navbar from '../components/layout/Navbar.vue';
+import Guide from '../views/components/Guide.vue';
 
 //user
 import Sign from '../views/user/Sign.vue';
+import MyClass from '../views/MyClass.vue';
 
 //class
 import ClassTest from '../views/class/ClassTest.vue';
@@ -27,6 +29,7 @@ import StudentWebRTC from '../views/webRTC/StudentWebRTC.vue';
 import UserEval from '../views/evaluation/UserEval.vue';
 import UserEvaluation from '../views/UserEvaluation.vue';
 import LecturerManage from '../views/evaluation/LecturerManage.vue';
+import LecSelectedEval from '../views/evaluation/LecSelectedEval.vue';
 // 테스트용 임포트 페이지
 
 import webrtcTest from '../views/testpage/webrtcTest.vue';
@@ -34,9 +37,9 @@ import webrtcTest2 from '../views/testpage/webrtcTest2.vue';
 import webrtcTest3 from '../views/testpage/webrtcTest3.vue';
 import webrtcTest4 from '../views/testpage/webrtcTest4.vue';
 import componentTest from '../views/testpage/componentTest.vue';
-import chartTest from '../views/testpage/chartTest.vue';
 import navTest from '../views/testpage/navTest.vue';
 import calendarTest from '../views/testpage/calendarTest.vue';
+
 Vue.use(VueRouter);
 
 const routes = [
@@ -49,6 +52,11 @@ const routes = [
     path: '/home',
     name: 'Home',
     components: { default: About, header: Navbar },
+  },
+  {
+    path: '/guide',
+    name: 'Guide',
+    components: { default: Guide },
   },
   {
     path: '/landingcomp',
@@ -65,10 +73,21 @@ const routes = [
     name: 'LecturerManage',
     components: { default: LecturerManage, header: Navbar },
   },
+
+  {
+    path: '/lecselectedeval',
+    name: 'LecSelectedEval',
+    components: { default: LecSelectedEval, header: Navbar },
+  },
   {
     path: '/sign',
     name: 'Sign',
     components: { default: Sign },
+  },
+  {
+    path: '/myclass',
+    name: 'MyClass',
+    components: { default: MyClass, header: Navbar },
   },
   //class
   {
@@ -165,11 +184,7 @@ const routes = [
     name: 'componentTest',
     component: componentTest,
   },
-  {
-    path: '/chartTest',
-    name: 'chartTest',
-    component: chartTest,
-  },
+
   {
     path: '/navTest',
     name: 'navTest',
