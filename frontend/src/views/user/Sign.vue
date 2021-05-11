@@ -91,7 +91,8 @@ export default {
     //validation check
     validateEmail(value) {
       if (
-        /^([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x22([^\x0d\x22\x5c\x80-\xff]|\x5c[\x00-\x7f])*\x22)(\x2e([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x22([^\x0d\x22\x5c\x80-\xff]|\x5c[\x00-\x7f])*\x22))*\x40([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x5b([^\x0d\x5b-\x5d\x80-\xff]|\x5c[\x00-\x7f])*\x5d)(\x2e([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x5b([^\x0d\x5b-\x5d\x80-\xff]|\x5c[\x00-\x7f])*\x5d))*$/.test(
+        /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$/.test(
+          // NOSONAR
           value
         )
       ) {
@@ -102,13 +103,13 @@ export default {
     },
     validatePassword(value) {
       if (/^(?=.*\d)(?=.*[a-z])(?=.*[^\w\d\s:])([^\s]){8,16}$/.test(value)) {
+        // NOSONAR
         this.msg['password'] = true;
       } else {
         this.msg['password'] = false;
       }
     },
     //통신
-
     async signup() {
       const userData = {
         email: this.email,

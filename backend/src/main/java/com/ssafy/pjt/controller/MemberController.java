@@ -248,7 +248,7 @@ public class MemberController {
     public ResponseEntity<Object> memberJoinRoom(@RequestParam int uid) {
     	List<findMemberRoom> list = null;
     	try {
-    		list = memberMapper.mamberJoinRoom(uid);
+    		list = memberMapper.memberJoinRoom(uid);
     		if(list.isEmpty()) return new ResponseEntity<>("수강 중인 강의가 없습니다.",HttpStatus.NO_CONTENT);
     	}catch (Exception e) {
     		return new ResponseEntity<>("fail",HttpStatus.BAD_REQUEST);
