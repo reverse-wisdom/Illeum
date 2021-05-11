@@ -31,7 +31,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
 	@Override
-	protected void configure(HttpSecurity http) throws Exception { // NOSONAR
+	protected void configure(HttpSecurity http) throws Exception {
 
 		http.httpBasic().disable().cors().and().csrf().disable().sessionManagement()
 				.sessionCreationPolicy(SessionCreationPolicy.STATELESS).
@@ -41,21 +41,40 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/webjars/**").permitAll().
 
 				and().authorizeRequests().antMatchers("/api/**").permitAll().
+//				and().
+//                	authorizeRequests().
+//                	antMatchers("/api/image/**").permitAll().
+//				
+//				and().
+//                   authorizeRequests().
+//                   antMatchers("/api/member/user/login").permitAll().
+//                and().
+//                   authorizeRequests().
+//                   antMatchers("/api/member/user/refresh").permitAll().
+//				and().
+//                   authorizeRequests().
+//                   antMatchers("/api/member/admin/**").hasRole("ADMIN").
+//                and().
+//                   authorizeRequests().
+//                   antMatchers("/api/member/user/**").hasRole("USER").
+//                     
 //                and().
 //                    authorizeRequests().
-//                    antMatchers("/admin/**").hasRole("ADMIN").
+//                    antMatchers("/api/room/findAll").permitAll().
 //                and().
 //                    authorizeRequests().
-//                    antMatchers("/user/**").hasAnyRole("USER", "ADMIN").
+//                    antMatchers("/api/room/findByRoomName").permitAll().
 //                and().
 //                    authorizeRequests().
-//                    antMatchers("/api/member/user/**").permitAll().
+//                    antMatchers("/api/room/**").hasAnyRole("USER", "ADMIN").
+//                    
 //                and().
 //                    authorizeRequests().
-//                    antMatchers("/admin/**").hasRole("ADMIN").
-//                and().
+//                    antMatchers("/api/entrant/**").hasAnyRole("USER", "ADMIN").
+//                    
+//                and().             
 //                    authorizeRequests().
-//                    antMatchers("/user/**").hasAnyRole("USER", "ADMIN").
+//                    antMatchers("/api/evaluation/**").hasAnyRole("USER", "ADMIN").
 
 				and().authorizeRequests().anyRequest().authenticated().and().exceptionHandling()
 				.authenticationEntryPoint(jwtAuthenticationEntryPoint).and()
