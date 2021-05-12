@@ -24,7 +24,7 @@ export default {
             pointHoverBorderColor: 'rgb(54, 162, 235)',
           },
           {
-            label: '평균',
+            label: '수업 평균',
             data: [],
             fill: true,
             backgroundColor: 'rgba(255, 99, 132, 0.2)',
