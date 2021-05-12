@@ -69,8 +69,8 @@ public class MemberController {
 	@Autowired
 	private AmqpAdmin admin;
 
-	private static final String success = "success";
-	private static final String fail = "fail";
+	private static final String SUCCESS = "success";
+	private static final String FAIL = "fail";
 
 	@ApiOperation(value = "로그인")
 	@PostMapping(path = "/user/login")
@@ -109,7 +109,7 @@ public class MemberController {
 			member.setPassword("");
 			map.put("member", member);
 		} catch (Exception e) {
-			return new ResponseEntity<>(fail, HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(FAIL, HttpStatus.BAD_REQUEST);
 		}
 
 		return new ResponseEntity<>(map, HttpStatus.OK);
@@ -123,7 +123,7 @@ public class MemberController {
 			// 토큰으로 이름 찾기?
 			username = jwtTokenUtil.getUsernameFromToken(accessToken);
 		} catch (IllegalArgumentException | ExpiredJwtException e) { // expire됐을 때
-			return new ResponseEntity<>(fail, HttpStatus.NO_CONTENT);
+			return new ResponseEntity<>(FAIL, HttpStatus.NO_CONTENT);
 		}
 
 		try {
@@ -132,7 +132,7 @@ public class MemberController {
 				redisTemplate.delete(username);
 			}
 		} catch (IllegalArgumentException e) {
-			return new ResponseEntity<>(fail, HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(FAIL, HttpStatus.BAD_REQUEST);
 		}
 
 		// cache logout token for 10 minutes!
@@ -140,7 +140,7 @@ public class MemberController {
 		redisTemplate.opsForValue().set(accessToken, true);
 		redisTemplate.expire(accessToken, 10 * 6 * 1000, TimeUnit.MILLISECONDS);
 
-		return new ResponseEntity<>(success, HttpStatus.OK);
+		return new ResponseEntity<>(SUCCESS, HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "회원가입")
@@ -164,7 +164,7 @@ public class MemberController {
 			member.setEmail(email);
 			member.setName(signup.getName());
 
-			map.put(success, true);
+			map.put(SUCCESS, true);
 			Member mem = memberRepository.save(member);
 
 			String queueName = "member." + Integer.toString(mem.getUid());
@@ -173,7 +173,7 @@ public class MemberController {
 
 			return new ResponseEntity<>(map, HttpStatus.OK);
 		} else {
-			map.put(success, false);
+			map.put(SUCCESS, false);
 			map.put("message", "duplicated email");
 		}
 		return new ResponseEntity<>(map, HttpStatus.OK);
@@ -186,9 +186,9 @@ public class MemberController {
 		try {
 			memberRepository.deleteByEmail(email);
 		} catch (Exception e) {
-			return new ResponseEntity<>(fail, HttpStatus.NO_CONTENT);
+			return new ResponseEntity<>(FAIL, HttpStatus.NO_CONTENT);
 		}
-		return new ResponseEntity<>(success, HttpStatus.OK);
+		return new ResponseEntity<>(SUCCESS, HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "회원탈퇴")
@@ -199,10 +199,10 @@ public class MemberController {
 		try {
 			email = jwtTokenUtil.getUsernameFromToken(accessToken);
 		} catch (IllegalArgumentException e) {
-			return new ResponseEntity<>(fail, HttpStatus.NO_CONTENT);
+			return new ResponseEntity<>(FAIL, HttpStatus.NO_CONTENT);
 		} catch (ExpiredJwtException e) { // expire됐을 때
 			email = e.getClaims().getSubject();
-			return new ResponseEntity<>(fail, HttpStatus.NO_CONTENT);
+			return new ResponseEntity<>(FAIL, HttpStatus.NO_CONTENT);
 		}
 
 		Member mem = memberRepository.findByEmail(email);
@@ -213,7 +213,7 @@ public class MemberController {
 				redisTemplate.delete(email);
 			}
 		} catch (IllegalArgumentException e) {
-			return new ResponseEntity<>(fail, HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(FAIL, HttpStatus.BAD_REQUEST);
 		}
 
 		String queueName = "member." + Integer.toString(mem.getUid());
@@ -228,7 +228,7 @@ public class MemberController {
 		Long result = memberRepository.deleteByEmail(email);
 		logger.info("delete result: " + result);
 
-		return new ResponseEntity<>(success, HttpStatus.OK);
+		return new ResponseEntity<>(SUCCESS, HttpStatus.OK);
 
 	}
 
@@ -247,7 +247,7 @@ public class MemberController {
 				return new ResponseEntity<>("해당  uid가 잘못되었습니다.", HttpStatus.NO_CONTENT);
 			return new ResponseEntity<>(member, HttpStatus.OK);
 		} catch (Exception e) {
-			return new ResponseEntity<>(fail, HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(FAIL, HttpStatus.BAD_REQUEST);
 		}
 	}
 
@@ -261,7 +261,7 @@ public class MemberController {
 			if (list.isEmpty())
 				return new ResponseEntity<>("수강 중인 강의가 없습니다.", HttpStatus.NO_CONTENT);
 		} catch (Exception e) {
-			return new ResponseEntity<>(fail, HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(FAIL, HttpStatus.BAD_REQUEST);
 		}
 		return new ResponseEntity<>(list, HttpStatus.OK);
 	}
@@ -276,7 +276,7 @@ public class MemberController {
 			if (list.isEmpty())
 				return new ResponseEntity<>("출결 기록이 없습니다.", HttpStatus.NO_CONTENT);
 		} catch (Exception e) {
-			return new ResponseEntity<>(fail, HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(FAIL, HttpStatus.BAD_REQUEST);
 		}
 		return new ResponseEntity<>(list, HttpStatus.OK);
 	}
@@ -291,7 +291,7 @@ public class MemberController {
 			if (list.isEmpty())
 				return new ResponseEntity<>("개설한 방이 없습니다.", HttpStatus.NO_CONTENT);
 		} catch (Exception e) {
-			return new ResponseEntity<>(fail, HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(FAIL, HttpStatus.BAD_REQUEST);
 		}
 		return new ResponseEntity<>(list, HttpStatus.OK);
 	}
@@ -306,7 +306,7 @@ public class MemberController {
 			if (list.isEmpty())
 				return new ResponseEntity<>("평가가 없습니다", HttpStatus.NO_CONTENT);
 		} catch (Exception e) {
-			return new ResponseEntity<>(fail, HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(FAIL, HttpStatus.BAD_REQUEST);
 		}
 		return new ResponseEntity<>(list, HttpStatus.OK);
 	}
@@ -317,7 +317,7 @@ public class MemberController {
 	public ResponseEntity<Object> updateMember(@RequestBody UpdateMemberDto update) {
 		Member member = memberRepository.findByEmail(update.getEmail());
 		if (member == null)
-			return new ResponseEntity<>(fail, HttpStatus.NO_CONTENT);
+			return new ResponseEntity<>(FAIL, HttpStatus.NO_CONTENT);
 
 		if (update.getPassword() != null)
 			member.setPassword(bcryptEncoder.encode(update.getPassword()));
@@ -327,10 +327,10 @@ public class MemberController {
 		try {
 			memberRepository.save(member);
 		} catch (Exception e) {
-			return new ResponseEntity<>(fail, HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(FAIL, HttpStatus.BAD_REQUEST);
 		}
 
-		return new ResponseEntity<>(success, HttpStatus.OK);
+		return new ResponseEntity<>(SUCCESS, HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "이메일 중복 체크")
@@ -342,7 +342,7 @@ public class MemberController {
 			else
 				return new ResponseEntity<>(false, HttpStatus.OK);
 		} catch (Exception e) {
-			return new ResponseEntity<>(fail, HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(FAIL, HttpStatus.BAD_REQUEST);
 		}
 	}
 
@@ -369,27 +369,25 @@ public class MemberController {
 			}
 
 			if (refreshToken != null) { // refresh를 같이 보냈으면.
-//                try { // Exception이 나올 것이 없으므로 try~catch 주석처리
+
 				ValueOperations<String, Object> vop = redisTemplate.opsForValue();
 				Token result = (Token) vop.get(email);
 				refreshTokenFromDb = result.getRefreshToken();
 
 				logger.info("rtfrom db: " + refreshTokenFromDb);
-//                } catch (IllegalArgumentException e) {
-//					logger.warn("illegal argument!!");
-//                }
+
 				// 둘이 일치하고 만료도 안됐으면 재발급 해주기.
 				if (refreshToken.equals(refreshTokenFromDb) && !jwtTokenUtil.isTokenExpired(refreshToken)) {
 					final UserDetails userDetails = userDetailsService.loadUserByUsername(email);
 					String newtok = jwtTokenUtil.generateAccessToken(userDetails);
-					map.put(success, true);
+					map.put(SUCCESS, true);
 					map.put(ACCESSTOKEN, newtok);
 				} else {
-					map.put(success, false);
+					map.put(SUCCESS, false);
 					map.put("msg", "refresh token is expired.");
 				}
 			} else { // refresh token이 없으면
-				map.put(success, false);
+				map.put(SUCCESS, false);
 				map.put("msg", "your refresh token does not exist.");
 			}
 
