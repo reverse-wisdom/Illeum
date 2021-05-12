@@ -123,20 +123,14 @@ export default {
 
     //validation check
     validateEmail(value) {
-      if (
-        /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$/.test(
-          // NOSONAR
-          value
-        )
-      ) {
+      if (/^(?=.{0,30}[A-Za-z])(?=.{0,30}\d)(?=.{0,30}[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,100}$/.test(value)) {
         this.msg['email'] = true;
       } else {
         this.msg['email'] = false;
       }
     },
     validatePassword(value) {
-      if (/^(?=.*\d)(?=.*[a-z])(?=.*[^\w\d\s:])([^\s]){8,16}$/.test(value)) {
-        // NOSONAR
+      if (/^(?=.{0,30}\d)(?=.{0,30}[a-z])(?=.{0,30}[^\w\d\s:])([^\s]){8,16}$/.test(value)) {
         this.msg['password'] = true;
       } else {
         this.msg['password'] = false;
