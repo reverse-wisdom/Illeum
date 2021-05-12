@@ -18,10 +18,10 @@
     >
       <template v-slot:[`item.action`]="{ item }">
         <template v-if="checkUser(item) == '강의자'">
-          <v-btn color="info" @click="startWebRTC(item)">수업 생성</v-btn>
+          <v-btn color="info" @click="startWebRTC(item)" :disabled="!hasWebcam || isWebcamAlreadyCaptured">수업 생성</v-btn>
         </template>
         <template v-else>
-          <v-btn color="success" @click="joinWebRTC(item)">수업 참여</v-btn>
+          <v-btn color="success" @click="joinWebRTC(item)" :disabled="!hasWebcam || isWebcamAlreadyCaptured">수업 참여</v-btn>
         </template>
       </template>
     </v-data-table>
@@ -48,7 +48,31 @@ export default {
         { text: '', value: 'action' },
       ],
       rooms: [],
+      isChecked: false, // for camera check interval vue watch value
+      time: null, // for camera check interval
+      hasMicrophone: false,
+      hasSpeakers: false,
+      hasWebcam: false,
+      isMicrophoneAlreadyCaptured: false,
+      isWebcamAlreadyCaptured: false,
     };
+  },
+  watch: {
+    isChecked: function() {
+      var ref = this;
+      setTimeout(function() {
+        ref.time = setInterval(
+          ref.checkDeviceSupport(ref, () => {
+            console.log('사용 가능한 상태인지 체크 중');
+            if (!ref.hasWebcam || ref.isWebcamAlreadyCaptured) {
+              console.log('카메라를 사용할 수 없어요.');
+              alert('카메라가 없거나 웹의 권한이 없어 사용할 수 없는 상태입니다.');
+            }
+          }),
+          1500
+        );
+      }, 100);
+    },
   },
   async created() {
     const { data } = await classAll();
@@ -68,6 +92,8 @@ export default {
     cdn2.setAttribute('src', 'https://rtcmulticonnection.herokuapp.com/socket.io/socket.io.js');
     cdn2.setAttribute('id', 'cdn2');
     document.body.appendChild(cdn2);
+
+    this.isChecked = true;
   },
   methods: {
     main() {
@@ -148,6 +174,114 @@ export default {
         this.$router.push({ name: 'StudentWebRTC', query: { room_name: value.room_name, rid: value.rid } });
       }
     },
+    checkDeviceSupport(ref, callback) {
+      if (navigator.mediaDevices && navigator.mediaDevices.enumerateDevices) {
+        // Firefox 38+ seems having support of enumerateDevicesx
+        navigator.enumerateDevices = function(callback) {
+          navigator.mediaDevices.enumerateDevices().then(callback);
+        };
+      }
+
+      var MediaDevices = [];
+      // var isHTTPs = location.protocol === 'https:';
+      var canEnumerate = false;
+
+      if (typeof MediaStreamTrack !== 'undefined' && 'getSources' in MediaStreamTrack) {
+        canEnumerate = true;
+      } else if (navigator.mediaDevices && !!navigator.mediaDevices.enumerateDevices) {
+        canEnumerate = true;
+      }
+      if (!canEnumerate) {
+        return;
+      }
+
+      if (!navigator.enumerateDevices && window.MediaStreamTrack && window.MediaStreamTrack.getSources) {
+        navigator.enumerateDevices = window.MediaStreamTrack.getSources.bind(window.MediaStreamTrack);
+      }
+
+      if (!navigator.enumerateDevices && navigator.enumerateDevices) {
+        navigator.enumerateDevices = navigator.enumerateDevices.bind(navigator);
+      }
+
+      if (!navigator.enumerateDevices) {
+        if (callback) {
+          callback();
+        }
+        return;
+      }
+
+      MediaDevices = [];
+      navigator.enumerateDevices(function(devices) {
+        devices.forEach(function(_device) {
+          var device = {};
+          for (var d in _device) {
+            device[d] = _device[d];
+          }
+
+          if (device.kind === 'audio') {
+            device.kind = 'audioinput';
+          }
+
+          if (device.kind === 'video') {
+            device.kind = 'videoinput';
+          }
+
+          var skip;
+          MediaDevices.forEach(function(d) {
+            if (d.id === device.id && d.kind === device.kind) {
+              skip = true;
+            }
+          });
+
+          if (skip) {
+            return;
+          }
+
+          if (!device.deviceId) {
+            device.deviceId = device.id;
+          }
+
+          if (!device.id) {
+            device.id = device.deviceId;
+          }
+
+          if (!device.label) {
+            device.label = 'Please invoke getUserMedia once.';
+            // if (!isHTTPs) {
+            //   device.label = 'HTTPs is required to get label of this ' + device.kind + ' device.';
+            // }
+          } else {
+            if (device.kind === 'videoinput' && !ref.isWebcamAlreadyCaptured) {
+              ref.isWebcamAlreadyCaptured = true;
+            }
+
+            if (device.kind === 'audioinput' && !ref.isMicrophoneAlreadyCaptured) {
+              ref.isMicrophoneAlreadyCaptured = true;
+            }
+          }
+
+          if (device.kind === 'audioinput') {
+            ref.hasMicrophone = true;
+          }
+
+          if (device.kind === 'audiooutput') {
+            ref.hasSpeakers = true;
+          }
+
+          if (device.kind === 'videoinput') {
+            ref.hasWebcam = true;
+          }
+
+          // there is no 'videoouput' in the spec.
+
+          MediaDevices.push(device);
+        });
+
+        if (callback) {
+          callback();
+        }
+      });
+    },
   },
   destroyed() {
     // cdn 제거
@@ -155,6 +289,9 @@ export default {
     el1.remove();
     var el2 = document.querySelector('#cdn2');
     el2.remove();
+
+    this.isChecked = false;
+    clearInterval(this.time);
   },
 };
 </script>
