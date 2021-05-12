@@ -4,7 +4,7 @@
 
 module.exports = exports = function(config, BASH_COLORS_HELPER) {
     var argv_array = [];
-    process.argv.forEach(function(val, index, array) {
+    process.argv.forEach(function(val, index, array) { // NOSONAR : Original maintenance required.
         if (argv_array.length) return;
         argv_array = array;
     });
