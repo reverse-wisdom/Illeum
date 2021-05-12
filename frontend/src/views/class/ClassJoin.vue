@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="classJoin">
     <h2>클래스 리스트 목록</h2>
     <v-data-table
       :headers="headers"
@@ -114,3 +114,8 @@ export default {
   },
 };
 </script>
+<style scoped>
+.classJoin {
+  margin: auto;
+}
+</style>

@@ -1,132 +1,134 @@
 <template>
-  <validation-observer ref="observer">
-    <form @submit.prevent="submit">
-      <!-- room_name -->
-      <validation-provider v-slot="{ errors }" name="방 제목" rules="required|max:10">
-        <v-text-field v-model="room_name" :counter="10" :error-messages="errors" label="방 제목"></v-text-field>
-      </validation-provider>
+  <div class="classCreate">
+    <validation-observer ref="observer">
+      <form @submit.prevent="submit">
+        <!-- room_name -->
+        <validation-provider v-slot="{ errors }" name="방 제목" rules="required|max:10">
+          <v-text-field v-model="room_name" :counter="10" :error-messages="errors" label="방 제목"></v-text-field>
+        </validation-provider>
 
-      <!-- start date/time -->
-      <v-row>
-        <v-col cols="12" sm="6" md="6">
-          <v-menu v-model="start_date_menu" :close-on-content-click="false" :nudge-right="40" transition="scale-transition" offset-y min-width="auto">
-            <template v-slot:activator="{ on }">
-              <validation-provider v-slot="{ errors }" name="시작날짜" rules="required">
-                <v-text-field :value="start_room_date | dayFilter" label="시작날짜" prepend-icon="mdi-calendar" readonly v-on="on" :error-messages="errors"></v-text-field>
-              </validation-provider>
-            </template>
-            <v-date-picker
-              v-model="start_room_date"
-              no-title
-              scrollable
-              color="green lighten-1"
-              :weekday-format="getDay"
-              :month-format="getMonth"
-              :header-date-format="headerDate"
-              @input="start_date_menu = false"
-            ></v-date-picker>
-          </v-menu>
-        </v-col>
-        <v-col cols="12" sm="6" md="6">
-          <v-menu
-            ref="start_time_menu"
-            v-model="start_time_menu"
-            :close-on-content-click="false"
-            :nudge-right="40"
-            :return-value.sync="start_room_time"
-            transition="scale-transition"
-            offset-y
-            max-width="290px"
-            min-width="290px"
-          >
-            <template v-slot:activator="{ on }">
-              <validation-provider v-slot="{ errors }" name="시작시간" rules="required">
-                <v-text-field :value="start_room_time | timeFilter" label="시작시간" prepend-icon="mdi-clock-time-four-outline" readonly v-on="on" :error-messages="errors"></v-text-field>
-              </validation-provider>
-            </template>
-            <v-time-picker scrollable color="green lighten-1" v-if="start_time_menu" v-model="start_room_time" @click:minute="$refs.start_time_menu.save(start_room_time)"></v-time-picker>
-          </v-menu>
-        </v-col>
-      </v-row>
+        <!-- start date/time -->
+        <v-row>
+          <v-col cols="12" sm="6" md="6">
+            <v-menu v-model="start_date_menu" :close-on-content-click="false" :nudge-right="40" transition="scale-transition" offset-y min-width="auto">
+              <template v-slot:activator="{ on }">
+                <validation-provider v-slot="{ errors }" name="시작날짜" rules="required">
+                  <v-text-field :value="start_room_date | dayFilter" label="시작날짜" prepend-icon="mdi-calendar" readonly v-on="on" :error-messages="errors"></v-text-field>
+                </validation-provider>
+              </template>
+              <v-date-picker
+                v-model="start_room_date"
+                no-title
+                scrollable
+                color="green lighten-1"
+                :weekday-format="getDay"
+                :month-format="getMonth"
+                :header-date-format="headerDate"
+                @input="start_date_menu = false"
+              ></v-date-picker>
+            </v-menu>
+          </v-col>
+          <v-col cols="12" sm="6" md="6">
+            <v-menu
+              ref="start_time_menu"
+              v-model="start_time_menu"
+              :close-on-content-click="false"
+              :nudge-right="40"
+              :return-value.sync="start_room_time"
+              transition="scale-transition"
+              offset-y
+              max-width="290px"
+              min-width="290px"
+            >
+              <template v-slot:activator="{ on }">
+                <validation-provider v-slot="{ errors }" name="시작시간" rules="required">
+                  <v-text-field :value="start_room_time | timeFilter" label="시작시간" prepend-icon="mdi-clock-time-four-outline" readonly v-on="on" :error-messages="errors"></v-text-field>
+                </validation-provider>
+              </template>
+              <v-time-picker scrollable color="green lighten-1" v-if="start_time_menu" v-model="start_room_time" @click:minute="$refs.start_time_menu.save(start_room_time)"></v-time-picker>
+            </v-menu>
+          </v-col>
+        </v-row>
 
-      <!-- hours add buttons -->
-      <div v-if="start_room_time != '' && start_room_date != ''">
-        <v-btn class="mr-4" @click="addHour(1)">
-          1시간 추가
+        <!-- hours add buttons -->
+        <div v-if="start_room_time != '' && start_room_date != ''">
+          <v-btn class="mr-4" @click="addHour(1)">
+            1시간 추가
+          </v-btn>
+          <v-btn class="mr-4" @click="addHour(2)">
+            2시간 추가
+          </v-btn>
+          <v-btn class="mr-4" @click="addHour(3)">
+            3시간 추가
+          </v-btn>
+        </div>
+
+        <!-- end date/time -->
+        <v-row>
+          <v-col cols="12" sm="6" md="6">
+            <v-menu v-model="end_date_menu" :close-on-content-click="false" :nudge-right="40" transition="scale-transition" offset-y min-width="auto">
+              <template v-slot:activator="{ on }">
+                <validation-provider v-slot="{ errors }" name="종료날짜" rules="required">
+                  <v-text-field :value="end_room_date | dayFilter" label="종료날짜" prepend-icon="mdi-calendar" readonly v-on="on" :error-messages="errors"></v-text-field>
+                </validation-provider>
+              </template>
+              <v-date-picker
+                v-model="end_room_date"
+                no-title
+                scrollable
+                :weekday-format="getDay"
+                :month-format="getMonth"
+                :header-date-format="headerDate"
+                @input="end_date_menu = false"
+              ></v-date-picker>
+            </v-menu>
+          </v-col>
+          <v-col cols="12" sm="6" md="6">
+            <v-menu
+              ref="end_time_menu"
+              v-model="end_time_menu"
+              :close-on-content-click="false"
+              :nudge-right="40"
+              :return-value.sync="end_room_time"
+              transition="scale-transition"
+              offset-y
+              max-width="290px"
+              min-width="290px"
+            >
+              <template v-slot:activator="{ on }">
+                <validation-provider v-slot="{ errors }" name="종료시간" rules="required">
+                  <v-text-field :value="end_room_time | timeFilter" label="종료시간" prepend-icon="mdi-clock-time-four-outline" readonly v-on="on" :error-messages="errors"></v-text-field>
+                </validation-provider>
+              </template>
+              <v-time-picker scrollable v-if="end_time_menu" v-model="end_room_time" full-width @click:minute="$refs.end_time_menu.save(end_room_time)"></v-time-picker>
+            </v-menu>
+          </v-col>
+        </v-row>
+
+        <!-- room_type / room_password -->
+        <validation-provider v-slot="{ errors }" name="공개방/암호방" rules="required">
+          <v-radio-group v-model="room_type" row :error-messages="errors">
+            <v-radio label="클래스 공개" value="공개"></v-radio>
+            <v-radio label="클래스 비공개" value="비공개"></v-radio>
+          </v-radio-group>
+        </validation-provider>
+
+        <validation-provider v-if="room_type == '비공개'" v-slot="{ errors }" name="방 비밀번호" rules="required|max:10">
+          <v-text-field v-model="room_password" :counter="10" :error-messages="errors" label="방 비밀번호"></v-text-field>
+        </validation-provider>
+
+        <v-btn class="mr-4" type="submit">
+          submit
         </v-btn>
-        <v-btn class="mr-4" @click="addHour(2)">
-          2시간 추가
+        <v-btn class="mr-4" @click="clear">
+          clear
         </v-btn>
-        <v-btn class="mr-4" @click="addHour(3)">
-          3시간 추가
+        <v-btn @click="back">
+          홈으로
         </v-btn>
-      </div>
-
-      <!-- end date/time -->
-      <v-row>
-        <v-col cols="12" sm="6" md="6">
-          <v-menu v-model="end_date_menu" :close-on-content-click="false" :nudge-right="40" transition="scale-transition" offset-y min-width="auto">
-            <template v-slot:activator="{ on }">
-              <validation-provider v-slot="{ errors }" name="종료날짜" rules="required">
-                <v-text-field :value="end_room_date | dayFilter" label="종료날짜" prepend-icon="mdi-calendar" readonly v-on="on" :error-messages="errors"></v-text-field>
-              </validation-provider>
-            </template>
-            <v-date-picker
-              v-model="end_room_date"
-              no-title
-              scrollable
-              :weekday-format="getDay"
-              :month-format="getMonth"
-              :header-date-format="headerDate"
-              @input="end_date_menu = false"
-            ></v-date-picker>
-          </v-menu>
-        </v-col>
-        <v-col cols="12" sm="6" md="6">
-          <v-menu
-            ref="end_time_menu"
-            v-model="end_time_menu"
-            :close-on-content-click="false"
-            :nudge-right="40"
-            :return-value.sync="end_room_time"
-            transition="scale-transition"
-            offset-y
-            max-width="290px"
-            min-width="290px"
-          >
-            <template v-slot:activator="{ on }">
-              <validation-provider v-slot="{ errors }" name="종료시간" rules="required">
-                <v-text-field :value="end_room_time | timeFilter" label="종료시간" prepend-icon="mdi-clock-time-four-outline" readonly v-on="on" :error-messages="errors"></v-text-field>
-              </validation-provider>
-            </template>
-            <v-time-picker scrollable v-if="end_time_menu" v-model="end_room_time" full-width @click:minute="$refs.end_time_menu.save(end_room_time)"></v-time-picker>
-          </v-menu>
-        </v-col>
-      </v-row>
-
-      <!-- room_type / room_password -->
-      <validation-provider v-slot="{ errors }" name="공개방/암호방" rules="required">
-        <v-radio-group v-model="room_type" row :error-messages="errors">
-          <v-radio label="클래스 공개" value="공개"></v-radio>
-          <v-radio label="클래스 비공개" value="비공개"></v-radio>
-        </v-radio-group>
-      </validation-provider>
-
-      <validation-provider v-if="room_type == '비공개'" v-slot="{ errors }" name="방 비밀번호" rules="required|max:10">
-        <v-text-field v-model="room_password" :counter="10" :error-messages="errors" label="방 비밀번호"></v-text-field>
-      </validation-provider>
-
-      <v-btn class="mr-4" type="submit">
-        submit
-      </v-btn>
-      <v-btn class="mr-4" @click="clear">
-        clear
-      </v-btn>
-      <v-btn @click="back">
-        홈으로
-      </v-btn>
-    </form>
-  </validation-observer>
+      </form>
+    </validation-observer>
+  </div>
 </template>
 
 <script>
@@ -273,4 +275,8 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+.classCreate {
+  margin: auto;
+}
+</style>

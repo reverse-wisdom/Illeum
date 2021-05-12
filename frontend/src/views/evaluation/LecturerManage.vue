@@ -381,17 +381,18 @@ export default {
 </script>
 <style scoped>
 .manage {
-  width: 100%;
+  margin: auto;
   margin-left: 30%;
+  /* width: 100%;
   padding: 25px 30px 30px 30px;
   border-radius: 5px;
-  background: #fff;
+  background: #fff; */
 }
 /* table */
 
-* {
+/* * {
   box-sizing: border-box;
-}
+} */
 
 .table_responsive {
   width: 150%;

@@ -88,7 +88,7 @@ export default new Vuex.Store({
             commit('setEmail', data.member.email);
             commit('setName', data.member.name);
             commit('setRole', data.member.role);
-            router.push('/home');
+            router.push('/myclass');
           }
         })
         .catch(() => {

@@ -89,9 +89,6 @@
       <!-- <v-divider></v-divider> -->
 
       <v-list>
-        <v-list-item>
-          <router-link to="/home">Home</router-link>
-        </v-list-item>
         <v-list-item v-if="loginchk === null || loginchk === undefined || loginchk === ''">
           <router-link to="/sign">Sign</router-link>
         </v-list-item>
@@ -109,6 +106,9 @@
         </v-list-item>
         <v-list-item>
           <router-link to="/webrtclist">화상수업 목록페이지</router-link>
+        </v-list-item>
+        <v-list-item>
+          <router-link to="/lecturermanage">강의관리</router-link>
         </v-list-item>
         <v-list-item>
           <router-link to="/userevaluation">Evaluation</router-link>

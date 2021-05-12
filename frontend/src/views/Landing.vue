@@ -150,7 +150,7 @@ export default {
 
 .logo {
   position: relative;
-  /* width: 125px; */
+  width: 25%;
   /* height: 125px; */
   margin-bottom: 20px;
 }
