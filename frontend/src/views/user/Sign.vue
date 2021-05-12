@@ -25,12 +25,22 @@
           <form @submit.prevent="submit">
             <!-- email -->
             <validation-provider v-slot="{ errors }" name="이메일" rules="required|max:30|email">
-              <v-text-field class="input" hide-details="auto" ref="signupInput1" v-model="email" :error-messages="errors" label="E-MAIL" @keyup.enter="$refs.signupInput2.focus()"></v-text-field>
+              <v-text-field
+                ref="signupInput1"
+                class="input email"
+                :append-icon="isDuplicateEmail ? 'mdi-cancel' : ''"
+                @click="isDuplicateEmail = false"
+                hide-details="auto"
+                v-model="email"
+                :error-messages="errors"
+                label="E-MAIL"
+                @keyup.enter="$refs.signupInput2.focus()"
+              ></v-text-field>
             </validation-provider>
 
             <!-- name -->
             <validation-provider v-slot="{ errors }" name="이름" rules="required|max:20">
-              <v-text-field class="input" hide-details="auto" ref="signupInput2" v-model="name" :error-messages="errors" label="NAME" @keyup.enter="$refs.signupInput3.focus()"></v-text-field>
+              <v-text-field ref="signupInput2" class="input" hide-details="auto" v-model="name" :error-messages="errors" label="NAME" @keyup.enter="$refs.signupInput3.focus()"></v-text-field>
             </validation-provider>
 
             <!-- password -->
@@ -40,7 +50,7 @@
                 :append-icon="showPwd ? 'mdi-eye' : 'mdi-eye-off'"
                 @click:append="showPwd = !showPwd"
                 :type="showPwd ? 'text' : 'password'"
-                class="input"
+                class="input password"
                 hide-details="auto"
                 v-model="password"
                 :error-messages="errors"
@@ -52,12 +62,12 @@
             <!-- passwordchk -->
             <validation-provider v-slot="{ errors }" name="비밀번호확인" rules="required|max:30|confirmed:password">
               <v-text-field
+                ref="signupInput4"
                 :append-icon="showPwdChk ? 'mdi-eye' : 'mdi-eye-off'"
                 @click:append="showPwdChk = !showPwdChk"
                 :type="showPwdChk ? 'text' : 'password'"
-                class="input"
+                class="input password"
                 hide-details="auto"
-                ref="signupInput4"
                 v-model="pwdcheck"
                 :error-messages="errors"
                 label="CONFIRM PASSWORD"
@@ -119,7 +129,7 @@ extend('required', {
 });
 extend('email', {
   ...email,
-  message: '{_field_} 이메일형식 aaa@aaa.com 을 지켜주세요.',
+  message: '{_field_} 이메일형식 user@illeum.com 을 지켜주세요.',
 });
 extend('confirmed', {
   ...confirmed,
@@ -155,6 +165,7 @@ export default {
       pwdcheck: '',
       showPwd: false,
       showPwdChk: false,
+      isDuplicateEmail: false,
       msg: [],
     };
   },
@@ -189,7 +200,6 @@ export default {
           };
           try {
             const { data } = await registerUser(userData);
-            console.log(data);
             if (data.success === true) {
               this.$swal({
                 icon: 'success',
@@ -197,8 +207,13 @@ export default {
                 showConfirmButton: false,
                 timer: 1500,
               });
-              // this.$router.push('/sign');
               this.$router.go();
+            } else if ((data.message = 'duplicated email')) {
+              this.isDuplicateEmail = true;
+              this.$swal({
+                icon: 'error',
+                title: '이메일이 중복되었습니다.!!',
+              });
             } else {
               this.$swal({
                 icon: 'error',
@@ -230,11 +245,7 @@ export default {
           email: this.Lemail,
           password: this.Lpassword,
         };
-        // console.log(userData);
         await this.$store.dispatch('LOGIN', userData);
-        console.log(this.$store.state.token);
-        console.log(this.$store.state.name);
-        console.log(this.$store.state.role);
         const mqSocket = new AlertRabbitMQSocket(this.$store.state.uuid);
         this.$store.commit('setAlertSocket', mqSocket);
         mqSocket.connect();
@@ -251,6 +262,13 @@ export default {
 .input >>> .v-input__slot::after {
   border-style: none !important;
 }
+.password >>> .v-icon.v-icon {
+  color: rgb(56, 168, 151);
+}
+.email >>> .v-icon.v-icon {
+  color: red;
+}
+
 @import url('https://fonts.googleapis.com/css?family=Montserrat|Quicksand');
 * {
   margin: 0;
