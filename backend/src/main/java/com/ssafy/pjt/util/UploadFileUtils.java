@@ -22,6 +22,10 @@ import org.springframework.web.multipart.MultipartFile;
  *
  */
 public class UploadFileUtils {
+	private UploadFileUtils() {
+		throw new IllegalStateException("Utility class");
+	}
+
 	private static final Logger logger = LoggerFactory.getLogger(UploadFileUtils.class);
 
 	/** MultipartFile 객체에서 File 객체를 복사 생성 */
@@ -50,7 +54,7 @@ public class UploadFileUtils {
 	 * @throws IllegalStateException
 	 * @throws IOException
 	 */
-	public static String fileSave(String uploadPath, MultipartFile file) throws IllegalStateException, IOException {
+	public static String fileSave(String uploadPath, MultipartFile file) throws IOException {
 
 		File uploadPathDir = new File(uploadPath);
 
@@ -74,6 +78,7 @@ public class UploadFileUtils {
 
 		return makeFilePath(uploadPath, savePath, saveFileName);
 	}
+
 	/**
 	 * @param filePath
 	 * @param filename
@@ -84,7 +89,7 @@ public class UploadFileUtils {
 	 * @throws IOException
 	 */
 	public static String fileSave(String uploadPath, String savePath, String filename, boolean thumbnail,
-			MultipartFile file) throws IllegalStateException, IOException {
+			MultipartFile file) throws IOException {
 
 		File uploadPathDir = new File(uploadPath + savePath);
 
@@ -139,10 +144,9 @@ public class UploadFileUtils {
 		int dotPosition = fullPath.lastIndexOf('.');
 		int separatePostion = fullPath.lastIndexOf('/');
 
-		if (-1 != dotPosition && fullPath.length() - 1 > dotPosition) {
-			if (-1 != separatePostion && fullPath.length() - 1 > separatePostion) {
-				return fullPath.substring(separatePostion + 1, dotPosition);
-			}
+		if ((-1 != dotPosition && fullPath.length() - 1 > dotPosition)
+				&& (-1 != separatePostion && fullPath.length() - 1 > separatePostion)) {
+			return fullPath.substring(separatePostion + 1, dotPosition);
 		}
 		return "";
 	}
@@ -185,26 +189,11 @@ public class UploadFileUtils {
 		}
 	}
 
-	private static String makeFilePath(String uploadPath, String path, String fileName) throws IOException {
+	private static String makeFilePath(String uploadPath, String path, String fileName) {
 		String filePath = uploadPath + path + File.separator + fileName;
 		return filePath.substring(uploadPath.length()).replace(File.separatorChar, '/');
 	}
 
-	private static String makeThumbnail(String uploadPath, String path, String fileName) throws IOException {
-
-		BufferedImage sourceImg = ImageIO.read(new File(uploadPath + path, fileName));
-
-		BufferedImage destImg = Scalr.resize(sourceImg, 128, 128);
-
-		String thumbnailName = uploadPath + path + File.separator + "s_" + fileName;
-
-		File newFile = new File(thumbnailName);
-		String formatName = fileName.substring(fileName.lastIndexOf('.') + 1);
-
-		ImageIO.write(destImg, formatName.toUpperCase(), newFile);
-
-		return thumbnailName.substring(uploadPath.length()).replace(File.separatorChar, '/');
-	}
 
 	private static BufferedImage resizeAndCrop(BufferedImage bufferedImage, Integer width, Integer height) {
 

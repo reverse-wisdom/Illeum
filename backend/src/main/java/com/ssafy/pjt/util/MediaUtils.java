@@ -7,6 +7,11 @@ import org.springframework.http.MediaType;
 
 public class MediaUtils {
 	private static Map<String, MediaType> mediaMap;
+	private static final String VIDEO = "video";
+
+	private MediaUtils() {
+		throw new IllegalStateException("Utility class");
+	}
 
 	static {
 		mediaMap = new HashMap<>();
@@ -18,10 +23,10 @@ public class MediaUtils {
 		mediaMap.put("bmp", new MediaType("image", "bmp"));
 		mediaMap.put("wav", new MediaType("audio", "x-wav"));
 		mediaMap.put("mp3", new MediaType("audio", "mpeg"));
-		mediaMap.put("avi", new MediaType("video", "x-msvideo"));
-		mediaMap.put("mov", new MediaType("video", "quicktime"));
-		mediaMap.put("mp4", new MediaType("video", "mp4"));
-		mediaMap.put("mpeg", new MediaType("video", "mpeg"));
+		mediaMap.put("avi", new MediaType(VIDEO, "x-msvideo"));
+		mediaMap.put("mov", new MediaType(VIDEO, "quicktime"));
+		mediaMap.put("mp4", new MediaType(VIDEO, "mp4"));
+		mediaMap.put("mpeg", new MediaType(VIDEO, "mpeg"));
 	}
 
 	public static MediaType getMediaType(String type) {
