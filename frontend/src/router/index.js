@@ -96,7 +96,7 @@ const routes = [
   {
     path: '/classcreate',
     name: 'ClassCreate',
-    components: { default: ClassCreate },
+    components: { default: ClassCreate, header: Navbar },
   },
   {
     path: '/userclasslist',
@@ -106,18 +106,18 @@ const routes = [
   {
     path: '/classlist',
     name: 'ClassList',
-    components: { default: ClassList },
+    components: { default: ClassList, header: Navbar },
   },
   {
     path: '/classjoin',
     name: 'ClassJoin',
-    components: { default: ClassJoin },
+    components: { default: ClassJoin, header: Navbar },
   },
   //webRTC
   {
     path: '/webrtclist',
     name: 'WebRTCList',
-    components: { default: WebRTCList },
+    components: { default: WebRTCList, header: Navbar },
   },
   {
     path: '/teacherwebrtc',

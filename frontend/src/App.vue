@@ -1,7 +1,9 @@
 <template>
   <v-app id="app">
     <router-view name="header" />
-    <router-view />
+    <div class="main-app">
+      <router-view />
+    </div>
   </v-app>
 </template>
 
@@ -65,5 +67,8 @@ body::-webkit-scrollbar {
 
 #nav a.router-link-exact-active {
   color: #42b983;
+}
+.main-app {
+  margin: 0 15% 0 15%;
 }
 </style>

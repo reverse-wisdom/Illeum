@@ -1,150 +1,142 @@
 <template>
-  <div id="nav">
-    <div class="Navwrapper hover_collapse">
-      <!-- sidebar -->
-      <div>
-        <img src="../../assets/img/navbar.jpg" class="Navbg" alt="" />
-      </div>
-      <div class="sidebar">
-        <img src="../../assets/img/greenlogo.png" class="Navlogo" alt="" />
-        <hr />
-        <v-btn v-if="this.$store.state.token" @click="signoutUser">LOGOUT</v-btn>
+  <div id="inspire">
+    <v-navigation-drawer absolute permanent app>
+      <img src="../../assets/img/textlogo.png" class="Navlogo" alt="" style="width:200px; height:80px;" />
+      <hr />
 
-        <!-- 프로필 모달 -->
-        <v-dialog v-if="this.$store.state.token" v-model="dialog" persistent max-width="800px">
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn color="primary" dark v-bind="attrs" v-on="on">
-              PROFILE
+      <v-sheet color="" class="pa-4">
+        <v-avatar class="mb-4" color="grey darken-1" size="64">
+          <v-img :src="'https://k4d106.p.ssafy.io/profile/' + this.$store.state.uuid + '/256'" id="preview" alt=""></v-img>
+        </v-avatar>
+        <div>{{ this.$store.state.email }}</div>
+      </v-sheet>
+      <!-- 프로필 모달 -->
+      <v-dialog v-if="this.$store.state.token" v-model="dialog" persistent max-width="800px">
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn color="primary" dark v-bind="attrs" v-on="on">
+            PROFILE
+          </v-btn>
+        </template>
+        <v-card>
+          <v-card-title>
+            <span class="headline">
+              <span>{{ this.$store.state.name }}님의</span>
+              Profile
+            </span>
+          </v-card-title>
+          <v-card-text>
+            <v-container>
+              <v-row>
+                <v-col cols="12">
+                  <!-- <v-col cols="12" sm="6" md="6"> -->
+                  <div>PROFILE IMAGE</div>
+                  <!-- <img src="../../assets/img/greenlogo.png" class="Navlogo" alt="" /> -->
+                  <div class="formdata">
+                    <v-file-input
+                      id="thumbnail"
+                      name="thumbnail"
+                      v-model="image"
+                      show-size
+                      label="프로필 이미지 수정을 위해 입력창을 클릭해주세요"
+                      @change="Preview_image($event)"
+                      style=" cursor : pointer;"
+                    ></v-file-input>
+                    <v-img :src="url" id="preview" style="width:100px; height:100px;"></v-img>
+                  </div>
+                </v-col>
+                <v-col cols="12">
+                  <label for="">계정:</label>
+                  {{ this.$store.state.email }}
+                </v-col>
+                <v-col cols="12">
+                  <label for="">이름:</label>
+                  {{ this.$store.state.name }}
+                </v-col>
+                <v-col cols="12" sm="6">
+                  <v-row>
+                    <label for="password">비밀번호:</label>
+                    <input type="password" id="password" v-model="password" disabled placeholder="*********" />
+                  </v-row>
+                  <v-row>
+                    <label for="passwordcheck">비밀번호확인:</label>
+                    <input type="password" id="passwordcheck" v-model="passwordchk" disabled value="" />
+                  </v-row>
+                  <v-row>
+                    <template v-if="correspond">
+                      <v-btn id="completed" @click="editPassword">수정완료</v-btn>
+                    </template>
+                    <template v-else>
+                      <v-btn @click="updatePassword">수정하기</v-btn>
+                    </template>
+                  </v-row>
+                </v-col>
+                <v-col cols="12" sm="6"></v-col>
+              </v-row>
+            </v-container>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="blue darken-1" text @click="dialog = false">
+              Close
             </v-btn>
-          </template>
-          <v-card>
-            <v-card-title>
-              <span class="headline">
-                <span>{{ this.$store.state.name }}님의</span>
-                Profile
-              </span>
-            </v-card-title>
-            <v-card-text>
-              <v-container>
-                <v-row>
-                  <v-col cols="12">
-                    <!-- <v-col cols="12" sm="6" md="6"> -->
-                    <div>PROFILE IMAGE</div>
-                    <!-- <img src="../../assets/img/greenlogo.png" class="Navlogo" alt="" /> -->
-                    <div class="formdata">
-                      <v-file-input
-                        id="thumbnail"
-                        name="thumbnail"
-                        v-model="image"
-                        show-size
-                        label="프로필 이미지 수정을 위해 입력창을 클릭해주세요"
-                        @change="Preview_image($event)"
-                        style=" cursor : pointer;"
-                      ></v-file-input>
-                      <v-img :src="url" id="preview" style="width:100px; height:100px;"></v-img>
-                    </div>
-                  </v-col>
-                  <v-col cols="12">
-                    <label for="">계정:</label>
-                    {{ this.$store.state.email }}
-                  </v-col>
-                  <v-col cols="12">
-                    <label for="">이름:</label>
-                    {{ this.$store.state.name }}
-                  </v-col>
-                  <v-col cols="12" sm="6">
-                    <v-row>
-                      <label for="password">비밀번호:</label>
-                      <input type="password" id="password" v-model="password" disabled placeholder="*********" />
-                    </v-row>
-                    <v-row>
-                      <label for="passwordcheck">비밀번호확인:</label>
-                      <input type="password" id="passwordcheck" v-model="passwordchk" disabled value="" />
-                    </v-row>
-                    <v-row>
-                      <template v-if="correspond">
-                        <v-btn id="completed" @click="editPassword">수정완료</v-btn>
-                      </template>
-                      <template v-else>
-                        <v-btn @click="updatePassword">수정하기</v-btn>
-                      </template>
-                    </v-row>
-                  </v-col>
-                  <v-col cols="12" sm="6"></v-col>
-                </v-row>
-              </v-container>
-            </v-card-text>
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn color="blue darken-1" text @click="dialog = false">
-                Close
-              </v-btn>
-              <v-btn color="blue darken-1" text @click="userUpdate">
-                Save
-              </v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
+            <v-btn color="blue darken-1" text @click="userUpdate">
+              Save
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+      <v-btn v-if="this.$store.state.token" @click="signoutUser">LOGOUT</v-btn>
+      <!-- <v-divider></v-divider> -->
 
-        <div class="sidebar_inner">
-          <ul>
-            <li>
-              <a href="/about">
-                <span class="Navtext">Home</span>
-              </a>
-            </li>
-            <li>
-              <a href="/sign" v-if="loginchk === null || loginchk === undefined || loginchk === ''">
-                <span class="Navtext">Sign</span>
-              </a>
-            </li>
-            <li>
-              <a href="/myclass">
-                <span class="Navtext">MY CLASS</span>
-              </a>
-            </li>
-            <li>
-              <a href="/classlist">
-                <span class="Navtext">class</span>
-              </a>
-            </li>
-            <li>
-              <a href="/classcreate">
-                <span class="Navtext">클래스 오픈(강의자)</span>
-              </a>
-            </li>
-            <li>
-              <a href="/classjoin">
-                <span class="Navtext">클래스 목록페이지(수강자)</span>
-              </a>
-            </li>
-            <li>
-              <a href="/webrtclist">
-                <span class="Navtext">화상수업 목록페이지</span>
-              </a>
-            </li>
-            <li>
-              <a href="/userevaluation">
-                <span class="Navtext">evaluation</span>
-              </a>
-            </li>
-            <!-- <li>
-              <a href="/classsearch">
-                <span class="Navtext">classsearch</span>
-              </a>
-            </li> -->
-          </ul>
-        </div>
-      </div>
-    </div>
+      <v-list>
+        <v-list-item>
+          <router-link to="/about">Home</router-link>
+        </v-list-item>
+        <v-list-item v-if="loginchk === null || loginchk === undefined || loginchk === ''">
+          <router-link to="/sign">Sign</router-link>
+        </v-list-item>
+        <v-list-item>
+          <router-link to="/myclass">MY CLASS</router-link>
+        </v-list-item>
+        <v-list-item>
+          <router-link to="/classlist">class</router-link>
+        </v-list-item>
+        <v-list-item>
+          <router-link to="/classcreate">클래스 오픈(강의자)</router-link>
+        </v-list-item>
+        <v-list-item>
+          <router-link to="/classjoin">클래스 목록페이지(수강자)</router-link>
+        </v-list-item>
+        <v-list-item>
+          <router-link to="/webrtclist">화상수업 목록페이지</router-link>
+        </v-list-item>
+        <v-list-item>
+          <router-link to="/userevaluation">Evaluation</router-link>
+        </v-list-item>
+      </v-list>
+    </v-navigation-drawer>
+
+    <v-main>
+      <v-container class="py-8 px-6" fluid></v-container>
+    </v-main>
   </div>
 </template>
+
 <script>
 import { logoutUser, editUser, createThumbnails } from '@/api/auth';
 export default {
-  components: {},
   data() {
     return {
+      cards: ['Today', 'Yesterday'],
+      // drawer: null,
+      links: [
+        ['mdi-inbox-arrow-down', 'HOME'],
+        ['mdi-send', 'MY CLASS'],
+        ['mdi-delete', 'Class Open(강의자)'],
+        ['mdi-alert-octagon', 'Class List(수강자)'],
+        ['mdi-alert-octagon', '화상수업목록'],
+        ['mdi-alert-octagon', 'EVALUATION'],
+      ],
       dialog: false,
       image: null,
       url: null,
@@ -222,86 +214,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Baloo+Paaji+2:wght@400;600&display=swap');
-
-* {
-  /* font-family: 'Baloo Paaji 2', cursive; */
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  list-style: none;
-  text-decoration: none;
-}
-.main-container {
-  width: 100%;
-  height: 100%;
-  background: #000;
-}
-#nav {
-  padding: 0;
-}
-
-.sidebar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 22%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.6);
-}
-.Navbg {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 22%;
-  height: 100%;
-  /* background: rgba(0, 0, 0, 0.8) url(../../assets/img/navbar.jpg); */
-}
-hr {
-  border-top: 1px solid rgba(248, 239, 239, 0.5);
-  border-bottom: 1px solid rgba(0, 0, 0);
-  margin-top: 20px;
-}
-.Navlogo {
-  margin-top: 1.5rem;
-  margin-left: 5%;
-  width: 50%;
-  /* height: 10%; */
-}
-.sidebar ul li a {
-  margin-top: 1rem;
-  display: block;
-  padding: 25px 20px;
-  /* border-bottom: 1px solid #fff; */
-  color: #000;
-  transition: all 0.2s ease;
-}
-
-.sidebar ul li a .Navtext {
-  color: #fff;
-  font-size: 15px;
-  font-weight: 100;
-  text-transform: uppercase;
-  letter-spacing: 3px;
-}
-
-.sidebar ul li a:hover {
-  background: #fff;
-  color: #1cbd8f;
-}
-.sidebar ul li a:hover .Navtext {
-  color: #1cbd8f;
-}
-
-.click_collapse .sidebar {
-  transition: all 0.2s ease;
-}
-/* password-check */
-.pwdchk-input {
-  border: 0;
-  margin: 5px 0;
-  border-bottom: 1px solid #000;
-}
-</style>
