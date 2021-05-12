@@ -282,7 +282,7 @@ export default {
   height: 100%;
   width: 100%;
   place-items: center;
-  background: no-repeat center/100% url('../../assets/img/bg4.jpg');
+  background: no-repeat center url('../../assets/img/bg4.jpg');
   /* background: -webkit-linear-gradient(90deg, #0162c8, #55e7fc); */
 }
 ::selection {
