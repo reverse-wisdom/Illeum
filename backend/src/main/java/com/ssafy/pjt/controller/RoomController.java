@@ -53,8 +53,8 @@ public class RoomController {
     @Autowired
     private AmqpAdmin admin;
     
-    private static final String success = "success";
-	private static final String fail = "fail";
+    private static final String SUCCESS = "success";
+	private static final String FAIL = "fail";
     
 	@ApiOperation(value = "방  리스트 조회")
 	@GetMapping(path = "/findAll")
@@ -62,7 +62,7 @@ public class RoomController {
 		try {
 			return new ResponseEntity<>(roomMapper.roomAll(), HttpStatus.OK);
 		} catch (SQLException e) {
-			return new ResponseEntity<>(fail, HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(FAIL, HttpStatus.BAD_REQUEST);
 		}
 	}
 
@@ -78,7 +78,7 @@ public class RoomController {
 				return new ResponseEntity<>("토큰 uid랑 uid가 다릅니다", HttpStatus.NO_CONTENT);
 			}
 		} catch (Exception e) {
-			return new ResponseEntity<>(fail, HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(FAIL, HttpStatus.BAD_REQUEST);
 		}
 	}
 
@@ -90,7 +90,7 @@ public class RoomController {
 			findRoom findroom = roomService.conversion(room);
 			return new ResponseEntity<>(findroom, HttpStatus.OK);
 		} catch (SQLException e) {
-			return new ResponseEntity<>(fail, HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(FAIL, HttpStatus.BAD_REQUEST);
 		}
 		
 	}
@@ -101,7 +101,7 @@ public class RoomController {
 		try {
 			return new ResponseEntity<>(roomMapper.roomName(roomName), HttpStatus.OK);
 		} catch (SQLException e) {
-			return new ResponseEntity<>(fail, HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(FAIL, HttpStatus.BAD_REQUEST);
 		}
 	}
 
@@ -114,7 +114,7 @@ public class RoomController {
 			if (list.isEmpty())
 				return new ResponseEntity<>("참가자가 없습니다.", HttpStatus.OK);
 		} catch (Exception e) {
-			return new ResponseEntity<>(fail, HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(FAIL, HttpStatus.BAD_REQUEST);
 		}
 		return new ResponseEntity<>(list, HttpStatus.OK);
 	}
@@ -128,7 +128,7 @@ public class RoomController {
 			if (list.isEmpty())
 				return new ResponseEntity<>("평가가 없습니다.", HttpStatus.NO_CONTENT);
 		} catch (Exception e) {			
-			return new ResponseEntity<>(fail, HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(FAIL, HttpStatus.BAD_REQUEST);
 		}
 		return new ResponseEntity<>(list, HttpStatus.OK);
 	}
@@ -160,7 +160,7 @@ public class RoomController {
 			admin.declareExchange(fanout);
 			return new ResponseEntity<>(find, HttpStatus.OK);
 		} catch (Exception e) {
-			return new ResponseEntity<>(fail, HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(FAIL, HttpStatus.BAD_REQUEST);
 		}
 	}
 
@@ -175,9 +175,9 @@ public class RoomController {
 			admin.deleteExchange(roomName);
 			roomRepository.deleteByRid(rid);
 		} catch (Exception e) {
-			return new ResponseEntity<>(fail, HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(FAIL, HttpStatus.BAD_REQUEST);
 		}
-		return new ResponseEntity<>(success, HttpStatus.OK);
+		return new ResponseEntity<>(SUCCESS, HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "방 수정(rid만 필수)")
@@ -204,9 +204,9 @@ public class RoomController {
 
 		try {
 			roomRepository.save(room);
-			return new ResponseEntity<>(success, HttpStatus.OK);
+			return new ResponseEntity<>(SUCCESS, HttpStatus.OK);
 		} catch (Exception e) {
-			return new ResponseEntity<>(fail, HttpStatus.BAD_GATEWAY);
+			return new ResponseEntity<>(FAIL, HttpStatus.BAD_GATEWAY);
 		}
 		
 	}
