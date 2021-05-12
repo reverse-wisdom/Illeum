@@ -11,23 +11,62 @@
       <div id="login-form">
         <form>
           <div class="input-each">
-            <input ref="loginId" type="text" placeholder="E-MAIL" v-model="Lemail" @keyup.enter="$refs.loginPassword.focus()" required />
+            <input class="input" ref="loginId" type="text" placeholder="E-MAIL" v-model="Lemail" @keyup.enter="$refs.loginPassword.focus()" required />
           </div>
           <div class="input-each">
-            <input ref="loginPassword" type="password" placeholder="PASSWORD" v-model="Lpassword" required @keyup.enter="signinUser" />
+            <input class="input" ref="loginPassword" type="password" placeholder="PASSWORD" v-model="Lpassword" required @keyup.enter="signinUser" />
           </div>
           <button type="button" class="btn login" @click="signinUser">LOGIN</button>
         </form>
       </div>
 
       <div id="signup-form">
-        <form>
-          <input ref="signupInput2" type="text" placeholder="E-MAIL" v-model="email" @keyup.enter="$refs.signupInput3.focus()" required />
-          <input ref="signupInput1" type="text" placeholder="NAME" v-model="name" @keyup.enter="$refs.signupInput2.focus()" required />
-          <input ref="signupInput3" type="password" placeholder="PASSWORD" v-model="password" @keyup.enter="$refs.signupInput4.focus()" required />
-          <input ref="signupInput4" type="password" placeholder="CONFIRM PASSWORD" v-model="pwdcheck" @keyup.enter="signup" required />
-          <button type="button" class="btn signup" @click="signup">SIGN UP</button>
-        </form>
+        <validation-observer ref="observer">
+          <form @submit.prevent="submit">
+            <!-- email -->
+            <validation-provider v-slot="{ errors }" name="이메일" rules="required|max:30|email">
+              <v-text-field class="input" hide-details="auto" ref="signupInput1" v-model="email" :error-messages="errors" label="E-MAIL" @keyup.enter="$refs.signupInput2.focus()"></v-text-field>
+            </validation-provider>
+
+            <!-- name -->
+            <validation-provider v-slot="{ errors }" name="이름" rules="required|max:20">
+              <v-text-field class="input" hide-details="auto" ref="signupInput2" v-model="name" :error-messages="errors" label="NAME" @keyup.enter="$refs.signupInput3.focus()"></v-text-field>
+            </validation-provider>
+
+            <!-- password -->
+            <validation-provider v-slot="{ errors }" name="비밀번호" rules="required|max:30|password" vid="password">
+              <v-text-field
+                ref="signupInput3"
+                :append-icon="showPwd ? 'mdi-eye' : 'mdi-eye-off'"
+                @click:append="showPwd = !showPwd"
+                :type="showPwd ? 'text' : 'password'"
+                class="input"
+                hide-details="auto"
+                v-model="password"
+                :error-messages="errors"
+                label="PASSWORD"
+                @keyup.enter="$refs.signupInput4.focus()"
+              ></v-text-field>
+            </validation-provider>
+
+            <!-- passwordchk -->
+            <validation-provider v-slot="{ errors }" name="비밀번호확인" rules="required|max:30|confirmed:password">
+              <v-text-field
+                :append-icon="showPwdChk ? 'mdi-eye' : 'mdi-eye-off'"
+                @click:append="showPwdChk = !showPwdChk"
+                :type="showPwdChk ? 'text' : 'password'"
+                class="input"
+                hide-details="auto"
+                ref="signupInput4"
+                v-model="pwdcheck"
+                :error-messages="errors"
+                label="CONFIRM PASSWORD"
+              ></v-text-field>
+            </validation-provider>
+
+            <button type="button" class="btn signup" @click="signup">SIGN UP</button>
+          </form>
+        </validation-observer>
       </div>
     </div>
   </div>
@@ -66,43 +105,60 @@ class AlertRabbitMQSocket {
   }
 }
 import { registerUser } from '@/api/auth';
+import { required, max, email, confirmed } from 'vee-validate/dist/rules';
+import { extend, ValidationObserver, ValidationProvider, setInteractionMode } from 'vee-validate';
+
+setInteractionMode('eager');
+extend('max', {
+  ...max,
+  message: '{_field_} 길이는 {length}자 이하만 가능합니다',
+});
+extend('required', {
+  ...required,
+  message: '{_field_} 필수항목 입니다.',
+});
+extend('email', {
+  ...email,
+  message: '{_field_} 이메일형식 aaa@aaa.com 을 지켜주세요.',
+});
+extend('confirmed', {
+  ...confirmed,
+  message: '비밀번호가 일치하지 않습니다.!!',
+});
+extend('password', {
+  validate: (value) => {
+    let regex = /^(?=.{0,30}\d)(?=.{0,30}[a-z])(?=.{0,30}[^\w\d\s:])([^\s]){8,16}$/.test(value);
+    if (!regex) {
+      return false;
+    } else {
+      return true;
+    }
+  },
+  message: '8자이상, 영어/숫자/특수문자 사용해주세요.',
+});
+
 import push from 'push.js';
 
 export default {
   name: 'Sign',
+  components: {
+    ValidationObserver,
+    ValidationProvider,
+  },
   data() {
     return {
-      url: '',
       Lemail: '',
       Lpassword: '',
       name: '',
       email: '',
       password: '',
       pwdcheck: '',
+      showPwd: false,
+      showPwdChk: false,
       msg: [],
     };
   },
   methods: {
-    //toggle
-    // signupClick() {
-    //   const loginText = document.querySelector('.title-text .login');
-    //   const loginForm = document.querySelector('form.login');
-    //   loginForm.style.marginLeft = '-50%';
-    //   loginText.style.marginLeft = '-50%';
-    // },
-
-    // loginClick() {
-    //   const loginText = document.querySelector('.title-text .login');
-    //   const loginForm = document.querySelector('form.login');
-    //   loginForm.style.marginLeft = '0%';
-    //   loginText.style.marginLeft = '0%';
-    // },
-
-    // signuplink() {
-    //   const signupBtn = document.querySelector('label.signup');
-    //   signupBtn.click();
-    //   return false;
-    // },
     toggleSignup() {
       document.getElementById('login-toggle').style.backgroundColor = '#fff';
       document.getElementById('login-toggle').style.color = '#222';
@@ -121,53 +177,42 @@ export default {
       document.getElementById('login-form').style.display = 'block';
     },
 
-    //validation check
-    validateEmail(value) {
-      if (/^(?=.{0,30}[A-Za-z])(?=.{0,30}\d)(?=.{0,30}[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,100}$/.test(value)) {
-        this.msg['email'] = true;
-      } else {
-        this.msg['email'] = false;
-      }
-    },
-    validatePassword(value) {
-      if (/^(?=.{0,30}\d)(?=.{0,30}[a-z])(?=.{0,30}[^\w\d\s:])([^\s]){8,16}$/.test(value)) {
-        this.msg['password'] = true;
-      } else {
-        this.msg['password'] = false;
-      }
-    },
     //통신
     async signup() {
-      const userData = {
-        email: this.email,
-        name: this.name,
-        thumbnail: 'string',
-        password: this.password,
-      };
-      try {
-        const { data } = await registerUser(userData);
-        console.log(data);
-        if (data.success === true) {
-          this.$swal({
-            icon: 'success',
-            title: '회원가입성공!!',
-            showConfirmButton: false,
-            timer: 1500,
-          });
-          // this.$router.push('/sign');
-          this.$router.go();
-        } else {
-          this.$swal({
-            icon: 'error',
-            title: '회원가입 실패 관리자에게 문의해주세요',
-          });
+      this.$refs.observer.validate().then(async (result) => {
+        if (result) {
+          const userData = {
+            email: this.email,
+            name: this.name,
+            thumbnail: 'string',
+            password: this.password,
+          };
+          try {
+            const { data } = await registerUser(userData);
+            console.log(data);
+            if (data.success === true) {
+              this.$swal({
+                icon: 'success',
+                title: '회원가입성공!!',
+                showConfirmButton: false,
+                timer: 1500,
+              });
+              // this.$router.push('/sign');
+              this.$router.go();
+            } else {
+              this.$swal({
+                icon: 'error',
+                title: '회원가입 실패 관리자에게 문의해주세요',
+              });
+            }
+          } catch (error) {
+            this.$swal({
+              icon: 'error',
+              title: '회원가입 실패 관리자에게 문의해주세요',
+            });
+          }
         }
-      } catch (error) {
-        this.$swal({
-          icon: 'error',
-          title: '회원가입 실패 관리자에게 문의해주세요',
-        });
-      }
+      });
     },
     async signinUser() {
       if (this.Lemail == '') {
@@ -200,6 +245,12 @@ export default {
 </script>
 
 <style scoped>
+.input >>> .v-input__slot::before {
+  border-style: none !important;
+}
+.input >>> .v-input__slot::after {
+  border-style: none !important;
+}
 @import url('https://fonts.googleapis.com/css?family=Montserrat|Quicksand');
 * {
   margin: 0;
@@ -343,11 +394,12 @@ img {
   padding: 0.6em;
 }
 
-.form-modal input {
+.form-modal .input {
   position: relative;
   width: 100%;
+  height: 70%;
   font-size: 1em;
-  padding: 1.2em 1.7em 1.2em 1.7em;
+  padding: 1em 1.7em 1em 1.7em;
   margin-top: 0.6em;
   margin-bottom: 0.6em;
   border-radius: 20px;
@@ -358,12 +410,12 @@ img {
   transition: 0.4s;
 }
 
-.form-modal input:focus,
-.form-modal input:active {
+.form-modal .input:focus,
+.form-modal .input:active {
   transform: scaleX(1.02);
 }
 
-.form-modal input::-webkit-input-placeholder {
+.form-modal .input::-webkit-input-placeholder {
   color: #777777;
 }
 
