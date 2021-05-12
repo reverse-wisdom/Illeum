@@ -2,6 +2,7 @@
 // MIT License    - www.WebRTC-Experiment.com/licence
 // Documentation  - github.com/muaz-khan/RTCMultiConnection
 
+var crypto = require('crypto');
 var fs = require('fs');
 var getJsonFile = require('./getJsonFile.js');
 
@@ -24,7 +25,7 @@ function pushLogs(config, name, error, clearLogsCallback) {
 
     try {
         var utcDateString = (new Date).toISOString();
-        utcDateString += (Math.random() * 100).toString();
+        utcDateString += crypto.randomInt(100000000000000).toString();
         utcDateString = utcDateString.replace(/ |-|,|:|\./g, '');
 
         var logs = getJsonFile(config.logs);
