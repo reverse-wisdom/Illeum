@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="webRTCList">
     <h2>화상수업 리스트 목록</h2>
     <v-data-table
       :headers="headers"
@@ -279,3 +279,8 @@ export default {
   },
 };
 </script>
+<style scoped>
+.webRTCList {
+  margin: auto;
+}
+</style>
