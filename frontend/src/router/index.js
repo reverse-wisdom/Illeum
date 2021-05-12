@@ -5,6 +5,7 @@ import Landing from '../views/Landing.vue';
 import About from '../views/About.vue';
 import Navbar from '../components/layout/Navbar.vue';
 import Guide from '../views/components/Guide.vue';
+import Clock from '../views/components/Clock.vue';
 
 //user
 import Sign from '../views/user/Sign.vue';
@@ -56,11 +57,11 @@ const routes = [
     name: 'LandingComp',
     components: { default: LandingComp },
   },
-  // {
-  //   path: '/landing',
-  //   name: 'Landing',
-  //   components: { default: Landing },
-  // },
+  {
+    path: '/clock',
+    name: 'Clock',
+    components: { default: Clock },
+  },
   {
     path: '/lecturermanage',
     name: 'LecturerManage',
@@ -138,6 +139,7 @@ const routes = [
   {
     path: '/userevaluation',
     name: 'UserEvaluation',
+    // components: { default: UserEvaluation },
     components: { default: UserEvaluation, header: Navbar },
   },
 
