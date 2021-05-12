@@ -14,7 +14,6 @@ export default {
         datasets: [
           {
             label: '내점수',
-            backgroundColor: [],
             data: [],
             stepSize: 1,
             backgroundColor: 'rgba(54, 162, 235, 0.2)',
@@ -26,9 +25,7 @@ export default {
           },
           {
             label: '평균',
-            backgroundColor: [],
             data: [],
-
             fill: true,
             backgroundColor: 'rgba(255, 99, 132, 0.2)',
             borderColor: 'rgb(255, 99, 132)',

@@ -24,24 +24,24 @@
             <table>
               <thead>
                 <tr>
-                  <th>No</th>
-                  <th>PROFILE</th>
-                  <th>NAME</th>
-                  <th>E-MAIL</th>
-                  <th>Evaluation</th>
-                  <th>Attendance</th>
-                  <th>date</th>
-                  <th>attend</th>
-                  <th>ranking</th>
-                  <th>participation</th>
-                  <th>모달</th>
+                  <th scope="col">No</th>
+                  <th scope="col">PROFILE</th>
+                  <th scope="col">NAME</th>
+                  <th scope="col">E-MAIL</th>
+                  <th scope="col">Evaluation</th>
+                  <th scope="col">Attendance</th>
+                  <th scope="col">date</th>
+                  <th scope="col">attend</th>
+                  <th scope="col">ranking</th>
+                  <th scope="col">participation</th>
+                  <th scope="col">모달</th>
                 </tr>
               </thead>
 
               <tbody>
                 <tr v-for="(each, idx) in userEval" :key="idx">
                   <td>{{ idx + 1 }}</td>
-                  <td><v-img :src="`https://k4d106.p.ssafy.io/profile/${each.uid}/256`" id="preview" style="width:50px; height:50px;"></v-img></td>
+                  <td><v-img :src="`https://k4d106.p.ssafy.io/profile/${each.uid}/256`" id="preview" style="width:50px; height:50px;" alt=""></v-img></td>
                   <td>{{ each.name }}</td>
                   <td>{{ each.email }}</td>
                   <td>Evaluation</td>

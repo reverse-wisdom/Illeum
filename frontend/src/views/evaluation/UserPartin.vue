@@ -17,12 +17,12 @@
       <p>
         출석왕
         <span>이름:{{ attendFirst }}</span>
-        <v-img :src="'https://k4d106.p.ssafy.io/profile/' + attendFirstUid + '/256'" id="preview" style="width:100px; height:100px; left:45%;"></v-img>
+        <v-img :src="'https://k4d106.p.ssafy.io/profile/' + attendFirstUid + '/256'" id="preview" alt="" style="width:100px; height:100px; left:45%;"></v-img>
       </p>
       <p>
         채팅참여왕
         <span>이름{{ partinFirst }}</span>
-        <v-img :src="'https://k4d106.p.ssafy.io/profile/' + partinFirstUid + '/256'" id="preview" style="width:100px; height:100px; left:45%;"></v-img>
+        <v-img :src="'https://k4d106.p.ssafy.io/profile/' + partinFirstUid + '/256'" id="preview" alt="" style="width:100px; height:100px; left:45%;"></v-img>
       </p>
     </div>
     <div>

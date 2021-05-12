@@ -19,7 +19,7 @@
         <div id="conversation-panel"></div>
         <div id="key-press" style="text-align: right; display: none; font-size: 11px;">
           <span style="vertical-align: middle;"></span>
-          <img src="https://www.webrtc-experiment.com/images/key-press.gif" style="height: 12px; vertical-align: middle;" />
+          <img alt="" src="https://www.webrtc-experiment.com/images/key-press.gif" style="height: 12px; vertical-align: middle;" />
         </div>
         <div class="wrapper">
           <v-textarea id="txt-chat-message" class="regular-input" rows="1" auto-grow single-line outlined style="border-color: white;" v-model="message" @keyup.enter="chat" label=""></v-textarea>
@@ -778,7 +778,7 @@ body::-webkit-scrollbar {
 .emoji-picker {
   position: absolute;
   z-index: 1;
-  font-family: Montserrat;
+  font-family: Montserrat, 'Serif';
   border: 1px solid #ccc;
   width: 15rem;
   height: 20rem;
