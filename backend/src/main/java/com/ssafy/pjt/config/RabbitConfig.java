@@ -1,6 +1,5 @@
 package com.ssafy.pjt.config;
 
-
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.core.TopicExchange;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;

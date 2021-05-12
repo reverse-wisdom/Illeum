@@ -74,7 +74,7 @@ public class ImageService {
 		return rootLocation.resolve(fileName);
 	}
 
-	public UploadFile store(MultipartFile file) throws Exception {
+	public UploadFile store(MultipartFile file) throws IOException {
 		try {
 			if (file.isEmpty()) {
 				throw new IOException("Failed to store empty file " + file.getOriginalFilename());
@@ -103,7 +103,7 @@ public class ImageService {
 		}
 	}
 
-	public UploadFile store(MultipartFile file, String subPath, String filename, boolean thumbnail) throws Exception {
+	public UploadFile store(MultipartFile file, String subPath, String filename, boolean thumbnail) throws IOException {
 		try {
 			if (file.isEmpty()) {
 				throw new IOException("Failed to store empty file " + file.getOriginalFilename());
