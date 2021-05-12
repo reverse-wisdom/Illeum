@@ -2,6 +2,7 @@
   "name": "frontend",
   "version": "0.1.0",
   "private": true,
+  "homepage": ".",
   "scripts": {
     "serve": "vue-cli-service serve --open --port 8000",
     "build": "vue-cli-service build",
@@ -16,6 +17,7 @@
     "vee-validate": "^3.4.5",
     "vue": "^2.6.11",
     "vue-chartjs": "^3.5.1",
+    "vue-emoji-picker": "^1.0.1",
     "vue-fullpage.js": "^0.1.7",
     "vue-moment": "^4.1.0",
     "vue-router": "^3.2.0",

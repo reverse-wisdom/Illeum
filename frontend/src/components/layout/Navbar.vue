@@ -165,7 +165,7 @@ export default {
     };
   },
   created() {
-    this.url = 'https://k4d106.p.ssafy.io/profile/' + this.$store.state.uuid + '/256';
+    this.url = `/profile/${this.$store.state.uuid}/256?t=${Date.now()}`;
     console.log(this.loginchk);
   },
   watch: {
@@ -178,7 +178,7 @@ export default {
   },
   methods: {
     Preview_image() {
-      this.url = URL.createObjectURL(this.image);
+      if (this.image != null) this.url = URL.createObjectURL(this.image);
     },
     async userUpdate() {
       const uuid = this.$store.state.uuid;
@@ -189,11 +189,11 @@ export default {
     },
     async signoutUser() {
       const userData = this.$store.state.token;
-
       const { data } = await logoutUser(userData);
       localStorage.clear();
       sessionStorage.clear();
       this.$router.push('/sign');
+
       if (data == 'success') {
         this.$store.commit('clearToken');
         this.$store.commit('clearUuid');
@@ -201,6 +201,9 @@ export default {
         this.$store.commit('clearRole');
         this.$store.commit('clearName');
         console.log('로그아웃 성공');
+
+        this.$store.state.alertSocket.disconnect();
+
       } else {
         console.log('로그아웃실패');
       }
