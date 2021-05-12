@@ -66,7 +66,7 @@ export default {
             console.log('사용 가능한 상태인지 체크 중');
             if (!ref.hasWebcam || ref.isWebcamAlreadyCaptured) {
               console.log('카메라를 사용할 수 없어요.');
-              alert('카메라가 없거나 웹의 권한이 없어 사용할 수 없는 상태입니다.');
+              alert('카메라가 없거나 사용중 또는 웹의 권한이 없어 화상회의를 사용할 수 없는 상태입니다.');
             }
           }),
           1500
@@ -83,16 +83,6 @@ export default {
     }
   },
   mounted() {
-    let cdn1 = document.createElement('script');
-    cdn1.setAttribute('src', 'https://cdn.jsdelivr.net/npm/rtcmulticonnection@latest/dist/RTCMultiConnection.min.js');
-    cdn1.setAttribute('id', 'cdn1');
-    document.body.appendChild(cdn1);
-
-    let cdn2 = document.createElement('script');
-    cdn2.setAttribute('src', 'https://rtcmulticonnection.herokuapp.com/socket.io/socket.io.js');
-    cdn2.setAttribute('id', 'cdn2');
-    document.body.appendChild(cdn2);
-
     this.isChecked = true;
   },
   methods: {
@@ -284,12 +274,6 @@ export default {
     },
   },
   destroyed() {
-    // cdn 제거
-    var el1 = document.querySelector('#cdn1');
-    el1.remove();
-    var el2 = document.querySelector('#cdn2');
-    el2.remove();
-
     this.isChecked = false;
     clearInterval(this.time);
   },
