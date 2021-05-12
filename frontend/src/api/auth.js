@@ -46,7 +46,7 @@ function userClasslist(userData) {
 }
 //프로필이미지 넣기
 function createThumbnails(uid, frm) {
-  return axios.post(`http://k4d106.p.ssafy.io:8080/api/member/profile/${uid}`, frm, { headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'multipart/form-data' } });
+  return posts.post(`/member/profile/${uid}`, frm, { headers: { 'Content-Type': 'multipart/form-data' } });
 }
 
 export { getUsers, loginUser, registerUser, editUser, signout, checkEmail, logoutUser, usePartinClass, userClasslist, userEvalList, createThumbnails };
