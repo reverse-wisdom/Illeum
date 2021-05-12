@@ -35,7 +35,7 @@ public class RabbitConfig {
 	}
 	
 	@Bean
-	DirectExchange exchange() {
+	DirectExchange exchange() { // NOSONAR : attribute wrapped by method.
 		return new DirectExchange(exchange);
 	}
 	

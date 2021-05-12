@@ -46,7 +46,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
     public Authentication getAuthentication(String token) {
         Map<String, Object> parseInfo = jtu.getUserParseInfo(token);
-        System.out.println("parseinfo: " + parseInfo);
+        logger.info("parseinfo: " + parseInfo);
         List<String> rs =(List)parseInfo.get("role"); //NOSONAR
         Collection<GrantedAuthority> tmp= new ArrayList<>();
         for (String a: rs) {
@@ -69,7 +69,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
 
-        System.out.println("REQUEST : " + request.getHeader("Authorization"));
+        logger.info("REQUEST : " + request.getHeader("Authorization"));
         String requestTokenHeader = request.getHeader("Authorization");
 
         logger.info("tokenHeader: " + requestTokenHeader);
