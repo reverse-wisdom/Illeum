@@ -12,7 +12,7 @@
           <p>{{ item.room_type }}</p>
           <p>{{ item.start_time }}</p>
           <p>{{ item.end_time }}</p>
-          <v-img :src="url" id="preview" style="width:100px; height:100px; left:45%;"></v-img>
+          <v-img :src="url" id="preview" alt="" style="width:100px; height:100px; left:45%;"></v-img>
         </div>
       </div>
     </div>

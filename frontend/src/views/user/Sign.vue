@@ -325,7 +325,6 @@ img {
 
 .form-modal .btn {
   border-radius: 20px;
-  border: none;
   font-weight: bold;
   font-size: 1.2em;
   padding: 0.8em 1em 0.8em 1em !important;

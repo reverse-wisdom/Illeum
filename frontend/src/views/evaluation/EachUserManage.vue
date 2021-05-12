@@ -1,7 +1,7 @@
 <template>
   <tr>
     <td>{{ idx + 1 }}</td>
-    <td><v-img :src="url" id="preview" style="width:50px; height:50px;"></v-img></td>
+    <td><v-img :src="url" id="preview" style="width:50px; height:50px;" alt=""></v-img></td>
     <td>{{ each.name }}</td>
     <td>{{ each.email }}</td>
 

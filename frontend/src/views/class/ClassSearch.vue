@@ -102,7 +102,7 @@ export default {};
   /* margin-top: 10px; */
   width: 100%;
   height: 100vh;
-  background-size: cover;
   background: url(../../assets/img/onlineclass.jpg) no-repeat;
+  background-size: cover;
 }
 </style>

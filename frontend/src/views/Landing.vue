@@ -65,22 +65,22 @@
         <div class="text-box"><p class="subtitle">Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores ut eveniet ab veniam hic et, distinctio reprehenderit</p></div>
         <ul class="features">
           <li>
-            <i class="fa fa-3x fa-address-book"></i>
+            <em class="fa fa-3x fa-address-book"></em>
             <h3>집중</h3>
             <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium aut,</p>
           </li>
           <li>
-            <i class="fa fa-3x fa-address-book"></i>
+            <em class="fa fa-3x fa-address-book"></em>
             <h3>딴짓</h3>
             <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium aut,</p>
           </li>
           <li>
-            <i class="fa fa-3x fa-address-book"></i>
+            <em class="fa fa-3x fa-address-book"></em>
             <h3>졸음</h3>
             <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium aut,</p>
           </li>
           <li>
-            <i class="fa fa-3x fa-address-book"></i>
+            <em class="fa fa-3x fa-address-book"></em>
             <h3>자리비움</h3>
             <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium aut,</p>
           </li>
