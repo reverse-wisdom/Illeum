@@ -168,14 +168,14 @@ export default {
 .section1-p {
   color: white;
   font-size: 1.25em;
-  font-family: 'GongGothicMedium';
+  font-family: 'GongGothicMedium', 'Serif';
 }
 
 h3 {
   color: rgb(250, 248, 248);
   margin-bottom: 15px;
   font-size: 2em;
-  font-family: 'GongGothicLight';
+  font-family: 'GongGothicLight', 'Serif';
 }
 .section3-p {
   margin-top: 0px;

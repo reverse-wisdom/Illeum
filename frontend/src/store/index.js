@@ -44,14 +44,6 @@ export default new Vuex.Store({
       state.email = '';
     },
 
-    //비밀번호
-    // setPassword(state, password) {
-    //   state.password = password;
-    // },
-    // clearPassword(state) {
-    //   state.password = '';
-    // },
-
     //이름
     setName(state, name) {
       state.name = name;
@@ -85,6 +77,11 @@ export default new Vuex.Store({
               icon: 'error',
               title: '비밀번호가 틀렸습니다.!!',
             });
+          } else if (data == 'not register') {
+            Vue.swal({
+              icon: 'error',
+              title: '등록되지 않은 사용자입니다.!!',
+            });
           } else if (data.accessToken !== '') {
             commit('setToken', data.accessToken);
             commit('setUuid', data.member.uid);
@@ -100,24 +97,6 @@ export default new Vuex.Store({
             title: '로그인 실패! 이메일 및 비밀번호를 확인해 주세요!',
           });
         });
-
-      // try {
-      //   const { data } = await loginUser(userData);
-      //   if (data.accessToken !== '') {
-      //     commit('setToken', data.accessToken);
-      //     commit('setUuid', data.member.uid);
-      //     commit('setEmail', data.member.email);
-      //     commit('setName', data.member.name);
-      //     commit('setRole', data.member.role);
-
-      //     router.push('/home');
-      //   }
-      // } catch (error) {
-      //   Vue.swal({
-      //     icon: 'error',
-      //     title: '로그인 실패! 이메일 및 비밀번호를 확인해 주세요!',
-      //   });
-      // }
     },
     async TEST({ commit }, test) {
       const data = test;

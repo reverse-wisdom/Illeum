@@ -23,12 +23,12 @@
             <table>
               <thead>
                 <tr>
-                  <th>No</th>
-                  <th>PROFILE</th>
-                  <th>NAME</th>
-                  <th>E-MAIL</th>
-                  <th>Evaluation</th>
-                  <th>Attendance</th>
+                  <th scope="col">No</th>
+                  <th scope="col">PROFILE</th>
+                  <th scope="col">NAME</th>
+                  <th scope="col">E-MAIL</th>
+                  <th scope="col">Evaluation</th>
+                  <th scope="col">Attendance</th>
                 </tr>
               </thead>
 

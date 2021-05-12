@@ -134,7 +134,7 @@ export default {
   font-size: 2rem;
   font-weight: bold;
   color: #fff;
-  font-family: 'GmarketSansMedium';
+  font-family: 'GmarketSansMedium', Serif;
 }
 .box .box-inner .content h2 span {
   font-size: 16px;

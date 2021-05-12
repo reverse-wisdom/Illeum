@@ -30,20 +30,20 @@
             <table>
               <thead>
                 <tr>
-                  <th>No</th>
-                  <th>PROFILE</th>
-                  <th>NAME</th>
-                  <th>E-MAIL</th>
-                  <th>Evaluation</th>
-                  <th>Attendance</th>
-                  <th>TOP</th>
+                  <th scope="col">No</th>
+                  <th scope="col">PROFILE</th>
+                  <th scope="col">NAME</th>
+                  <th scope="col">E-MAIL</th>
+                  <th scope="col">Evaluation</th>
+                  <th scope="col">Attendance</th>
+                  <th scope="col">TOP</th>
                 </tr>
               </thead>
 
               <tbody>
                 <tr v-for="(each, idx) in UsersEval" :key="idx">
                   <td>{{ idx + 1 }}</td>
-                  <td><v-img :src="'https://k4d106.p.ssafy.io/profile/' + each.uid + '/256'" id="preview" style="width:50px; height:50px; "></v-img></td>
+                  <td><v-img :src="'https://k4d106.p.ssafy.io/profile/' + each.uid + '/256'" id="preview" style="width:50px; height:50px; " alt=""></v-img></td>
                   <td>
                     {{ each.name }}
                   </td>

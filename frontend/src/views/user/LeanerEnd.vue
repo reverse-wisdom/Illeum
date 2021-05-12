@@ -8,7 +8,7 @@
           <h3>vid:{{ item.vid }}</h3>
           <h3>강의자:{{ item.founder }}</h3>
           <h3>강의명:{{ item.room_name }}</h3>
-          <v-img :src="'https://k4d106.p.ssafy.io/profile/' + item.founder_uid + '/256'" id="preview" style="width:100px; height:100px; left:45%;"></v-img>
+          <v-img :src="'https://k4d106.p.ssafy.io/profile/' + item.founder_uid + '/256'" id="preview" alt="" style="width:100px; height:100px; left:45%;"></v-img>
           <h3>공개/비공개:{{ item.room_type }}</h3>
           <h3>진행여부:{{ item.room_state }}</h3>
           <h3>시작시간{{ item.start_time }}</h3>

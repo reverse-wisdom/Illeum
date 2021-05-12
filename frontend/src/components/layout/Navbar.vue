@@ -133,16 +133,6 @@
                 <span class="Navtext">classsearch</span>
               </a>
             </li> -->
-            <li>
-              <a href="/webrtcTest4">
-                <span class="Navtext">webrtc Test4</span>
-              </a>
-            </li>
-            <li>
-              <a href="/componentTest">
-                <span class="Navtext">component Test</span>
-              </a>
-            </li>
           </ul>
         </div>
       </div>
@@ -203,7 +193,6 @@ export default {
         console.log('로그아웃 성공');
 
         this.$store.state.alertSocket.disconnect();
-
       } else {
         console.log('로그아웃실패');
       }
@@ -215,23 +204,6 @@ export default {
       password.focus();
       passwordcheck.disabled = false;
       passwordcheck.classList.add('pwdchk-input');
-      // const update = {
-      //   email: this.$store.state.email,
-      //   name: this.$store.state.name,
-      //   password,
-      // };
-      // if (passwordcheck != password) {
-      //   this.$swal({
-      //     icon: 'error',
-      //     title: '비밀번호가 일치하지 않습니다.',
-      //   });
-      // } else {
-      //   this.$swal({
-      //     icon: 'success',
-      //     title: '비밀번호가 일치합니다.',
-      //   });
-      //   const { data } = await editUser();
-      // }
     },
     async editPassword() {
       const userData = {
@@ -306,12 +278,6 @@ hr {
   color: #000;
   transition: all 0.2s ease;
 }
-
-/* .sidebar ul li a .icon {
-  font-size: 18px;
-  vertical-align: middle;
-  transition: background 0.2s ease;
-} */
 
 .sidebar ul li a .Navtext {
   color: #fff;
