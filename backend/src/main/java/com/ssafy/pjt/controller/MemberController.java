@@ -76,7 +76,7 @@ public class MemberController {
         try {
             am.authenticate(new UsernamePasswordAuthenticationToken(email, login.getPassword()));
         } catch (Exception e){
-        	return new ResponseEntity<>("fail",HttpStatus.NO_CONTENT);
+        	return new ResponseEntity<>("wrong password",HttpStatus.OK);
         }
 
         final UserDetails userDetails = userDetailsService.loadUserByUsername(email);
