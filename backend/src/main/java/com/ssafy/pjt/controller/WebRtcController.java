@@ -26,8 +26,8 @@ public class WebRtcController {
 	@Autowired
 	private AmqpTemplate amqpTemplate;
 	
-	private final String success = "success";
-	private final String fail = "fail";
+	private static final String success = "success";
+	private static final String fail = "fail";
 	
 	@ApiOperation(value = "미팅  입장")
 	@GetMapping(path = "/entrance")
