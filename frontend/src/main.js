@@ -9,6 +9,7 @@ import 'sweetalert2/dist/sweetalert2.min.css';
 import VueMoment from 'vue-moment';
 import VueFullPage from 'vue-fullpage.js';
 import { EmojiPickerPlugin } from 'vue-emoji-picker';
+import LoadScript from 'vue-plugin-load-script';
 
 Vue.config.productionTip = false;
 
@@ -26,6 +27,8 @@ Vue.use(Vuetify); // Vuetify
 Vue.use(VueFullPage); //VueFullPage
 
 Vue.use(EmojiPickerPlugin); // emoji
+
+Vue.use(LoadScript); // Vue.loadScript, Vue.unloadScript
 
 new Vue({
   router,
