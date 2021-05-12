@@ -115,16 +115,21 @@ export default {
     this.getStudentList();
   },
 
-  mounted() {
-    let cdn1 = document.createElement('script');
-    cdn1.setAttribute('src', 'https://cdn.jsdelivr.net/npm/rtcmulticonnection@latest/dist/RTCMultiConnection.min.js');
-    cdn1.setAttribute('id', 'cdn1');
-    document.body.appendChild(cdn1);
-
-    let cdn2 = document.createElement('script');
-    cdn2.setAttribute('src', 'https://rtcmulticonnection.herokuapp.com/socket.io/socket.io.js');
-    cdn2.setAttribute('id', 'cdn2');
-    document.body.appendChild(cdn2);
+  async mounted() {
+    await this.$loadScript('https://cdn.jsdelivr.net/npm/rtcmulticonnection@latest/dist/RTCMultiConnection.min.js')
+      .then(() => {
+        console.log('RTCMultiConnection Load...');
+      })
+      .catch(() => {
+        console.log('RTCMultiConnection failed...');
+      });
+    await this.$loadScript('https://rtcmulticonnection.herokuapp.com/socket.io/socket.io.js')
+      .then(() => {
+        console.log('socket.io Load...');
+      })
+      .catch(() => {
+        console.log('socket.io failed...');
+      });
 
     var left = document.getElementById('drag-left');
     var right = document.getElementById('drag-right');
@@ -515,10 +520,8 @@ export default {
   },
   destroyed() {
     // cdn 제거
-    var el1 = document.querySelector('#cdn1');
-    el1.remove();
-    var el2 = document.querySelector('#cdn2');
-    el2.remove();
+    this.$unloadScript('https://cdn.jsdelivr.net/npm/rtcmulticonnection@latest/dist/RTCMultiConnection.min.js');
+    this.$unloadScript('https://rtcmulticonnection.herokuapp.com/socket.io/socket.io.js');
   },
 };
 </script>
