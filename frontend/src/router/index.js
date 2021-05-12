@@ -1,8 +1,10 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
+import store from '@/store/index';
+
 import LandingComp from '../views/LandingComp.vue';
 import Landing from '../views/Landing.vue';
-import About from '../views/About.vue';
+
 import Navbar from '../components/layout/Navbar.vue';
 import Guide from '../views/components/Guide.vue';
 import Clock from '../views/components/Clock.vue';
@@ -12,10 +14,10 @@ import Sign from '../views/user/Sign.vue';
 import MyClass from '../views/MyClass.vue';
 
 //class
-import ClassTest from '../views/class/ClassTest.vue';
+
 import ClassSearch from '../views/class/ClassSearch.vue';
 import ClassCreate from '../views/class/ClassCreate.vue';
-import UserClasslist from '../views/class/UserClasslist.vue';
+
 import ClassList from '../views/class/ClassList.vue';
 import ClassJoin from '../views/class/ClassJoin.vue';
 
@@ -42,11 +44,7 @@ const routes = [
     name: 'Landing',
     components: { default: Landing },
   },
-  {
-    path: '/home',
-    name: 'Home',
-    components: { default: About, header: Navbar },
-  },
+
   {
     path: '/guide',
     name: 'Guide',
@@ -61,17 +59,20 @@ const routes = [
     path: '/clock',
     name: 'Clock',
     components: { default: Clock },
+    meta: { auth: true },
   },
   {
     path: '/lecturermanage',
     name: 'LecturerManage',
     components: { default: LecturerManage, header: Navbar },
+    meta: { auth: true },
   },
 
   {
     path: '/lecselectedeval',
     name: 'LecSelectedEval',
     components: { default: LecSelectedEval, header: Navbar },
+    meta: { auth: true },
   },
   {
     path: '/sign',
@@ -82,65 +83,61 @@ const routes = [
     path: '/myclass',
     name: 'MyClass',
     components: { default: MyClass, header: Navbar },
+    meta: { auth: true },
   },
   //class
-  {
-    path: '/classtest',
-    name: 'ClassTest',
-    components: { default: ClassTest, header: Navbar },
-  },
+
   {
     path: '/classsearch',
     name: 'ClassSearch',
     components: { default: ClassSearch, header: Navbar },
+    meta: { auth: true },
   },
   {
     path: '/classcreate',
     name: 'ClassCreate',
     components: { default: ClassCreate, header: Navbar },
+    meta: { auth: true },
   },
-  {
-    path: '/userclasslist',
-    name: 'UserClasslist',
-    components: { default: UserClasslist, header: Navbar },
-  },
+
   {
     path: '/classlist',
     name: 'ClassList',
     components: { default: ClassList, header: Navbar },
+    meta: { auth: true },
   },
   {
     path: '/classjoin',
     name: 'ClassJoin',
     components: { default: ClassJoin, header: Navbar },
+    meta: { auth: true },
   },
   //webRTC
   {
     path: '/webrtclist',
     name: 'WebRTCList',
     components: { default: WebRTCList, header: Navbar },
+    meta: { auth: true },
   },
   {
     path: '/teacherwebrtc',
     name: 'TeacherWebRTC',
     components: { default: TeacherWebRTC },
+    meta: { auth: true },
   },
   {
     path: '/studentwebrtc',
     name: 'StudentWebRTC',
     components: { default: StudentWebRTC },
+    meta: { auth: true },
   },
   //evaluation
   {
-    path: '/usereval',
-    name: 'UserEval',
-    components: { default: UserEval, header: Navbar },
-  },
-  {
     path: '/userevaluation',
     name: 'UserEvaluation',
-    // components: { default: UserEvaluation },
+
     components: { default: UserEvaluation, header: Navbar },
+    meta: { auth: true },
   },
 
   // 테스트용 라우터 세팅
@@ -155,11 +152,12 @@ const routes = [
     component: calendarTest,
   },
   // // end
-  {
-    path: '/about',
-    name: 'About',
-    component: () => import('../views/About.vue'),
-  },
+  // {
+  //   path: '/about',
+  //   name: 'About',
+  //   component: () => import('../views/About.vue'),
+  //   meta: { auth: true },
+  // },
 ];
 
 const router = new VueRouter({
@@ -167,5 +165,17 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes,
 });
-
+router.beforeEach((to, from, next) => {
+  if (to.meta.auth && !store.getters.isLogin) {
+    Vue.swal({
+      icon: 'error',
+      title: '로그인후 사용가능한 서비스입니다.',
+      showConfirmButton: false,
+      timer: 1500,
+    });
+    next('/sign');
+    return;
+  }
+  next();
+});
 export default router;
