@@ -2,6 +2,8 @@
 // MIT License    - www.WebRTC-Experiment.com/licence
 // Documentation  - github.com/muaz-khan/RTCMultiConnection
 
+var crypto = require('crypto');
+
 var listOfUsers = {};
 var listOfRooms = {};
 
@@ -229,11 +231,11 @@ module.exports = exports = function(socket, config) {
         var params = socket.handshake.query;
 
         if(!params.userid) {
-            params.userid = (Math.random() * 100).toString().replace('.', '');
+            params.userid = crypto.randomInt(100000000000000).toString();
         }
 
         if(!params.sessionid) {
-            params.sessionid = (Math.random() * 100).toString().replace('.', '');
+            params.sessionid = crypto.randomInt(100000000000000).toString();
         }
 
         if (params.extra) {
@@ -276,7 +278,7 @@ module.exports = exports = function(socket, config) {
         // do not allow to override userid
         if (!!listOfUsers[params.userid]) {
             var useridAlreadyTaken = params.userid;
-            params.userid = (Math.random() * 1000).toString().replace('.', '');
+            params.userid = crypto.randomInt(100000000000000).toString();
             socket.emit('userid-already-taken', useridAlreadyTaken, params.userid);
             return;
         }
