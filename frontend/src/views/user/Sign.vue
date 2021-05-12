@@ -9,19 +9,36 @@
       </div>
 
       <div id="login-form">
-        <form>
-          <div class="input-each">
-            <input class="input" ref="loginId" type="text" placeholder="E-MAIL" v-model="Lemail" @keyup.enter="$refs.loginPassword.focus()" required />
-          </div>
-          <div class="input-each">
-            <input class="input" ref="loginPassword" type="password" placeholder="PASSWORD" v-model="Lpassword" required @keyup.enter="signinUser" />
-          </div>
-          <button type="button" class="btn login" @click="signinUser">LOGIN</button>
-        </form>
+        <validation-observer ref="loginObserver">
+          <form @submit.prevent="submit">
+            <!-- email -->
+            <validation-provider v-slot="{ errors }" name="이메일" rules="required|max:30">
+              <v-text-field ref="loginId" class="input" hide-details="auto" :error-messages="errors" label="E-MAIL" v-model="Lemail" @keyup.enter="$refs.loginPassword.focus()" />
+            </validation-provider>
+
+            <!-- password -->
+            <validation-provider v-slot="{ errors }" name="비밀번호" rules="required|max:30">
+              <v-text-field
+                ref="loginPassword"
+                class="input"
+                :error-messages="errors"
+                :append-icon="showLoginPwd ? 'mdi-eye' : 'mdi-eye-off'"
+                @click:append="showLoginPwd = !showLoginPwd"
+                :type="showLoginPwd ? 'text' : 'password'"
+                label="PASSWORD"
+                hide-details="auto"
+                v-model="Lpassword"
+                required
+                @keyup.enter="signinUser"
+              />
+            </validation-provider>
+            <button type="button" class="btn login" @click="signinUser">LOGIN</button>
+          </form>
+        </validation-observer>
       </div>
 
       <div id="signup-form">
-        <validation-observer ref="observer">
+        <validation-observer ref="signupObserver">
           <form @submit.prevent="submit">
             <!-- email -->
             <validation-provider v-slot="{ errors }" name="이메일" rules="required|max:30|email">
@@ -163,6 +180,7 @@ export default {
       email: '',
       password: '',
       pwdcheck: '',
+      showLoginPwd: false,
       showPwd: false,
       showPwdChk: false,
       isDuplicateEmail: false,
@@ -188,9 +206,8 @@ export default {
       document.getElementById('login-form').style.display = 'block';
     },
 
-    //통신
     async signup() {
-      this.$refs.observer.validate().then(async (result) => {
+      this.$refs.signupObserver.validate().then(async (result) => {
         if (result) {
           const userData = {
             email: this.email,
@@ -229,27 +246,20 @@ export default {
         }
       });
     },
+
     async signinUser() {
-      if (this.Lemail == '') {
-        this.$swal({
-          icon: 'error',
-          title: '아이디를 입력해 주세요!',
-        });
-      } else if (this.Lpassword == '') {
-        this.$swal({
-          icon: 'error',
-          title: '비밀번호를 입력해 주세요!',
-        });
-      } else {
-        const userData = {
-          email: this.Lemail,
-          password: this.Lpassword,
-        };
-        await this.$store.dispatch('LOGIN', userData);
-        const mqSocket = new AlertRabbitMQSocket(this.$store.state.uuid);
-        this.$store.commit('setAlertSocket', mqSocket);
-        mqSocket.connect();
-      }
+      this.$refs.loginObserver.validate().then(async (result) => {
+        if (result) {
+          const userData = {
+            email: this.Lemail,
+            password: this.Lpassword,
+          };
+          await this.$store.dispatch('LOGIN', userData);
+          const mqSocket = new AlertRabbitMQSocket(this.$store.state.uuid);
+          this.$store.commit('setAlertSocket', mqSocket);
+          mqSocket.connect();
+        }
+      });
     },
   },
 };
