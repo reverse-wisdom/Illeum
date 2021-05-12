@@ -73,6 +73,9 @@ public class MemberController {
     public ResponseEntity<?> login(@RequestBody LoginDto login) { //NOSONAR
         final String email = login.getEmail();
         logger.info("test input username: " + email);
+        // 있는지 없는지 확인        
+        if(memberRepository.findByEmail(email) == null) return new ResponseEntity<>("not register",HttpStatus.OK);
+        //비밀번호 확인
         try {
             am.authenticate(new UsernamePasswordAuthenticationToken(email, login.getPassword()));
         } catch (Exception e){
@@ -226,6 +229,7 @@ public class MemberController {
     public Iterable<Member> getAllMember() {
         return memberRepository.findAll();
     }
+    
     @ApiOperation(value = "uid로 회원정보 조회")
     @GetMapping(path="/user/findByUid")
     public ResponseEntity<Object> findByUid(@RequestParam int uid) {
