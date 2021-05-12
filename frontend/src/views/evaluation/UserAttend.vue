@@ -14,7 +14,7 @@
         max="2100-10-30"
       ></v-date-picker>
       <v-col cols="12" sm="6">
-        <v-select :items="items" :label="date" solo @change="showPartin"></v-select>
+        <v-select :items="items" :label="date" solo @input="showPartin"></v-select>
       </v-col>
     </v-row>
     <div style="margin-top: 100px;">
@@ -82,14 +82,12 @@ export default {
   },
   methods: {
     classNameFetch() {
-      this.roomName = [];
+      this.items = [];
       for (var i = 0; i < this.eval.length; i++) {
-        if (this.eval[i].eval_date.slice(0, 10) === this.date && !this.roomName.includes(this.eval[i].room_name)) {
-          this.roomName.push(this.eval[i].room_name);
+        if (this.eval[i].eval_date.slice(0, 10) === this.date && !this.items.includes(this.eval[i].room_name)) {
+          this.items.push(this.eval[i].room_name);
         }
       }
-
-      this.items = this.roomName;
     },
     allowedDates(val) {
       for (var i = 0; i < this.arrayDates.length; i++) {
@@ -105,18 +103,15 @@ export default {
       this.attendRank = [];
       this.fetchRoomlen = 0;
       this.saveTime = '';
+      this.attend_time = '';
+      this.attend = '';
       for (var i = 0; i < this.eval.length; i++) {
-        if (this.eval[i].room_name === selected) {
-          this.selectedRoomName = selected;
-          const { data } = await fetchRoomname(this.eval[i].room_name);
-          const roomPartinUser = data[0].rid;
-          const res = await evaluateList(roomPartinUser);
-          for (var j = 0; j < res.data.length; j++) {
-            if (this.uuid === res.data[j].uid) {
-              this.attend_time = res.data[j].attend_time;
-              this.attend = res.data[j].attend;
-            }
-          }
+        if (this.eval[i].room_name == selected && this.date == this.eval[i].eval_date.slice(0, 10)) {
+          console.log(this.date);
+          console.log(this.eval[i].eval_date.slice(0, 10));
+          this.attend_time = this.eval[i].attend_time;
+          this.attend = this.eval[i].attend;
+          break;
         }
       }
     },
