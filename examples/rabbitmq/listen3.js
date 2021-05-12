@@ -1,28 +1,49 @@
-#!/usr/bin/env node
+//#!/usr/bin/env node
 
-var amqp = require('amqplib/callback_api');
+// import Stomp from 'stomp-websocket';
+// import Stomp from 'webstomp-client'
+// import SockJS from 'sockjs-client';
 
-amqp.connect('amqp://illeum:illeum123@k4d106.p.ssafy.io:5672', function(error0, connection) {
-    if (error0) {
-        throw error0;
-    }
-    connection.createChannel(function(error1, channel) {
-        if (error1) {
-            throw error1;
-        }
+// const socket = new SockJS('http://k4d106.p.ssafy.io:15674');
+// var client = Stomp.over(socket);
 
-        var queue = 'member.3';
+var ws = new WebSocket('ws://k4d106.p.ssafy.io:15674/ws');
+var client = Stomp.over(ws);
 
-        channel.assertQueue(queue, {
-            durable: false
-        });
+var connectCallback = function () {
+  client.subscribe('/amq/queue/member.10', (res) => {
+    console.log("구독으로 받은 메시지", res.body);
+  }); //큐명을 지정한경우 시 사용
+};
 
-        console.log(" [*] Waiting for messages in %s. To exit press CTRL+C", queue);
+var errorCallback = function (error) {
+  console.log('소켓 연결 실패', error);
+  //alert(error.headers.message);
+};
 
-        channel.consume(queue, function(msg) {
-            console.log(" [x] Received %s", msg.content.toString());
-        }, {
-            noAck: true
-        });
-    });
-});
+var id = 'illeum';
+var pass = 'illeum123';
+
+client.connect(id, pass, connectCallback, errorCallback, '/');
+
+// client.connect(
+//   'illeum',
+//   'illeum123',
+//   (frame) => {
+//     // 소켓 연결 성공
+//     console.log('소켓 연결 성공', frame);
+//     // 서버의 메시지 전송 endpoint를 구독합니다.
+//     // 이런형태를 pub sub 구조라고 합니다.
+//     client.subscribe('/amq/queue/member.10', (res) => {
+//       console.log('구독으로 받은 메시지 입니다.', res.body);
+//       //   console.log('구독으로 받은 메시지 입니다.', res.body);
+
+//       // 받은 데이터를 json으로 파싱하고 리스트에 넣어줍니다.
+//       //   this.recvList.push(JSON.parse(res.body));
+//     });
+//   },
+//   (error) => {
+//     // 소켓 연결 실패
+//     console.log('소켓 연결 실패', error);
+//   }
+// );
