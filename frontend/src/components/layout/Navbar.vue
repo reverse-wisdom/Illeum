@@ -90,7 +90,7 @@
 
       <v-list>
         <v-list-item>
-          <router-link to="/about">Home</router-link>
+          <router-link to="/home">Home</router-link>
         </v-list-item>
         <v-list-item v-if="loginchk === null || loginchk === undefined || loginchk === ''">
           <router-link to="/sign">Sign</router-link>
