@@ -52,7 +52,7 @@ public class ImageService {
 		return fileRepository.findById(fileId).orElse(null);
 	}
 
-	public Resource loadAsResource(String fileName) throws Exception {
+	public Resource loadAsResource(String fileName) throws IOException  {
 		try {
 			if (fileName.toCharArray()[0] == '/') {
 				fileName = fileName.substring(1);
@@ -106,7 +106,7 @@ public class ImageService {
 	public UploadFile store(MultipartFile file, String subPath, String filename, boolean thumbnail) throws Exception {
 		try {
 			if (file.isEmpty()) {
-				throw new Exception("Failed to store empty file " + file.getOriginalFilename());
+				throw new IOException("Failed to store empty file " + file.getOriginalFilename());
 			}
 
 			String saveFileName = UploadFileUtils.fileSave(rootLocation.toString().replace('\\', '/'), subPath, filename, thumbnail, file);
