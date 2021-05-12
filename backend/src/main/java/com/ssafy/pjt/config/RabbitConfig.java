@@ -35,11 +35,6 @@ public class RabbitConfig {
 	}
 	
 	@Bean
-	DirectExchange exchange() {
-		return new DirectExchange(exchange);
-	}
-	
-	@Bean
 	TopicExchange topic() {
 		return new TopicExchange(topicName);
 	}
