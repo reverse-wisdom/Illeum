@@ -10,7 +10,6 @@ export default {
         hoverBackgroundColor: 'red',
         hoverBorderWidth: 10,
         labels: [],
-
         datasets: [
           {
             label: 'Data One',

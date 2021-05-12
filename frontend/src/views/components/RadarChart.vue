@@ -13,7 +13,6 @@ export default {
         datasets: [
           {
             label: 'Data One',
-            backgroundColor: [],
             data: [],
             fill: true,
             backgroundColor: 'rgba(255, 99, 132, 0.2)',

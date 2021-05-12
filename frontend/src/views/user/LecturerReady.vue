@@ -11,7 +11,7 @@
           <h3>{{ item.room_state }}</h3>
           <h3>{{ item.room_type }}</h3>
           <h3>{{ item.start_time }}</h3>
-          <v-img :src="url" id="preview" style="width:100px; height:100px; left:45%;"></v-img>
+          <v-img :src="url" id="preview" alt="" style="width:100px; height:100px; left:45%;"></v-img>
           <v-btn @click="startRTC(item)">수업시작</v-btn>
         </div>
       </div>
