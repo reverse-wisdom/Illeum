@@ -114,8 +114,4 @@ export default {
   },
 };
 </script>
-<style scoped>
-.classJoin {
-  margin: auto;
-}
-</style>
+<style scoped></style>

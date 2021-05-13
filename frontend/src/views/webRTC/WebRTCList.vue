@@ -279,8 +279,4 @@ export default {
   },
 };
 </script>
-<style scoped>
-.webRTCList {
-  margin: auto;
-}
-</style>
+<style scoped></style>

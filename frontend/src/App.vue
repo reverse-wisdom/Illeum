@@ -1,8 +1,9 @@
 <template>
   <v-app id="app">
     <router-view name="header" />
-
-    <router-view />
+    <v-main>
+      <router-view />
+    </v-main>
   </v-app>
 </template>
 
