@@ -6,7 +6,7 @@
 
       <v-sheet color="" class="pa-4">
         <v-avatar class="mb-4" color="grey darken-1" size="64">
-          <v-img :src="'https://k4d106.p.ssafy.io/profile/' + this.$store.state.uuid + '/256'" id="preview" alt=""></v-img>
+          <v-img :src="'/profile/' + this.$store.state.uuid + '/256'" id="preview" alt=""></v-img>
         </v-avatar>
         <div>{{ this.$store.state.email }}</div>
       </v-sheet>

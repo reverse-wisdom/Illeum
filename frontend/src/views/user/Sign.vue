@@ -103,7 +103,7 @@
 class AlertRabbitMQSocket {
   constructor(uid) {
     this.uid = uid;
-    let ws = new WebSocket('ws://k4d106.p.ssafy.io:15674/ws');
+    let ws = new WebSocket(`wss://${window.location.host}/api/rabbitmq/`);
     this.client = Stomp.over(ws);
     this.client.debug = () => {};
     this.login = 'illeum-guest';

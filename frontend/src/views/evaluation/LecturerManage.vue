@@ -41,7 +41,7 @@
               <tbody>
                 <tr v-for="(each, idx) in userEval" :key="idx">
                   <td>{{ idx + 1 }}</td>
-                  <td><v-img :src="`https://k4d106.p.ssafy.io/profile/${each.uid}/256`" id="preview" style="width:50px; height:50px;" alt=""></v-img></td>
+                  <td><v-img :src="`/profile/${each.uid}/256`" id="preview" style="width:50px; height:50px;" alt=""></v-img></td>
                   <td>{{ each.name }}</td>
                   <td>{{ each.email }}</td>
                   <td>Evaluation</td>
