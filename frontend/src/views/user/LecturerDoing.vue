@@ -32,7 +32,7 @@ export default {
     };
   },
   async created() {
-    this.url = 'https://k4d106.p.ssafy.io/profile/' + this.$store.state.uuid + '/256';
+    this.url = '/profile/' + this.$store.state.uuid + '/256';
     const { data } = await userClasslist(this.$store.state.uuid);
     console.log(data);
     if (data) {
