@@ -256,6 +256,12 @@ export default {
 </script>
 
 <style scoped>
+@font-face {
+  font-family: 'S-CoreDream-3Light';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-3Light.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
 .input >>> .v-input__slot::before {
   border-style: none !important;
 }
@@ -269,7 +275,6 @@ export default {
   color: red;
 }
 
-@import url('https://fonts.googleapis.com/css?family=Montserrat|Quicksand');
 * {
   margin: 0;
   padding: 0;
@@ -297,6 +302,7 @@ img {
 .sign p {
   font-weight: 900;
   margin: 10px 0px;
+  font-family: 'S-CoreDream-3Light';
 }
 .form-modal {
   position: relative;
@@ -317,6 +323,7 @@ img {
   position: relative;
   text-transform: capitalize;
   font-size: 1em;
+  font-family: 'quicksand', Arial, Helvetica, sans-serif;
   z-index: 2;
   outline: none;
   background: #fff;
@@ -325,8 +332,9 @@ img {
 
 .form-modal .btn {
   border-radius: 20px;
-  font-weight: bold;
-  font-size: 1.2em;
+  /* font-weight: bold; */
+  font-size: 1.3em;
+  font-family: 'quicksand', Arial, Helvetica, sans-serif;
   padding: 0.8em 1em 0.8em 1em !important;
   transition: 0.5s;
   border: 1px solid #ebebeb;
@@ -359,8 +367,9 @@ img {
   margin-bottom: 1.5em;
   border: none;
   transition: 0.2s;
-  font-size: 1.1em;
-  font-weight: bold;
+  font-size: 1.2em;
+  font-family: 'quicksand', Arial, Helvetica, sans-serif;
+  /* font-weight: bold; */
   border-top-right-radius: 20px;
   border-top-left-radius: 20px;
 }
@@ -376,12 +385,12 @@ img {
 #login-toggle {
   background: #38a897;
   color: #ffff;
-  letter-spacing: 3px;
+  letter-spacing: 2px;
 }
 #signup-toggle {
   /* background: #38a897; */
   color: #000;
-  letter-spacing: 3px;
+  letter-spacing: 2px;
 }
 
 .form-modal form {
@@ -416,6 +425,7 @@ img {
   width: 100%;
   height: 70%;
   font-size: 1em;
+  font-family: 'quicksand', Arial, Helvetica, sans-serif;
   padding: 1em 1.7em 1em 1.7em;
   margin-top: 0.6em;
   margin-bottom: 0.6em;

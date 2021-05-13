@@ -4,12 +4,21 @@
       <div class="section section1" :style="image_1">
         <div class="">
           <div class="content">
-            <h3>원격수업의 질을 높여드리는 '일름'서비스</h3>
+            <h3 style="color: #535353;">
+              <span style="color:#38A897;">
+                원격수업의 질
+              </span>
+              을 높여드리는
+              <span style="color:#6173FF;">
+                '일름'
+              </span>
+              서비스
+            </h3>
             <p class="section1-p">언택트시대 온라인 학습 일름이 해답입니다.</p>
           </div>
         </div>
 
-        <button @click="$refs.fullpage.api.moveSectionDown()">Move Down</button>
+        <button style="margin-bottom:0;" @click="$refs.fullpage.api.moveSectionDown()">NEXT ▼</button>
       </div>
       <div class="section section2" :style="image_2">
         <!-- 화상플랫폼(webRTC) 기능
@@ -32,10 +41,10 @@
         </div>
       </div>
       <div class="section section3" :style="image_3">
-        <h2>Lorem ipsum dolor sit amet consectetur adipisicing elit</h2>
+        <h4 style="color: #535353; font-family:GongGothicMedium; letter-spacing:4px; font-size:60px;">실시간 학습태도관리</h4>
         <div class="text-box">
           <p class="section3-p">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Officiis ipsum adipisci fugit delectus voluptatum? Distinctio nihil eveniet corrupti vitae ex nemo dolore. Unde saepe,
+            학생들의 카메라에 비치는 얼굴, 시선, 상태에 따라서 현재 학생이 집중하는지, 딴짓을 하는지, 졸고 있는지, 자리를 비웠는지 등의 4가지 상태로 나누어서 AI로 실시간 학습태도를 관리할 수 있습니다.
           </p>
         </div>
         <LandingComp></LandingComp>
@@ -77,7 +86,7 @@ export default {
   props: {
     image1: {
       type: String,
-      default: require('@/assets/img/bg3.jpg'),
+      default: require('@/assets/img/bg5.jpg'),
     },
     image2: {
       type: String,
@@ -159,14 +168,14 @@ export default {
   position: relative;
   top: 30%;
   padding: 20px 15px;
-  margin: 40px auto;
-  background: rgba(80, 80, 83, 0.8);
-  backdrop-filter: hue-rotate(180deg);
-  z-index: 1;
+  margin: 15% auto;
+  background: rgba(223, 223, 230, 0.7);
+
+  /* filter: blur(10px); */
 }
 
 .section1-p {
-  color: white;
+  color: #535353;
   font-size: 1.25em;
   font-family: 'GongGothicMedium', 'Serif';
 }
@@ -183,6 +192,10 @@ h3 {
   font-size: 0.8em;
   line-height: 1em;
   padding: 20px 20px;
+  max-width: 44%;
+  margin: auto;
+  line-height: 32px;
+  font-family: 'GongGothicLight';
 }
 .text-box {
   width: 100%;
