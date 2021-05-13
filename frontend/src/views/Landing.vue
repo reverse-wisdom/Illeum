@@ -95,6 +95,11 @@ export default {
   components: {
     LandingComp,
   },
+  beforeCreate() {
+    if (this.$store.getters.isLogin) {
+      this.$router.push({ name: 'MyClass' });
+    }
+  },
   methods: {
     homeGo() {
       this.$router.push('/guide');
