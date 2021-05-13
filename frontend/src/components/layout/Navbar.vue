@@ -1,6 +1,6 @@
 <template>
-  <div id="inspire">
-    <v-navigation-drawer absolute permanent app>
+  <div id="">
+    <v-navigation-drawer absolute app>
       <img src="../../assets/img/textlogo.png" class="Navlogo" alt="" style="width:200px; height:80px;" />
       <hr />
 
@@ -115,10 +115,6 @@
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
-
-    <v-main>
-      <v-container class="py-8 px-6" fluid></v-container>
-    </v-main>
   </div>
 </template>
 
