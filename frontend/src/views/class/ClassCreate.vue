@@ -275,8 +275,4 @@ export default {
 };
 </script>
 
-<style scoped>
-.classCreate {
-  margin: auto;
-}
-</style>
+<style scoped></style>
