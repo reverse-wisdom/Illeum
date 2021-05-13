@@ -8,9 +8,8 @@
           일름에서 원격수업의 해답을 찾다.
         </h1>
         <div class="text-box">
-          <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Beatae qui accusamus tempora esse aliquam in impedit aut placeat sunt cumque animi nemo sapiente fuga, sed obcaecati ducimus nisi
-            sit veritatis?
+          <p style="  color: #4e4e4e;">
+            온라인에서 상호 소통하며 수업에 적극적으로 참여할 수 있는 다양한 교수학습지원기능을 제공하여, 어디서든 교실과 차이 없는 온라인 수업이 가능한 교육환경을 제공합니다.
           </p>
         </div>
         <div class="buttons">
@@ -98,7 +97,7 @@ export default {
   },
   methods: {
     homeGo() {
-      this.$router.push('/home');
+      this.$router.push('/guide');
     },
     startGo() {
       this.$router.push('/sign');
@@ -108,8 +107,18 @@ export default {
 </script>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@400;600&display=swap');
-
+@font-face {
+  font-family: 'NEXON Lv2 Gothic Bold';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@2.1/NEXON Lv2 Gothic Bold.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'S-CoreDream-3Light';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-3Light.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
 :root {
   --cyan: hsl(171, 66%, 44%);
   --lightblue: hsl(233, 100%, 69%);
@@ -118,7 +127,7 @@ export default {
 }
 
 #landing2 {
-  font-family: 'Bai Jamjuree', sans-serif;
+  font-family: 'NEXON Lv2 Gothic Bold', 'Bai Jamjuree', sans-serif;
   margin: 0;
   padding: 0;
   background-color: #fff;
@@ -156,13 +165,17 @@ export default {
 }
 
 .text-box {
-  width: 600px;
+  width: 740px;
+  margin-top: 1%;
+  font-family: 'S-CoreDream-3Light';
+  color: #2c2b2b;
 }
 
 .section1 h1 {
-  color: hsl(210, 10%, 33%);
+  color: #4e4e4e;
   margin-bottom: 5px;
   font-size: 2.5em;
+  letter-spacing: 2px;
 }
 
 .section1 p {
@@ -175,6 +188,8 @@ export default {
 .buttons {
   display: flex;
   flex-direction: row;
+  margin-top: 2%;
+  margin-bottom: 10.5%;
   column-gap: 15px;
   padding-top: 15px;
 }
