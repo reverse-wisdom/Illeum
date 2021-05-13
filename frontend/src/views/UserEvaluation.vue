@@ -52,8 +52,4 @@ export default {
 };
 </script>
 
-<style scoped>
-#user-eval {
-  margin: auto;
-}
-</style>
+<style scoped></style>
