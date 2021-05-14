@@ -10,6 +10,8 @@ import VueMoment from 'vue-moment';
 import VueFullPage from 'vue-fullpage.js';
 import { EmojiPickerPlugin } from 'vue-emoji-picker';
 import LoadScript from 'vue-plugin-load-script';
+import Toast from 'vue-toastification';
+import 'vue-toastification/dist/index.css';
 
 Vue.config.productionTip = false;
 
@@ -29,6 +31,20 @@ Vue.use(VueFullPage); //VueFullPage
 Vue.use(EmojiPickerPlugin); // emoji
 
 Vue.use(LoadScript); // Vue.loadScript, Vue.unloadScript
+//Toast
+Vue.use(Toast, {
+  transition: 'Vue-Toastification__bounce',
+  maxToasts: 3,
+  newestOnTop: true,
+  filterBeforeCreate: (toast, toasts) => {
+    if (toasts.filter((t) => t.type === toast.type).length !== 0) {
+      // Returning false discards the toast
+      return false;
+    }
+    // You can modify the toast if you want
+    return toast;
+  },
+});
 
 new Vue({
   router,
