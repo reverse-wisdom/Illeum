@@ -90,6 +90,8 @@
 import push from 'push.js';
 import { updateClass, getStudents } from '@/api/class';
 import { insertAbsent } from '@/api/evaluation';
+import { notification } from '@/api/alert';
+
 export default {
   data() {
     return {
@@ -116,6 +118,7 @@ export default {
   },
 
   async mounted() {
+    notification();
     await this.$loadScript('https://cdn.jsdelivr.net/npm/rtcmulticonnection@latest/dist/RTCMultiConnection.min.js')
       .then(() => {
         console.log('RTCMultiConnection Load...');
