@@ -120,6 +120,7 @@
 
 <script>
 import { logoutUser, editUser, createThumbnails } from '@/api/auth';
+import { notification } from '@/api/alert';
 export default {
   data() {
     return {
@@ -144,7 +145,9 @@ export default {
   },
   created() {
     this.url = `/profile/${this.$store.state.uuid}/256?t=${Date.now()}`;
-    console.log(this.loginchk);
+  },
+  mounted() {
+    notification(this.$store.state.uuid);
   },
   watch: {
     passwordchk(value) {
@@ -168,22 +171,13 @@ export default {
     async signoutUser() {
       const userData = this.$store.state.token;
       const { data } = await logoutUser(userData);
-      localStorage.clear();
-      sessionStorage.clear();
-      this.$router.push('/sign');
-
       if (data == 'success') {
-        this.$store.commit('clearToken');
-        this.$store.commit('clearUuid');
-        this.$store.commit('clearEmail');
-        this.$store.commit('clearRole');
-        this.$store.commit('clearName');
+        await this.$store.dispatch('LOGOUT');
         console.log('로그아웃 성공');
-
-        this.$store.state.alertSocket.disconnect();
       } else {
         console.log('로그아웃실패');
       }
+      this.$router.push('/sign');
     },
     updatePassword() {
       const password = document.querySelector('#password');
