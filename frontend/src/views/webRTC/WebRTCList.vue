@@ -64,9 +64,10 @@ export default {
         ref.time = setInterval(
           ref.checkDeviceSupport(ref, () => {
             console.log('사용 가능한 상태인지 체크 중');
-            if (!ref.hasWebcam || ref.isWebcamAlreadyCaptured) {
+            if (!ref.hasWebcam /*|| ref.isWebcamAlreadyCaptured*/) {
               console.log('카메라를 사용할 수 없어요.');
-              alert('카메라가 없거나 사용중 또는 웹의 권한이 없어 화상회의를 사용할 수 없는 상태입니다.');
+              //alert('카메라가 없거나 사용중 또는 웹의 권한이 없어 화상회의를 사용할 수 없는 상태입니다.');
+              alert('카메라가 인식되지 않습니다. 연결 상태를 확인해주세요.');
             }
           }),
           1500
