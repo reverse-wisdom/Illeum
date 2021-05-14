@@ -91,6 +91,7 @@ import { faceAI } from '@/api/faceAI';
 import { findUidAndRid } from '@/api/entrant';
 import { exit, entrance } from '@/api/rabbit';
 import { insertEvaluation, updateByVid } from '@/api/evaluation';
+import { notification } from '@/api/alert';
 
 export default {
   data() {
@@ -118,6 +119,7 @@ export default {
     this.userName = this.$store.state.name;
   },
   async mounted() {
+    notification();
     await this.$loadScript('https://cdn.jsdelivr.net/npm/rtcmulticonnection@latest/dist/RTCMultiConnection.min.js')
       .then(() => {
         console.log('RTCMultiConnection Load...');

@@ -100,37 +100,6 @@
 </template>
 
 <script>
-class AlertRabbitMQSocket {
-  constructor(uid) {
-    this.uid = uid;
-    let ws = new WebSocket(`wss://${window.location.host}/api/rabbitmq/`);
-    this.client = Stomp.over(ws);
-    this.client.debug = () => {};
-    this.login = 'illeum-guest';
-    this.passcode = 'illeum-guest';
-  }
-
-  connect() {
-    this.client.connect(
-      this.login,
-      this.passcode,
-      () => {
-        this.client.subscribe(`/amq/queue/member.${this.uid}`, (res) => {
-          push.create(res.body);
-        }); //큐명을 지정한경우 시 사용
-      },
-      (error) => {
-        console.log('소켓 연결 실패', error);
-        console.dir(error);
-      },
-      '/'
-    );
-  }
-  disconnect() {
-    this.client.disconnect();
-    // this.client.close();
-  }
-}
 import { registerUser } from '@/api/auth';
 import { required, max, email, confirmed } from 'vee-validate/dist/rules';
 import { extend, ValidationObserver, ValidationProvider, setInteractionMode } from 'vee-validate';
@@ -163,8 +132,7 @@ extend('password', {
   },
   message: '8자이상, 영어/숫자/특수문자 사용해주세요.',
 });
-
-import push from 'push.js';
+import { notification } from '@/api/alert';
 
 export default {
   name: 'Sign',
@@ -255,9 +223,6 @@ export default {
             password: this.Lpassword,
           };
           await this.$store.dispatch('LOGIN', userData);
-          const mqSocket = new AlertRabbitMQSocket(this.$store.state.uuid);
-          this.$store.commit('setAlertSocket', mqSocket);
-          mqSocket.connect();
         }
       });
     },
