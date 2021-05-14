@@ -147,7 +147,23 @@ export default {
     this.url = `/profile/${this.$store.state.uuid}/256?t=${Date.now()}`;
   },
   mounted() {
-    notification(this.$store.state.uuid);
+    let ref = this;
+    notification(this.$store.state.uuid, (msg) => {
+      ref.$toast(msg, {
+        position: 'bottom-right',
+        timeout: 4990,
+        closeOnClick: true,
+        pauseOnFocusLoss: true,
+        pauseOnHover: true,
+        draggable: true,
+        draggablePercent: 0.3,
+        showCloseButtonOnHover: false,
+        hideProgressBar: true,
+        closeButton: 'button',
+        icon: true,
+        rtl: false,
+      });
+    });
   },
   watch: {
     passwordchk(value) {
