@@ -17,7 +17,9 @@
             {{ name }}
           </template>
         </div>
-        <div id="conversation-panel"></div>
+        <div class="chat-area">
+          <div id="conversation-panel"></div>
+        </div>
         <div id="key-press" style="text-align: right; display: none; font-size: 11px;">
           <span style="vertical-align: middle;"></span>
           <img alt="" src="https://www.webrtc-experiment.com/images/key-press.gif" style="height: 12px; vertical-align: middle;" />
@@ -50,8 +52,8 @@
               </div>
             </div>
           </emoji-picker>
+          <button class="btn btn-primary" id="btn-chat-message" @click="chat">Send</button>
         </div>
-        <button class="btn btn-primary" id="btn-chat-message" @click="chat">Send</button>
       </div>
     </div>
     <div class="panel-three">
@@ -78,8 +80,12 @@
     <!-- 화이트보드 모달 영역 -->
     <div id="modal">
       <div class="modal_content text-center">
-        <v-btn class="mr-4 mb-4" color="error" @click="closeWhiteBoard">닫기</v-btn>
-        <div id="widget-container" style="height: 80%; width: 80%; border: 1px solid black; border-top:0; border-bottom: 0;"></div>
+        <div>
+          <v-btn class="mr-4 mb-4" color="error" @click="clearCanvas">전체삭제</v-btn>
+          <v-btn class="mr-4 mb-4" color="error" @click="closeWhiteBoard">닫기</v-btn>
+        </div>
+        <!-- <div id="widget-container" style="height: 80%; width: 70%; border: 1px solid black; border-top:0; border-bottom: 0;"></div> -->
+        <div id="widget-container"></div>
       </div>
     </div>
     <div class="modal_layer"></div>
@@ -179,7 +185,7 @@ export default {
         pencil: true,
         text: true,
         image: true,
-        pdf: true,
+        pdf: false,
         eraser: true,
         line: true,
         arrow: true,
@@ -188,7 +194,7 @@ export default {
         arc: true,
         rectangle: true,
         quadratic: false,
-        bezier: true,
+        bezier: false,
         marker: true,
         zoom: false,
         lineWidth: false,
@@ -196,7 +202,6 @@ export default {
         extraOptions: false,
         code: false,
         undo: true,
-        isLoad: false,
       });
       this.designer.appendTo(document.getElementById('widget-container'));
       this.designer.addSyncListener(function(data) {
@@ -232,7 +237,6 @@ export default {
     },
     offAudio() {
       let localStream = this.connection.attachStreams[0];
-      localStream.unmute('audio');
       localStream.mute('audio');
       this.connection.streamEvents.selectFirst('local').mediaElement.muted = true;
       this.isAudio = false;
@@ -271,13 +275,12 @@ export default {
 
       if (event.data) {
         div.innerHTML = '<b>' + userName + '&nbsp;' + timestamp + ':</b><br>' + event.data.chatMessage;
-        console.log(userName + ' ' + uuid + ' ' + event.data.chatMessage + ' ' + timestamp);
         this.chatResult.push({ uuid: uuid, userName: userName, chatMessage: event.data.chatMessage, timestamp: timestamp });
-        this.chatLog += userName + ' ' + uuid + ' ' + event.data.chatMessage.replaceAll('\n', '') + ' ' + timestamp + '\r\n';
+        this.chatLog += '[' + userName + '][' + timestamp + '] ' + event.data.chatMessage.replaceAll('\n', '') + '\r\n';
       } else {
         div.innerHTML = '<b>' + this.userName + '(당신)&nbsp;' + timestamp + '</b> <br>' + event;
-        this.chatLog += userName + ' ' + uuid + ' ' + event.replaceAll('\n', '') + ' ' + timestamp + '\r\n';
         this.chatResult.push({ uid: uuid, userName: userName, chatMessage: event, timestamp: timestamp });
+        this.chatLog += '[' + userName + '][' + timestamp + '] ' + event.replaceAll('\n', '') + '\r\n';
         div.style.background = '#cbffcb';
       }
 
@@ -493,7 +496,9 @@ export default {
         });
     },
     saveMessageLog() {
-      var fileName = this.roomid;
+      var date = new Date();
+      var timestamp = date.toLocaleTimeString();
+      var fileName = this.roomid + ' ' + timestamp;
       var content = this.chatLog;
       var blob = new Blob([content], { type: 'text/plain' });
       var objURL = window.URL.createObjectURL(blob);
@@ -525,6 +530,9 @@ export default {
       }
 
       console.log(rankArr);
+    },
+    clearCanvas() {
+      this.designer.clearCanvas();
     },
     append(emoji) {
       this.message += emoji;
@@ -571,7 +579,9 @@ body::-webkit-scrollbar {
 .panel-two {
   flex: 1;
   width: 20%;
+  height: 800px;
 }
+
 .panel-three {
   border-top: 2px solid black;
   padding-top: 5px;
@@ -606,11 +616,9 @@ body::-webkit-scrollbar {
 #conversation-panel {
   margin-bottom: 20px;
   text-align: left;
-  min-height: 700px;
-  overflow: scroll;
-  overflow-x: hidden;
-  /* border-top: 1px solid #e5e5e5; */
+  height: 650px;
   width: 100%;
+  overflow: auto;
 }
 
 #conversation-panel .message {
@@ -643,7 +651,7 @@ body::-webkit-scrollbar {
 #modal {
   position: fixed;
   top: 200%;
-  width: 100%;
+  width: 80%;
   height: 100%;
   z-index: 9999;
 }
@@ -693,7 +701,16 @@ body::-webkit-scrollbar {
 .regular-input:focus {
   box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.5);
 }
-
+#widget-container {
+  /* position: fixed; */
+  bottom: 0;
+  right: 20%;
+  left: 20%;
+  height: 80%;
+  border: 1px solid black;
+  border-top: 0;
+  border-bottom: 0;
+}
 .emoji-invoker {
   position: absolute;
   top: 0.5rem;
