@@ -21,6 +21,7 @@ body::-webkit-scrollbar {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+  background-color: #f4f4f4;
 }
 
 #nav {
