@@ -18,10 +18,10 @@
     >
       <template v-slot:[`item.action`]="{ item }">
         <template v-if="checkUser(item) == '강의자'">
-          <v-btn color="info" @click="startWebRTC(item)" :disabled="!hasWebcam || isWebcamAlreadyCaptured">수업 생성</v-btn>
+          <v-btn color="info" @click="startWebRTC(item)" :disabled="!hasWebcam">수업 생성</v-btn>
         </template>
         <template v-else>
-          <v-btn color="success" @click="joinWebRTC(item)" :disabled="!hasWebcam || isWebcamAlreadyCaptured">수업 참여</v-btn>
+          <v-btn color="success" @click="joinWebRTC(item)" :disabled="!hasWebcam">수업 참여</v-btn>
         </template>
       </template>
     </v-data-table>
