@@ -118,7 +118,23 @@ export default {
   },
 
   async mounted() {
-    notification();
+    let ref = this;
+    notification(this.$store.state.uuid, (msg) => {
+      ref.$toast(msg, {
+        position: 'bottom-right',
+        timeout: 4990,
+        closeOnClick: true,
+        pauseOnFocusLoss: true,
+        pauseOnHover: true,
+        draggable: true,
+        draggablePercent: 0.3,
+        showCloseButtonOnHover: false,
+        hideProgressBar: true,
+        closeButton: 'button',
+        icon: true,
+        rtl: false,
+      });
+    });
     await this.$loadScript('https://cdn.jsdelivr.net/npm/rtcmulticonnection@latest/dist/RTCMultiConnection.min.js')
       .then(() => {
         console.log('RTCMultiConnection Load...');
@@ -150,7 +166,7 @@ export default {
     bar.addEventListener('mouseup', () => {
       document.removeEventListener('mousemove', drag);
     });
-    var ref = this;
+    ref = this;
     // canvas
     this.$nextTick(function() {
       this.designer = new window.CanvasDesigner();
