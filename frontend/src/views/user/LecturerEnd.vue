@@ -79,7 +79,7 @@
                           {{ item.end_time }}
                         </span>
                       </div>
-                      <v-btn class="button" large color="#6173FF" @click="learnerDataGo(item)">학생평가보기</v-btn>
+                      <v-btn class="button" large color="#6173FF" @click="learnerDataGo(item.rid)">학생평가보기</v-btn>
                     </div>
                   </div>
                 </div>
@@ -119,7 +119,7 @@ export default {
     learnerDataGo(value) {
       const roomData = value;
       console.log(roomData);
-      this.$router.push({ name: 'LecSelectedEval', query: { roomData: roomData } });
+      this.$router.push({ name: 'LecSelectedEval', query: { rid: roomData } });
     },
   },
 };
