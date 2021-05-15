@@ -16,7 +16,9 @@
             {{ name }}
           </template>
         </div>
-        <div id="conversation-panel"></div>
+        <div class="chat-area">
+          <div id="conversation-panel"></div>
+        </div>
         <div id="key-press" style="text-align: right; display: none; font-size: 11px;">
           <span style="vertical-align: middle;"></span>
           <img alt="" src="https://www.webrtc-experiment.com/images/key-press.gif" style="height: 12px; vertical-align: middle;" />
@@ -77,8 +79,11 @@
     <!-- 화이트보드 모달 영역 -->
     <div id="modal">
       <div class="modal_content text-center">
-        <v-btn class="mr-4 mb-4" color="error" @click="closeWhiteBoard">닫기</v-btn>
-        <div id="widget-container" style="height: 80%; width: 80%; border: 1px solid black; border-top:0; border-bottom: 0;"></div>
+        <div>
+          <v-btn class="mr-4 mb-4" color="error" @click="closeWhiteBoard">닫기</v-btn>
+        </div>
+        <!-- <div id="widget-container" style="height: 80%; width: 70%; border: 1px solid black; border-top:0; border-bottom: 0;"></div> -->
+        <div id="widget-container"></div>
       </div>
     </div>
     <div class="modal_layer"></div>
@@ -91,6 +96,7 @@ import { faceAI } from '@/api/faceAI';
 import { findUidAndRid } from '@/api/entrant';
 import { exit, entrance } from '@/api/rabbit';
 import { insertEvaluation, updateByVid } from '@/api/evaluation';
+import { notification } from '@/api/alert';
 
 export default {
   data() {
@@ -118,6 +124,23 @@ export default {
     this.userName = this.$store.state.name;
   },
   async mounted() {
+    var ref = this;
+    notification(this.$store.state.uuid, (msg) => {
+      ref.$toast(msg, {
+        position: 'bottom-right',
+        timeout: 4990,
+        closeOnClick: true,
+        pauseOnFocusLoss: true,
+        pauseOnHover: true,
+        draggable: true,
+        draggablePercent: 0.3,
+        showCloseButtonOnHover: false,
+        hideProgressBar: true,
+        closeButton: 'button',
+        icon: true,
+        rtl: false,
+      });
+    });
     await this.$loadScript('https://cdn.jsdelivr.net/npm/rtcmulticonnection@latest/dist/RTCMultiConnection.min.js')
       .then(() => {
         console.log('RTCMultiConnection Load...');
@@ -149,7 +172,7 @@ export default {
     bar.addEventListener('mouseup', () => {
       document.removeEventListener('mousemove', drag);
     });
-    var ref = this;
+    ref = this;
     // canvas
     this.$nextTick(function() {
       this.designer = new window.CanvasDesigner();
@@ -162,7 +185,7 @@ export default {
         pencil: true,
         text: true,
         image: true,
-        pdf: true,
+        pdf: false,
         eraser: true,
         line: true,
         arrow: true,
@@ -171,7 +194,7 @@ export default {
         arc: true,
         rectangle: true,
         quadratic: false,
-        bezier: true,
+        bezier: false,
         marker: true,
         zoom: false,
         lineWidth: false,
@@ -179,7 +202,6 @@ export default {
         extraOptions: false,
         code: false,
         undo: true,
-        isLoad: false,
       });
       this.designer.appendTo(document.getElementById('widget-container'));
       this.designer.addSyncListener(function(data) {
@@ -281,11 +303,10 @@ export default {
 
       if (event.data) {
         div.innerHTML = '<b>' + userName + '&nbsp;' + timestamp + ':</b><br>' + event.data.chatMessage;
-        this.chatLog += userName + ' ' + uuid + ' ' + event.data.chatMessage.replaceAll('\n', '') + ' ' + timestamp + '\r\n';
-        div.innerHTML = '<b>' + userName + '&nbsp;' + timestamp + ':</b><br>' + event.data.chatMessage;
+        this.chatLog += '[' + userName + '][' + timestamp + '] ' + event.data.chatMessage.replaceAll('\n', '') + '\r\n';
       } else {
         div.innerHTML = '<b>' + this.userName + '(당신)&nbsp;' + timestamp + '</b> <br>' + event;
-        this.chatLog += userName + ' ' + uuid + ' ' + event.replaceAll('\n', '') + ' ' + timestamp + '\r\n';
+        this.chatLog += '[' + userName + '][' + timestamp + '] ' + event.replaceAll('\n', '') + '\r\n';
         this.chatResult.push({ uid: uuid, userName: userName, chatMessage: event, timestamp: timestamp });
         div.style.background = '#cbffcb';
       }
@@ -502,7 +523,9 @@ export default {
         });
     },
     saveMessageLog() {
-      var fileName = this.roomid;
+      var date = new Date();
+      var timestamp = date.toLocaleTimeString();
+      var fileName = this.roomid + ' ' + timestamp;
       var content = this.chatLog;
       var blob = new Blob([content], { type: 'text/plain' });
       var objURL = window.URL.createObjectURL(blob);
@@ -635,6 +658,7 @@ body::-webkit-scrollbar {
 .panel-two {
   flex: 1;
   width: 20%;
+  height: 800px;
 }
 .panel-three {
   border-top: 2px solid black;
@@ -670,11 +694,9 @@ body::-webkit-scrollbar {
 #conversation-panel {
   margin-bottom: 20px;
   text-align: left;
-  min-height: 700px;
-  overflow: scroll;
-  overflow-x: hidden;
-  /* border-top: 1px solid #e5e5e5; */
+  height: 650px;
   width: 100%;
+  overflow: auto;
 }
 
 #conversation-panel .message {
@@ -709,7 +731,7 @@ body::-webkit-scrollbar {
   top: 200%;
   width: 100%;
   height: 100%;
-  z-index: 1;
+  z-index: 9999;
 }
 
 #modal h2 {
