@@ -1,7 +1,7 @@
 <template>
   <div class="lec-ready">
     <div v-if="lecturerReady == true">
-      <div v-for="(item, idx) in classLi" :key="idx">
+      <!-- <div v-for="(item, idx) in classLi" :key="idx">
         <div v-if="item.room_state == '준비'">
           <div class="blog-card">
             <input type="radio" name="select" id="tap-1" checked />
@@ -9,8 +9,7 @@
 
             <div class="inner-part">
               <label for="imgTap" class="img">
-                <!-- founderUid -->
-                <v-img :src="url" id="preview" alt="" style="width:240px; height:240px;"></v-img>
+                <v-img :src="url" id="preview" alt=""></v-img>
               </label>
               <div class="content content-1">
                 <span>클래스명:{{ item.room_name }}</span>
@@ -25,7 +24,39 @@
             </div>
           </div>
         </div>
-      </div>
+      </div> -->
+      <!-- card -->
+      <v-row no-gutters>
+        <template v-for="(item, idx) in classLi">
+          <v-col :key="idx">
+            <v-card flat color="#f4f4f4" width="700">
+              <div v-if="item.room_state == '준비'">
+                <div class="blog-card">
+                  <input type="radio" name="select" id="tap-1" checked />
+                  <input type="checkbox" id="imgTap" />
+
+                  <div class="inner-part">
+                    <label for="imgTap" class="img">
+                      <v-img :src="'/profile/' + item.founderUid + '/256'" id="preview" alt=""></v-img>
+                    </label>
+                    <div class="content content-1">
+                      <span>클래스명:{{ item.room_name }}</span>
+
+                      <div class="title">강의자:{{ item.founder }}</div>
+                      <div class="text">진행단계:{{ item.room_state }}</div>
+                      <div class="text">공개여부:{{ item.room_type }}</div>
+                      <div class="text">시작시간:{{ item.start_time }}</div>
+                      <div class="text">종료시간:{{ item.end_time }}</div>
+                      <v-btn class="button" x-large style=" padding: 20px 30px; font-size: 1.2rem; margin-left: 200px;" color="#6173FF" @click="startRTC(item)">강의시작</v-btn>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </v-card>
+          </v-col>
+          <v-responsive v-if="idx % 2 == 1" :key="`width-${idx}`" width="100%"></v-responsive>
+        </template>
+      </v-row>
     </div>
 
     <div v-else>

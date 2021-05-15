@@ -238,10 +238,8 @@ export default {
 <style scoped>
 .seletedManage {
   width: 100%;
-  margin-left: 30%;
   padding: 25px 30px 30px 30px;
   border-radius: 5px;
-  background: #fff;
 }
 /* table */
 

@@ -1,99 +1,113 @@
 <template>
   <div>
-    <h2>수강자-수업시간종료</h2>
     <div v-if="learnerDoing == true">
-      <p>수강진행중인 강좌가 있음</p>
-      <div v-for="(item, idx) in classLi" :key="idx">
-        <div v-if="new Date(item.end_time) < Date.now() && item.room_state == '준비'">
-          <h3>VID:{{ item.vid }}</h3>
-          <h3>강의자:{{ item.founder }}</h3>
-          <v-img :src="'/profile/' + item.founder_uid + '/256'" id="preview" alt="" style="width:100px; height:100px; left:45%;"></v-img>
-          <h3>클래스명:{{ item.room_name }}</h3>
+      <v-row no-gutters>
+        <template v-for="(item, idx) in classLi">
+          <v-col :key="idx">
+            <v-card flat color="#f4f4f4" width="700">
+              <div v-if="new Date(item.end_time) < Date.now() && item.room_state == '준비'">
+                <div class="blog-card">
+                  <input type="radio" name="select" id="tap-1" checked />
+                  <input type="checkbox" id="imgTap" />
 
-          <h3>공개여부:{{ item.room_type }}</h3>
-          <h3>시작시간:{{ item.start_time }}</h3>
-          <h3>종료시간:{{ item.end_time }}</h3>
-          <!-- <v-btn color="primary" @click="evalShow(item)">평가보기</v-btn>
-           -->
-          <v-dialog v-if="$store.state.token" v-model="dialog" persistent max-width="1200px" :retain-focus="false">
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn color="primary" dark v-bind="attrs" v-on="on" @click="evalShow(item)">
-                내평가보기
-              </v-btn>
-            </template>
-            <v-card>
-              <v-card-title>
-                <span class="headline">
-                  <span>{{ name }}님의</span>
-                  Evaluation
-                </span>
-              </v-card-title>
-              <v-card-text>
-                <v-container>
-                  <v-card>
-                    <v-toolbar flat color="primary" dark>
-                      <v-toolbar-title>
-                        <span>{{ name }}님의</span>
-                        Evaluation
-                      </v-toolbar-title>
-                    </v-toolbar>
-                    <v-tabs vertical>
-                      <v-tab>
-                        <v-icon left>
-                          mdi-account
-                        </v-icon>
-                        출결
-                      </v-tab>
-                      <v-tab>
-                        <v-icon left>
-                          mdi-lock
-                        </v-icon>
-                        학습태도
-                      </v-tab>
-                      <v-tab>
-                        <v-icon left>
-                          mdi-access-point
-                        </v-icon>
-                        참여현황
-                      </v-tab>
+                  <div class="inner-part">
+                    <label for="imgTap" class="img">
+                      <v-img :src="'/profile/' + item.founderUid + '/256'" id="preview" alt=""></v-img>
+                    </label>
+                    <div class="content content-1">
+                      <span>클래스명:{{ item.room_name }}</span>
 
-                      <v-tab-item>
-                        <v-card flat>
-                          <h2>출결</h2>
-                          <h3>출석시간:{{ attend_time }}</h3>
-                          <h3>지각여부:{{ attend }}</h3>
+                      <div class="title">강의자:{{ item.founder }}</div>
+                      <div class="text">진행단계:{{ item.room_state }}</div>
+                      <div class="text">공개여부:{{ item.room_type }}</div>
+                      <div class="text">시작시간:{{ item.start_time }}</div>
+                      <div class="text">종료시간:{{ item.end_time }}</div>
+
+                      <v-dialog v-if="$store.state.token" v-model="dialog" persistent max-width="1200px" :retain-focus="false">
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-btn color="primary" dark v-bind="attrs" v-on="on" @click="evalShow(item)">
+                            내평가보기
+                          </v-btn>
+                        </template>
+                        <v-card>
+                          <v-card-title>
+                            <span class="headline">
+                              <span>{{ name }}님의</span>
+                              Evaluation
+                            </span>
+                          </v-card-title>
+                          <v-card-text>
+                            <v-container>
+                              <v-card>
+                                <v-toolbar flat color="primary" dark>
+                                  <v-toolbar-title>
+                                    <span>{{ name }}님의</span>
+                                    Evaluation
+                                  </v-toolbar-title>
+                                </v-toolbar>
+                                <v-tabs vertical>
+                                  <v-tab>
+                                    <v-icon left>
+                                      mdi-account
+                                    </v-icon>
+                                    출결
+                                  </v-tab>
+                                  <v-tab>
+                                    <v-icon left>
+                                      mdi-lock
+                                    </v-icon>
+                                    학습태도
+                                  </v-tab>
+                                  <v-tab>
+                                    <v-icon left>
+                                      mdi-access-point
+                                    </v-icon>
+                                    참여현황
+                                  </v-tab>
+
+                                  <v-tab-item>
+                                    <v-card flat>
+                                      <h2>출결</h2>
+                                      <h3>출석시간:{{ attend_time }}</h3>
+                                      <h3>지각여부:{{ attend }}</h3>
+                                    </v-card>
+                                  </v-tab-item>
+                                  <v-tab-item>
+                                    <v-card flat>
+                                      <MyPagePieChart :learnData="learnData" :key="change" />
+                                      <MyPageRadarChart :learnData="learnData" :averageData="averageData" :key="renderKey" />
+                                    </v-card>
+                                  </v-tab-item>
+                                  <v-tab-item>
+                                    <v-card flat>
+                                      <div>{{ name }}님</div>
+                                      <div>{{ roomName }} 수업에서 수업참여도</div>
+                                      <div>총 수강생 {{ evalUserCnt }}명중에 {{ partuidRank }}위입니다</div>
+                                      <div>{{ roomName }} 수업에서 출석을</div>
+                                      <div>총 수강생 {{ evalUserCnt }}명중에 {{ attenduidRank }}위입니다</div>
+                                    </v-card>
+                                  </v-tab-item>
+                                </v-tabs>
+                              </v-card>
+                            </v-container>
+                          </v-card-text>
+                          <v-card-actions>
+                            <v-spacer></v-spacer>
+                            <v-btn color="blue darken-1" text @click="dialog = false">
+                              Close
+                            </v-btn>
+                          </v-card-actions>
                         </v-card>
-                      </v-tab-item>
-                      <v-tab-item>
-                        <v-card flat>
-                          <MyPagePieChart :learnData="learnData" :key="change" />
-                          <MyPageRadarChart :learnData="learnData" :averageData="averageData" :key="renderKey" />
-                        </v-card>
-                      </v-tab-item>
-                      <v-tab-item>
-                        <v-card flat>
-                          <div>{{ name }}님</div>
-                          <div>{{ roomName }} 수업에서 수업참여도</div>
-                          <div>총 수강생 {{ evalUserCnt }}명중에 {{ partuidRank }}위입니다</div>
-                          <div>{{ roomName }} 수업에서 출석을</div>
-                          <div>총 수강생 {{ evalUserCnt }}명중에 {{ attenduidRank }}위입니다</div>
-                        </v-card>
-                      </v-tab-item>
-                    </v-tabs>
-                  </v-card>
-                </v-container>
-              </v-card-text>
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" text @click="dialog = false">
-                  Close
-                </v-btn>
-              </v-card-actions>
+                      </v-dialog>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </v-card>
-          </v-dialog>
-          <hr />
-        </div>
-      </div>
+          </v-col>
+          <v-responsive v-if="idx % 2 == 1" :key="`width-${idx}`" width="100%"></v-responsive>
+        </template>
+      </v-row>
     </div>
     <div v-else>
       <p>수강진행중인 강좌가 없음</p>
@@ -185,8 +199,7 @@ export default {
     this.attendRank = [];
 
     const { data } = await userEvalList(this.$store.state.uuid);
-
-    console.log(this.$store.state.name);
+    console.log(data);
     if (data) {
       this.learnerDoing = true;
       this.classLi = data;
@@ -289,4 +302,120 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.blog-card {
+  display: grid;
+  /* position: absolute; */
+  height: 270px;
+  width: 80%;
+  max-width: 1200px;
+  margin: 20px auto;
+  border-radius: 25px;
+  background: white;
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.5);
+}
+.inner-part {
+  position: absolute;
+  display: flex;
+  height: 280px;
+  align-items: center;
+  justify-content: center;
+  padding: 0 25px;
+}
+#imgTap:checked ~ .inner-part {
+  padding: 0;
+  transition: 0.1s ease-in;
+}
+.inner-part .img {
+  height: 220px;
+  width: 220px;
+  flex-shrink: 0;
+  overflow: hidden;
+  border-radius: 20px;
+  box-shadow: 2px 3px 15px rgba(0, 0, 0, 0.1);
+}
+#imgTap:checked ~ .inner-part .img {
+  height: 370px;
+  width: 850px;
+  z-index: 99;
+  margin-top: 10px;
+  transition: 0.3s 0.2s ease-in;
+}
+.img img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  cursor: pointer;
+  opacity: 0;
+  transition: 0.6s;
+}
+#tap-1:checked ~ .inner-part .img-1 {
+  opacity: 1;
+  transition-delay: 0.2s;
+}
+.content {
+  padding: 0 10px 0 10px;
+  width: 380px;
+  margin-left: 40px;
+
+  transition: 0.6s;
+}
+#imgTap:checked ~ .inner-part .content {
+  display: none;
+}
+#tap-1:checked ~ .inner-part .content-1 {
+  opacity: 1;
+  margin-left: 20px;
+  z-index: 100;
+  transition-delay: 0.3s;
+}
+.content span {
+  display: block;
+  color: #6173ff;
+  margin-bottom: 10px;
+  font-size: 22px;
+  font-weight: 900;
+}
+.content .title {
+  font-size: 30px;
+  font-weight: 700;
+  color: #0d0925;
+  margin-bottom: 10px;
+}
+.content .text {
+  color: #4e4a67;
+  font-size: 15px;
+  margin-bottom: 10px;
+  line-height: 1.2em;
+  text-align: justify;
+  overflow: hidden;
+}
+.content .button {
+  display: inline-flex;
+  padding: 35px 40px;
+  font-size: 16px;
+  text-transform: uppercase;
+  color: #fff0e6;
+  font-weight: 600;
+  letter-spacing: 1px;
+  border-radius: 50px;
+  cursor: pointer;
+  outline: none;
+  border: 1px solid #1976d2;
+  background: #1976d2;
+}
+.content .button:hover {
+  background: #1976d2;
+}
+
+input[type='radio'],
+input[type='checkbox'] {
+  display: none;
+}
+</style>

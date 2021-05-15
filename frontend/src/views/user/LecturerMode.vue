@@ -1,12 +1,9 @@
 <template>
-  <div class="learner">
+  <div class="lecturer">
     <v-tabs v-model="tab" background-color="#4cb4a5" slider-size="2" dark>
       <v-tabs-slider color="#fed327"></v-tabs-slider>
       <v-tab>
         준비
-      </v-tab>
-      <v-tab>
-        진행
       </v-tab>
       <v-tab>
         완료
@@ -22,17 +19,12 @@
         </v-card>
       </v-tab-item>
       <v-tab-item>
-        <v-card flat>
-          <LecturerDoing>진행</LecturerDoing>
-        </v-card>
-      </v-tab-item>
-      <v-tab-item>
-        <v-card flat>
+        <v-card flat color="#f4f4f4">
           <LecturerCompleted>완료</LecturerCompleted>
         </v-card>
       </v-tab-item>
       <v-tab-item>
-        <v-card flat>
+        <v-card flat color="#f4f4f4">
           <LecturerEnd>종료</LecturerEnd>
         </v-card>
       </v-tab-item>
@@ -42,12 +34,12 @@
 
 <script>
 import LecturerReady from '@/views/user/LecturerReady.vue';
-import LecturerDoing from '@/views/user/LecturerDoing.vue';
+
 import LecturerCompleted from '@/views/user/LecturerCompleted.vue';
 import LecturerEnd from '@/views/user/LecturerEnd.vue';
 
 export default {
-  components: { LecturerReady, LecturerDoing, LecturerCompleted, LecturerEnd },
+  components: { LecturerReady, LecturerCompleted, LecturerEnd },
   data() {
     return {
       tab: null,
@@ -57,7 +49,7 @@ export default {
 </script>
 
 <style scoped>
-.learner {
+.lecturer {
   width: 1400px;
 }
 .v-tab {
