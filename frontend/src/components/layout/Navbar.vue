@@ -1,6 +1,6 @@
 <template>
   <div id="">
-    <v-navigation-drawer absolute app>
+    <v-navigation-drawer absolute app width="320">
       <img src="../../assets/img/textlogo.png" class="Navlogo" alt="" style="width:220px; height:90px; margin: 4% 0;" />
 
       <v-sheet color="" class="pa-1">
@@ -21,7 +21,7 @@
       </v-btn> -->
       <!-- <v-divider></v-divider> -->
       <!-- 프로필 모달 -->
-      <v-list>
+      <v-list class="my-0">
         <v-dialog v-if="this.$store.state.token" v-model="dialog" persistent max-width="800px">
           <template v-slot:activator="{ on, attrs }">
             <v-btn v-bind="attrs" v-on="on" tile outlined>
@@ -160,7 +160,6 @@
 
 <script>
 import { logoutUser, editUser, createThumbnails } from '@/api/auth';
-import { notification } from '@/api/alert';
 export default {
   data() {
     return {
@@ -180,25 +179,7 @@ export default {
   },
   created() {
     this.url = `/profile/${this.$store.state.uuid}/256?t=${Date.now()}`;
-  },
-  mounted() {
-    let ref = this;
-    notification(this.$store.state.uuid, (msg) => {
-      ref.$toast(msg, {
-        position: 'bottom-right',
-        timeout: 4990,
-        closeOnClick: true,
-        pauseOnFocusLoss: true,
-        pauseOnHover: true,
-        draggable: true,
-        draggablePercent: 0.3,
-        showCloseButtonOnHover: false,
-        hideProgressBar: true,
-        closeButton: 'button',
-        icon: true,
-        rtl: false,
-      });
-    });
+    console.log(this.loginchk);
   },
   watch: {
     passwordchk(value) {
@@ -222,13 +203,23 @@ export default {
     async signoutUser() {
       const userData = this.$store.state.token;
       const { data } = await logoutUser(userData);
+      console.log(data);
+      localStorage.clear();
+      sessionStorage.clear();
+      this.$router.push('/sign');
+
       if (data == 'success') {
-        await this.$store.dispatch('LOGOUT');
+        this.$store.commit('clearToken');
+        this.$store.commit('clearUuid');
+        this.$store.commit('clearEmail');
+        this.$store.commit('clearRole');
+        this.$store.commit('clearName');
         console.log('로그아웃 성공');
+
+        this.$store.state.alertSocket.disconnect();
       } else {
         console.log('로그아웃실패');
       }
-      this.$router.push('/sign');
     },
     updatePassword() {
       const password = document.querySelector('#password');
