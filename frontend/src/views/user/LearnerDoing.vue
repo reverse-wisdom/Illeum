@@ -30,55 +30,53 @@
         </div>
       </div> -->
       <v-row no-gutters>
-        <template v-for="(item, idx) in classLi">
+        <template v-for="(item, idx) in classLiFilter">
           <v-col :key="idx">
             <v-card flat color="#f4f4f4" width="700">
-              <div v-if="item.room_state == '진행'">
-                <div class="blog-card">
-                  <div class="inner-part">
-                    <label for="imgTap" class="img">
-                      <v-img :src="'/profile/' + item.founder_uid + '/256'" id="preview" alt=""></v-img>
-                    </label>
-                    <div class="content">
-                      <div class="class-name">{{ item.room_name }}</div>
-                      <div class="title">
-                        <v-icon>mdi-account-circle</v-icon>
-                        {{ item.founder }}
-                      </div>
-                      <div class="text">
-                        <v-icon>mdi-clock-start</v-icon>
-                        <span class="detail-label">
-                          진행여부
-                        </span>
-                        <span>{{ item.room_state }}중</span>
-                      </div>
-                      <div class="text">
-                        <v-icon>mdi-lock-open-outline</v-icon>
-                        <span class="detail-label">
-                          공개여부
-                        </span>
-                        <span>
-                          {{ item.room_type }}
-                        </span>
-                      </div>
-                      <div class="text">
-                        <v-icon>mdi-arrow-right-bold-hexagon-outline</v-icon>
-                        <span class="detail-label">
-                          강의시작
-                        </span>
-                        {{ item.start_time }}
-                      </div>
-                      <div class="text">
-                        <v-icon>mdi-exit-to-app</v-icon>
-                        <span class="detail-label">
-                          강의종료
-                        </span>
-                        <span>
-                          {{ item.end_time }}
-                        </span>
-                      </div>
-                      <v-btn class="button" large color="#6173FF" @click="attendClass(item)">수업참여</v-btn>
+              <div class="blog-card">
+                <div class="inner-part">
+                  <label for="imgTap" class="img">
+                    <v-img :src="'/profile/' + item.founder_uid + '/256'" id="preview" alt=""></v-img>
+                  </label>
+                  <div class="content">
+                    <div class="class-name">{{ item.room_name }}</div>
+                    <div class="title">
+                      <v-icon>mdi-account-circle</v-icon>
+                      {{ item.founder }}
                     </div>
+                    <div class="text">
+                      <v-icon>mdi-clock-start</v-icon>
+                      <span class="detail-label">
+                        진행여부
+                      </span>
+                      <span>{{ item.room_state }}중</span>
+                    </div>
+                    <div class="text">
+                      <v-icon>mdi-lock-open-outline</v-icon>
+                      <span class="detail-label">
+                        공개여부
+                      </span>
+                      <span>
+                        {{ item.room_type }}
+                      </span>
+                    </div>
+                    <div class="text">
+                      <v-icon>mdi-arrow-right-bold-hexagon-outline</v-icon>
+                      <span class="detail-label">
+                        강의시작
+                      </span>
+                      {{ item.start_time }}
+                    </div>
+                    <div class="text">
+                      <v-icon>mdi-exit-to-app</v-icon>
+                      <span class="detail-label">
+                        강의종료
+                      </span>
+                      <span>
+                        {{ item.end_time }}
+                      </span>
+                    </div>
+                    <v-btn class="button" large color="#6173FF" @click="attendClass(item)">수업참여</v-btn>
                   </div>
                 </div>
               </div>
@@ -104,6 +102,11 @@ export default {
       classLi: [],
       founderUid: '',
     };
+  },
+  computed: {
+    classLiFilter: function() {
+      return this.classLi.filter((i) => i.room_state == '진행');
+    },
   },
   async created() {
     const { data } = await usePartinClass(this.$store.state.uuid);
