@@ -2,69 +2,75 @@
   <div>
     <div v-if="learnerDoing == true">
       <v-row no-gutters>
-        <template v-for="(item, idx) in classLi">
+        <template v-for="(item, idx) in classLiFilter">
           <v-col :key="idx">
             <v-card flat color="#f4f4f4" width="700">
-              <div v-if="new Date(item.end_time) < Date.now() && item.room_state == '준비'">
-                <div class="blog-card">
-                  <div class="inner-part">
-                    <label for="imgTap" class="img">
-                      <v-img :src="'/profile/' + item.founderUid + '/256'" id="preview" alt=""></v-img>
-                    </label>
-                    <div class="content">
-                      <div class="class-name">{{ item.room_name }}</div>
-                      <div class="title">
-                        <v-icon>mdi-account-circle</v-icon>
-                        {{ item.founder }}
-                      </div>
-                      <div class="text">
-                        <v-icon>mdi-clock-start</v-icon>
-                        <span class="detail-label">
-                          진행여부
-                        </span>
-                        <span>{{ item.room_state }}중</span>
-                      </div>
-                      <div class="text">
-                        <v-icon>mdi-lock-open-outline</v-icon>
-                        <span class="detail-label">
-                          공개여부
-                        </span>
-                        <span>
-                          {{ item.room_type }}
-                        </span>
-                      </div>
-                      <div class="text">
-                        <v-icon>mdi-arrow-right-bold-hexagon-outline</v-icon>
-                        <span class="detail-label">
-                          강의시작
-                        </span>
-                        {{ item.start_time }}
-                      </div>
-                      <div class="text">
-                        <v-icon>mdi-exit-to-app</v-icon>
-                        <span class="detail-label">
-                          강의종료
-                        </span>
-                        <span>
-                          {{ item.end_time }}
-                        </span>
-                      </div>
-                      <v-dialog v-if="$store.state.token" v-model="dialog" hide-overlay max-width="900px" :retain-focus="false">
-                        <template v-slot:activator="{ on, attrs }">
-                          <v-btn class="button" large color="#6173FF" v-bind="attrs" v-on="on" @click="evalShow(item)">
-                            내평가보기
-                          </v-btn>
-                        </template>
-                        <v-card flat>
-                          <v-card-text>
+              <div class="blog-card">
+                <div class="inner-part">
+                  <label for="imgTap" class="img">
+                    <v-img :src="'/profile/' + item.founderUid + '/256'" id="preview" alt=""></v-img>
+                  </label>
+                  <div class="content">
+                    <div class="class-name">{{ item.room_name }}</div>
+                    <div class="title">
+                      <v-icon>mdi-account-circle</v-icon>
+                      {{ item.founder }}
+                    </div>
+                    <div class="text">
+                      <v-icon>mdi-clock-start</v-icon>
+                      <span class="detail-label">
+                        진행여부
+                      </span>
+                      <span>{{ item.room_state }}중</span>
+                    </div>
+                    <div class="text">
+                      <v-icon>mdi-lock-open-outline</v-icon>
+                      <span class="detail-label">
+                        공개여부
+                      </span>
+                      <span>
+                        {{ item.room_type }}
+                      </span>
+                    </div>
+                    <div class="text">
+                      <v-icon>mdi-arrow-right-bold-hexagon-outline</v-icon>
+                      <span class="detail-label">
+                        강의시작
+                      </span>
+                      {{ item.start_time }}
+                    </div>
+                    <div class="text">
+                      <v-icon>mdi-exit-to-app</v-icon>
+                      <span class="detail-label">
+                        강의종료
+                      </span>
+                      <span>
+                        {{ item.end_time }}
+                      </span>
+                    </div>
+                    <v-dialog v-if="$store.state.token" v-model="dialog" persistent max-width="1200px" :retain-focus="false">
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-btn class="button" large color="#6173FF" v-bind="attrs" v-on="on" @click="evalShow(item)">
+                          내평가보기
+                        </v-btn>
+                      </template>
+                      <v-card>
+                        <v-card-title>
+                          <span class="headline">
+                            <span>{{ name }}님의</span>
+                            Evaluation
+                          </span>
+                        </v-card-title>
+                        <v-card-text>
+                          <v-container>
                             <v-card>
-                              <v-toolbar flat color="#6173FF" dark>
+                              <v-toolbar flat color="primary" dark>
                                 <v-toolbar-title>
                                   <span>{{ name }}님의</span>
-                                  평가조회
+                                  Evaluation
                                 </v-toolbar-title>
                               </v-toolbar>
-                              <v-tabs vertical color="#6173FF">
+                              <v-tabs vertical>
                                 <v-tab>
                                   <v-icon left>
                                     mdi-account
@@ -86,63 +92,38 @@
 
                                 <v-tab-item>
                                   <v-card flat>
-                                    <div style="margin:1.5rem 0;">
-                                      <v-icon left x-large>
-                                        mdi-alarm
-                                      </v-icon>
-                                      <span style="font-size:2rem;">{{ attend_time }}</span>
-                                      에 출석하셨습니다!
-                                    </div>
-                                    <div>
-                                      출결상태는
-                                      <span style="font-size:2rem;">{{ attend }}</span>
-                                      입니다.
-                                    </div>
+                                    <h2>출결</h2>
+                                    <h3>출석시간:{{ attend_time }}</h3>
+                                    <h3>지각여부:{{ attend }}</h3>
                                   </v-card>
                                 </v-tab-item>
                                 <v-tab-item>
-                                  <v-card flat style="width:30%; margin: auto;">
+                                  <v-card flat>
                                     <MyPagePieChart :learnData="learnData" :key="change" />
                                     <MyPageRadarChart :learnData="learnData" :averageData="averageData" :key="renderKey" />
                                   </v-card>
                                 </v-tab-item>
                                 <v-tab-item>
                                   <v-card flat>
-                                    <div style="display:flex; justify-content:center; flex-direction:column; margin:2rem 0;">
-                                      <div class="partin-each">
-                                        <span style="font-size:1.5rem;">{{ roomName }}수업</span>
-                                        에서 총
-                                        <span style="font-size:1.5rem;">{{ evalUserCnt }}명</span>
-                                        중
-                                      </div>
-                                      <div class="partin-each">
-                                        <span style="color:#4cb4a5; font-size:1.5rem; font-weight: bold;">수업참여도</span>
-                                        는
-                                        <span style="color:#4cb4a5; font-size:1.5rem; font-weight: bold;">{{ partuidRank }}위</span>
-                                        입니다
-                                      </div>
-
-                                      <div class="partin-each">
-                                        <span style="color:#FC5230; font-size:1.5rem; font-weight: bold;">출석</span>
-                                        은
-                                        <span style="color:#FC5230; font-size:1.5rem; font-weight: bold;">{{ attenduidRank }}위</span>
-                                        입니다
-                                      </div>
-                                    </div>
+                                    <div>{{ name }}님</div>
+                                    <div>{{ roomName }} 수업에서 수업참여도</div>
+                                    <div>총 수강생 {{ evalUserCnt }}명중에 {{ partuidRank }}위입니다</div>
+                                    <div>{{ roomName }} 수업에서 출석을</div>
+                                    <div>총 수강생 {{ evalUserCnt }}명중에 {{ attenduidRank }}위입니다</div>
                                   </v-card>
                                 </v-tab-item>
                               </v-tabs>
                             </v-card>
-                          </v-card-text>
-                          <v-card-actions>
-                            <v-spacer></v-spacer>
-                            <v-btn large color="#6173FF" dark @click="dialog = false">
-                              Close
-                            </v-btn>
-                          </v-card-actions>
-                        </v-card>
-                      </v-dialog>
-                    </div>
+                          </v-container>
+                        </v-card-text>
+                        <v-card-actions>
+                          <v-spacer></v-spacer>
+                          <v-btn color="blue darken-1" text @click="dialog = false">
+                            Close
+                          </v-btn>
+                        </v-card-actions>
+                      </v-card>
+                    </v-dialog>
                   </div>
                 </div>
               </div>
@@ -235,6 +216,11 @@ export default {
       per5: 0,
       resDatalen: 0,
     };
+  },
+  computed: {
+    classLiFilter: function() {
+      return this.classLi.filter((i) => new Date(i.end_time) < Date.now() && i.room_state == '준비');
+    },
   },
   async created() {
     this.classLi = [];
