@@ -1,24 +1,17 @@
 <template>
   <div>
     <div v-if="learnerDoing == true">
-      <div v-for="(item, idx) in classLi" :key="idx">
+      <!-- 1 -->
+      <!-- <div v-for="(item, idx) in classLi" :key="idx">
         <div v-if="new Date(item.end_time) < Date.now() && item.room_state == '완료'">
-          <!-- <p>{{ item.rid }}</p>
-          <p>{{ item.founder }}</p>
-          <p>{{ item.room_name }}</p>
-
-          <p>{{ item.room_type }}</p>
-          <p>{{ item.start_time }}</p>
-          <p>{{ item.end_time }}</p>
-          <v-img :src="url" id="preview" alt="" style="width:100px; height:100px; left:45%;"></v-img> -->
+      
           <div class="blog-card">
             <input type="radio" name="select" id="tap-1" checked />
             <input type="checkbox" id="imgTap" />
 
             <div class="inner-part">
               <label for="imgTap" class="img">
-                <!-- founderUid -->
-                <v-img :src="url" id="preview" alt="" style="width:240px; height:240px;"></v-img>
+                <v-img :src="url" id="preview" alt=""></v-img>
               </label>
               <div class="content content-1">
                 <span>클래스명:{{ item.room_name }}</span>
@@ -33,10 +26,41 @@
             </div>
           </div>
         </div>
-      </div>
-    </div>
-    <div v-else>
-      <p>수강진행중인 강좌가 없음</p>
+        <div v-else>
+          <p>강의종료된 강좌가 없음</p>
+        </div>
+      </div> -->
+      <!-- card -->
+      <v-row no-gutters>
+        <template v-for="(item, idx) in classLi">
+          <v-col :key="idx">
+            <v-card flat color="#f4f4f4" width="700">
+              <div v-if="new Date(item.end_time) < Date.now() && item.room_state == '완료'">
+                <div class="blog-card">
+                  <input type="radio" name="select" id="tap-1" checked />
+                  <input type="checkbox" id="imgTap" />
+
+                  <div class="inner-part">
+                    <label for="imgTap" class="img">
+                      <v-img :src="'/profile/' + item.founderUid + '/256'" id="preview" alt=""></v-img>
+                    </label>
+                    <div class="content content-1">
+                      <span>클래스명:{{ item.room_name }}</span>
+                      <div class="title">강의자:{{ item.founder }}</div>
+                      <div class="text">진행단계:{{ item.room_state }}</div>
+                      <div class="text">공개여부:{{ item.room_type }}</div>
+                      <div class="text">시작시간:{{ item.start_time }}</div>
+                      <div class="text">종료시간:{{ item.end_time }}</div>
+                      <v-btn color="primary" @click="learnerDataGo(item)">학생평가보기</v-btn>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </v-card>
+          </v-col>
+          <v-responsive v-if="idx % 2 == 1" :key="`width-${idx}`" width="100%"></v-responsive>
+        </template>
+      </v-row>
     </div>
   </div>
 </template>
@@ -58,8 +82,14 @@ export default {
     if (data) {
       this.learnerDoing = true;
       this.classLi = data;
-    } else {
     }
+  },
+  methods: {
+    learnerDataGo(value) {
+      const roomData = value;
+      console.log(roomData);
+      this.$router.push({ name: 'LecSelectedEval', query: { roomData: roomData } });
+    },
   },
 };
 </script>
