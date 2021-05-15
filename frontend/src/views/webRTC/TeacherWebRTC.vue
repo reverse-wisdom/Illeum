@@ -25,7 +25,20 @@
           <img alt="" src="https://www.webrtc-experiment.com/images/key-press.gif" style="height: 12px; vertical-align: middle;" />
         </div>
         <div class="wrapper">
-          <v-textarea id="txt-chat-message" class="regular-input" rows="1" auto-grow single-line outlined style="border-color: white;" v-model="message" @keyup.enter="chat" label=""></v-textarea>
+          <v-textarea
+            id="txt-chat-message"
+            class="regular-input"
+            rows="3"
+            prepend-icon="mdi-comment"
+            single-line
+            no-resize
+            outlined
+            row-height="15"
+            style="border-color: white;"
+            v-model="message"
+            @keyup.enter="chat"
+            label=""
+          ></v-textarea>
 
           <emoji-picker @emoji="append" :search="search">
             <div class="emoji-invoker" slot="emoji-invoker" slot-scope="{ events: { click: clickEvent } }" @click.stop="clickEvent">
@@ -52,7 +65,8 @@
               </div>
             </div>
           </emoji-picker>
-          <button class="btn btn-primary" id="btn-chat-message" @click="chat">Send</button>
+          <!-- <button class="btn btn-primary" id="btn-chat-message" @click="chat">Send</button> -->
+          <v-btn id="btn-chat-message" large rounded color="primary" @click="chat">입력</v-btn>
         </div>
       </div>
     </div>
@@ -556,7 +570,7 @@ export default {
 <style scoped>
 body {
   -ms-overflow-style: none;
-  overflow-y: hidden;
+  /* overflow-y: hidden; */
 }
 body::-webkit-scrollbar {
   display: none;
@@ -605,8 +619,9 @@ body::-webkit-scrollbar {
 }
 
 #btn-chat-message {
-  margin: 5px;
-  display: block;
+  /* margin: 3rem; */
+  margin-bottom: 3rem !important;
+  /* display: block; */
   float: right;
 }
 #btn-chat-message::after {
@@ -616,7 +631,7 @@ body::-webkit-scrollbar {
 #conversation-panel {
   margin-bottom: 20px;
   text-align: left;
-  height: 650px;
+  height: 36rem;
   width: 100%;
   overflow: auto;
 }
@@ -690,19 +705,13 @@ body::-webkit-scrollbar {
 }
 
 .regular-input {
-  padding: 0.5rem 1rem;
-  /* border-radius: 3px; */
-  /* border: 1px solid #ccc; */
   width: 22rem;
-  /* height: 6rem; */
-  /* outline: none; */
 }
 
 .regular-input:focus {
   box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.5);
 }
 #widget-container {
-  /* position: fixed; */
   bottom: 0;
   right: 20%;
   left: 20%;
@@ -741,7 +750,7 @@ body::-webkit-scrollbar {
   border-radius: 0.5rem;
   background: #fff;
   box-shadow: 1px 1px 8px #c7dbe6;
-  top: 0 !important;
+  top: -22rem !important;
   left: 0 !important;
 }
 .emoji-picker__search {
