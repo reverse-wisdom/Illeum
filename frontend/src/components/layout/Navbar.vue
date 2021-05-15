@@ -1,6 +1,6 @@
 <template>
   <div id="">
-    <v-navigation-drawer absolute app>
+    <v-navigation-drawer absolute app width="320">
       <img src="../../assets/img/textlogo.png" class="Navlogo" alt="" style="width:220px; height:90px; margin: 4% 0;" />
 
       <v-sheet color="" class="pa-1">
@@ -21,7 +21,7 @@
       </v-btn> -->
       <!-- <v-divider></v-divider> -->
       <!-- 프로필 모달 -->
-      <v-list>
+      <v-list class="my-0">
         <v-dialog v-if="this.$store.state.token" v-model="dialog" persistent max-width="800px">
           <template v-slot:activator="{ on, attrs }">
             <v-btn v-bind="attrs" v-on="on" tile outlined>
@@ -203,6 +203,7 @@ export default {
     async signoutUser() {
       const userData = this.$store.state.token;
       const { data } = await logoutUser(userData);
+      console.log(data);
       localStorage.clear();
       sessionStorage.clear();
       this.$router.push('/sign');

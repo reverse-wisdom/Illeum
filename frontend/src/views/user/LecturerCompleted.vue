@@ -3,14 +3,6 @@
     <div v-if="lecturerReady == true">
       <div v-for="(item, idx) in classLi" :key="idx">
         <div v-if="new Date(item.end_time) < Date.now() && item.room_state == '준비'">
-          <!-- <h3>RID:{{ item.rid }}</h3>
-          <h3>{{ $store.state.name }}</h3>
-          <h3>{{ item.room_name }}</h3>
-          <h3>{{ item.room_state }}</h3>
-          <h3>{{ item.room_type }}</h3>
-          <h3>{{ item.start_time }}</h3>
-          <v-img :src="url" id="preview" alt="" style="width:100px; height:100px; left:45%;"></v-img>
-          <v-btn color="primary" @click="learnerDataGo(item)">학생평가보기</v-btn> -->
           <div class="blog-card">
             <input type="radio" name="select" id="tap-1" checked />
             <input type="checkbox" id="imgTap" />
@@ -18,25 +10,25 @@
             <div class="inner-part">
               <label for="imgTap" class="img">
                 <!-- founderUid -->
-                <v-img :src="url" id="preview" alt="" style="width:240px; height:240px;"></v-img>
+                <v-img :src="url" id="preview" alt=""></v-img>
               </label>
               <div class="content content-1">
                 <span>클래스명:{{ item.room_name }}</span>
-
                 <div class="title">강의자:{{ $store.state.name }}</div>
                 <div class="text">진행단계:{{ item.room_state }}</div>
                 <div class="text">공개여부:{{ item.room_type }}</div>
                 <div class="text">시작시간:{{ item.start_time }}</div>
                 <div class="text">종료시간:{{ item.end_time }}</div>
-                <v-btn class="button" x-large style=" padding: 20px 30px; font-size: 1.2rem; margin-left: 200px;" color="#6173FF" @click="startRTC(item)">강의시작</v-btn>
+                <v-btn color="primary" @click="learnerDataGo(item)">학생평가보기</v-btn>
               </div>
             </div>
           </div>
         </div>
+        <div v-else></div>
       </div>
     </div>
     <div v-else>
-      <p>강의완료중인 강좌가 없음</p>
+      <p>개설한 클래스가 없습니다</p>
     </div>
   </div>
 </template>
