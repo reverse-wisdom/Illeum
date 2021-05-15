@@ -19,7 +19,7 @@
                 <div class="text">공개여부:{{ item.room_type }}</div>
                 <div class="text">시작시간:{{ item.start_time }}</div>
                 <div class="text">종료시간:{{ item.end_time }}</div>
-                <v-btn color="primary" @click="learnerDataGo(item)">학생평가보기</v-btn>
+                <v-btn color="primary" @click="learnerDataGo(item.rid)">학생평가보기</v-btn>
               </div>
             </div>
           </div>
@@ -54,9 +54,7 @@ export default {
   },
   methods: {
     learnerDataGo(value) {
-      const roomData = value;
-      console.log(roomData);
-      this.$router.push({ name: 'LecSelectedEval', query: { roomData: roomData } });
+      this.$router.push({ name: 'LecSelectedEval', query: { rid: value } });
     },
   },
 };

@@ -1,94 +1,23 @@
 <template>
-  <div class="seletedManage">
-    <div
-      style="display:flex; flex-direction:column; align-items:center; margin-left:-40%; 
-    "
-    >
+  <div class="">
+    <div>
       <h2>myPage에서 넘긴 수강데이터</h2>
-      <h4>{{ this.$store.state.name }}의 학생관리</h4>
-      <h4>넘겨준 RID:{{ this.$route.query.roomData.rid }}</h4>
-      <h4>클래스명:{{ this.$route.query.roomData.room_name }}의 평가데이터</h4>
+      <h4>넘겨준 RID:{{ this.rid }}</h4>
     </div>
     <v-row>
-      <v-date-picker v-model="date" @click:date="showManage" :landscape="landscape" locale="ko-kr" :allowed-dates="allowedDates" class="mt-4" min="1900-04-01" max="2100-10-30"></v-date-picker>
-    </v-row>
-
-    <v-row>
-      <div>
-        <h2>{{ date }}</h2>
-      </div>
-    </v-row>
-    <!-- <v-row>
-      <v-col cols="12" sm="6">
-        <v-select :items="items" :label="date" solo @change="showManage"></v-select>
-      </v-col>
-    </v-row> -->
-    <v-row>
-      <v-col cols="12" sm="4">
-        <div class="table-body">
-          <div class="table_responsive">
-            <table>
-              <thead>
-                <tr>
-                  <th scope="col">No</th>
-                  <th scope="col">PROFILE</th>
-                  <th scope="col">NAME</th>
-                  <th scope="col">E-MAIL</th>
-                  <th scope="col">Evaluation</th>
-                  <th scope="col">Attendance</th>
-                  <th scope="col">TOP</th>
-                </tr>
-              </thead>
-
-              <tbody>
-                <tr v-for="(each, idx) in UsersEval" :key="idx">
-                  <td>{{ idx + 1 }}</td>
-                  <td><v-img :src="'/profile/' + each.uid + '/256'" id="preview" style="width:50px; height:50px; " alt=""></v-img></td>
-                  <td>
-                    {{ each.name }}
-                  </td>
-                  <td>
-                    {{ each.email }}
-                  </td>
-                  <td>
-                    <v-btn color="primary" dark>
-                      DETAIL
-                    </v-btn>
-                  </td>
-                  <td>
-                    {{ each.attend }}
-                  </td>
-                  <template v-if="each.ranking == 1">
-                    <td>
-                      <h4>채팅참여도1등</h4>
-                    </td>
-                  </template>
-                  <template v-else>
-                    <td>
-                      <h4></h4>
-                    </td>
-                  </template>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
+      <v-col cols="6">
+        <v-date-picker v-model="date" @click:date="showAll" :landscape="true" locale="ko-kr" :allowed-dates="allowedDates" class="mt-4" min="1900-04-01" max="2100-10-30"></v-date-picker>
       </v-col>
       <!-- 필터검색 -->
-      <v-col cols="12" sm="4" class="chip-search">
+      <v-col cols="6" sm="4" class="chip-search">
         <v-card class="mx-auto" max-width="300">
           <v-toolbar flat color="transparent">
             <v-toolbar-title>빠른검색</v-toolbar-title>
-            <v-spacer></v-spacer>
-            <v-btn icon @click="$refs.search.focus()">
-              <v-icon>mdi-magnify</v-icon>
-            </v-btn>
           </v-toolbar>
 
           <v-container class="py-0">
             <v-row align="center" justify="start">
               <v-col v-for="(selection, i) in selections" :key="selection.text" class="shrink">
-                <!-- <v-chip :disabled="loading" close @click:close="selected.splice(i, 1)"> -->
                 <v-chip :disabled="loading" close @click:close="chipClose(selection, i)">
                   <v-icon left v-text="selection.icon"></v-icon>
                   {{ selection.text }}
@@ -113,32 +42,160 @@
           <v-divider></v-divider>
         </v-card>
       </v-col>
-      <v-col cols="12" sm="4"></v-col>
+    </v-row>
+    <v-row>
+      <div style="margin-top: 100px;">
+        <h2>show Management</h2>
+        <h2>{{ date }}</h2>
+      </div>
+    </v-row>
+    <v-row>
+      <div class="table-body">
+        <div class="table_responsive">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">No</th>
+                <th scope="col">PROFILE</th>
+                <th scope="col">NAME</th>
+                <th scope="col">E-MAIL</th>
+                <th scope="col">Evaluation</th>
+                <th scope="col">Attendance</th>
+                <th scope="col">date</th>
+                <th scope="col">attend</th>
+                <th scope="col">ranking</th>
+                <th scope="col">participation</th>
+                <th scope="col">모달</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr v-for="(each, idx) in userEval" :key="idx">
+                <td>{{ idx + 1 }}</td>
+                <td><v-img :src="`/profile/${each.uid}/256`" id="preview" style="width:50px; height:50px;" alt=""></v-img></td>
+                <td>{{ each.name }}</td>
+                <td>{{ each.email }}</td>
+                <td>Evaluation</td>
+                <td>Attendance</td>
+                <td>{{ each.attend_time }}</td>
+                <td>{{ each.attend }}</td>
+                <td>{{ each.ranking | checkChatRanking }}</td>
+                <td>{{ each.participation }}회 채팅</td>
+
+                <td>
+                  <v-dialog v-model="dialog" persistent max-width="1200px">
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-btn color="primary" dark v-bind="attrs" v-on="on">
+                        DETAIL
+                      </v-btn>
+                    </template>
+                    <v-card>
+                      <v-card-title>
+                        <span class="headline">
+                          <span>{{ each.name }}님의</span>
+                          Evaluation
+                        </span>
+                      </v-card-title>
+                      <v-card-text>
+                        <v-container>
+                          <v-card>
+                            <v-toolbar flat color="primary" dark>
+                              <v-toolbar-title>
+                                <span>{{ each.name }}님의</span>
+                                Evaluation
+                              </v-toolbar-title>
+                            </v-toolbar>
+                            <v-tabs vertical>
+                              <v-tab>
+                                <v-icon left>
+                                  mdi-account
+                                </v-icon>
+                                출결
+                              </v-tab>
+                              <v-tab>
+                                <v-icon left>
+                                  mdi-lock
+                                </v-icon>
+                                학습태도
+                              </v-tab>
+                              <v-tab>
+                                <v-icon left>
+                                  mdi-access-point
+                                </v-icon>
+                                참여현황
+                              </v-tab>
+
+                              <v-tab-item>
+                                <v-card flat>
+                                  <h2>출결</h2>
+                                  <h3>출석시간:{{ each.attend_time }}</h3>
+                                  <h3>지각여부:{{ each.attend }}</h3>
+                                </v-card>
+                              </v-tab-item>
+                              <v-tab-item>
+                                <v-card flat>
+                                  <LecUserEval :each="each" :rid="roomData.rid"></LecUserEval>
+                                </v-card>
+                              </v-tab-item>
+                              <v-tab-item>
+                                <v-card flat>
+                                  <LecUserPartin :each="each" :roomData="roomData" :evalUserCnt="userEvalLength" :rid="roomData.rid"></LecUserPartin>
+                                </v-card>
+                              </v-tab-item>
+                            </v-tabs>
+                          </v-card>
+                        </v-container>
+                      </v-card-text>
+                      <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn color="blue darken-1" text @click="dialog = false">
+                          Close
+                        </v-btn>
+                      </v-card-actions>
+                    </v-card>
+                  </v-dialog>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </v-row>
   </div>
 </template>
 
 <script>
-import { fetchCondition } from '@/api/evaluation.js';
+import LecUserEval from '@/views/evaluation/LecUserEval';
+import LecUserPartin from '@/views/evaluation/LecUserPartin';
+
+import { fetchCondition } from '@/api/evaluation';
+import { findByUidClass, findByRidClass } from '@/api/class';
 export default {
+  components: {
+    LecUserEval,
+    LecUserPartin,
+  },
   data() {
     return {
-      selectedeval: [],
-      Dates: [],
-      date: '',
-      roomDTO: null,
-      UsersEval: [],
-      url: null,
-      landscape: true,
       chipCheck: {
         isLate: false,
         isAbsent: false,
         isAttendFirst: false,
         isChatFirst: false,
       },
-      search: '',
-      selected: [],
+      date: '',
+      roomData: null,
+      dialog: false,
+
+      rid: '',
+      dateList: [], // rid date pair list
+      classList: [], // for rid list
+      userEval: [], // for table list
+      userEvalLength: '', // for table list length
       loading: false,
+      userEvalAll: [],
+      selected: [],
+      search: '',
       chips: [
         {
           text: '지각',
@@ -158,27 +215,6 @@ export default {
         },
       ],
     };
-  },
-  async created() {
-    this.roomDTO = this.$route.query.roomData;
-    const rid = this.$route.query.roomData.rid;
-    const roomData = {
-      isAbsent: 0,
-      isAttendFist: 0,
-      isChatFirst: 0,
-      isLate: 0,
-      rid,
-    };
-    console.log(this.roomDTO);
-    const { data } = await fetchCondition(roomData);
-    if (data) {
-      this.selectedeval = data;
-      for (var i = 0; i < data.length; i++) {
-        var dates = data[i].eval_date.slice(0, 10);
-        this.Dates.push(dates);
-      }
-    }
-    console.log('selectedeval', this.selectedeval);
   },
   computed: {
     allSelected() {
@@ -209,42 +245,99 @@ export default {
     selected() {
       this.search = '';
     },
+    userEval(val) {
+      this.userEval = val;
+    },
   },
+  filters: {
+    checkChatRanking: function(value) {
+      if (value == 1000) return '채팅미참여';
+      return value + '등';
+    },
+  },
+  async created() {
+    this.rid = this.$route.query.rid;
+    await findByRidClass(this.rid).then(({ data }) => {
+      this.roomData = data;
+    });
+    await fetchCondition({ rid: this.rid }).then(({ data }) => {
+      this.userEvalAll = data;
+      for (let j = 0; j < data.length; j++) {
+        if (!this.dateList.some((e) => e.date == data[j].attend_time.slice(0, 10))) {
+          this.dateList.push({ date: data[j].eval_date.slice(0, 10) });
+        }
+      }
+    });
+  },
+
   methods: {
     allowedDates(val) {
-      for (var i = 0; i < this.Dates.length; i++) {
-        if (this.Dates[i] == val) {
+      for (var i = 0; i < this.dateList.length; i++) {
+        if (this.dateList[i].date == val) {
           return true;
         }
       }
     },
-    async showManage() {
-      console.log('selected', this.date);
-      this.manageClasscheck = true;
-      this.manageUsers = [];
-      this.UsersEval = [];
-      for (var i = 0; i < this.selectedeval.length; i++) {
-        if (this.date === this.selectedeval[i].eval_date.slice(0, 10)) {
-          this.url = '/profile/' + this.selectedeval.uid + '/256';
-          this.UsersEval.push(this.selectedeval[i]);
+    showAll() {
+      this.userEval = [];
+      this.userEvalLength = '';
+      for (let index = 0; index < this.userEvalAll.length; index++) {
+        if (this.userEvalAll[index].attend_time.slice(0, 10) == this.date) {
+          this.userEval.push(this.userEvalAll[index]);
         }
       }
-      console.log(this.UsersEval);
+      this.userEvalLength = this.userEval.length;
+    },
+    async getList(chipCheck) {
+      this.userEval = [];
+      this.userEvalLength = '';
+      var isAbsent = chipCheck.isAbsent ? 1 : 0;
+      var isLate = chipCheck.isLate ? 1 : 0;
+      var isAttendFirst = chipCheck.isAttendFirst ? 1 : 0;
+      var isChatFirst = chipCheck.isChatFirst ? 1 : 0;
+      await fetchCondition({ rid: this.rid, isAbsent, isLate, isAttendFirst, isChatFirst }).then(({ data }) => {
+        for (let i = 0; i < data.length; i++) {
+          if (this.date == data[i].attend_time.slice(0, 10)) {
+            this.userEval.push(data[i]);
+          }
+        }
+      });
+    },
+    next() {
+      this.loading = true;
+
+      setTimeout(() => {
+        this.search = '';
+        this.selected = [];
+        this.loading = false;
+      }, 1000);
+    },
+    chipClose(selection, i) {
+      this.selected.splice(i, 1);
+      if (selection.text == '지각') this.chipCheck.isLate = false;
+      if (selection.text == '결석') this.chipCheck.isAbsent = false;
+      if (selection.text == '출석1등') this.chipCheck.isAttendFirst = false;
+      if (selection.text == '채팅참여1등') this.chipCheck.isChatFirst = false;
+      this.getList(this.chipCheck);
+    },
+    showSelected(item) {
+      this.selected.push(item);
+
+      if (item.text == '지각') this.chipCheck.isLate = true;
+      if (item.text == '결석') this.chipCheck.isAbsent = true;
+      if (item.text == '출석1등') this.chipCheck.isAttendFirst = true;
+      if (item.text == '채팅참여1등') this.chipCheck.isChatFirst = true;
+      this.getList(this.chipCheck);
+      this.$emit('selected', this.selected);
     },
   },
 };
 </script>
 
 <style scoped>
-.seletedManage {
-  width: 100%;
-  padding: 25px 30px 30px 30px;
-  border-radius: 5px;
-}
-/* table */
-
-* {
-  box-sizing: border-box;
+.manage {
+  margin: auto;
+  margin-left: 30%;
 }
 
 .table_responsive {

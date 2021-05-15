@@ -3,7 +3,6 @@
     <v-row>
       <v-container>{{ this.$store.state.uuid }}의 학생관리</v-container>
       <v-date-picker v-model="date" @click:date="classNameFetch" :landscape="true" locale="ko-kr" :allowed-dates="allowedDates" class="mt-4" min="1900-04-01" max="2100-10-30"></v-date-picker>
-      <!-- <v-date-picker v-model="date" :landscape="true" locale="ko-kr" :allowed-dates="allowedDates" class="mt-4" min="1900-04-01" max="2100-10-30"></v-date-picker> -->
     </v-row>
     <v-row>
       <div style="margin-top: 100px;">
@@ -12,139 +11,18 @@
       </div>
     </v-row>
     <v-row>
-      <v-col cols="12" sm="6">
+      <v-col cols="6" sm="6">
         <v-select :items="roomNameList" :value="roomNameList[0]" solo @input="showAll"></v-select>
-        <!-- <v-select :items="roomNameList" :label="date" solo></v-select> -->
       </v-col>
-    </v-row>
-    <v-row>
-      <v-col cols="12" sm="4">
-        <div class="table-body">
-          <div class="table_responsive">
-            <table>
-              <thead>
-                <tr>
-                  <th scope="col">No</th>
-                  <th scope="col">PROFILE</th>
-                  <th scope="col">NAME</th>
-                  <th scope="col">E-MAIL</th>
-                  <th scope="col">Evaluation</th>
-                  <th scope="col">Attendance</th>
-                  <th scope="col">date</th>
-                  <th scope="col">attend</th>
-                  <th scope="col">ranking</th>
-                  <th scope="col">participation</th>
-                  <th scope="col">모달</th>
-                </tr>
-              </thead>
-
-              <tbody>
-                <tr v-for="(each, idx) in userEval" :key="idx">
-                  <td>{{ idx + 1 }}</td>
-                  <td><v-img :src="`/profile/${each.uid}/256`" id="preview" style="width:50px; height:50px;" alt=""></v-img></td>
-                  <td>{{ each.name }}</td>
-                  <td>{{ each.email }}</td>
-                  <td>Evaluation</td>
-                  <td>Attendance</td>
-                  <td>{{ each.attend_time }}</td>
-                  <td>{{ each.attend }}</td>
-                  <td>{{ each.ranking | checkChatRanking }}</td>
-                  <td>{{ each.participation }}회 채팅</td>
-
-                  <td>
-                    <v-dialog v-model="dialog" persistent max-width="1200px">
-                      <template v-slot:activator="{ on, attrs }">
-                        <v-btn color="primary" dark v-bind="attrs" v-on="on">
-                          DETAIL
-                        </v-btn>
-                      </template>
-                      <v-card>
-                        <v-card-title>
-                          <span class="headline">
-                            <span>{{ each.name }}님의</span>
-                            Evaluation
-                          </span>
-                        </v-card-title>
-                        <v-card-text>
-                          <v-container>
-                            <v-card>
-                              <v-toolbar flat color="primary" dark>
-                                <v-toolbar-title>
-                                  <span>{{ each.name }}님의</span>
-                                  Evaluation
-                                </v-toolbar-title>
-                              </v-toolbar>
-                              <v-tabs vertical>
-                                <v-tab>
-                                  <v-icon left>
-                                    mdi-account
-                                  </v-icon>
-                                  출결
-                                </v-tab>
-                                <v-tab>
-                                  <v-icon left>
-                                    mdi-lock
-                                  </v-icon>
-                                  학습태도
-                                </v-tab>
-                                <v-tab>
-                                  <v-icon left>
-                                    mdi-access-point
-                                  </v-icon>
-                                  참여현황
-                                </v-tab>
-
-                                <v-tab-item>
-                                  <v-card flat>
-                                    <h2>출결</h2>
-                                    <h3>출석시간:{{ each.attend_time }}</h3>
-                                    <h3>지각여부:{{ each.attend }}</h3>
-                                  </v-card>
-                                </v-tab-item>
-                                <v-tab-item>
-                                  <v-card flat>
-                                    <LecUserEval :each="each" :rid="ridSelected"></LecUserEval>
-                                  </v-card>
-                                </v-tab-item>
-                                <v-tab-item>
-                                  <v-card flat>
-                                    <LecUserPartin :each="each" :roomData="roomData" :evalUserCnt="userEvalLength" :rid="ridSelected"></LecUserPartin>
-                                  </v-card>
-                                </v-tab-item>
-                              </v-tabs>
-                            </v-card>
-                          </v-container>
-                        </v-card-text>
-                        <v-card-actions>
-                          <v-spacer></v-spacer>
-                          <v-btn color="blue darken-1" text @click="dialog = false">
-                            Close
-                          </v-btn>
-                        </v-card-actions>
-                      </v-card>
-                    </v-dialog>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </v-col>
-      <!-- 필터검색 -->
-      <v-col cols="12" sm="4" class="chip-search">
+      <v-col cols="6">
         <v-card class="mx-auto" max-width="300">
           <v-toolbar flat color="transparent">
             <v-toolbar-title>빠른검색</v-toolbar-title>
-            <v-spacer></v-spacer>
-            <v-btn icon @click="$refs.search.focus()">
-              <v-icon>mdi-magnify</v-icon>
-            </v-btn>
           </v-toolbar>
 
           <v-container class="py-0">
             <v-row align="center" justify="start">
               <v-col v-for="(selection, i) in selections" :key="selection.text" class="shrink">
-                <!-- <v-chip :disabled="loading" close @click:close="selected.splice(i, 1)"> -->
                 <v-chip :disabled="loading" close @click:close="chipClose(selection, i)">
                   <v-icon left v-text="selection.icon"></v-icon>
                   {{ selection.text }}
@@ -169,6 +47,118 @@
           <v-divider></v-divider>
         </v-card>
       </v-col>
+    </v-row>
+    <v-row>
+      <div class="table-body">
+        <div class="table_responsive">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">No</th>
+                <th scope="col">PROFILE</th>
+                <th scope="col">NAME</th>
+                <th scope="col">E-MAIL</th>
+                <th scope="col">Evaluation</th>
+                <th scope="col">Attendance</th>
+                <th scope="col">date</th>
+                <th scope="col">attend</th>
+                <th scope="col">ranking</th>
+                <th scope="col">participation</th>
+                <th scope="col">모달</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr v-for="(each, idx) in userEval" :key="idx">
+                <td>{{ idx + 1 }}</td>
+                <td><v-img :src="`/profile/${each.uid}/256`" id="preview" style="width:50px; height:50px;" alt=""></v-img></td>
+                <td>{{ each.name }}</td>
+                <td>{{ each.email }}</td>
+                <td>Evaluation</td>
+                <td>Attendance</td>
+                <td>{{ each.attend_time }}</td>
+                <td>{{ each.attend }}</td>
+                <td>{{ each.ranking | checkChatRanking }}</td>
+                <td>{{ each.participation }}회 채팅</td>
+
+                <td>
+                  <v-dialog v-model="dialog" persistent max-width="1200px">
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-btn color="primary" dark v-bind="attrs" v-on="on">
+                        DETAIL
+                      </v-btn>
+                    </template>
+                    <v-card>
+                      <v-card-title>
+                        <span class="headline">
+                          <span>{{ each.name }}님의</span>
+                          Evaluation
+                        </span>
+                      </v-card-title>
+                      <v-card-text>
+                        <v-container>
+                          <v-card>
+                            <v-toolbar flat color="primary" dark>
+                              <v-toolbar-title>
+                                <span>{{ each.name }}님의</span>
+                                Evaluation
+                              </v-toolbar-title>
+                            </v-toolbar>
+                            <v-tabs vertical>
+                              <v-tab>
+                                <v-icon left>
+                                  mdi-account
+                                </v-icon>
+                                출결
+                              </v-tab>
+                              <v-tab>
+                                <v-icon left>
+                                  mdi-lock
+                                </v-icon>
+                                학습태도
+                              </v-tab>
+                              <v-tab>
+                                <v-icon left>
+                                  mdi-access-point
+                                </v-icon>
+                                참여현황
+                              </v-tab>
+
+                              <v-tab-item>
+                                <v-card flat>
+                                  <h2>출결</h2>
+                                  <h3>출석시간:{{ each.attend_time }}</h3>
+                                  <h3>지각여부:{{ each.attend }}</h3>
+                                </v-card>
+                              </v-tab-item>
+                              <v-tab-item>
+                                <v-card flat>
+                                  <LecUserEval :each="each" :rid="ridSelected"></LecUserEval>
+                                </v-card>
+                              </v-tab-item>
+                              <v-tab-item>
+                                <v-card flat>
+                                  <LecUserPartin :each="each" :roomData="roomData" :evalUserCnt="userEvalLength" :rid="ridSelected"></LecUserPartin>
+                                </v-card>
+                              </v-tab-item>
+                            </v-tabs>
+                          </v-card>
+                        </v-container>
+                      </v-card-text>
+                      <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn color="blue darken-1" text @click="dialog = false">
+                          Close
+                        </v-btn>
+                      </v-card-actions>
+                    </v-card>
+                  </v-dialog>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </v-row>
   </div>
 </template>
@@ -304,7 +294,6 @@ export default {
       this.selected = [];
 
       for (let index = 0; index < this.dateList.length; index++) {
-        console.log(this.dateList[index]);
         if (this.dateList[index].date == this.date) {
           this.roomNameList.push(this.dateList[index].classInfo.roomName);
           this.ridSelected = this.dateList[index].classInfo.rid;
@@ -317,11 +306,9 @@ export default {
       this.userEvalLength = '';
       this.roomData.room_name = roomName;
       for (let i = 0; i < this.dateList.length; i++) {
-        console.log(this.dateList[i]);
         if (this.dateList[i].classInfo.roomName == roomName) {
           if (this.dateList[i].date == this.date) {
             for (let j = 0; j < this.dateList[i].data.length; j++) {
-              console.log(this.dateList[i].data[j]);
               if (this.dateList[i].data[j].attend_time.slice(0, 10) == this.date) {
                 this.userEval.push(this.dateList[i].data[j]);
               }
@@ -341,7 +328,6 @@ export default {
       await fetchCondition({ rid: this.ridSelected, isAbsent, isLate, isAttendFirst, isChatFirst }).then(({ data }) => {
         for (let i = 0; i < data.length; i++) {
           if (this.date == data[i].attend_time.slice(0, 10)) {
-            console.log(data[i]);
             this.userEval.push(data[i]);
           }
         }
@@ -380,20 +366,6 @@ export default {
 };
 </script>
 <style scoped>
-.manage {
-  margin: auto;
-  margin-left: 30%;
-  /* width: 100%;
-  padding: 25px 30px 30px 30px;
-  border-radius: 5px;
-  background: #fff; */
-}
-/* table */
-
-/* * {
-  box-sizing: border-box;
-} */
-
 .table_responsive {
   width: 150%;
   padding: 15px;
