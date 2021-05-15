@@ -237,7 +237,9 @@ export default {
 
   methods: {
     async evalShow(value) {
-      console.log('value', value);
+      this.dialog = true;
+      console.log(this.dialog);
+      console.log(value.vid);
       //출결
       this.attend_time = value.attend_time;
       this.attend = value.attend;
@@ -342,13 +344,14 @@ export default {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-family: 'GongGothicLight';
 }
 .blog-card {
   display: grid;
   height: 280px;
   width: 100%;
   max-width: 650px;
-  margin: 30px auto;
+  margin: 30px 0px;
   border-radius: 15px;
   background: white;
   box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.5);
@@ -437,4 +440,15 @@ input[type='radio'],
 input[type='checkbox'] {
   display: none;
 }
+.partin-each {
+  margin: 0.5rem 0px;
+}
+#app > div:nth-child(15) {
+  box-shadow: none !important;
+}
+</style>
+<style>
+/* .v-dialog {
+  box-shadow: none !important;
+} */
 </style>

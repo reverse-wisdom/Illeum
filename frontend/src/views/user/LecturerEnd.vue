@@ -122,7 +122,7 @@ export default {
     learnerDataGo(value) {
       const roomData = value;
       console.log(roomData);
-      this.$router.push({ name: 'LecSelectedEval', query: { roomData: roomData } });
+      this.$router.push({ name: 'LecSelectedEval', query: { rid: roomData } });
     },
   },
 };
