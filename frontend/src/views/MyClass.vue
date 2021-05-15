@@ -47,18 +47,17 @@ export default {
 
 <style scoped>
 @font-face {
-  font-family: 'NEXON Lv2 Gothic';
-  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@2.1/NEXON Lv2 Gothic.woff') format('woff');
+  font-family: 'GongGothicLight';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-10@1.0/GongGothicLight.woff') format('woff');
   font-weight: normal;
   font-style: normal;
 }
 
-* {
-  font-family: 'NEXON Lv2 Gothic';
-}
 .my-class {
   margin-left: 7%;
+  font-family: 'GongGothicLight';
 }
+
 .checkbox {
   position: absolute;
   top: 16px;
@@ -116,7 +115,7 @@ export default {
   position: absolute;
   outline: none;
   top: 1.9rem;
-  right: 2.5%;
+  right: 2%;
   color: #fff;
   font-size: 20px;
   font-weight: 400;

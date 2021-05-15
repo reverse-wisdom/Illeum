@@ -16,7 +16,7 @@
     <v-tabs-items v-model="tab" width="1500" color="#f4f4f4" style="background-color:#f4f4f4;">
       <v-tab-item>
         <v-card flat color="#f4f4f4">
-          <LeanerDoing>진행</LeanerDoing>
+          <LearnerDoing>진행</LearnerDoing>
         </v-card>
       </v-tab-item>
       <v-tab-item>
@@ -32,11 +32,11 @@
 </template>
 
 <script>
-import LeanerDoing from '@/views/user/LearnerDoing.vue';
+import LearnerDoing from '@/views/user/LearnerDoing.vue';
 import LearnerCompleted from '@/views/user/LearnerCompleted.vue';
-import LearnerEnd from '@/views/user/LeanerEnd.vue';
+import LearnerEnd from '@/views/user/LearnerEnd.vue';
 export default {
-  components: { LeanerDoing, LearnerCompleted, LearnerEnd },
+  components: { LearnerDoing, LearnerCompleted, LearnerEnd },
   data() {
     return {
       tab: null,
@@ -48,6 +48,7 @@ export default {
 <style scoped>
 .learner {
   width: 1400px;
+  font-family: 'GongGothicLight';
 }
 .v-tab {
   font-size: 1.2rem;
