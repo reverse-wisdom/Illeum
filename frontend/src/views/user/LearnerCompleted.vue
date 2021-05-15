@@ -48,77 +48,94 @@
                         {{ item.end_time }}
                       </span>
                     </div>
-                    <v-dialog v-if="$store.state.token" v-model="dialog" persistent max-width="1200px" :retain-focus="false">
+                    <v-dialog v-if="$store.state.token" v-model="dialog" hide-overlay max-width="900px" :retain-focus="false">
                       <template v-slot:activator="{ on, attrs }">
                         <v-btn class="button" large color="#6173FF" v-bind="attrs" v-on="on" @click="evalShow(item)">
                           내평가보기
                         </v-btn>
                       </template>
-                      <v-card>
-                        <v-card-title>
-                          <span class="headline">
-                            <span>{{ name }}님의</span>
-                            Evaluation
-                          </span>
-                        </v-card-title>
+                      <v-card flat>
                         <v-card-text>
-                          <v-container>
-                            <v-card>
-                              <v-toolbar flat color="primary" dark>
-                                <v-toolbar-title>
-                                  <span>{{ name }}님의</span>
-                                  Evaluation
-                                </v-toolbar-title>
-                              </v-toolbar>
-                              <v-tabs vertical>
-                                <v-tab>
-                                  <v-icon left>
-                                    mdi-account
-                                  </v-icon>
-                                  출결
-                                </v-tab>
-                                <v-tab>
-                                  <v-icon left>
-                                    mdi-lock
-                                  </v-icon>
-                                  학습태도
-                                </v-tab>
-                                <v-tab>
-                                  <v-icon left>
-                                    mdi-access-point
-                                  </v-icon>
-                                  참여현황
-                                </v-tab>
+                          <v-card>
+                            <v-toolbar flat color="#6173FF" dark>
+                              <v-toolbar-title>
+                                <span>{{ name }}님의</span>
+                                평가조회
+                              </v-toolbar-title>
+                            </v-toolbar>
+                            <v-tabs vertical color="#6173FF">
+                              <v-tab>
+                                <v-icon left>
+                                  mdi-account
+                                </v-icon>
+                                출결
+                              </v-tab>
+                              <v-tab>
+                                <v-icon left>
+                                  mdi-lock
+                                </v-icon>
+                                학습태도
+                              </v-tab>
+                              <v-tab>
+                                <v-icon left>
+                                  mdi-access-point
+                                </v-icon>
+                                참여현황
+                              </v-tab>
 
-                                <v-tab-item>
-                                  <v-card flat>
-                                    <h2>출결</h2>
-                                    <h3>출석시간:{{ attend_time }}</h3>
-                                    <h3>지각여부:{{ attend }}</h3>
-                                  </v-card>
-                                </v-tab-item>
-                                <v-tab-item>
-                                  <v-card flat>
-                                    <MyPagePieChart :learnData="learnData" :key="change" />
-                                    <MyPageRadarChart :learnData="learnData" :averageData="averageData" :key="renderKey" />
-                                  </v-card>
-                                </v-tab-item>
-                                <v-tab-item>
-                                  <v-card flat>
-                                    <div>{{ name }}님</div>
-                                    <div>{{ roomName }} 수업에서 수업참여도</div>
-                                    <div>총 수강생 {{ evalUserCnt }}명중에 {{ partuidRank }}위입니다</div>
-                                    <div>{{ roomName }} 수업에서 출석을</div>
-                                    <div>총 수강생 {{ evalUserCnt }}명중에 {{ attenduidRank }}위입니다</div>
-                                  </v-card>
-                                </v-tab-item>
-                              </v-tabs>
-                            </v-card>
-                          </v-container>
+                              <v-tab-item>
+                                <v-card flat>
+                                  <div style="margin:1.5rem 0;">
+                                    <v-icon left x-large>
+                                      mdi-alarm
+                                    </v-icon>
+                                    <span style="font-size:2rem;">{{ attend_time }}</span>
+                                    에 출석하셨습니다!
+                                  </div>
+                                  <div>
+                                    출결상태는
+                                    <span style="font-size:2rem;">{{ attend }}</span>
+                                    입니다.
+                                  </div>
+                                </v-card>
+                              </v-tab-item>
+                              <v-tab-item>
+                                <v-card flat style="width:30%; margin: auto;">
+                                  <MyPagePieChart :learnData="learnData" :key="change" />
+                                  <MyPageRadarChart :learnData="learnData" :averageData="averageData" :key="renderKey" />
+                                </v-card>
+                              </v-tab-item>
+                              <v-tab-item>
+                                <v-card flat>
+                                  <div style="display:flex; justify-content:center; flex-direction:column; margin:2rem 0;">
+                                    <div class="partin-each">
+                                      <span style="font-size:1.5rem;">{{ roomName }}수업</span>
+                                      에서 총
+                                      <span style="font-size:1.5rem;">{{ evalUserCnt }}명</span>
+                                      중
+                                    </div>
+                                    <div class="partin-each">
+                                      <span style="color:#4cb4a5; font-size:1.5rem; font-weight: bold;">수업참여도</span>
+                                      는
+                                      <span style="color:#4cb4a5; font-size:1.5rem; font-weight: bold;">{{ partuidRank }}위</span>
+                                      입니다
+                                    </div>
+
+                                    <div class="partin-each">
+                                      <span style="color:#FC5230; font-size:1.5rem; font-weight: bold;">출석</span>
+                                      은
+                                      <span style="color:#FC5230; font-size:1.5rem; font-weight: bold;">{{ attenduidRank }}위</span>
+                                      입니다
+                                    </div>
+                                  </div>
+                                </v-card>
+                              </v-tab-item>
+                            </v-tabs>
+                          </v-card>
                         </v-card-text>
                         <v-card-actions>
                           <v-spacer></v-spacer>
-                          <v-btn color="blue darken-1" text @click="dialog = false">
+                          <v-btn large color="#6173FF" dark @click="dialog = false">
                             Close
                           </v-btn>
                         </v-card-actions>
