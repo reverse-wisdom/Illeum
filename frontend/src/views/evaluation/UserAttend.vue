@@ -1,42 +1,61 @@
 <template>
-  <div>
+  <div class="user-attend">
     <v-row>
-      <v-col cols="12" sm="6" md="8">
-        <Clock></Clock>
-        <section class="time-contain">
-          <p class="attend-time time-shadow" v-text="currentTime"></p>
-        </section>
-        <v-col cols="6" md="4">
-          <v-date-picker
-            v-model="date"
-            width="500"
-            @click:date="classNameFetch"
-            :landscape="landscape"
-            locale="ko-kr"
-            :allowed-dates="allowedDates"
-            class="mt-4"
-            min="1900-04-01"
-            max="2100-10-30"
-          ></v-date-picker>
-        </v-col>
+      <p>출결확인을 위해 1.날짜를 체크하고 2.클레스를 선택해주세요</p>
+    </v-row>
+    <v-row>
+      <v-col cols="12" sm="4">
+        <v-date-picker
+          v-model="date"
+          width="400"
+          header-color="#000"
+          @click:date="classNameFetch"
+          locale="ko-kr"
+          :allowed-dates="allowedDates"
+          class="mt-4"
+          min="1900-04-01"
+          max="2100-10-30"
+        ></v-date-picker>
+      </v-col>
+
+      <v-col cols="12" sm="4">
+        <div style="margin-top:1rem;">
+          <label for="" style="border: 1px solid black; padding:10px 20px; border-radius: 10px; font-size:1.2rem; color:#fff; background:#000;">클래스선택</label>
+          <div style=" margin-top: 20px;">
+            <v-select :items="items" :label="date" solo @input="showPartin" placeholder="클래스를 선택해주세요"></v-select>
+          </div>
+        </div>
+        <div class="attend-time-detail">
+          <div class="title-attend">
+            <v-icon x-large>mdi-alarm</v-icon>
+            출석시간
+          </div>
+          <div>{{ attend_time }}</div>
+        </div>
+        <div class="attend-check">
+          <div>지각여부</div>
+          <div v-if="'지각'" class="late-attend">{{ attend }}</div>
+          <div v-else-if="'결석'" class="afk-attend">{{ attend }}</div>
+          <div v-else class="normal-attend">{{ attend }}</div>
+        </div>
+      </v-col>
+      <v-col cols="12" sm="4">
+        <div>
+          <div class="clock-info">
+            <div class="clock">
+              <Clock></Clock>
+            </div>
+
+            <section class="time-contain">
+              <p class="attend-time time-shadow" v-text="currentTime"></p>
+            </section>
+          </div>
+          <div class="saying">
+            <p>{{ randomSaying }}</p>
+          </div>
+        </div>
       </v-col>
     </v-row>
-    <span>{{ this.$store.state.uuid }}의출결현황</span>
-    <v-col cols="12" sm="5">
-      <v-select :items="items" :label="date" solo @input="showPartin"></v-select>
-    </v-col>
-
-    <div style="margin-top: 100px;">
-      <h2>show attendence</h2>
-      <h2>eval_date:{{ date }}</h2>
-      <h2>{{ dayLabel }}</h2>
-    </div>
-
-    <div>
-      <div>유저이름:{{ this.$store.state.name }}님</div>
-      <div>출석시간:{{ attend_time }}</div>
-      <div>지각여부:{{ attend }}</div>
-    </div>
   </div>
 </template>
 
@@ -74,6 +93,16 @@ export default {
       selected: true,
       // digital clock
       currentTime: null,
+      //명언
+      timeSaying: [
+        '당신은 지체할 수도 있지만 시간은 그러하지 않을 것이다.',
+        '계획을 세우는 데 소비한 시간이 길어질수록 실행에 옮기는 시간이 줄어든다.',
+        '과거를 기억 못하는 이들은 과거를 반복하기 마련이다.',
+        '짧은 인생은 시간낭비에 의해 더욱 짧아진다.',
+        '미래를 신뢰하지 마라, 죽은 과거는 묻어버려라, 그리고 살아있는 현재에 행동하라.',
+        '승자는 시간을 관리하며 살고, 패자는 시간에 끌려 산다.',
+      ],
+      randomSaying: '',
     };
   },
 
@@ -91,6 +120,9 @@ export default {
     this.eval = data;
     this.items = [];
     this.evalcheck = false;
+    //random saying
+    this.randomSaying = this.timeSaying[Math.floor(Math.random() * this.timeSaying.length)];
+    console.log(this.randomSaying);
     // digital clock
     this.currentTime = this.$moment().format('LTS');
     setInterval(() => this.updateCurrentTime(), 1 * 1000);
@@ -138,21 +170,18 @@ export default {
 };
 </script>
 
-<style lang="scss">
-/* digital clock */
-$top-color: LightSteelBlue;
-$bottom-color: LightSalmon;
+<style scoped>
+.user-attend {
+  margin: 3% 2%;
+  background: #f4f4f4;
+}
 
 section.time-contain {
-  // display: flex;
-  flex-direction: row;
-  // align-items: center;
-  padding-top: 140px;
-  background: transparent;
+  display: flex;
 }
 
 .attend-time {
-  color: #304ffe;
+  color: #000;
   font-size: 3em;
 }
 
@@ -163,5 +192,54 @@ h3.is-3:not(:last-child) {
 
 .time-shadow {
   text-shadow: 0 0 15px rgba(100, 100, 100, 0.35);
+}
+.user-attend .saying {
+  border: 1px solid black;
+  border-radius: 10px;
+  width: 80%;
+  padding: 2rem 2rem;
+  margin-bottom: 1rem;
+}
+.user-attend .clock-info {
+  display: flex;
+  flex-direction: column;
+  justify-items: center;
+  align-items: center;
+  margin-left: -5rem;
+}
+. .attend-check .late-attend {
+  border: 1px solid black;
+  border-radius: 10px;
+  background: #ff8040;
+  width: 20%;
+  height: 100%;
+}
+.attend-check .afk-attend {
+  border: 1px solid black;
+  border-radius: 10px;
+  background: #fc5230;
+  width: 20%;
+  height: 100%;
+}
+.attend-check .normal-attend {
+  border: 1px solid black;
+  border-radius: 10px;
+  background: #3a7de2;
+  width: 20%;
+  height: 100%;
+}
+.attend-time-detail .title-attend {
+  border: 2px solid #f4f4f4;
+  border-radius: 10px;
+  /* background: #3a7de2;
+   */
+
+  font-weight: bold;
+  width: 40%;
+  color: #000;
+  font-size: 1.2rem;
+  height: 40%;
+  letter-spacing: 2px;
+  padding: 10px 0px 10px 0px;
 }
 </style>
