@@ -1,7 +1,7 @@
 <template>
   <div class="learner">
-    <v-tabs v-model="tab" background-color="#4cb4a5" slider-size="2" dark>
-      <v-tabs-slider color="#fed327"></v-tabs-slider>
+    <v-tabs v-model="tab" slider-size="2" background-color="#f4f4f4">
+      <v-tabs-slider></v-tabs-slider>
       <v-tab>
         진행
       </v-tab>
