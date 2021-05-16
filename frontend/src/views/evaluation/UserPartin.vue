@@ -1,6 +1,5 @@
 <template>
   <div>
-    <span>{{ this.$store.state.uuid }}의 출석/채팅참여</span>
     <v-row justify="center">
       <v-date-picker v-model="date" @click:date="classNameFetch" :landscape="landscape" locale="ko-kr" :allowed-dates="allowedDates" class="mt-4" min="1900-04-01" max="2100-10-30"></v-date-picker>
       <v-col class="d-flex" cols="12" sm="6">

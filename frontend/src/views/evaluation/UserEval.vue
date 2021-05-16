@@ -8,8 +8,6 @@
       </v-col>
     </v-row>
     <v-row>
-      <h2>show evaluation</h2>
-      <h2>{{ date }}</h2>
       <div v-if="evalcheck">
         <div v-if="attendchk">
           <EvalPieChart :learnData="learnData" :key="change" />
