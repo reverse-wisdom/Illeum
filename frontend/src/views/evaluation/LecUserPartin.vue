@@ -53,6 +53,8 @@ export default {
     },
   },
   async created() {
+    console.log(this.each);
+    console.log(this.rid);
     console.log(this.evalUserCnt);
     console.log(this.roomData);
 
@@ -67,10 +69,10 @@ export default {
     //채팅참여도1등, 출석1등 구하기
     console.log(res.data);
     for (var j = 0; j < res.data.length; j++) {
-      this.partinRank.push({ uid: res.data[j].uid, participation: res.data[j].participation });
+      this.partinRank.push({ uid: res.data[j].uid, participation: res.data[j].participation, vid: res.data[j].vid });
       // attendRank push 메소드 시간순으로 정렬됨
       this.attendRank.push({ uid: res.data[j].uid, attend_time: res.data[j].attend_time });
-      console.log(this.attendRank);
+      console.log('attend배열', this.attendRank);
       this.attendRank.sort(function(a, b) {
         return a.attend_time < b.attend_time ? -1 : a.attend_time > b.attend_time ? 1 : 0;
       });
@@ -102,15 +104,17 @@ export default {
 
     //로그인한 청강자 채팅참여도 순위 구하기
     for (var k = 0; k < this.partinRank.length; k++) {
-      if (this.partinRank[k].uid === this.each.uid) {
+      if (this.partinRank[k].uid === this.each.uid && this.partinRank[k].vid === this.each.vid) {
         this.partuidRank = this.partinRank.indexOf(this.partinRank[k]) + 1;
+        break;
       }
     }
     //로그인한 청강자 출석시간 순위 구하기
     console.log(this.attendRank);
     for (var m = 0; m < this.attendRank.length; m++) {
-      if (this.attendRank[m].uid === this.each.uid) {
+      if (this.attendRank[m].uid === this.each.uid && this.partinRank[k].vid === this.each.vid) {
         this.attenduidRank = this.attendRank.indexOf(this.attendRank[m]) + 1;
+        break;
       }
     }
   },

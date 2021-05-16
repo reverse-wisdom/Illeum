@@ -91,62 +91,51 @@
     <!-- modal -->
     <v-dialog v-model="dialog" persistent max-width="1200px">
       <v-card>
-        <v-card-title>
-          <span class="headline">
+        <v-toolbar flat color="primary" dark>
+          <v-toolbar-title>
             <span>{{ modalEach.name }}님의</span>
             Evaluation
-          </span>
-        </v-card-title>
-        <v-card-text>
-          <v-container>
-            <v-card>
-              <v-toolbar flat color="primary" dark>
-                <v-toolbar-title>
-                  <span>{{ modalEach.name }}님의</span>
-                  Evaluation
-                </v-toolbar-title>
-              </v-toolbar>
-              <v-tabs vertical>
-                <v-tab>
-                  <v-icon left>
-                    mdi-account
-                  </v-icon>
-                  출결
-                </v-tab>
-                <v-tab>
-                  <v-icon left>
-                    mdi-lock
-                  </v-icon>
-                  학습태도
-                </v-tab>
-                <v-tab>
-                  <v-icon left>
-                    mdi-access-point
-                  </v-icon>
-                  참여현황
-                </v-tab>
+          </v-toolbar-title>
+        </v-toolbar>
+        <v-tabs vertical>
+          <v-tab>
+            <v-icon left>
+              mdi-account
+            </v-icon>
+            출결
+          </v-tab>
+          <v-tab>
+            <v-icon left>
+              mdi-lock
+            </v-icon>
+            학습태도
+          </v-tab>
+          <v-tab>
+            <v-icon left>
+              mdi-access-point
+            </v-icon>
+            참여현황
+          </v-tab>
 
-                <v-tab-item>
-                  <v-card flat>
-                    <h2>출결</h2>
-                    <h3>출석시간:{{ modalEach.attend_time }}</h3>
-                    <h3>지각여부:{{ modalEach.attend }}</h3>
-                  </v-card>
-                </v-tab-item>
-                <v-tab-item :key="modalEach.vid + 'A'">
-                  <v-card flat>
-                    <LecUserEval :each="modalEach" :rid="ridSelected"></LecUserEval>
-                  </v-card>
-                </v-tab-item>
-                <v-tab-item :key="modalEach.vid + 'B'">
-                  <v-card flat>
-                    <LecUserPartin :each="modalEach" :roomData="roomData" :evalUserCnt="userEvalLength" :rid="ridSelected"></LecUserPartin>
-                  </v-card>
-                </v-tab-item>
-              </v-tabs>
+          <v-tab-item>
+            <v-card flat>
+              <h2>출결</h2>
+              <h3>출석시간:{{ modalEach.attend_time }}</h3>
+              <h3>지각여부:{{ modalEach.attend }}</h3>
             </v-card>
-          </v-container>
-        </v-card-text>
+          </v-tab-item>
+          <v-tab-item :key="modalEach.vid + 'A'">
+            <v-card flat>
+              <LecUserEval :each="modalEach" :rid="ridSelected"></LecUserEval>
+            </v-card>
+          </v-tab-item>
+          <v-tab-item :key="modalEach.vid + 'B'">
+            <v-card flat>
+              <LecUserPartin :each="modalEach" :roomData="roomData" :evalUserCnt="userEvalLength" :rid="ridSelected"></LecUserPartin>
+            </v-card>
+          </v-tab-item>
+        </v-tabs>
+
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="blue darken-1" text @click="dialog = false">
