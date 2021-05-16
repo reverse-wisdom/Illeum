@@ -1,21 +1,39 @@
 <template>
-  <div>
-    <span>{{ this.$store.state.uuid }}의 평가목록</span>
+  <div class="user-eval">
+    <v-row>
+      <p>출결확인을 위해 1.날짜를 체크하고 2.클레스를 선택해주세요</p>
+    </v-row>
     <v-row justify="center">
-      <v-date-picker v-model="date" @click:date="classNameFetch" :landscape="landscape" locale="ko-kr" :allowed-dates="allowedDates" class="mt-4" min="1900-04-01" max="2100-10-30"></v-date-picker>
+      <v-date-picker
+        v-model="date"
+        width="400"
+        header-color="#000"
+        @click:date="classNameFetch"
+        :landscape="landscape"
+        locale="ko-kr"
+        :allowed-dates="allowedDates"
+        class="mt-4"
+        min="1900-04-01"
+        max="2100-10-30"
+      ></v-date-picker>
+
       <v-col class="d-flex" cols="12" sm="6">
         <v-select :items="items" :label="date" solo @input="showEvaluation"></v-select>
       </v-col>
     </v-row>
     <v-row>
-      <div v-if="evalcheck">
+      <div v-if="evalcheck" style="margin-top: 3%; display:flex; flex-direction: row;  flex-wrap: wrap; justify-content: flex-start; justify-content: space-around;">
         <div v-if="attendchk">
+          <label for="">개인데이터</label>
           <EvalPieChart :learnData="learnData" :key="change" />
         </div>
         <div v-else>
-          <h3>결석한 수업이므로 데이터가 없습니다.</h3>
+          <h3 style="">결석한 수업입니다. 평균데이터만 확인할 수 있습니다.</h3>
         </div>
-        <EvalRadarChart :learnData="learnData" :averageData="averageData" :key="renderKey" />
+        <div>
+          <label for="">해당클래스의 평균 및 개인 평가데이터</label>
+          <EvalRadarChart :learnData="learnData" :averageData="averageData" :key="renderKey" />
+        </div>
       </div>
     </v-row>
   </div>
@@ -223,4 +241,9 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+.user-eval {
+  margin: 3% 2%;
+  background: #f4f4f4;
+}
+</style>

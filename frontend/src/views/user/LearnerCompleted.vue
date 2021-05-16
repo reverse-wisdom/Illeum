@@ -48,66 +48,75 @@
                         {{ item.end_time }}
                       </span>
                     </div>
-                    <v-dialog v-if="$store.state.token" v-model="dialog" hide-overlay max-width="900px" :retain-focus="false">
-                      <template v-slot:activator="{ on, attrs }">
-                        <v-btn class="button" large color="#6173FF" v-bind="attrs" v-on="on" @click="evalShow(item)">
-                          내평가보기
-                        </v-btn>
-                      </template>
-                      <v-card flat>
-                        <v-card-text>
-                          <v-card>
-                            <v-toolbar flat color="#6173FF" dark>
-                              <v-toolbar-title>
-                                <span>{{ name }}님의</span>
-                                평가조회
-                              </v-toolbar-title>
-                            </v-toolbar>
-                            <v-tabs vertical color="#6173FF">
-                              <v-tab>
-                                <v-icon left>
-                                  mdi-account
-                                </v-icon>
-                                출결
-                              </v-tab>
-                              <v-tab>
-                                <v-icon left>
-                                  mdi-lock
-                                </v-icon>
-                                학습태도
-                              </v-tab>
-                              <v-tab>
-                                <v-icon left>
-                                  mdi-access-point
-                                </v-icon>
-                                참여현황
-                              </v-tab>
+                    <v-btn class="button" large color="#6173FF" v-bind="attrs" v-on="on" @click="evalShow(item)">
+                      내평가보기
+                    </v-btn>
+                  </div>
+                </div>
+              </div>
+            </v-card>
+          </v-col>
+          <v-responsive v-if="idx % 2 == 1" :key="`width-${idx}`" width="100%"></v-responsive>
+        </template>
+      </v-row>
+    </div>
+    <div v-else>
+      <p>수강진행중인 강좌가 없음</p>
+    </div>
+    <v-dialog v-if="$store.state.token" v-model="dialog" hide-overlay max-width="900px" :retain-focus="false">
+      <v-card flat>
+        <v-card>
+          <v-toolbar flat color="#6173FF" dark>
+            <v-toolbar-title>
+              <span>{{ name }}님의</span>
+              평가조회
+            </v-toolbar-title>
+          </v-toolbar>
+          <v-tabs vertical color="#6173FF">
+            <v-tab>
+              <v-icon left>
+                mdi-account
+              </v-icon>
+              출결
+            </v-tab>
+            <v-tab>
+              <v-icon left>
+                mdi-lock
+              </v-icon>
+              학습태도
+            </v-tab>
+            <v-tab>
+              <v-icon left>
+                mdi-access-point
+              </v-icon>
+              참여현황
+            </v-tab>
 
-                              <v-tab-item>
-                                <v-card flat>
-                                  <div style="margin:1.5rem 0;">
-                                    <v-icon left x-large>
-                                      mdi-alarm
-                                    </v-icon>
-                                    <span style="font-size:2rem;">{{ attend_time }}</span>
-                                    에 출석하셨습니다!
-                                  </div>
-                                  <div>
-                                    출결상태는
-                                    <span style="font-size:2rem;">{{ attend }}</span>
-                                    입니다.
-                                  </div>
-                                </v-card>
-                              </v-tab-item>
-                              <v-tab-item>
-                                <v-card flat style="width:30%; margin: auto;">
-                                  <MyPagePieChart :learnData="learnData" :key="change" />
-                                  <MyPageRadarChart :learnData="learnData" :averageData="averageData" :key="renderKey" />
-                                </v-card>
-                              </v-tab-item>
-                              <v-tab-item>
-                                <v-card flat>
-                                  <div style="display:flex; justify-content:center; flex-direction:column; margin:2rem 0;">
+            <v-tab-item>
+              <v-card flat>
+                <div style="margin:1.5rem 0;">
+                  <v-icon left x-large>
+                    mdi-alarm
+                  </v-icon>
+                  <span style="font-size:2rem;">{{ attend_time }}</span>
+                  에 출석하셨습니다!
+                </div>
+                <div>
+                  출결상태는
+                  <span style="font-size:2rem;">{{ attend }}</span>
+                  입니다.
+                </div>
+              </v-card>
+            </v-tab-item>
+            <v-tab-item>
+              <v-card flat style="width:30%; margin: auto;">
+                <MyPagePieChart :learnData="learnData" :key="modalEach.vid + 'A'" />
+                <MyPageRadarChart :learnData="learnData" :averageData="averageData" :key="modalEach.vid + 'B'" />
+              </v-card>
+            </v-tab-item>
+            <v-tab-item>
+              <v-card flat>
+                <!-- <div style="display:flex; justify-content:center; flex-direction:column; margin:2rem 0;">
                                     <div class="partin-each">
                                       <span style="font-size:1.5rem;">{{ roomName }}수업</span>
                                       에서 총
@@ -127,42 +136,32 @@
                                       <span style="color:#FC5230; font-size:1.5rem; font-weight: bold;">{{ attenduidRank }}위</span>
                                       입니다
                                     </div>
-                                  </div>
-                                </v-card>
-                              </v-tab-item>
-                            </v-tabs>
-                          </v-card>
-                        </v-card-text>
-                        <v-card-actions>
-                          <v-spacer></v-spacer>
-                          <v-btn large color="#6173FF" dark @click="dialog = false">
-                            Close
-                          </v-btn>
-                        </v-card-actions>
-                      </v-card>
-                    </v-dialog>
-                  </div>
-                </div>
-              </div>
-            </v-card>
-          </v-col>
-          <v-responsive v-if="idx % 2 == 1" :key="`width-${idx}`" width="100%"></v-responsive>
-        </template>
-      </v-row>
-    </div>
-    <div v-else>
-      <p>수강진행중인 강좌가 없음</p>
-    </div>
+                                  </div> -->
+                <LecUserPartin :each="modalEach" :roomData="modalEach" :evalUserCnt="evalUserCnt" :rid="ridSelected" :key="modalEach.vid + 'C'"></LecUserPartin>
+              </v-card>
+            </v-tab-item>
+          </v-tabs>
+        </v-card>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn large color="#6173FF" dark @click="dialog = false">
+            Close
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
 <script>
 import { userEvalList } from '@/api/auth.js';
 import { fetchRoomname, evaluateList } from '@/api/class';
+import LecUserPartin from '@/views/evaluation/LecUserPartin';
 import MyPagePieChart from '@/views/components/MyPagePieChart';
 import MyPageRadarChart from '@/views/components/MyPageRadarChart';
 export default {
-  components: { MyPagePieChart, MyPageRadarChart },
+  components: { MyPagePieChart, MyPageRadarChart, LecUserPartin },
   data() {
     return {
       learnerDoing: false,
@@ -232,6 +231,8 @@ export default {
       per4: 0,
       per5: 0,
       resDatalen: 0,
+      modalEach: {},
+      ridSelected: '',
     };
   },
   computed: {
@@ -254,12 +255,22 @@ export default {
 
   methods: {
     async evalShow(value) {
+      this.modalEach = value;
+      this.modalEach.uid = this.$store.state.uuid;
       this.dialog = true;
-      console.log(this.dialog);
-      console.log(value.vid);
+
       //출결
       this.attend_time = value.attend_time;
       this.attend = value.attend;
+      //평가초기화
+      this.roomName = '';
+      this.partinRank = [];
+      this.attendRank = [];
+      this.partuidRank = '';
+      this.attenduidRank = '';
+      this.evalUserCnt = 0;
+      this.fetchRoomlen = 0;
+
       //평가
       this.learnData[0].per = value.attention;
       this.learnData[1].per = value.distracted;
@@ -268,6 +279,7 @@ export default {
       this.learnData[4].per = value.participation;
       const { data } = await fetchRoomname(value.room_name);
       const roomPartinUser = data[0].rid;
+      this.ridSelected = data[0].rid;
       const res = await evaluateList(roomPartinUser);
 
       for (var i = 0; i < res.data.length; i++) {
