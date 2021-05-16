@@ -20,8 +20,11 @@
         <template v-if="checkUser(item) == '강의자'">
           <v-btn color="info" @click="startWebRTC(item)" :disabled="!hasWebcam">수업 생성</v-btn>
         </template>
-        <template v-else>
+        <template v-else-if="item.room_state == '진행'">
           <v-btn color="success" @click="joinWebRTC(item)" :disabled="!hasWebcam">수업 참여</v-btn>
+        </template>
+        <template v-else>
+          <v-btn color="warning" disabled>준비중</v-btn>
         </template>
       </template>
     </v-data-table>
@@ -67,7 +70,11 @@ export default {
             if (!ref.hasWebcam /*|| ref.isWebcamAlreadyCaptured*/) {
               console.log('카메라를 사용할 수 없어요.');
               //alert('카메라가 없거나 사용중 또는 웹의 권한이 없어 화상회의를 사용할 수 없는 상태입니다.');
-              alert('카메라가 인식되지 않습니다. 연결 상태를 확인해주세요.');
+              // alert('카메라가 인식되지 않습니다. 연결 상태를 확인해주세요.');
+              this.$swal({
+                icon: 'error',
+                title: '카메라가 인식되지 않습니다. 연결 상태를 확인해주세요.!!',
+              });
             }
           }),
           1500

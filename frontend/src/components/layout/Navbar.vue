@@ -125,7 +125,7 @@
               <router-link to="/classcreate">클래스개설</router-link>
             </v-list-item-content>
             <v-list-item-content>
-              <router-link to="/webrtclist">수업시작</router-link>
+              <router-link to="/webrtclistall">수업시작</router-link>
             </v-list-item-content>
             <v-list-item-content>
               <router-link to="/lecturermanage">평가관리</router-link>
@@ -143,7 +143,7 @@
               <router-link to="/classjoin">수강신청</router-link>
             </v-list-item-content>
             <v-list-item-content>
-              <router-link to="/classjoin">수업참여</router-link>
+              <router-link to="/webrtclistall">수업참여</router-link>
             </v-list-item-content>
             <v-list-item-content>
               <router-link to="/userevaluation">평가조회</router-link>
@@ -151,6 +151,12 @@
           </template>
         </v-list-group>
         <v-list-item></v-list-item>
+      </v-list>
+
+      <v-list style="margin-bottom: 0;">
+        <v-list-item-content>
+          <router-link to="/webrtclistall">전체수업리스트</router-link>
+        </v-list-item-content>
       </v-list>
       <v-list style="margin-bottom: 0;">
         <v-btn v-if="this.$store.state.token" @click="signoutUser" tile outlined>
