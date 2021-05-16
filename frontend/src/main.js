@@ -24,6 +24,18 @@ Vue.use(VueSweetalert2, sweetalert2_options); // alert API
 
 Vue.use(VueMoment); // vue-moment
 
+export default new Vuetify({
+  breakpoint: {
+    thresholds: {
+      xs: 340,
+      sm: 540,
+      md: 800,
+      lg: 1280,
+    },
+    scrollBarWidth: 24,
+  },
+});
+
 Vue.use(Vuetify); // Vuetify
 
 Vue.use(VueFullPage); //VueFullPage

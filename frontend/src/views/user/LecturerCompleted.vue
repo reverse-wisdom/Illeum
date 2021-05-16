@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="lec-ready overflow-y-auto" style="height:43rem">
     <div v-if="LecturerCompleted == true">
       <!-- <div v-for="(item, idx) in classLi" :key="idx">
         <div v-if="new Date(item.end_time) < Date.now() && item.room_state == '준비'">
@@ -27,7 +27,7 @@
       </div> -->
       <v-row no-gutters>
         <template v-for="(item, idx) in classLiFilter">
-          <v-col :key="idx">
+          <v-col :key="idx" xl="6" lg="12">
             <v-card flat color="#f4f4f4" width="700">
               <div class="blog-card">
                 <div class="inner-part">
