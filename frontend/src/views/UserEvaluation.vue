@@ -29,8 +29,8 @@
       </v-tab>
     </v-tabs>
 
-    <v-tabs-items v-model="tab" background-color="#f4f4f4">
-      <v-tab-item x>
+    <v-tabs-items v-model="tab" style="background:#f4f4f4;">
+      <v-tab-item>
         <v-card flat color="#f4f4f4">
           <UserAttend></UserAttend>
         </v-card>

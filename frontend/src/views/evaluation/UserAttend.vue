@@ -25,18 +25,24 @@
             <v-select :items="items" :label="date" solo @input="showPartin" placeholder="클래스를 선택해주세요"></v-select>
           </div>
         </div>
-        <div class="attend-time-detail">
-          <div class="title-attend">
-            <v-icon x-large>mdi-alarm</v-icon>
-            출석시간
+        <div class="attend-info" style=" ">
+          <div class="attend-time-detail" style="display:flex; flex-direction:row;">
+            <div class="title-attend">
+              <v-icon x-large>mdi-alarm</v-icon>
+            </div>
+            <div class="label-attend">출석시간</div>
           </div>
           <div>{{ attend_time }}</div>
-        </div>
-        <div class="attend-check">
-          <div>지각여부</div>
-          <div v-if="'지각'" class="late-attend">{{ attend }}</div>
-          <div v-else-if="'결석'" class="afk-attend">{{ attend }}</div>
-          <div v-else class="normal-attend">{{ attend }}</div>
+
+          <div class="attend-check" style="display:flex; flex-direction:row;">
+            <v-icon x-large>
+              mdi-calendar-check
+            </v-icon>
+            <div class="label-attend">지각여부</div>
+          </div>
+          <div :class="{ normal: attend == '정상', late: attend == '지각', afk: attend == '결석' }">
+            {{ attend }}
+          </div>
         </div>
       </v-col>
       <v-col cols="12" sm="4">
@@ -122,7 +128,7 @@ export default {
     this.evalcheck = false;
     //random saying
     this.randomSaying = this.timeSaying[Math.floor(Math.random() * this.timeSaying.length)];
-    console.log(this.randomSaying);
+
     // digital clock
     this.currentTime = this.$moment().format('LTS');
     setInterval(() => this.updateCurrentTime(), 1 * 1000);
@@ -148,7 +154,6 @@ export default {
       }
     },
     async showPartin(selected) {
-      console.log('this eval', this.eval);
       this.evalcheck = true;
       this.partinRank = [];
       this.attendRank = [];
@@ -194,11 +199,12 @@ h3.is-3:not(:last-child) {
   text-shadow: 0 0 15px rgba(100, 100, 100, 0.35);
 }
 .user-attend .saying {
-  border: 1px solid black;
+  border: 3px solid black;
   border-radius: 10px;
   width: 80%;
   padding: 2rem 2rem;
-  margin-bottom: 1rem;
+  font-weight: 900;
+  /* margin-bottom: 1rem; */
 }
 .user-attend .clock-info {
   display: flex;
@@ -207,32 +213,52 @@ h3.is-3:not(:last-child) {
   align-items: center;
   margin-left: -5rem;
 }
-. .attend-check .late-attend {
-  border: 1px solid black;
-  border-radius: 10px;
-  background: #ff8040;
-  width: 20%;
-  height: 100%;
+.attend-info {
+  display: flex;
+  flex-direction: column;
+  border: 3px solid #000;
+  border-radius: 20px;
+  font-weight: 900;
+  padding: 1rem 1rem;
+  margin: 2rem auto;
 }
-.attend-check .afk-attend {
-  border: 1px solid black;
+.attend-check {
+  margin-top: 5%;
+}
+.late {
+  background: #ff9c6c;
+  border: 0px solid black;
   border-radius: 10px;
+  width: 30%;
+  height: 60%;
+  padding: 10px 10px;
+  margin-left: 35%;
+  font-size: 1.2rem;
+}
+.afk {
   background: #fc5230;
-  width: 20%;
-  height: 100%;
-}
-.attend-check .normal-attend {
-  border: 1px solid black;
+  border: 0px solid black;
   border-radius: 10px;
-  background: #3a7de2;
-  width: 20%;
-  height: 100%;
+  width: 30%;
+  height: 60%;
+  padding: 10px 10px;
+  margin-left: 35%;
+  font-size: 1.2rem;
 }
-.attend-time-detail .title-attend {
+.normal {
+  background: #3a7de2;
+  border: 0px solid black;
+  border-radius: 10px;
+  font-size: 1.2rem;
+  width: 30%;
+  height: 60%;
+  padding: 10px 10px;
+  margin-left: 35%;
+}
+/* .attend-time-detail .title-attend {
   border: 2px solid #f4f4f4;
   border-radius: 10px;
-  /* background: #3a7de2;
-   */
+
 
   font-weight: bold;
   width: 40%;
@@ -241,5 +267,9 @@ h3.is-3:not(:last-child) {
   height: 40%;
   letter-spacing: 2px;
   padding: 10px 0px 10px 0px;
+} */
+.label-attend {
+  font-size: 1.5rem;
+  font-weight: bold;
 }
 </style>
