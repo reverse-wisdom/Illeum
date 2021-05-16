@@ -100,7 +100,7 @@ export default {
   },
   computed: {
     classLiFilter: function() {
-      return this.classLi.filter((i) => new Date(i).end_time < Date.now() && i.room_state == '준비');
+      return this.classLi.filter((i) => new Date(i.end_time) < Date.now() && i.room_state == '준비');
     },
   },
   async created() {
