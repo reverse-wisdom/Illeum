@@ -134,12 +134,12 @@
                     <h3>지각여부:{{ modalEach.attend }}</h3>
                   </v-card>
                 </v-tab-item>
-                <v-tab-item :key="modalEach.vid">
+                <v-tab-item :key="modalEach.vid + 'A'">
                   <v-card flat>
                     <LecUserEval :each="modalEach" :rid="rid"></LecUserEval>
                   </v-card>
                 </v-tab-item>
-                <v-tab-item :key="modalEach.vid">
+                <v-tab-item :key="modalEach.vid + 'B'">
                   <v-card flat>
                     <LecUserPartin :each="modalEach" :roomData="roomData" :evalUserCnt="userEvalLength" :rid="rid"></LecUserPartin>
                   </v-card>
