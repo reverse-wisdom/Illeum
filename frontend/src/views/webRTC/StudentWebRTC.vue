@@ -353,7 +353,7 @@ export default {
                 icon: 'error',
                 title: '참여할 수 없는 화상수업입니다.!!',
               });
-              ref.$router.push({ name: 'WebRTCList' });
+              ref.$router.push({ name: 'WebRTCListAll' });
               return;
             }
             ref.connection.onUserStatusChanged();
@@ -368,7 +368,7 @@ export default {
             icon: 'error',
             title: '개설되지 않는 화상수업입니다.!!',
           });
-          ref.$router.push({ name: 'WebRTCList' });
+          ref.$router.push({ name: 'WebRTCListAll' });
         }
       });
 
@@ -432,7 +432,7 @@ export default {
 
               ref.connection.closeSocket();
 
-              ref.$router.push({ name: 'WebRTCList' });
+              ref.$router.push({ name: 'WebRTCListAll' });
             }
           }
         } catch {
@@ -512,7 +512,7 @@ export default {
             console.log('멈춤');
             clearInterval(this.time);
 
-            this.$router.push({ name: 'WebRTCList' });
+            this.$router.push({ name: 'WebRTCListAll' });
           }
         })
         .catch((err) => {

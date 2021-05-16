@@ -22,7 +22,7 @@ import ClassList from '../views/class/ClassList.vue';
 import ClassJoin from '../views/class/ClassJoin.vue';
 
 //WebRTC
-import WebRTCList from '../views/webRTC/WebRTCList.vue';
+import WebRTCListAll from '../views/webRTC/WebRTCListAll.vue';
 import TeacherWebRTC from '../views/webRTC/TeacherWebRTC.vue';
 import StudentWebRTC from '../views/webRTC/StudentWebRTC.vue';
 
@@ -114,9 +114,9 @@ const routes = [
   },
   //webRTC
   {
-    path: '/webrtclist',
-    name: 'WebRTCList',
-    components: { default: WebRTCList, header: Navbar },
+    path: '/webrtclistall',
+    name: 'WebRTCListAll',
+    components: { default: WebRTCListAll, header: Navbar },
     meta: { auth: true },
   },
   {
