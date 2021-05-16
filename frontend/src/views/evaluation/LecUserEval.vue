@@ -92,8 +92,6 @@ export default {
     // console.log(selected);
     this.evalcheck = true;
 
-    console.log(this.averageData);
-
     this.LeclearnData[0].per = this.each.attention;
     this.LeclearnData[1].per = this.each.distracted;
     this.LeclearnData[2].per = this.each.asleep;
