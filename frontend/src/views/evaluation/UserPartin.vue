@@ -8,7 +8,7 @@
         </div>
 
         <div style="">
-          <v-avatar class="mb-3" color="grey darken-1" size="256">
+          <v-avatar class="mb-3" color="grey darken-1" size="200">
             <v-img :src="'/profile/' + attendFirstUid + '/256'" id="preview" alt=""></v-img>
           </v-avatar>
           <p style="font-size:1.7rem; font-weight:bold;">
@@ -23,7 +23,7 @@
           채팅참여왕
         </div>
         <div>
-          <v-avatar class="mb-3" color="grey darken-1" size="256">
+          <v-avatar class="mb-3" color="grey darken-1" size="200">
             <v-img :src="'/profile/' + partinFirstUid + '/256'" id="preview" alt=""></v-img>
           </v-avatar>
           <p style="font-size:1.7rem; font-weight:bold;">
@@ -35,7 +35,7 @@
 
       <v-col cols="12" sm="6">
         <v-date-picker
-          width="400"
+          width="300"
           header-color="#000"
           v-model="date"
           @click:date="classNameFetch"
