@@ -1,39 +1,58 @@
 <template>
   <div class="manage">
+    <v-alert
+      class="text-start font-weight-black"
+      border="left"
+      dark
+      id="alert"
+      style="margin-top:6%; font-size: 1.5rem; letter-spacing: 2.3px; padding-left:20px; line-height: 45px;"
+      elevation="3"
+      height="70"
+    >
+      <span>
+        <v-icon>mdi-account-check</v-icon>
+        {{ $store.state.name }}
+      </span>
+      님의 평가관리
+    </v-alert>
     <v-row>
-      <v-container>{{ this.$store.state.uuid }}의 학생관리</v-container>
-      <v-date-picker v-model="date" @click:date="classNameFetch" :landscape="true" locale="ko-kr" :allowed-dates="allowedDates" class="mt-4" min="1900-04-01" max="2100-10-30"></v-date-picker>
+      <p>출결확인을 위해 1.날짜를 체크하고 2.클레스를 선택해주세요</p>
     </v-row>
     <v-row>
-      <div style="margin-top: 100px;">
-        <h2>show Management</h2>
-        <h2>{{ date }}</h2>
-      </div>
-    </v-row>
-    <v-row>
+      <v-date-picker
+        width="400"
+        header-color="#000"
+        v-model="date"
+        @click:date="classNameFetch"
+        :landscape="true"
+        locale="ko-kr"
+        :allowed-dates="allowedDates"
+        class="mt-4"
+        min="1900-04-01"
+        max="2100-10-30"
+      ></v-date-picker>
       <v-col cols="6" sm="6">
-        <v-select :items="roomNameList" :value="roomNameList[0]" solo @input="showAll"></v-select>
-      </v-col>
-      <v-col cols="6">
-        <v-card class="mx-auto" max-width="300">
-          <v-toolbar flat color="transparent">
-            <v-toolbar-title>빠른검색</v-toolbar-title>
-          </v-toolbar>
+        <label for="" style=" border: 1px solid black; padding:10px 20px;  font-size:1.2rem; color:#fff; background:#000;">클래스선택</label>
+        <v-select style="margin-top: 2%;" :items="roomNameList" :value="roomNameList[0]" solo @input="showAll"></v-select>
+        <v-col cols="12">
+          <v-card class="mx-auto" max-width="600">
+            <v-toolbar flat color="">
+              <v-toolbar-title>빠른검색</v-toolbar-title>
+            </v-toolbar>
 
-          <v-container class="py-0">
-            <v-row align="center" justify="start">
-              <v-col v-for="(selection, i) in selections" :key="selection.text" class="shrink">
-                <v-chip :disabled="loading" close @click:close="chipClose(selection, i)">
-                  <v-icon left v-text="selection.icon"></v-icon>
-                  {{ selection.text }}
-                </v-chip>
-              </v-col>
-            </v-row>
-          </v-container>
+            <v-container class="py-0">
+              <v-row align="center" justify="start">
+                <v-col v-for="(selection, i) in selections" :key="selection.text" class="shrink">
+                  <v-chip :disabled="loading" close @click:close="chipClose(selection, i)">
+                    <v-icon left v-text="selection.icon"></v-icon>
+                    {{ selection.text }}
+                  </v-chip>
+                </v-col>
+              </v-row>
+            </v-container>
 
-          <v-divider v-if="!allSelected"></v-divider>
+            <v-divider v-if="!allSelected"></v-divider>
 
-          <v-list>
             <template v-for="item in categories">
               <v-list-item v-if="!selected.includes(item)" :key="item.text" :disabled="loading" @click="showSelected(item)">
                 <v-list-item-avatar>
@@ -42,12 +61,14 @@
                 <v-list-item-title v-text="item.text"></v-list-item-title>
               </v-list-item>
             </template>
-          </v-list>
 
-          <v-divider></v-divider>
-        </v-card>
+            <!-- <v-divider></v-divider> -->
+          </v-card>
+        </v-col>
       </v-col>
     </v-row>
+    <!-- <h2>{{ date }}</h2> -->
+
     <v-row>
       <div class="table-body">
         <div class="table_responsive">
@@ -58,8 +79,7 @@
                 <th scope="col">PROFILE</th>
                 <th scope="col">NAME</th>
                 <th scope="col">E-MAIL</th>
-                <th scope="col">Evaluation</th>
-                <th scope="col">Attendance</th>
+
                 <th scope="col">date</th>
                 <th scope="col">attend</th>
                 <th scope="col">ranking</th>
@@ -74,13 +94,12 @@
                 <td><v-img :src="`/profile/${each.uid}/256`" id="preview" style="width:50px; height:50px;" alt=""></v-img></td>
                 <td>{{ each.name }}</td>
                 <td>{{ each.email }}</td>
-                <td>Evaluation</td>
-                <td>Attendance</td>
+
                 <td>{{ each.attend_time }}</td>
                 <td>{{ each.attend }}</td>
                 <td>{{ each.ranking | checkChatRanking }}</td>
                 <td>{{ each.participation }}회 채팅</td>
-                <td><v-btn color="primary" @click="openModal(each)">MODAL</v-btn></td>
+                <td><v-btn color="#38A897" dark @click="openModal(each)">MODAL</v-btn></td>
               </tr>
             </tbody>
           </table>
@@ -90,13 +109,7 @@
 
     <!-- modal -->
     <v-dialog v-model="dialog" persistent max-width="1200px">
-      <v-card>
-        <v-toolbar flat color="primary" dark>
-          <v-toolbar-title>
-            <span>{{ modalEach.name }}님의</span>
-            Evaluation
-          </v-toolbar-title>
-        </v-toolbar>
+      <v-card flat>
         <v-tabs vertical>
           <v-tab>
             <v-icon left>
@@ -355,10 +368,21 @@ export default {
 };
 </script>
 <style scoped>
+@font-face {
+  font-family: 'GongGothicLight';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-10@1.0/GongGothicLight.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.manage {
+  margin: 3% 2%;
+  font-family: 'GongGothicLight';
+}
 .table_responsive {
-  width: 150%;
+  width: 100%;
   padding: 15px;
-  overflow: auto;
+  /* overflow: auto; */
   margin: auto;
   border-radius: 4px;
 }
@@ -372,7 +396,7 @@ table {
 }
 
 table > thead {
-  background-color: #1976d2;
+  background-color: #000;
   color: #fff;
 }
 
@@ -383,7 +407,7 @@ table > thead th {
 table th,
 table td {
   border: 1px solid #00000017;
-  padding: 10px 15px;
+  padding: 10px 5px;
 }
 
 table > tbody > tr > td > img {
@@ -436,7 +460,7 @@ table > tbody > tr:nth-child(even) {
 }
 
 table > tbody > tr:hover {
-  filter: drop-shadow(0px 2px 6px #0002);
+  filter: drop-shadow(0px 5px 10px #0002);
 }
 .chip-search {
   margin-left: 10em;
