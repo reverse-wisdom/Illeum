@@ -1,9 +1,9 @@
 <template>
   <div class="user-partin">
     <v-row justify="center">
-      <div style="margin-right:5%;">
-        <div>
-          <v-icon>mdi-alarm-check</v-icon>
+      <div style="margin-right: 5%">
+        <div style="border: 1px solid #38A897; background: #38A897; border-radius: 50px; color:white; padding: 0.5rem 0; font-size:1.5rem; margin-bottom: 10%;">
+          <v-icon x-large color="white">mdi-alarm-check</v-icon>
           출석왕
         </div>
 
@@ -11,19 +11,25 @@
           <v-avatar class="mb-3" color="grey darken-1" size="256">
             <v-img :src="'/profile/' + attendFirstUid + '/256'" id="preview" alt=""></v-img>
           </v-avatar>
-          <p>이름:{{ attendFirst }}</p>
+          <p style="font-size:1.7rem; font-weight:bold;">
+            {{ attendFirst }}
+            <span style="font-size:1.2rem;">교육생</span>
+          </p>
         </div>
       </div>
       <div>
-        <div>
-          <v-icon>mdi-forum-outline</v-icon>
+        <div style="border: 1px solid #38A897; background:#3f51b5; border-radius: 50px; color:white; padding:0.5rem 0; font-size:1.5rem; margin-bottom: 10%;">
+          <v-icon x-large color="white">mdi-forum-outline</v-icon>
           채팅참여왕
         </div>
         <div>
           <v-avatar class="mb-3" color="grey darken-1" size="256">
             <v-img :src="'/profile/' + partinFirstUid + '/256'" id="preview" alt=""></v-img>
           </v-avatar>
-          <p>이름:{{ partinFirst }}</p>
+          <p style="font-size:1.7rem; font-weight:bold;">
+            {{ partinFirst }}
+            <span style="font-size:1.2rem;">교육생</span>
+          </p>
         </div>
       </div>
 
@@ -49,18 +55,20 @@
 
     <!-- <h2>{{ date }}</h2> -->
 
-    <div v-if="uidcheck">
-      <div v-if="UserAttendRank != 1000">해당 수업의 총 수강생 {{ fetchRoomlen }}명중에 출석 {{ UserAttendRank }}위입니다</div>
-      <div v-else>수업에 참여하지 않았습니다.</div>
-      <div v-if="zeroPartinchk == false">해당 수업의 총 수강생 {{ fetchRoomlen }}명중에 {{ UserPartinRank }}위입니다</div>
-      <div v-else>채팅에 참여하지 않았습니다.</div>
+    <div v-if="uidcheck" style="display:flex; flex-direction:column;">
+      <v-alert v-if="UserAttendRank != 1000" style="width:90%; margin:auto;" color="#38A897" border="left" dark>
+        해당 수업의 총 수강생 {{ fetchRoomlen }}명중에 출석순위는
+        <span style="font-size:1.5rem;">{{ UserAttendRank }}위</span>
+        입니다
+      </v-alert>
+      <v-alert v-else border="left" style="width:90%; margin:auto;" color="#38A897" dark>수업에 참여하지 않았습니다.</v-alert>
+      <v-alert v-if="zeroPartinchk == false" border="left" style="width:90%; margin: 2% auto; " color="indigo" dark>
+        해당 수업의 총 수강생 {{ fetchRoomlen }}명중에 채팅참여도는
+        <span style="font-size:1.5rem;">{{ UserPartinRank }}위</span>
+        입니다
+      </v-alert>
+      <v-alert v-else border="left" style="width:90%; margin: 2% auto;" color="indigo" dark>채팅에 참여하지 않았습니다.</v-alert>
     </div>
-    <v-alert border="left" color="indigo" dark>
-      I'm an alert with a border left type info
-    </v-alert>
-    <v-alert border="left" color="indigo" dark>
-      I'm an alert with a border left type info
-    </v-alert>
   </div>
 </template>
 
@@ -201,7 +209,7 @@ export default {
 </script>
 <style scoped>
 .user-partin {
-  margin: 3% 2%;
+  margin: 3% 0%;
   background: #f4f4f4;
 }
 </style>

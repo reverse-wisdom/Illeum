@@ -6,6 +6,7 @@ export default {
   props: ['LeclearnData', 'LecAverageData'],
   data() {
     return {
+      maxNumber: 0,
       chartData: {
         hoverBackgroundColor: 'red',
         hoverBorderWidth: 10,
@@ -40,14 +41,35 @@ export default {
   },
 
   created() {
+    // for (let i = 0; i < this.LecAverageData.length; i++) {
+    //   this.chartData.labels.push(this.LecAverageData[i].data);
+    //   this.chartData.datasets[1].data.push(this.LecAverageData[i].per);
+    // }
+    // for (let i = 0; i < this.LeclearnData.length; i++) {
+
+    //   this.chartData.datasets[0].data.push(this.LeclearnData[i].per);
+    // }
+    var maxNum1 = 0;
     for (let i = 0; i < this.LecAverageData.length; i++) {
       this.chartData.labels.push(this.LecAverageData[i].data);
       this.chartData.datasets[1].data.push(this.LecAverageData[i].per);
+      if (this.LecAverageData[i].per > maxNum1) {
+        maxNum1 = this.LecAverageData[i].per;
+      }
     }
+    var maxNum2 = 0;
     for (let i = 0; i < this.LeclearnData.length; i++) {
-      // this.chartData.labels.push(this.learnData[i].data);
-
       this.chartData.datasets[0].data.push(this.LeclearnData[i].per);
+      if (this.LeclearnData[i].per > maxNum2) {
+        maxNum2 = this.LeclearnData[i].per;
+      }
+    }
+    if (maxNum1 > maxNum2) {
+      this.maxNumber = Math.ceil(Number(maxNum1) / 10) * 10;
+    } else if (maxNum1 < maxNum2) {
+      this.maxNumber = Math.ceil(Number(maxNum2) / 10) * 10;
+    } else {
+      this.maxNumber = Math.ceil(Number(maxNum1) / 10) * 10;
     }
   },
   mounted() {
@@ -55,9 +77,9 @@ export default {
     this.renderChart(this.chartData, {
       scale: {
         ticks: {
-          max: 100,
+          max: this.maxNumber,
           min: 0,
-          stepsize: 10,
+          stepsize: 5,
           beginAtZero: true,
         },
       },
