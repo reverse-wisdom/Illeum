@@ -89,6 +89,20 @@ export default {
         this.rooms.push(data[index]);
       }
     }
+    var ref = this;
+    navigator.mediaDevices
+      .getUserMedia({ video: true })
+      .then(function(stream) {
+        ref.hasWebcam = true;
+        stream.getTracks()[0].stop();
+      })
+      .catch((err) => {
+        ref.$swal({
+          icon: 'error',
+          title: '웹캠이 존재하지 않거나<br/> 다른 프로그램에서 사용중입니다.!!',
+        });
+        ref.hasWebcam = false;
+      });
   },
   mounted() {
     this.isChecked = true;
