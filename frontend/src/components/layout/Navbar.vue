@@ -100,7 +100,7 @@
               </v-card-actions>
             </v-card>
           </v-dialog>
-          <v-btn v-bind="attrs" v-on="on" tile outlined>
+          <v-btn v-bind="attrs" v-on="on" tile outlined style="margin-left:5%;">
             <v-icon left>
               mdi-account
             </v-icon>

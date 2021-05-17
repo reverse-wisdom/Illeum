@@ -17,21 +17,25 @@
         max="2100-10-30"
       ></v-date-picker>
 
-      <v-col class="d-flex" cols="12" sm="6">
-        <v-select :items="items" :label="date" solo @input="showEvaluation"></v-select>
+      <v-col cols="12" sm="6">
+        <label for="" style=" border: 1px solid black; padding:10px 20px;  font-size:1.2rem; color:#fff; background:#000;">클래스선택</label>
+        <v-select style="margin-top: 2%;" :items="items" :label="date" solo @input="showEvaluation"></v-select>
       </v-col>
     </v-row>
-    <v-row>
+    <v-row
+      style="display: flex;
+    justify-content: center;"
+    >
       <div v-if="evalcheck" style="margin-top: 3%; display:flex; flex-direction: row;  flex-wrap: wrap; justify-content: flex-start; justify-content: space-around;">
-        <div v-if="attendchk">
-          <label for="">개인데이터</label>
+        <div v-if="attendchk" style="margin-right:10vw;">
+          <div class="label-eval">개인데이터</div>
           <EvalPieChart :learnData="learnData" :key="change" />
         </div>
         <div v-else>
           <h3 style="">결석한 수업입니다. 평균데이터만 확인할 수 있습니다.</h3>
         </div>
         <div>
-          <label for="">해당클래스의 평균 및 개인 평가데이터</label>
+          <div class="label-eval">해당클래스의 평균 및 개인 평가데이터</div>
           <EvalRadarChart :learnData="learnData" :averageData="averageData" :key="renderKey" />
         </div>
       </div>
@@ -215,7 +219,7 @@ export default {
       this.averageData[3].per = (this.per4 / res.data.length).toFixed(1);
       this.averageData[4].per = (this.per5 / res.data.length).toFixed(1);
       for (var i = 0; i < this.eval.length; i++) {
-        if (this.eval[i].attend == '정상' && this.date == this.eval[i].eval_date.slice(0, 10)) {
+        if (this.eval[i].attend != '결석' && this.date == this.eval[i].eval_date.slice(0, 10)) {
           console.log(this.eval[i].attend);
           console.log(this.eval[i].eval_date.slice(0, 10));
           console.log(this.date);
@@ -245,5 +249,11 @@ export default {
 .user-eval {
   margin: 3% 2%;
   background: #f4f4f4;
+}
+.label-eval {
+  border: 1px solid black;
+  background: #000;
+  color: #fff;
+  padding: 0.5rem 0rem;
 }
 </style>
