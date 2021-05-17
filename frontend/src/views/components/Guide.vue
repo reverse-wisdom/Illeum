@@ -29,20 +29,49 @@
         </div>
       </div>
       <div class="section section3" :style="image_3">
-        <h4 style="color: #535353; font-family:GongGothicMedium; letter-spacing:4px; font-size:60px;">실시간 학습태도관리</h4>
-        <div class="text-box">
+        <!-- <h4 style="color: #535353;  letter-spacing:4px; font-size:2rem;">실시간 학습태도관리</h4> -->
+        <ul class="features">
+          <div style="display:flex; flex-direction:row;">
+            <li>
+              <em class="fa fa-3x fa-address-book"></em>
+              <h3>집중</h3>
+              <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium aut,</p>
+            </li>
+
+            <li>
+              <em class="fa fa-3x fa-address-book"></em>
+              <h3>딴짓</h3>
+              <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium aut,</p>
+            </li>
+          </div>
+          <div style="display:flex; flex-direction:row;">
+            <li>
+              <em class="fa fa-3x fa-address-book"></em>
+              <h3>졸음</h3>
+              <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium aut,</p>
+            </li>
+            <li>
+              <em class="fa fa-3x fa-address-book"></em>
+              <h3>자리비움</h3>
+              <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium aut,</p>
+            </li>
+          </div>
+        </ul>
+        <!-- <div class="text-box">
           <p class="section3-p">
             학생들의 카메라에 비치는 얼굴, 시선, 상태에 따라서 현재 학생이 집중하는지, 딴짓을 하는지, 졸고 있는지, 자리를 비웠는지 등의 4가지 상태로 나누어서 AI로 실시간 학습태도를 관리할 수 있습니다.
           </p>
+        </div> -->
+        <div>
+          <LandingComp></LandingComp>
         </div>
-        <LandingComp></LandingComp>
       </div>
       <div class=" section section4" :style="image_4">
         <!-- 데이터 시각화 도구 
         - 출결
         - 학습태도 데이터
         - 참여도 -->
-        <div class="slide">
+        <!-- <div class="slide">
           <h3>Slide 4.1</h3>
         </div>
         <div class="slide">
@@ -50,6 +79,41 @@
         </div>
         <div class="slide">
           <h3>Slide 4.3</h3>
+        </div> -->
+        <div class="section2a">
+          <div class="explanation">
+            <v-row>
+              <v-col cols="10">
+                <img src="@/assets/img/onlinestudy.jpeg" class="monitor" alt="computer" />
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col cols="4">
+                <div>
+                  <h3>출결관리</h3>
+                  <p>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim magni veritatis, expedita maiores error.
+                  </p>
+                </div>
+              </v-col>
+              <v-col cols="4">
+                <div>
+                  <h3>출결관리</h3>
+                  <p>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim magni veritatis, expedita maiores error.
+                  </p>
+                </div>
+              </v-col>
+              <v-col cols="4">
+                <div>
+                  <h3>출결관리</h3>
+                  <p>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim magni veritatis, expedita maiores error.
+                  </p>
+                </div>
+              </v-col>
+            </v-row>
+          </div>
         </div>
       </div>
     </full-page>
@@ -130,7 +194,7 @@ export default {
 }
 .section {
   text-align: center;
-  font-size: 2em;
+  font-size: 1rem;
 }
 .section1 {
   z-index: -1;
@@ -141,9 +205,12 @@ export default {
   opacity: 0.4;
 }
 .section3 {
-  /* opacity: 0.3; */
+  /* opacity: 0.5; */
+  display: flex;
+  flex-direction: row;
 }
 /* .section4 {
+
 } */
 
 /* .backdrop {
@@ -180,7 +247,7 @@ export default {
   margin-top: 0px;
   color: hsl(210, 2%, 22%);
   font-size: 0.8em;
-  line-height: 1em;
+  line-height: 1eem;
   padding: 20px 20px;
   max-width: 44%;
   margin: auto;
@@ -217,4 +284,61 @@ export default {
 
   cursor: pointer;
 } */
+
+.features {
+  padding: 0;
+  margin: 15% auto;
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.features h3 {
+  color: hsl(210, 10%, 33%);
+  font-size: 1.5em;
+  padding-top: 20px;
+}
+.features li {
+  list-style-type: none;
+  width: 330px;
+  margin: auto 15px;
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  flex-direction: column;
+}
+
+/* .section2 {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding-top: 50px;
+} */
+
+.section2a {
+  text-align: left;
+  line-height: 1.5em;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-direction: row;
+  margin-top: 30px;
+  /* margin-right: 350px; */
+}
+
+.monitor {
+  height: 50vh;
+  width: auto;
+  /* margin-top: 30px; */
+  margin: 2% 30% 2% 30%;
+}
+
+.explanation {
+  margin-left: 100px;
+  width: 80%;
+}
 </style>

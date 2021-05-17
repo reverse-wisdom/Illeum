@@ -25,7 +25,7 @@
             assumenda vel sunt reprehenderit veritatis repellat numquam.
           </p>
         </div>
-        <div class="section2a">
+        <!-- <div class="section2a">
           <img src="@/assets/img/onlinestudy.jpeg" class="monitor" alt="computer" />
           <div class="explanation">
             <div>
@@ -47,9 +47,9 @@
               </p>
             </div>
           </div>
-        </div>
+        </div> -->
       </div>
-      <div class="section3">
+      <!-- <div class="section3">
         <h2>Lorem ipsum dolor sit amet consectetur adipisicing elit</h2>
         <div class="text-box">
           <p>
@@ -58,8 +58,8 @@
           </p>
         </div>
         <LandingComp></LandingComp>
-      </div>
-      <div class="section4">
+      </div> -->
+      <!-- <div class="section4">
         <h2>AI학습관리</h2>
         <div class="text-box"><p class="subtitle">Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores ut eveniet ab veniam hic et, distinctio reprehenderit</p></div>
         <ul class="features">
@@ -84,7 +84,7 @@
             <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium aut,</p>
           </li>
         </ul>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
