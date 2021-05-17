@@ -1,37 +1,66 @@
 <template>
-  <div>
+  <div class="user-partin">
     <v-row justify="center">
-      <v-date-picker v-model="date" @click:date="classNameFetch" :landscape="landscape" locale="ko-kr" :allowed-dates="allowedDates" class="mt-4" min="1900-04-01" max="2100-10-30"></v-date-picker>
-      <v-col class="d-flex" cols="12" sm="6">
-        <v-select :items="items" :label="date" solo @input="showPartin"></v-select>
+      <div style="margin-right:5%;">
+        <div>
+          <v-icon>mdi-alarm-check</v-icon>
+          출석왕
+        </div>
+
+        <div style="">
+          <v-avatar class="mb-3" color="grey darken-1" size="256">
+            <v-img :src="'/profile/' + attendFirstUid + '/256'" id="preview" alt=""></v-img>
+          </v-avatar>
+          <p>이름:{{ attendFirst }}</p>
+        </div>
+      </div>
+      <div>
+        <div>
+          <v-icon>mdi-forum-outline</v-icon>
+          채팅참여왕
+        </div>
+        <div>
+          <v-avatar class="mb-3" color="grey darken-1" size="256">
+            <v-img :src="'/profile/' + partinFirstUid + '/256'" id="preview" alt=""></v-img>
+          </v-avatar>
+          <p>이름:{{ partinFirst }}</p>
+        </div>
+      </div>
+
+      <v-col cols="12" sm="6">
+        <v-date-picker
+          width="400"
+          header-color="#000"
+          v-model="date"
+          @click:date="classNameFetch"
+          :landscape="landscape"
+          locale="ko-kr"
+          :allowed-dates="allowedDates"
+          class="mt-4"
+          min="1900-04-01"
+          max="2100-10-30"
+        ></v-date-picker>
+
+        <v-col style="margin:auto;" cols="12" sm="10">
+          <v-select :items="items" :label="date" solo @input="showPartin" style="max-width:100%; "></v-select>
+        </v-col>
       </v-col>
     </v-row>
 
-    <div style="margin-top: 100px;">
-      <h2>show participation</h2>
-      <h2>{{ date }}</h2>
-    </div>
+    <!-- <h2>{{ date }}</h2> -->
 
-    <div>
-      <p>
-        출석왕
-        <span>이름:{{ attendFirst }}</span>
-        <v-img :src="'/profile/' + attendFirstUid + '/256'" id="preview" alt="" style="width:100px; height:100px; left:45%;"></v-img>
-      </p>
-      <p>
-        채팅참여왕
-        <span>이름{{ partinFirst }}</span>
-        <v-img :src="'/profile/' + partinFirstUid + '/256'" id="preview" alt="" style="width:100px; height:100px; left:45%;"></v-img>
-      </p>
-    </div>
-    <div>
-      <div>{{ this.$store.state.name }}님</div>
-
+    <div v-if="uidcheck">
       <div v-if="UserAttendRank != 1000">해당 수업의 총 수강생 {{ fetchRoomlen }}명중에 출석 {{ UserAttendRank }}위입니다</div>
       <div v-else>수업에 참여하지 않았습니다.</div>
       <div v-if="zeroPartinchk == false">해당 수업의 총 수강생 {{ fetchRoomlen }}명중에 {{ UserPartinRank }}위입니다</div>
       <div v-else>채팅에 참여하지 않았습니다.</div>
     </div>
+    <v-alert border="left" color="indigo" dark>
+      I'm an alert with a border left type info
+    </v-alert>
+    <v-alert border="left" color="indigo" dark>
+      I'm an alert with a border left type info
+    </v-alert>
   </div>
 </template>
 
@@ -67,6 +96,7 @@ export default {
       fetchRoomlen: 0,
       evalcheck: false,
       zeroPartinchk: false,
+      uidcheck: false,
     };
   },
 
@@ -116,7 +146,10 @@ export default {
               this.partData.push({ uid: res.data[j].uid, participation: res.data[j].participation });
               this.attendData.push({ uid: res.data[j].uid, attend_time: res.data[j].attend_time });
               this.fetchRoomlen++;
-
+              //로그인한 유저 참여도 데이터 있는지 없는지 체크하고 조건부 렌더링 체크
+              if (res.data[j].uid != this.$store.state.uuid) {
+                this.uidcheck = true;
+              }
               //출석1등 청강생 구하기
               if (res.data[j].ranking === 1) {
                 this.attendFirst = res.data[j].name;
@@ -154,7 +187,7 @@ export default {
         if (this.partData[k].uid === this.$store.state.uuid && this.partData[k].participation != 0) {
           this.UserPartinRank = this.partData.indexOf(this.partData[k]) + 1;
           break;
-        } else {
+        } else if (this.partData[k].uid === this.$store.state.uuid && this.partData[k].participation == 0) {
           this.zeroPartinchk = true;
         }
       }
@@ -166,3 +199,9 @@ export default {
   },
 };
 </script>
+<style scoped>
+.user-partin {
+  margin: 3% 2%;
+  background: #f4f4f4;
+}
+</style>

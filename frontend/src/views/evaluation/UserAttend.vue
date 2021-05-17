@@ -7,7 +7,7 @@
       <v-col cols="12" sm="4">
         <v-date-picker
           v-model="date"
-          width="400"
+          width="350"
           header-color="#000"
           @click:date="classNameFetch"
           locale="ko-kr"
@@ -20,7 +20,7 @@
 
       <v-col cols="12" sm="4">
         <div style="margin-top:1rem;">
-          <label for="" style="border: 1px solid black; padding:10px 20px; border-radius: 10px; font-size:1.2rem; color:#fff; background:#000;">클래스선택</label>
+          <label for="" style="border: 1px solid black; padding:10px 20px; font-size:1.2rem; color:#fff; background:#000;">클래스선택</label>
           <div style=" margin-top: 20px;">
             <v-select :items="items" :label="date" solo @input="showPartin" placeholder="클래스를 선택해주세요"></v-select>
           </div>
@@ -56,6 +56,7 @@
               <p class="attend-time time-shadow" v-text="currentTime"></p>
             </section>
           </div>
+          <div class="title-saying">오늘의 명언</div>
           <div class="saying">
             <p>{{ randomSaying }}</p>
           </div>
@@ -177,7 +178,7 @@ export default {
 
 <style scoped>
 .user-attend {
-  margin: 3% 2%;
+  margin: 3% 1%;
   background: #f4f4f4;
 }
 
@@ -202,9 +203,20 @@ h3.is-3:not(:last-child) {
   border: 3px solid black;
   border-radius: 10px;
   width: 80%;
-  padding: 2rem 2rem;
+  padding: 3rem 2rem 1rem 2rem;
   font-weight: 900;
+
   /* margin-bottom: 1rem; */
+}
+.title-saying {
+  border: 0px solid black;
+  width: 39.3vh;
+  margin: auto;
+  color: #fff;
+  padding: 0.2rem 2rem;
+  background: #000;
+  position: absolute;
+  z-index: 2;
 }
 .user-attend .clock-info {
   display: flex;
@@ -217,10 +229,10 @@ h3.is-3:not(:last-child) {
   display: flex;
   flex-direction: column;
   border: 3px solid #000;
-  border-radius: 20px;
+
   font-weight: 900;
   padding: 1rem 1rem;
-  margin: 2rem auto;
+  margin: 2rem 1rem;
 }
 .attend-check {
   margin-top: 5%;
