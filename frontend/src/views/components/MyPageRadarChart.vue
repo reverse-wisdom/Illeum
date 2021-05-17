@@ -6,6 +6,7 @@ export default {
   props: ['learnData', 'averageData'],
   data() {
     return {
+      maxNumber: 0,
       chartData: {
         hoverBackgroundColor: 'red',
         hoverBorderWidth: 10,
@@ -40,14 +41,27 @@ export default {
   },
 
   created() {
+    var maxNum1 = 0;
     for (let i = 0; i < this.averageData.length; i++) {
       this.chartData.labels.push(this.averageData[i].data);
       this.chartData.datasets[1].data.push(this.averageData[i].per);
+      if (this.averageData[i].per > maxNum1) {
+        maxNum1 = this.averageData[i].per;
+      }
     }
+    var maxNum2 = 0;
     for (let i = 0; i < this.learnData.length; i++) {
-      // this.chartData.labels.push(this.learnData[i].data);
-
       this.chartData.datasets[0].data.push(this.learnData[i].per);
+      if (this.learnData[i].per > maxNum2) {
+        maxNum2 = this.learnData[i].per;
+      }
+    }
+    if (maxNum1 > maxNum2) {
+      this.maxNumber = Math.ceil(Number(maxNum1) / 10) * 10;
+    } else if (maxNum1 < maxNum2) {
+      this.maxNumber = Math.ceil(Number(maxNum2) / 10) * 10;
+    } else {
+      this.maxNumber = Math.ceil(Number(maxNum1) / 10) * 10;
     }
   },
   mounted() {
@@ -55,9 +69,9 @@ export default {
     this.renderChart(this.chartData, {
       scale: {
         ticks: {
-          max: 100,
+          max: this.maxNumber,
           min: 0,
-          stepsize: 10,
+          stepsize: 5,
           beginAtZero: true,
         },
       },
