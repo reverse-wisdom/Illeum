@@ -250,12 +250,14 @@ export default {
     offVideo() {
       let localStream = this.connection.attachStreams[0];
       localStream.mute('video');
+      clearInterval(this.time);
       this.isVideo = false;
     },
     onVideo() {
       this.connection.session.video = true;
       let localStream = this.connection.attachStreams[0];
       localStream.unmute('video');
+      this.time = setInterval(this.screenCapture, 5000);
       this.isVideo = true;
     },
     onAudio() {
