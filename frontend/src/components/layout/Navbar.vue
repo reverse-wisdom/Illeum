@@ -125,7 +125,7 @@
               <router-link to="/classcreate">클래스개설</router-link>
             </v-list-item-content>
             <v-list-item-content>
-              <router-link to="/webrtclistall">수업시작</router-link>
+              <router-link to="/webrtclistteacher">수업시작</router-link>
             </v-list-item-content>
             <v-list-item-content>
               <router-link to="/lecturermanage">평가관리</router-link>
@@ -143,7 +143,7 @@
               <router-link to="/classjoin">수강신청</router-link>
             </v-list-item-content>
             <v-list-item-content>
-              <router-link to="/webrtclistall">수업참여</router-link>
+              <router-link to="/webrtcliststudent">수업참여</router-link>
             </v-list-item-content>
             <v-list-item-content>
               <router-link to="/userevaluation">평가조회</router-link>
