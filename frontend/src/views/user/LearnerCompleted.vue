@@ -4,7 +4,7 @@
       <v-row no-gutters>
         <template v-for="(item, idx) in classLiFilter">
           <v-col :key="idx" xl="6" lg="12">
-            <v-card flat color="#f4f4f4" width="700">
+            <v-card flat color="#f9f9f9" width="700">
               <div class="blog-card">
                 <div class="inner-part">
                   <label for="imgTap" class="img">
@@ -48,7 +48,7 @@
                         {{ item.end_time }}
                       </span>
                     </div>
-                    <v-btn class="button" large color="#6173FF" v-bind="attrs" v-on="on" @click="evalShow(item)">
+                    <v-btn class="button" large color="#FF625C" depressed v-bind="attrs" v-on="on" @click="evalShow(item)">
                       내평가보기
                     </v-btn>
                   </div>
@@ -417,7 +417,7 @@ export default {
 .content .class-name {
   position: absolute !important;
   font-family: 'GongGothicLight';
-  color: #6173ff;
+  color: #2e79ff;
   font-size: 2rem;
   /* right: 50px; */
   top: 20px;

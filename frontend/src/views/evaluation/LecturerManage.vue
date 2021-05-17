@@ -5,6 +5,7 @@
       border="left"
       dark
       id="alert"
+      color="#2E95FF"
       style="margin-top:6%; font-size: 1.5rem; letter-spacing: 2.3px; padding-left:20px; line-height: 45px;"
       elevation="3"
       height="70"
@@ -21,7 +22,7 @@
     <v-row>
       <v-date-picker
         width="400"
-        header-color="#000"
+        color="#FF625C"
         v-model="date"
         @click:date="classNameFetch"
         :landscape="true"
@@ -32,7 +33,7 @@
         max="2100-10-30"
       ></v-date-picker>
       <v-col cols="6" sm="6">
-        <label for="" style=" border: 1px solid black; padding:10px 20px;  font-size:1.2rem; color:#fff; background:#000;">클래스선택</label>
+        <label for="" style=" border: 1px solid #756BFF; padding:10px 20px;  font-size:1.2rem; color:#fff; background:#756BFF;">클래스선택</label>
         <v-select style="margin-top: 2%;" :items="roomNameList" :value="roomNameList[0]" solo @input="showAll"></v-select>
         <v-col cols="12">
           <v-card class="mx-auto" max-width="600">
@@ -99,7 +100,7 @@
                 <td>{{ each.attend }}</td>
                 <td>{{ each.ranking | checkChatRanking }}</td>
                 <td>{{ each.participation }}회 채팅</td>
-                <td><v-btn color="#38A897" dark @click="openModal(each)">MODAL</v-btn></td>
+                <td><v-btn color="#756BFF" depressed dark @click="openModal(each)">평가조회</v-btn></td>
               </tr>
             </tbody>
           </table>
@@ -108,8 +109,14 @@
     </v-row>
 
     <!-- modal -->
-    <v-dialog v-model="dialog" persistent max-width="1200px">
+    <v-dialog v-if="$store.state.token" v-model="dialog" hide-overlay max-width="900px">
       <v-card flat>
+        <v-toolbar flat color="#6173FF" dark>
+          <v-toolbar-title>
+            <span>{{ modalEach.name }}님의</span>
+            평가조회
+          </v-toolbar-title>
+        </v-toolbar>
         <v-tabs vertical>
           <v-tab>
             <v-icon left>
@@ -132,9 +139,18 @@
 
           <v-tab-item>
             <v-card flat>
-              <h2>출결</h2>
-              <h3>출석시간:{{ modalEach.attend_time }}</h3>
-              <h3>지각여부:{{ modalEach.attend }}</h3>
+              <div style="margin:1.5rem 0;">
+                <v-icon left x-large>
+                  mdi-alarm
+                </v-icon>
+                <span style="font-size:2rem;">{{ modalEach.attend_time }}</span>
+                에 출석하셨습니다!
+              </div>
+              <div>
+                출결상태는
+                <span style="font-size:2rem;">{{ modalEach.attend }}</span>
+                입니다.
+              </div>
             </v-card>
           </v-tab-item>
           <v-tab-item :key="modalEach.vid + 'A'">
@@ -374,7 +390,12 @@ export default {
   font-weight: normal;
   font-style: normal;
 }
-
+/* * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'GongGothicLight';
+} */
 .manage {
   margin: 3% 2%;
   font-family: 'GongGothicLight';
@@ -396,7 +417,7 @@ table {
 }
 
 table > thead {
-  background-color: #000;
+  background-color: #41ea93;
   color: #fff;
 }
 
@@ -406,7 +427,7 @@ table > thead th {
 
 table th,
 table td {
-  border: 1px solid #00000017;
+  border: 1px solid #0000;
   padding: 10px 5px;
 }
 
@@ -417,7 +438,7 @@ table > tbody > tr > td > img {
   object-fit: cover;
   border-radius: 50%;
   border: 4px solid #fff;
-  box-shadow: 0 2px 6px #0003;
+  box-shadow: 0 2px 6px #000;
 }
 
 .action_btn {

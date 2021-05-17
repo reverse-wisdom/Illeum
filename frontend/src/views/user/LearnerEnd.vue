@@ -29,7 +29,7 @@
       <v-row no-gutters>
         <template v-for="(item, idx) in classLiFilter">
           <v-col :key="idx" xl="6" lg="12">
-            <v-card flat color="#f4f4f4" width="700">
+            <v-card flat color="#f9f9f9" width="700">
               <div class="blog-card">
                 <div class="inner-part">
                   <label for="imgTap" class="img">
@@ -37,8 +37,7 @@
                   </label>
                   <div class="content">
                     <div class="class-name">{{ item.room_name }}</div>
-                    <!-- vid -->
-                    <div>vid:{{ item.vid }}</div>
+
                     <div class="title">
                       <v-icon>mdi-account-circle</v-icon>
                       {{ item.founder }}
@@ -76,7 +75,7 @@
                       </span>
                     </div>
                     <!-- 버튼 -->
-                    <v-btn class="button" large color="#6173FF" @click="evalShow(item)">
+                    <v-btn class="button" large color="#FF625C" depressed @click="evalShow(item)">
                       내평가보기
                     </v-btn>
                   </div>
@@ -144,27 +143,6 @@
             </v-tab-item>
             <v-tab-item>
               <v-card flat>
-                <!-- <div style="display:flex; justify-content:center; flex-direction:column; margin:2rem 0;">
-                  <div class="partin-each">
-                    <span style="font-size:1.5rem;">{{ roomName }}수업</span>
-                    에서 총
-                    <span style="font-size:1.5rem;">{{ evalUserCnt }}명</span>
-                    중
-                  </div>
-                  <div class="partin-each">
-                    <span style="color:#4cb4a5; font-size:1.5rem; font-weight: bold;">수업참여도</span>
-                    는
-                    <span style="color:#4cb4a5; font-size:1.5rem; font-weight: bold;">{{ partuidRank }}위</span>
-                    입니다
-                  </div>
-
-                  <div class="partin-each">
-                    <span style="color:#FC5230; font-size:1.5rem; font-weight: bold;">출석</span>
-                    은
-                    <span style="color:#FC5230; font-size:1.5rem; font-weight: bold;">{{ attenduidRank }}위</span>
-                    입니다
-                  </div>
-                </div> -->
                 <LecUserPartin :each="modalEach" :roomData="modalEach" :evalUserCnt="evalUserCnt" :rid="ridSelected" :key="modalEach.vid + 'C'"></LecUserPartin>
               </v-card>
             </v-tab-item>
@@ -439,7 +417,7 @@ export default {
 .content .class-name {
   position: absolute !important;
   font-family: 'GongGothicLight';
-  color: #6173ff;
+  color: #2e79ff;
   font-size: 2rem;
   /* right: 50px; */
   top: 20px;

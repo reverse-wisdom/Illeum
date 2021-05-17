@@ -8,7 +8,7 @@
         <v-date-picker
           v-model="date"
           width="350"
-          header-color="#000"
+          color="#FF625C"
           @click:date="classNameFetch"
           locale="ko-kr"
           :allowed-dates="allowedDates"
@@ -20,7 +20,7 @@
 
       <v-col cols="12" sm="4">
         <div style="margin-top:1rem;">
-          <label for="" style="border: 1px solid black; padding:10px 20px; font-size:1.2rem; color:#fff; background:#000;">클래스선택</label>
+          <label for="" style=" border: 1px solid #756BFF; padding:10px 20px;  font-size:1.2rem; color:#fff; background:#756BFF;">클래스선택</label>
           <div style=" margin-top: 20px;">
             <v-select :items="items" :label="date" solo @input="showPartin" placeholder="클래스를 선택해주세요"></v-select>
           </div>
@@ -178,8 +178,8 @@ export default {
 
 <style scoped>
 .user-attend {
-  margin: 3% 1%;
-  background: #f4f4f4;
+  margin: 3% 2%;
+  background: #f9f9f9;
 }
 
 section.time-contain {
@@ -202,7 +202,7 @@ h3.is-3:not(:last-child) {
 .user-attend .saying {
   border: 3px solid black;
   border-radius: 10px;
-  width: 80%;
+  width: 39.3vh;
   padding: 3rem 2rem 1rem 2rem;
   font-weight: 900;
 
@@ -214,7 +214,7 @@ h3.is-3:not(:last-child) {
   margin: auto;
   color: #fff;
   padding: 0.2rem 2rem;
-  background: #000;
+  background: #41ea93;
   position: absolute;
   z-index: 2;
 }
@@ -268,7 +268,7 @@ h3.is-3:not(:last-child) {
   margin-left: 35%;
 }
 /* .attend-time-detail .title-attend {
-  border: 2px solid #f4f4f4;
+  border: 2px solid #f9f9f9;
   border-radius: 10px;
 
 
