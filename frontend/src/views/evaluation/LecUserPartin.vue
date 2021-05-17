@@ -1,11 +1,27 @@
 <template>
   <div>
     <div>
-      <div>{{ each.name }}님</div>
-      <div>{{ roomData.room_name }} 수업에서 수업참여도</div>
-      <div>총 수강생 {{ evalUserCnt }}명중에 {{ partuidRank }}위입니다</div>
-      <div>{{ roomData.room_name }} 수업에서 출석을</div>
-      <div>총 수강생 {{ evalUserCnt }}명중에 {{ attenduidRank }}위입니다</div>
+      <div style="display:flex; justify-content:center; flex-direction:column; margin:2rem 0;">
+        <div class="partin-each">
+          <span style="font-size:1.5rem;">{{ roomData.room_name }}수업</span>
+          에서 총
+          <span style="font-size:1.5rem;">{{ evalUserCnt }}명</span>
+          중
+        </div>
+        <div class="partin-each">
+          <span style="color:#4cb4a5; font-size:1.5rem; font-weight: bold;">수업참여도</span>
+          는
+          <span style="color:#4cb4a5; font-size:1.5rem; font-weight: bold;">{{ partuidRank }}위</span>
+          입니다
+        </div>
+
+        <div class="partin-each">
+          <span style="color:#FC5230; font-size:1.5rem; font-weight: bold;">출석</span>
+          은
+          <span style="color:#FC5230; font-size:1.5rem; font-weight: bold;">{{ attenduidRank }}위</span>
+          입니다
+        </div>
+      </div>
     </div>
   </div>
 </template>

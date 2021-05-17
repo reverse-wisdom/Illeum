@@ -58,7 +58,7 @@ export default {
   /* background-color: #fff; */
   /* float: right; */
   /* margin: 10% 0 10% 20%; */
-  margin: 3% 5%;
+  margin: -40% 25%;
   perspective: 1700px;
   transform: translateY(10%);
   transition: all ease 300ms;
