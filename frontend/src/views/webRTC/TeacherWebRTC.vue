@@ -1,7 +1,7 @@
 <template>
   <div style="background-color:white; height: auto">
     <div class="class-name">
-      <h2>{{ this.$route.query.room_name }}</h2>
+      <h2>{{ this.$route.query.room_name }}&nbsp;클래스</h2>
     </div>
 
     <div class="drag-container">
@@ -11,17 +11,17 @@
       </div>
       <div class="dragbar" id="dragbar"></div>
       <div class="panel-two" id="drag-right">
-        <v-tabs v-model="tab" background-color="deep-purple accent-4" hide-slider centered dark icons-and-text>
+        <v-tabs v-model="tab" background-color="#2E95FF" hide-slider centered dark icons-and-text>
           <v-tabs-slider></v-tabs-slider>
 
           <v-tab href="#tab-1">
             채팅
-            <v-icon>mdi-phone</v-icon>
+            <v-icon>mdi-chat-outline</v-icon>
           </v-tab>
 
           <v-tab href="#tab-2">
-            참여자목록
-            <v-icon>mdi-heart</v-icon>
+            참여자
+            <v-icon>mdi-account-multiple</v-icon>
           </v-tab>
         </v-tabs>
 
@@ -58,23 +58,19 @@
                   </div>
                 </div>
               </emoji-picker>
-              <!-- <button class="btn btn-primary" id="btn-chat-message" @click="chat">Send</button> -->
               <v-btn id="btn-chat-message" height="3.5rem" large color="primary" @click="chat">입력</v-btn>
             </div>
           </v-tab-item>
           <v-tab-item :value="'tab-2'">
             <div id="onUserStatusChanged">
-              참여자 목록
-
-              <v-list>
+              <v-list class="name-list">
                 <v-list-item v-for="(name, idx) in names" :key="idx">
-                  <v-list-item-content>
-                    <v-list-item-title v-text="name.name"></v-list-item-title>
+                  <v-list-item-content class="name-list-item">
+                    <v-list-item-title class="name-list-item-content" v-text="name.name"></v-list-item-title>
                   </v-list-item-content>
-
-                  <v-list-item-avatar>
+                  <v-avatar class="ma-3" size="50" tile>
                     <v-img :src="name.avatar"></v-img>
-                  </v-list-item-avatar>
+                  </v-avatar>
                 </v-list-item>
               </v-list>
             </div>
@@ -84,34 +80,35 @@
     </div>
     <div class="panel-three">
       <template v-if="isAudio">
-        <v-btn class="mr-4" color="error" @click="offAudio">오디오 끄기</v-btn>
+        <v-btn class="mr-4 btn" color="#FF625C" @click="offAudio">오디오 끄기</v-btn>
       </template>
       <template v-else>
-        <v-btn class="mr-4" color="primary" @click="onAudio">오디오 켜기</v-btn>
+        <v-btn class="mr-4 btn" color="#41EA93" @click="onAudio">오디오 켜기</v-btn>
       </template>
       <template v-if="isVideo">
-        <v-btn class="mr-4" color="error" @click="offVideo">비디오 끄기</v-btn>
+        <v-btn class="mr-4 btn" color="#FF625C" @click="offVideo">비디오 끄기</v-btn>
       </template>
       <template v-else>
-        <v-btn class="mr-4" color="primary" @click="onVideo">비디오 켜기</v-btn>
+        <v-btn class="mr-4 btn" color="#41EA93" @click="onVideo">비디오 켜기</v-btn>
       </template>
 
-      <v-btn class="mr-4" color="cyan" @click="screen">화면공유</v-btn>
-      <v-btn class="mr-4" color="cyan" @click="openWhiteBoard">화이트보드</v-btn>
-      <v-btn class="mr-4" color="cyan" @click="saveMessageLog">채팅기록저장</v-btn>
-      <v-btn class="mr-4" color="error" @click="outRoom">종료</v-btn>
+      <v-btn class="mr-4 btn" color="#2E95FF" @click="screen">화면공유</v-btn>
+      <v-btn class="mr-4 btn" color="#2E95FF" @click="openWhiteBoard">화이트보드</v-btn>
+      <v-btn class="mr-4 btn" color="#2E95FF" @click="saveMessageLog">채팅기록저장</v-btn>
+      <v-btn class="mr-4 btn" color="#FF625C" @click="outRoom">종료</v-btn>
     </div>
 
     <!-- 화이트보드 모달 영역 -->
     <div id="modal">
-      <div class="modal_content text-center">
-        <div style="float:right">
-          <v-btn class="mr-4 mb-4" color="error" @click="clearCanvas">전체삭제</v-btn>
-          <v-btn class="mr-4 mb-4" color="error" @click="closeWhiteBoard">닫기</v-btn>
-        </div>
-        <!-- <div id="widget-container" style="height: 80%; width: 70%; border: 1px solid black; border-top:0; border-bottom: 0;"></div> -->
-
+      <div class="modal_content ">
         <div id="widget-container"></div>
+        <v-row no-gutters>
+          <v-col></v-col>
+        </v-row>
+        <div class="modal-btn" style="display: inline-flex;">
+          <v-btn class="" color="error" @click="clearCanvas">전체삭제</v-btn>
+          <v-btn class="ml-5" color="#41EA93" @click="closeWhiteBoard">닫기</v-btn>
+        </div>
       </div>
     </div>
     <div class="modal_layer"></div>
@@ -133,7 +130,6 @@ export default {
       designer: null,
       message: '',
       chatLog: '',
-      chatResult: [],
       isAudio: true,
       isVideo: true,
       userUIDList: [],
@@ -191,7 +187,6 @@ export default {
       document.selection ? document.selection.empty() : window.getSelection().removeAllRanges();
       left.style.width = e.pageX - bar.offsetWidth / 2 + 'px';
     };
-
     bar.addEventListener('mousedown', () => {
       document.addEventListener('mousemove', drag);
     });
@@ -241,13 +236,6 @@ export default {
       document.querySelector('#modal').style.display = 'none';
       document.querySelector('#modal').style.top = 0;
       ref.designer.iframe.style.border = '2px solid black';
-
-      var nodes = ref.designer.iframe.childNodes;
-      for (var i = 0; i < nodes.length; i++) {
-        if (nodes[i].nodeName.toLowerCase() == 'section') {
-          nodes[i].style.backgroundColor = 'white';
-        }
-      }
     };
 
     this.openRoom();
@@ -279,12 +267,11 @@ export default {
     openWhiteBoard() {
       document.querySelector('#modal').style.top = 0;
       document.querySelector('#modal').style.display = 'block';
-      // document.querySelector('iframe').style.backgroundColor = 'white';
     },
     closeWhiteBoard() {
-      console.log(document.querySelector('#modal').style.display);
       document.querySelector('#modal').style.display = 'none';
     },
+
     chat() {
       var chatMessage = this.message;
 
@@ -311,13 +298,13 @@ export default {
 
       if (event.data) {
         div.innerHTML = '<b>' + userName + '&nbsp;' + timestamp + ':</b><br>' + event.data.chatMessage;
-        this.chatResult.push({ uuid: uuid, userName: userName, chatMessage: event.data.chatMessage, timestamp: timestamp });
         this.chatLog += '[' + userName + '][' + timestamp + '] ' + event.data.chatMessage.replaceAll('\n', '') + '\r\n';
+        div.style.borderBottom = '0.5px groove #B2EBF2';
       } else {
         div.innerHTML = '<b>' + this.userName + '(당신)&nbsp;' + timestamp + '</b> <br>' + event;
-        this.chatResult.push({ uid: uuid, userName: userName, chatMessage: event, timestamp: timestamp });
         this.chatLog += '[' + userName + '][' + timestamp + '] ' + event.replaceAll('\n', '') + '\r\n';
-        div.style.background = '#cbffcb';
+        div.style.background = '#E3F2FD';
+        div.style.borderBottom = '0.5px groove #B2EBF2';
       }
 
       conversationPanel.appendChild(div);
@@ -375,7 +362,8 @@ export default {
         }
       });
 
-      // 리스너 영역
+      // 리스너 영역 시작
+
       this.connection.onopen = function() {
         if (ref.designer.pointsLength <= 0) {
           // you seems having data to be synced with new user!
@@ -403,11 +391,15 @@ export default {
       };
 
       this.connection.onstream = function(event) {
+        console.log(event);
         var video = event.mediaElement;
         if (event.extra.type == 'cam') {
           document.querySelector('.videos-container').appendChild(video);
           video.removeAttribute('controls');
-        } else {
+        } else if (event.extra.type == 'share' || event.extra.typeAlpha == 'share') {
+          document.querySelectorAll('.videos-container > video').forEach((elem) => {
+            elem.style.width = '10%';
+          });
           document.querySelector('.share-videos-container').appendChild(video);
         }
       };
@@ -424,10 +416,6 @@ export default {
             }
           }
         });
-        // if (!ref.names.length) {
-        //   ref.names = ['Only You'];
-        // } else {
-        //   }
 
         ref.names.push({ name: ref.connection.extra.userFullName, avatar: '/profile/' + ref.connection.extra.userUUID + '/256' });
       };
@@ -445,27 +433,24 @@ export default {
         console.log(temp);
         ref.connection.extra.status = '퇴장';
         ref.connection.onUserStatusChanged(event);
-        // if (temp.length == 1) ref.names = ['Only You'];
-        // else
         ref.names = temp;
       };
 
-      this.connection.onclose = function(event) {
-        console.log(event);
-        ref.names = [];
-        console.log('close');
-      };
       this.connection.onstreamended = function(event) {
-        if (event.extra.type == 'share') {
+        console.log(event);
+        if (event.extra.type == 'share' || event.extra.typeAlpha == 'share') {
           var share = document.querySelector('.share-videos-container');
-          while (share.hasChildNodes()) {
-            share.removeChild(share.firstChild);
+          console.log(share);
+          if (share != null) {
+            while (share.hasChildNodes()) {
+              share.removeChild(share.firstChild);
+            }
           }
 
           document.querySelectorAll('.videos-container > video').forEach((elem) => {
             elem.style.width = '30%';
           });
-        } else {
+        } else if (event.extra.userUUID != ref.$store.state.uuid) {
           var screenId = event.mediaElement.id;
           document.querySelector('#' + screenId).remove();
         }
@@ -483,7 +468,7 @@ export default {
       });
 
       this.connection.videosContainer = document.querySelector('.share-videos-container');
-      document.querySelectorAll('.videos-container > video').forEach((elem, index) => {
+      document.querySelectorAll('.videos-container > video').forEach((elem) => {
         elem.style.width = '10%';
       });
     },
@@ -512,8 +497,6 @@ export default {
       var end_time = new Date(new Date().toString().split('GMT')[0] + ' UTC').toISOString().split('.')[0] + '.000Z';
       await updateClass({ rid: this.$route.query.rid, room_state: '준비', end_time })
         .then(({ data }) => {
-          ref.convertChat();
-
           if (data == 'success') {
             this.$swal({
               icon: 'success',
@@ -573,22 +556,6 @@ export default {
       a.download = fileName;
       a.href = objURL;
       a.click();
-    },
-    convertChat() {
-      var rankArr = [];
-      var rank = 1;
-      for (let index = 0; index < this.chatResult.length; index++) {
-        var indexOfchatResult = rankArr.findIndex((i) => i.uuid == this.chatResult[index].uuid);
-        if (indexOfchatResult == -1) {
-          rankArr.push({ uuid: this.chatResult[index].uuid, participation: 1, rank: rank });
-          rank++;
-        } else {
-          var indexOfObj = rankArr.findIndex((i) => i.uuid == this.chatResult[index].uuid);
-          rankArr[indexOfObj].participation++;
-        }
-      }
-
-      console.log(rankArr);
     },
     clearCanvas() {
       this.designer.clearCanvas();
@@ -654,6 +621,7 @@ body::-webkit-scrollbar {
   cursor: col-resize;
   background-color: black;
 }
+
 .img {
   width: inherit;
 }
@@ -666,11 +634,10 @@ body::-webkit-scrollbar {
 }
 
 #btn-chat-message {
-  /* margin: 3rem; */
   margin-bottom: 3rem !important;
-  /* display: block; */
   float: right;
 }
+
 #btn-chat-message::after {
   clear: both;
 }
@@ -681,9 +648,6 @@ body::-webkit-scrollbar {
   min-height: 37rem;
   width: 100%;
   overflow: auto;
-  /* border-top-width: 3px;
-  border-top-style: groove;
-  border-top-color: black; */
 }
 
 #conversation-panel .message {
@@ -706,25 +670,27 @@ body::-webkit-scrollbar {
   width: -webkit-fill-available;
   width: 30%;
   border: 1px solid;
-  /* pointer-events: none; */
 }
 .share-videos-container >>> video {
   display: inline;
   width: -webkit-fill-available;
   width: 80%;
   border: 1px solid;
-  /* pointer-events: none; */
 }
 
-/* mordal */
+/* modal */
 #modal {
   position: fixed;
   top: 200%;
   width: 80%;
-  height: 100%;
+  height: 88%;
   z-index: 9999;
+  left: 5%;
+  padding-bottom: 0px;
 }
-
+.modal-btn {
+  margin: 1rem 0 0 55rem;
+}
 #modal h2 {
   margin: 0;
 }
@@ -743,9 +709,12 @@ body::-webkit-scrollbar {
   background: #fff;
   border: 2px solid #666;
 }
+.btn {
+  color: white !important;
+}
 
 #modal .modal_layer {
-  position: fixed;
+  /* position: fixed; */
   top: 0;
   left: 0;
   width: 100%;
@@ -758,6 +727,33 @@ body::-webkit-scrollbar {
   display: flex;
   height: 60px;
   margin-top: 4rem;
+}
+/* .name-list {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 24px;
+  text-decoration: none;
+  width: 250px;
+  padding: 0px;
+  margin: 0px;
+} */
+.name-list-item {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 24px;
+  text-decoration: none;
+  width: 250px;
+  padding: 0px;
+  margin: 0px;
+}
+.name-list-item-content {
+  background-color: #e6e6e6;
+  background-image: url('//www.kirupa.com/images/gray_smiley.png');
+  background-position: 7px 7px;
+  background-repeat: no-repeat;
+  color: #666;
+  list-style: none outside none;
+  padding-left: 29px;
+  padding-top: 10px;
+  height: 50px;
 }
 
 .regular-input {
