@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="background-color:white; height: auto">
     <div class="class-name">
       <h2>{{ this.$route.query.room_name }}</h2>
     </div>
@@ -11,63 +11,75 @@
       </div>
       <div class="dragbar" id="dragbar"></div>
       <div class="panel-two" id="drag-right">
-        <div id="onUserStatusChanged">
-          참여자 목록
-          <template v-for="name in names">
-            {{ name }}
-          </template>
-        </div>
-        <div class="chat-area">
-          <div id="conversation-panel"></div>
-        </div>
-        <div id="key-press" style="text-align: right; display: none; font-size: 11px;">
-          <span style="vertical-align: middle;"></span>
-          <img alt="" src="https://www.webrtc-experiment.com/images/key-press.gif" style="height: 12px; vertical-align: middle;" />
-        </div>
-        <div class="wrapper">
-          <v-textarea
-            id="txt-chat-message"
-            class="regular-input"
-            rows="3"
-            prepend-icon="mdi-comment"
-            single-line
-            no-resize
-            outlined
-            row-height="15"
-            style="border-color: white;"
-            v-model="message"
-            @keyup.enter="chat"
-            label=""
-          ></v-textarea>
+        <v-tabs v-model="tab" background-color="deep-purple accent-4" hide-slider centered dark icons-and-text>
+          <v-tabs-slider></v-tabs-slider>
 
-          <emoji-picker @emoji="append" :search="search">
-            <div class="emoji-invoker" slot="emoji-invoker" slot-scope="{ events: { click: clickEvent } }" @click.stop="clickEvent">
-              <svg height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
-                <path d="M0 0h24v24H0z" fill="none" />
-                <path
-                  d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 8 15.5 8 14 8.67 14 9.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S9.33 8 8.5 8 7 8.67 7 9.5 7.67 11 8.5 11zm3.5 6.5c2.33 0 4.31-1.46 5.11-3.5H6.89c.8 2.04 2.78 3.5 5.11 3.5z"
-                />
-              </svg>
+          <v-tab href="#tab-1">
+            채팅
+            <v-icon>mdi-phone</v-icon>
+          </v-tab>
+
+          <v-tab href="#tab-2">
+            참여자목록
+            <v-icon>mdi-heart</v-icon>
+          </v-tab>
+        </v-tabs>
+
+        <v-tabs-items v-model="tab">
+          <v-tab-item :value="'tab-1'">
+            <div class="chat-area">
+              <div id="conversation-panel"></div>
             </div>
-            <div slot="emoji-picker" slot-scope="{ emojis, insert, display }">
-              <div class="emoji-picker" :style="{ top: display.y + 'px', left: display.x + 'px' }">
-                <div class="emoji-picker__search">
-                  <input type="text" v-model="search" v-focus />
+            <div class="wrapper">
+              <v-textarea id="txt-chat-message" class="regular-input" rows="1" no-resize outlined style="border-color: white;" v-model="message" @keyup.enter="chat" label="채팅 입력"></v-textarea>
+
+              <emoji-picker @emoji="append" :search="search">
+                <div class="emoji-invoker" slot="emoji-invoker" slot-scope="{ events: { click: clickEvent } }" @click.stop="clickEvent">
+                  <svg height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M0 0h24v24H0z" fill="none" />
+                    <path
+                      d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 8 15.5 8 14 8.67 14 9.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S9.33 8 8.5 8 7 8.67 7 9.5 7.67 11 8.5 11zm3.5 6.5c2.33 0 4.31-1.46 5.11-3.5H6.89c.8 2.04 2.78 3.5 5.11 3.5z"
+                    />
+                  </svg>
                 </div>
-                <div>
-                  <div v-for="(emojiGroup, category) in emojis" :key="category">
-                    <h5>{{ category }}</h5>
-                    <div class="emojis">
-                      <span v-for="(emoji, emojiName) in emojiGroup" :key="emojiName" @click="insert(emoji)" :title="emojiName">{{ emoji }}</span>
+                <div slot="emoji-picker" slot-scope="{ emojis, insert, display }">
+                  <div class="emoji-picker" :style="{ top: display.y + 'px', left: display.x + 'px' }">
+                    <div class="emoji-picker__search">
+                      <input type="text" v-model="search" v-focus />
+                    </div>
+                    <div>
+                      <div v-for="(emojiGroup, category) in emojis" :key="category">
+                        <h5>{{ category }}</h5>
+                        <div class="emojis">
+                          <span v-for="(emoji, emojiName) in emojiGroup" :key="emojiName" @click="insert(emoji)" :title="emojiName">{{ emoji }}</span>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
+              </emoji-picker>
+              <!-- <button class="btn btn-primary" id="btn-chat-message" @click="chat">Send</button> -->
+              <v-btn id="btn-chat-message" height="3.5rem" large color="primary" @click="chat">입력</v-btn>
             </div>
-          </emoji-picker>
-          <!-- <button class="btn btn-primary" id="btn-chat-message" @click="chat">Send</button> -->
-          <v-btn id="btn-chat-message" large rounded color="primary" @click="chat">입력</v-btn>
-        </div>
+          </v-tab-item>
+          <v-tab-item :value="'tab-2'">
+            <div id="onUserStatusChanged">
+              참여자 목록
+
+              <v-list>
+                <v-list-item v-for="(name, idx) in names" :key="idx">
+                  <v-list-item-content>
+                    <v-list-item-title v-text="name.name"></v-list-item-title>
+                  </v-list-item-content>
+
+                  <v-list-item-avatar>
+                    <v-img :src="name.avatar"></v-img>
+                  </v-list-item-avatar>
+                </v-list-item>
+              </v-list>
+            </div>
+          </v-tab-item>
+        </v-tabs-items>
       </div>
     </div>
     <div class="panel-three">
@@ -87,18 +99,18 @@
       <v-btn class="mr-4" color="cyan" @click="screen">화면공유</v-btn>
       <v-btn class="mr-4" color="cyan" @click="openWhiteBoard">화이트보드</v-btn>
       <v-btn class="mr-4" color="cyan" @click="saveMessageLog">채팅기록저장</v-btn>
-      <v-btn class="mr-4" color="cyan" @click="chatTest">채팅콘솔테스트</v-btn>
       <v-btn class="mr-4" color="error" @click="outRoom">종료</v-btn>
     </div>
 
     <!-- 화이트보드 모달 영역 -->
     <div id="modal">
       <div class="modal_content text-center">
-        <div>
+        <div style="float:right">
           <v-btn class="mr-4 mb-4" color="error" @click="clearCanvas">전체삭제</v-btn>
           <v-btn class="mr-4 mb-4" color="error" @click="closeWhiteBoard">닫기</v-btn>
         </div>
         <!-- <div id="widget-container" style="height: 80%; width: 70%; border: 1px solid black; border-top:0; border-bottom: 0;"></div> -->
+
         <div id="widget-container"></div>
       </div>
     </div>
@@ -127,6 +139,7 @@ export default {
       userUIDList: [],
       search: '',
       names: [], // name list
+      tab: null,
     };
   },
   created() {
@@ -227,6 +240,14 @@ export default {
     window.onload = function() {
       document.querySelector('#modal').style.display = 'none';
       document.querySelector('#modal').style.top = 0;
+      ref.designer.iframe.style.border = '2px solid black';
+
+      var nodes = ref.designer.iframe.childNodes;
+      for (var i = 0; i < nodes.length; i++) {
+        if (nodes[i].nodeName.toLowerCase() == 'section') {
+          nodes[i].style.backgroundColor = 'white';
+        }
+      }
     };
 
     this.openRoom();
@@ -258,6 +279,7 @@ export default {
     openWhiteBoard() {
       document.querySelector('#modal').style.top = 0;
       document.querySelector('#modal').style.display = 'block';
+      // document.querySelector('iframe').style.backgroundColor = 'white';
     },
     closeWhiteBoard() {
       console.log(document.querySelector('#modal').style.display);
@@ -394,7 +416,7 @@ export default {
         ref.names = [];
         ref.connection.getAllParticipants().forEach(function(participantId) {
           var user = ref.connection.peers[participantId];
-          ref.names.push(user.extra.userFullName);
+          ref.names.push({ name: user.extra.userFullName, avatar: '/profile/' + user.extra.userUUID + '/256' });
           if (ref.userUIDList.includes(event.extra.userUUID)) {
             const index = ref.userUIDList.indexOf(event.extra.userUUID);
             if (index > -1) {
@@ -402,31 +424,51 @@ export default {
             }
           }
         });
-        if (!ref.names.length) {
-          ref.names = ['Only You'];
-        } else {
-          ref.names.push(ref.connection.extra.userFullName);
-        }
+        // if (!ref.names.length) {
+        //   ref.names = ['Only You'];
+        // } else {
+        //   }
+
+        ref.names.push({ name: ref.connection.extra.userFullName, avatar: '/profile/' + ref.connection.extra.userUUID + '/256' });
       };
 
       this.connection.onleave = function(event) {
-        const idx = ref.names.indexOf(event.extra.userFullName);
+        const idx = ref.names.findIndex(function(item) {
+          return item.name == event.extra.userFullName;
+        });
         console.log(idx);
         if (idx > -1) {
           ref.names.splice(idx, 1);
         }
         var temp = ref.names;
 
-        console.log(event);
+        console.log(temp);
         ref.connection.extra.status = '퇴장';
         ref.connection.onUserStatusChanged(event);
-        if (temp.length == 1) ref.names = ['Only You'];
-        else ref.names = temp;
+        // if (temp.length == 1) ref.names = ['Only You'];
+        // else
+        ref.names = temp;
       };
 
       this.connection.onclose = function(event) {
+        console.log(event);
         ref.names = [];
         console.log('close');
+      };
+      this.connection.onstreamended = function(event) {
+        if (event.extra.type == 'share') {
+          var share = document.querySelector('.share-videos-container');
+          while (share.hasChildNodes()) {
+            share.removeChild(share.firstChild);
+          }
+
+          document.querySelectorAll('.videos-container > video').forEach((elem) => {
+            elem.style.width = '30%';
+          });
+        } else {
+          var screenId = event.mediaElement.id;
+          document.querySelector('#' + screenId).remove();
+        }
       };
     },
 
@@ -441,6 +483,9 @@ export default {
       });
 
       this.connection.videosContainer = document.querySelector('.share-videos-container');
+      document.querySelectorAll('.videos-container > video').forEach((elem, index) => {
+        elem.style.width = '10%';
+      });
     },
 
     async getStudentList() {
@@ -467,7 +512,7 @@ export default {
       var end_time = new Date(new Date().toString().split('GMT')[0] + ' UTC').toISOString().split('.')[0] + '.000Z';
       await updateClass({ rid: this.$route.query.rid, room_state: '준비', end_time })
         .then(({ data }) => {
-          ref.chatTest();
+          ref.convertChat();
 
           if (data == 'success') {
             this.$swal({
@@ -529,7 +574,7 @@ export default {
       a.href = objURL;
       a.click();
     },
-    chatTest() {
+    convertChat() {
       var rankArr = [];
       var rank = 1;
       for (let index = 0; index < this.chatResult.length; index++) {
@@ -594,11 +639,14 @@ body::-webkit-scrollbar {
   flex: 1;
   width: 20%;
   height: 800px;
+  padding-bottom: 10px;
 }
 
 .panel-three {
   border-top: 2px solid black;
+  margin-top: 1px;
   padding-top: 5px;
+  height: 6rem;
 }
 
 .dragbar {
@@ -615,7 +663,6 @@ body::-webkit-scrollbar {
   resize: vertical;
   margin: 5px;
   margin-right: 0;
-  min-height: 30px;
 }
 
 #btn-chat-message {
@@ -631,9 +678,12 @@ body::-webkit-scrollbar {
 #conversation-panel {
   margin-bottom: 20px;
   text-align: left;
-  height: 36rem;
+  min-height: 37rem;
   width: 100%;
   overflow: auto;
+  /* border-top-width: 3px;
+  border-top-style: groove;
+  border-top-color: black; */
 }
 
 #conversation-panel .message {
@@ -645,6 +695,10 @@ body::-webkit-scrollbar {
 #conversation-panel .message video,
 #conversation-panel .message iframe {
   max-width: 100%;
+}
+
+.videos-container {
+  display: contents;
 }
 
 .videos-container >>> video {
@@ -701,7 +755,9 @@ body::-webkit-scrollbar {
 }
 .wrapper {
   position: relative;
-  display: inline-block;
+  display: flex;
+  height: 60px;
+  margin-top: 4rem;
 }
 
 .regular-input {
@@ -723,7 +779,7 @@ body::-webkit-scrollbar {
 .emoji-invoker {
   position: absolute;
   top: 0.5rem;
-  right: 0.5rem;
+  right: 5rem;
   width: 1.5rem;
   height: 1.5rem;
   border-radius: 50%;
@@ -742,7 +798,7 @@ body::-webkit-scrollbar {
   z-index: 1;
   font-family: Montserrat, 'Serif';
   border: 1px solid #ccc;
-  width: 15rem;
+  width: 100%;
   height: 20rem;
   overflow: scroll;
   padding: 1rem;
