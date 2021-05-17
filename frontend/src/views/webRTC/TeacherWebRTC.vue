@@ -1,7 +1,7 @@
 <template>
   <div style="background-color:white; height: auto">
     <div class="class-name">
-      <h2>{{ this.$route.query.room_name }}클래스</h2>
+      <h2>{{ this.$route.query.room_name }}&nbsp;클래스</h2>
     </div>
 
     <div class="drag-container">
@@ -58,13 +58,11 @@
                   </div>
                 </div>
               </emoji-picker>
-              <!-- <button class="btn btn-primary" id="btn-chat-message" @click="chat">Send</button> -->
               <v-btn id="btn-chat-message" height="3.5rem" large color="primary" @click="chat">입력</v-btn>
             </div>
           </v-tab-item>
           <v-tab-item :value="'tab-2'">
             <div id="onUserStatusChanged">
-              <!-- <v-list class="name-list" color="#E0F7FA"> -->
               <v-list class="name-list">
                 <v-list-item v-for="(name, idx) in names" :key="idx">
                   <v-list-item-content class="name-list-item">
@@ -109,7 +107,7 @@
         </v-row>
         <div class="modal-btn" style="display: inline-flex;">
           <v-btn class="" color="error" @click="clearCanvas">전체삭제</v-btn>
-          <v-btn class="ml-5" color="error" @click="closeWhiteBoard">닫기</v-btn>
+          <v-btn class="ml-5" color="#41EA93" @click="closeWhiteBoard">닫기</v-btn>
         </div>
       </div>
     </div>
@@ -132,7 +130,6 @@ export default {
       designer: null,
       message: '',
       chatLog: '',
-      chatResult: [],
       isAudio: true,
       isVideo: true,
       userUIDList: [],
@@ -239,13 +236,6 @@ export default {
       document.querySelector('#modal').style.display = 'none';
       document.querySelector('#modal').style.top = 0;
       ref.designer.iframe.style.border = '2px solid black';
-
-      var nodes = ref.designer.iframe.childNodes;
-      for (var i = 0; i < nodes.length; i++) {
-        if (nodes[i].nodeName.toLowerCase() == 'section') {
-          nodes[i].style.backgroundColor = 'white';
-        }
-      }
     };
 
     this.openRoom();
@@ -277,12 +267,11 @@ export default {
     openWhiteBoard() {
       document.querySelector('#modal').style.top = 0;
       document.querySelector('#modal').style.display = 'block';
-      // document.querySelector('iframe').style.backgroundColor = 'white';
     },
     closeWhiteBoard() {
-      console.log(document.querySelector('#modal').style.display);
       document.querySelector('#modal').style.display = 'none';
     },
+
     chat() {
       var chatMessage = this.message;
 
@@ -309,12 +298,10 @@ export default {
 
       if (event.data) {
         div.innerHTML = '<b>' + userName + '&nbsp;' + timestamp + ':</b><br>' + event.data.chatMessage;
-        this.chatResult.push({ uuid: uuid, userName: userName, chatMessage: event.data.chatMessage, timestamp: timestamp });
         this.chatLog += '[' + userName + '][' + timestamp + '] ' + event.data.chatMessage.replaceAll('\n', '') + '\r\n';
         div.style.borderBottom = '0.5px groove #B2EBF2';
       } else {
         div.innerHTML = '<b>' + this.userName + '(당신)&nbsp;' + timestamp + '</b> <br>' + event;
-        this.chatResult.push({ uid: uuid, userName: userName, chatMessage: event, timestamp: timestamp });
         this.chatLog += '[' + userName + '][' + timestamp + '] ' + event.replaceAll('\n', '') + '\r\n';
         div.style.background = '#E3F2FD';
         div.style.borderBottom = '0.5px groove #B2EBF2';
@@ -375,7 +362,8 @@ export default {
         }
       });
 
-      // 리스너 영역
+      // 리스너 영역 시작
+
       this.connection.onopen = function() {
         if (ref.designer.pointsLength <= 0) {
           // you seems having data to be synced with new user!
@@ -403,16 +391,15 @@ export default {
       };
 
       this.connection.onstream = function(event) {
+        console.log(event);
         var video = event.mediaElement;
         if (event.extra.type == 'cam') {
           document.querySelector('.videos-container').appendChild(video);
-          // document.querySelector('.videos-container').append(video);
-          // document.querySelector('.videos-container').append(video);
-          // document.querySelector('.videos-container').append(video);
-          // document.querySelector('.videos-container').append(video);
-          // document.querySelector('.videos-container').append(video);
           video.removeAttribute('controls');
-        } else {
+        } else if (event.extra.type == 'share' || event.extra.typeAlpha == 'share') {
+          document.querySelectorAll('.videos-container > video').forEach((elem) => {
+            elem.style.width = '10%';
+          });
           document.querySelector('.share-videos-container').appendChild(video);
         }
       };
@@ -449,23 +436,21 @@ export default {
         ref.names = temp;
       };
 
-      this.connection.onclose = function(event) {
-        console.log(event);
-        ref.names = [];
-        console.log('close');
-      };
       this.connection.onstreamended = function(event) {
         console.log(event);
-        if (event.extra.type == 'share') {
+        if (event.extra.type == 'share' || event.extra.typeAlpha == 'share') {
           var share = document.querySelector('.share-videos-container');
-          while (share.hasChildNodes()) {
-            share.removeChild(share.firstChild);
+          console.log(share);
+          if (share != null) {
+            while (share.hasChildNodes()) {
+              share.removeChild(share.firstChild);
+            }
           }
 
           document.querySelectorAll('.videos-container > video').forEach((elem) => {
             elem.style.width = '30%';
           });
-        } else {
+        } else if (event.extra.userUUID != ref.$store.state.uuid) {
           var screenId = event.mediaElement.id;
           document.querySelector('#' + screenId).remove();
         }
@@ -483,7 +468,7 @@ export default {
       });
 
       this.connection.videosContainer = document.querySelector('.share-videos-container');
-      document.querySelectorAll('.videos-container > video').forEach((elem, index) => {
+      document.querySelectorAll('.videos-container > video').forEach((elem) => {
         elem.style.width = '10%';
       });
     },
@@ -512,8 +497,6 @@ export default {
       var end_time = new Date(new Date().toString().split('GMT')[0] + ' UTC').toISOString().split('.')[0] + '.000Z';
       await updateClass({ rid: this.$route.query.rid, room_state: '준비', end_time })
         .then(({ data }) => {
-          ref.convertChat();
-
           if (data == 'success') {
             this.$swal({
               icon: 'success',
@@ -573,22 +556,6 @@ export default {
       a.download = fileName;
       a.href = objURL;
       a.click();
-    },
-    convertChat() {
-      var rankArr = [];
-      var rank = 1;
-      for (let index = 0; index < this.chatResult.length; index++) {
-        var indexOfchatResult = rankArr.findIndex((i) => i.uuid == this.chatResult[index].uuid);
-        if (indexOfchatResult == -1) {
-          rankArr.push({ uuid: this.chatResult[index].uuid, participation: 1, rank: rank });
-          rank++;
-        } else {
-          var indexOfObj = rankArr.findIndex((i) => i.uuid == this.chatResult[index].uuid);
-          rankArr[indexOfObj].participation++;
-        }
-      }
-
-      console.log(rankArr);
     },
     clearCanvas() {
       this.designer.clearCanvas();
@@ -654,6 +621,7 @@ body::-webkit-scrollbar {
   cursor: col-resize;
   background-color: black;
 }
+
 .img {
   width: inherit;
 }
@@ -666,11 +634,10 @@ body::-webkit-scrollbar {
 }
 
 #btn-chat-message {
-  /* margin: 3rem; */
   margin-bottom: 3rem !important;
-  /* display: block; */
   float: right;
 }
+
 #btn-chat-message::after {
   clear: both;
 }
@@ -681,9 +648,6 @@ body::-webkit-scrollbar {
   min-height: 37rem;
   width: 100%;
   overflow: auto;
-  /* border-top-width: 3px;
-  border-top-style: groove;
-  border-top-color: black; */
 }
 
 #conversation-panel .message {
@@ -706,17 +670,15 @@ body::-webkit-scrollbar {
   width: -webkit-fill-available;
   width: 30%;
   border: 1px solid;
-  /* pointer-events: none; */
 }
 .share-videos-container >>> video {
   display: inline;
   width: -webkit-fill-available;
   width: 80%;
   border: 1px solid;
-  /* pointer-events: none; */
 }
 
-/* mordal */
+/* modal */
 #modal {
   position: fixed;
   top: 200%;
