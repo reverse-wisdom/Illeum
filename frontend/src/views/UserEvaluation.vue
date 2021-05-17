@@ -3,9 +3,8 @@
     <v-alert
       class="text-start font-weight-black"
       border="left"
-      color=""
       dark
-      id="alert"
+      color="#2E95FF"
       style="margin-top:6%; font-size: 1.5rem; letter-spacing: 2.3px; padding-left:20px; line-height: 45px;"
       elevation="3"
       height="70"
@@ -29,19 +28,19 @@
       </v-tab>
     </v-tabs>
 
-    <v-tabs-items v-model="tab" style="background:#f4f4f4;">
+    <v-tabs-items v-model="tab" style="background:#f9f9f9;">
       <v-tab-item>
-        <v-card flat color="#f4f4f4">
+        <v-card flat color="#f9f9f9">
           <UserAttend></UserAttend>
         </v-card>
       </v-tab-item>
       <v-tab-item>
-        <v-card flat color="#f4f4f4">
+        <v-card flat color="#f9f9f9">
           <UserEval></UserEval>
         </v-card>
       </v-tab-item>
       <v-tab-item>
-        <v-card flat color="#f4f4f4" t>
+        <v-card flat color="#f9f9f9" t>
           <UserPartin></UserPartin>
         </v-card>
       </v-tab-item>
@@ -75,7 +74,7 @@ export default {
 }
 
 #user-eval {
-  margin-left: 7%;
+  margin: 3% 2%;
   font-family: 'GongGothicLight';
 }
 </style>

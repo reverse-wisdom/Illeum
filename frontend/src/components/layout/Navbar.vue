@@ -1,7 +1,7 @@
 <template>
   <div id="">
     <v-navigation-drawer permanent app width="320">
-      <img src="../../assets/img/textlogo.png" class="Navlogo" alt="" style="width:220px; height:90px; margin: 4% 0;" />
+      <img src="../../assets/img/textlogo_2.png" class="Navlogo" alt="" style="width:240px; height:100px; margin: 4% 0;" />
 
       <v-sheet color="" class="pa-1">
         <v-avatar class="mb-3" color="grey darken-1" size="90">
@@ -21,24 +21,20 @@
       </v-btn> -->
       <!-- <v-divider></v-divider> -->
       <!-- 프로필 모달 -->
-      <v-list class="text-center">
-        <v-row class="px-4">
-          <v-col xl="6" lg="12">
-            <v-btn width="8rem" tile outlined @click="dialog = true">
-              <v-icon left>
-                mdi-account
-              </v-icon>
-              PROFILE
-            </v-btn>
-          </v-col>
-          <v-col xl="6" lg="12">
-            <v-btn width="8rem" tile outlined>
-              <v-icon left>
-                mdi-account
-              </v-icon>
-              <router-link to="/myclass" style="margin:auto; text-decoration:none; color:#000;">MY CLASS</router-link>
-            </v-btn>
-          </v-col>
+      <v-list class="">
+        <v-row class="mx-2 pa-2">
+          <v-btn tile outlined @click="dialog = true">
+            <v-icon left>
+              mdi-account
+            </v-icon>
+            PROFILE
+          </v-btn>
+          <v-btn tile outlined style="margin-left:2%;">
+            <v-icon left>
+              mdi-account
+            </v-icon>
+            <router-link to="/myclass" style="margin:auto; text-decoration:none; color:#000;">MY CLASS</router-link>
+          </v-btn>
         </v-row>
       </v-list>
 
@@ -52,7 +48,6 @@
           <template v-slot:activator>
             <v-list-item-title>강의자</v-list-item-title>
           </template>
-
           <template>
             <v-list-item-content>
               <router-link to="/classcreate">클래스개설</router-link>
@@ -83,6 +78,7 @@
             </v-list-item-content>
           </template>
         </v-list-group>
+        <v-list-item></v-list-item>
       </v-list>
 
       <v-list style="margin-bottom: 0;">

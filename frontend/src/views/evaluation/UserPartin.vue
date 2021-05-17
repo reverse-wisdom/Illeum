@@ -2,7 +2,7 @@
   <div class="user-partin">
     <v-row justify="center">
       <div style="margin-right: 5%">
-        <div style="border: 1px solid #38A897; background: #38A897; border-radius: 50px; color:white; padding: 0.5rem 0; font-size:1.5rem; margin-bottom: 10%;">
+        <div style="border: 1px solid ##2E95FF; background: #756BFF; border-radius: 50px; color:white; padding: 0.5rem 0; font-size:1.5rem; margin-bottom: 10%;">
           <v-icon x-large color="white">mdi-alarm-check</v-icon>
           출석왕
         </div>
@@ -18,7 +18,7 @@
         </div>
       </div>
       <div>
-        <div style="border: 1px solid #38A897; background:#3f51b5; border-radius: 50px; color:white; padding:0.5rem 0; font-size:1.5rem; margin-bottom: 10%;">
+        <div style="border: 1px solid ##2E95FF; background:#41EA93; border-radius: 50px; color:white; padding:0.5rem 0; font-size:1.5rem; margin-bottom: 10%;">
           <v-icon x-large color="white">mdi-forum-outline</v-icon>
           채팅참여왕
         </div>
@@ -36,7 +36,7 @@
       <v-col cols="12" sm="6">
         <v-date-picker
           width="300"
-          header-color="#000"
+          color="#FF625C"
           v-model="date"
           @click:date="classNameFetch"
           :landscape="landscape"
@@ -56,18 +56,18 @@
     <!-- <h2>{{ date }}</h2> -->
 
     <div v-if="uidcheck" style="display:flex; flex-direction:column;">
-      <v-alert v-if="UserAttendRank != 1000" style="width:90%; margin:auto;" color="#38A897" border="left" dark>
+      <v-alert v-if="UserAttendRank != 1000" style="width:90%; margin:auto;" color="#756BFF" border="left" dark>
         해당 수업의 총 수강생 {{ fetchRoomlen }}명중에 출석순위는
         <span style="font-size:1.5rem;">{{ UserAttendRank }}위</span>
         입니다
       </v-alert>
-      <v-alert v-else border="left" style="width:90%; margin:auto;" color="#38A897" dark>수업에 참여하지 않았습니다.</v-alert>
-      <v-alert v-if="zeroPartinchk == false" border="left" style="width:90%; margin: 2% auto; " color="indigo" dark>
+      <v-alert v-else border="left" style="width:90%; margin:auto;" color="#756BFF" dark>수업에 참여하지 않았습니다.</v-alert>
+      <v-alert v-if="zeroPartinchk == false" border="left" style="width:90%; margin: 2% auto; " color="#41EA93" dark>
         해당 수업의 총 수강생 {{ fetchRoomlen }}명중에 채팅참여도는
         <span style="font-size:1.5rem;">{{ UserPartinRank }}위</span>
         입니다
       </v-alert>
-      <v-alert v-else border="left" style="width:90%; margin: 2% auto;" color="indigo" dark>채팅에 참여하지 않았습니다.</v-alert>
+      <v-alert v-else border="left" style="width:90%; margin: 2% auto;" color="#41EA93" dark>채팅에 참여하지 않았습니다.</v-alert>
     </div>
   </div>
 </template>
@@ -210,6 +210,6 @@ export default {
 <style scoped>
 .user-partin {
   margin: 3% 0%;
-  background: #f4f4f4;
+  background: #f9f9f9;
 }
 </style>
