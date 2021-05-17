@@ -1,9 +1,8 @@
 <template>
-  <div>
-    <h2>평가</h2>
+  <div class="lec-user-eval">
     <v-row v-if="evalcheck">
-      <LecEvalPieChart :LeclearnData="LeclearnData" :key="change" />
-      <LecEvalRadarChart :LeclearnData="LeclearnData" :LecAverageData="LecAverageData" :key="renderKey" />
+      <LecEvalPieChart style="width:50%;" :LeclearnData="LeclearnData" :key="change" />
+      <LecEvalRadarChart style="width:50%;" :LeclearnData="LeclearnData" :LecAverageData="LecAverageData" :key="renderKey" />
     </v-row>
   </div>
 </template>
@@ -119,4 +118,10 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+.lec-user-eval {
+  margin: 3% 2%;
+
+  /* background: #f9f9f9; */
+}
+</style>

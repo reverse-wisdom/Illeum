@@ -133,7 +133,7 @@ export default {
         navigation: true,
         sectionsColor: ['require(', '#ff5f45', '#0798ec', '#fec401', '#1bcee6', '#ee1a59', '#2c3e4f', '#ba5be9', '#b4b8ab'],
       },
-      serviceText: `<h3 style="color: #535353;"><span style="color:#38A897;">원격수업의 질</span>을 높여드리는<span style="color:#6173FF;"> '일름' </span>서비스</h3>
+      serviceText: `<h3 style="color: #535353;"><span style="color:##2E95FF;">원격수업의 질</span>을 높여드리는<span style="color:#6173FF;"> '일름' </span>서비스</h3>
         <p class="section1-p">언택트시대 온라인 학습 일름이 해답입니다.</p>`,
     };
   },
@@ -209,9 +209,10 @@ export default {
   display: flex;
   flex-direction: row;
 }
-/* .section4 {
-
-} */
+.section4 {
+  position: relative;
+  opacity: 0.5;
+}
 
 /* .backdrop {
   background: url('https://i.imgbox.com/JGXLxgQb.jpg');
@@ -320,6 +321,7 @@ export default {
 } */
 
 .section2a {
+  position: relative;
   text-align: left;
   line-height: 1.5em;
   display: flex;
@@ -338,6 +340,7 @@ export default {
 }
 
 .explanation {
+  position: absolute;
   margin-left: 100px;
   width: 80%;
 }

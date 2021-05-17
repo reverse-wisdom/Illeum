@@ -1,6 +1,20 @@
 <template>
   <div class="webRTCList">
-    <h2>화상수업 리스트 목록</h2>
+    <v-alert
+      class="text-start font-weight-black"
+      border="left"
+      dark
+      id="alert"
+      color="#2E95FF"
+      style="margin-top:6%; font-size: 1.5rem; letter-spacing: 2.3px; padding-left:20px; line-height: 45px;"
+      elevation="3"
+      height="70"
+    >
+      <span>
+        <v-icon>mdi-account-check</v-icon>
+        화상수업리스트
+      </span>
+    </v-alert>
     <v-data-table
       :headers="headers"
       :items="rooms"
@@ -28,9 +42,6 @@
         </template>
       </template>
     </v-data-table>
-    <v-btn @click="main">
-      홈으로
-    </v-btn>
   </div>
 </template>
 <script>
@@ -292,4 +303,9 @@ export default {
   },
 };
 </script>
-<style scoped></style>
+<style scoped>
+.webRTCList {
+  margin: 3% 2%;
+  font-family: 'GongGothicLight';
+}
+</style>

@@ -3,7 +3,7 @@
     <v-alert
       class="text-start font-weight-black"
       border="left"
-      color="indigo"
+      color="#2E95FF"
       dark
       id="alert"
       style="margin-top:6%; font-size: 1.5rem; letter-spacing: 2.3px; line-height: 45px;"
@@ -66,7 +66,7 @@ export default {
   -webkit-appearance: none;
   width: 14rem;
   height: 60px;
-  background-color: #707070;
+  background-color: #41ea93;
 
   border-radius: 50px;
   cursor: pointer;
@@ -75,7 +75,7 @@ export default {
 }
 
 .checkbox:checked {
-  background-color: #8f8f8f;
+  background-color: #41ea93;
   outline: none;
   cursor: pointer;
 }
@@ -85,7 +85,7 @@ export default {
   position: absolute;
   width: 6rem;
   height: 40px;
-  background-color: #4cb4a5;
+  background-color: #ff625c;
   border-radius: 50px;
   top: 10px;
   cursor: pointer;
@@ -122,8 +122,5 @@ export default {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 
   z-index: 3;
-}
-#alert {
-  background: linear-gradient(60deg, #4cb4a5, #38a897);
 }
 </style>
