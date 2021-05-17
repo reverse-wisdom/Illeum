@@ -1,6 +1,6 @@
 <template>
   <div class="learner">
-    <v-tabs v-model="tab" slider-size="2" background-color="#f4f4f4">
+    <v-tabs v-model="tab" slider-size="2" background-color="#f9f9f9">
       <v-tabs-slider></v-tabs-slider>
       <v-tab>
         진행
@@ -13,9 +13,9 @@
       </v-tab>
     </v-tabs>
 
-    <v-tabs-items v-model="tab" width="1500" color="#f4f4f4" style="background-color:#f4f4f4;">
+    <v-tabs-items v-model="tab" width="1500" color="#f9f9f9" style="background-color:#f9f9f9;">
       <v-tab-item>
-        <v-card flat color="#f4f4f4">
+        <v-card flat color="#f9f9f9">
           <LearnerDoing>진행</LearnerDoing>
         </v-card>
       </v-tab-item>
@@ -23,7 +23,7 @@
         <LearnerCompleted>완료</LearnerCompleted>
       </v-tab-item>
       <v-tab-item>
-        <v-card flat color="#f4f4f4">
+        <v-card flat color="#f9f9f9">
           <LearnerEnd>종료</LearnerEnd>
         </v-card>
       </v-tab-item>

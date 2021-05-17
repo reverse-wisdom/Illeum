@@ -7,10 +7,10 @@
       <v-date-picker
         v-model="date"
         width="400"
-        header-color="#000"
         @click:date="classNameFetch"
         :landscape="landscape"
         locale="ko-kr"
+        color="#FF625C"
         :allowed-dates="allowedDates"
         class="mt-4"
         min="1900-04-01"
@@ -18,7 +18,7 @@
       ></v-date-picker>
 
       <v-col cols="12" sm="6">
-        <label for="" style=" border: 1px solid black; padding:10px 20px;  font-size:1.2rem; color:#fff; background:#000;">클래스선택</label>
+        <label for="" style=" border: 1px solid #756BFF; padding:10px 20px;  font-size:1.2rem; color:#fff; background:#756BFF;">클래스선택</label>
         <v-select style="margin-top: 2%;" :items="items" :label="date" solo @input="showEvaluation"></v-select>
       </v-col>
     </v-row>
@@ -248,11 +248,11 @@ export default {
 <style scoped>
 .user-eval {
   margin: 3% 2%;
-  background: #f4f4f4;
+  background: #f9f9f9;
 }
 .label-eval {
-  border: 1px solid black;
-  background: #000;
+  border: 1px solid #41ea93;
+  background: #41ea93;
   color: #fff;
   padding: 0.5rem 0rem;
 }

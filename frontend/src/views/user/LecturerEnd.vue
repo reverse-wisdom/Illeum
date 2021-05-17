@@ -1,40 +1,11 @@
 <template>
   <div class="lec-ready overflow-y-auto" style="height:43rem">
     <div v-if="learnerEnd == true">
-      <!-- 1 -->
-      <!-- <div v-for="(item, idx) in classLi" :key="idx">
-        <div v-if="new Date(item.end_time) < Date.now() && item.room_state == '완료'">
-      
-          <div class="blog-card">
-            <input type="radio" name="select" id="tap-1" checked />
-            <input type="checkbox" id="imgTap" />
-
-            <div class="inner-part">
-              <label for="imgTap" class="img">
-                <v-img :src="url" id="preview" alt=""></v-img>
-              </label>
-              <div class="content content-1">
-                <span>클래스명:{{ item.room_name }}</span>
-
-                <div class="title">강의자:{{ $store.state.name }}</div>
-                <div class="text">진행단계:{{ item.room_state }}</div>
-                <div class="text">공개여부:{{ item.room_type }}</div>
-                <div class="text">시작시간:{{ item.start_time }}</div>
-                <div class="text">종료시간:{{ item.end_time }}</div>
-                <v-btn class="button" x-large style=" padding: 20px 30px; font-size: 1.2rem; margin-left: 200px;" color="#6173FF" @click="startRTC(item)">강의시작</v-btn>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div v-else>
-          <p>강의종료된 강좌가 없음</p>
-        </div>
-      </div> -->
       <!-- card -->
       <v-row no-gutters>
         <template v-for="(item, idx) in classLiFilter">
           <v-col :key="idx" xl="6" lg="12">
-            <v-card flat color="#f4f4f4" width="700">
+            <v-card flat color="#f9f9f9" width="700">
               <div class="blog-card">
                 <div class="inner-part">
                   <label for="imgTap" class="img">
@@ -78,7 +49,7 @@
                         {{ item.end_time }}
                       </span>
                     </div>
-                    <v-btn class="button" large color="#6173FF" @click="learnerDataGo(item.rid)">학생평가보기</v-btn>
+                    <v-btn class="button" large color="#FF625C" depressed @click="learnerDataGo(item.rid)">학생평가보기</v-btn>
                   </div>
                 </div>
               </div>
@@ -180,7 +151,7 @@ export default {
 .content .class-name {
   position: absolute !important;
   font-family: 'GongGothicLight';
-  color: #6173ff;
+  color: #2e79ff;
   font-size: 2rem;
   /* right: 50px; */
   top: 20px;

@@ -1,6 +1,6 @@
 <template>
   <div class="sign">
-    <img src="@/assets/img/textlogo.png" alt="logo" />
+    <img src="@/assets/img/textlogo_2.png" alt="logo" />
     <p>서비스 이용을 위해 해당 양식을 입력해주세요.</p>
     <div class="form-modal">
       <div class="form-toggle">
@@ -159,14 +159,14 @@ export default {
     toggleSignup() {
       document.getElementById('login-toggle').style.backgroundColor = '#fff';
       document.getElementById('login-toggle').style.color = '#222';
-      document.getElementById('signup-toggle').style.backgroundColor = '#38A897';
+      document.getElementById('signup-toggle').style.backgroundColor = '#756BFF';
       document.getElementById('signup-toggle').style.color = '#fff';
       document.getElementById('login-form').style.display = 'none';
       document.getElementById('signup-form').style.display = 'block';
     },
 
     toggleLogin() {
-      document.getElementById('login-toggle').style.backgroundColor = '#38A897';
+      document.getElementById('login-toggle').style.backgroundColor = '#756BFF';
       document.getElementById('login-toggle').style.color = '#fff';
       document.getElementById('signup-toggle').style.backgroundColor = '#fff';
       document.getElementById('signup-toggle').style.color = '#222';
@@ -320,13 +320,13 @@ img {
 
 .form-modal .login,
 .form-modal .signup {
-  background: #38a897;
+  background: #756bff;
   color: #fff;
 }
 
 .form-modal .login:hover,
 .form-modal .signup:hover {
-  background: #6173ff;
+  background: #41ea93;
 }
 
 .form-toggle {
@@ -358,12 +358,12 @@ img {
 }
 
 #login-toggle {
-  background: #38a897;
+  background: #756bff;
   color: #ffff;
   letter-spacing: 2px;
 }
 #signup-toggle {
-  /* background: #38a897; */
+  /* background: ##2E95FF; */
   color: #000;
   letter-spacing: 2px;
 }

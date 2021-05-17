@@ -32,7 +32,7 @@
       <v-row no-gutters>
         <template v-for="(item, idx) in classLiFilter">
           <v-col :key="idx" xl="6" lg="12">
-            <v-card flat color="#f4f4f4" width="700">
+            <v-card flat color="#f9f9f9" width="700">
               <div class="blog-card">
                 <div class="inner-part">
                   <label for="imgTap" class="img">
@@ -76,7 +76,7 @@
                         {{ item.end_time }}
                       </span>
                     </div>
-                    <v-btn class="button" large color="#6173FF" @click="attendClass(item)">수업참여</v-btn>
+                    <v-btn class="button" large color="#FF625C" depressed @click="attendClass(item)">수업참여</v-btn>
                   </div>
                 </div>
               </div>
@@ -182,7 +182,7 @@ export default {
   margin: 30px auto;
   border-radius: 15px;
   background: white;
-  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.5);
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
 }
 .inner-part {
   display: flex;
@@ -216,7 +216,7 @@ export default {
 .content .class-name {
   position: absolute !important;
   font-family: 'GongGothicMedium';
-  color: #6173ff;
+  color: #2e79ff;
   font-size: 2rem;
   /* right: 50px; */
   top: 20px;
