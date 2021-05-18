@@ -2,7 +2,34 @@
 
 > illeum은 인공지능을 활용한 교육 목적의 화상 플랫폼
 
-<여기에 기술 스택 뱃지 달 예정>
+## ⭐ Stack
+
+<img src="https://img.shields.io/badge/Java-1.8 openJDK-007396?style=flat-square&logo=Java&logoColor=white" 
+       style="height : auto; margin-left : 10px; margin-right : 10px;" />
+<img src="https://img.shields.io/badge/JavaScript-ES6-F7DF1E?style=flat-square&logo=JavaScript&logoColor=black"
+       style="height : auto; margin-left : 10px; margin-right : 10px;" />
+<img src="https://img.shields.io/badge/Vue.js-v2.6.11-4FC08D?style=flat-square&logo=Vue.js&logoColor=white"
+       style="height : auto; margin-left : 10px; margin-right : 10px;" />
+<img src="https://img.shields.io/badge/HTML-HTML5-E34F26?style=flat-square&logo=HTML5&logoColor=white"
+       style="height : auto; margin-left : 10px; margin-right : 10px;" />
+<img src="https://img.shields.io/badge/Spring-2.2.2-6DB33F?style=flat-square&logo=Spring&logoColor=white"
+       style="height : auto; margin-left : 10px; margin-right : 10px;" />
+<img src="https://img.shields.io/badge/Python-3.8-EE4C2C?style=flat-square&logo=Python&logoColor=white"
+       style="height : auto; margin-left : 10px; margin-right : 10px;" />
+<img src="https://img.shields.io/badge/TensorFlow-2.4.1-FF6F00?style=flat-square&logo=TensorFlow&logoColor=white"
+       style="height : auto; margin-left : 10px; margin-right : 10px;" />
+<img src="https://img.shields.io/badge/FastAPI-0.63.0-009688?style=flat-square&logo=FastAPI&logoColor=white"
+       style="height : auto; margin-left : 10px; margin-right : 10px;" />
+<img src="https://img.shields.io/badge/MySQL-8.0-4479A1?style=flat-square&logo=MySQL&logoColor=white"
+       style="height : auto; margin-left : 10px; margin-right : 10px;" />
+<img src="https://img.shields.io/badge/Docker-20.10.6-2496ED?style=flat-square&logo=Docker&logoColor=white"
+       style="height : auto; margin-left : 10px; margin-right : 10px;" />
+<img src="https://img.shields.io/badge/Jenkins-2.289-D24939?style=flat-square&logo=Jenkins&logoColor=white"
+       style="height : auto; margin-left : 10px; margin-right : 10px;" />
+<img src="https://img.shields.io/badge/RabbitMQ-3.8.14-FF6600?style=flat-square&logo=RabbitMQ&logoColor=white"
+       style="height : auto; margin-left : 10px; margin-right : 10px;" />
+<img src="https://img.shields.io/badge/WebRTC-RTCMultiConnection 3.7.0-333333?style=flat-square&logo=WebRTC&logoColor=white"
+       style="height : auto; margin-left : 10px; margin-right : 10px;" />
 
 # 🎨 What's "illeum"?
 
@@ -130,9 +157,9 @@ illeum은 인공지능을 활용한 교육 목적의 화상 플랫폼으로 기�
    3. Run (컨테이너 실행)
 8. `docker ps` 를 통해 frontend, backend, AI 컨테이너가 실행되는 것을 확인 (Jenkins, MySQL, RabbitMQ 포함)
 
-# 🏃‍♂️ Progress
+# 📆 Progress
 
-- 진행일자 : 2021-04-12 ~ 2021-05-18
+- 진행기간 : 2021-04-12 ~ 2021-05-18
   ![images/sprint.png](images/sprint.png)
 
 # 📒 Documents
