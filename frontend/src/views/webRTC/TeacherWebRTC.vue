@@ -245,6 +245,11 @@ export default {
     offVideo() {
       let localStream = this.connection.attachStreams[0];
       localStream.mute('video');
+      // document.getElementById(localStream.id).setAttribute('poster', '/profile/' + this.$store.state.uuid + '/256');
+      // console.log(document.getElementById(localStream.id).poster);
+      // document.getElementById(localStream.id).poster.setAttribute('width', '10%');
+      // localStream.mediaElement.setAttribute('poster', 'https://www.webrtc-experiment.com/images/key-press.gif');
+
       this.isVideo = false;
     },
     onVideo() {
@@ -413,7 +418,7 @@ export default {
         ref.names = [];
         ref.connection.getAllParticipants().forEach(function(participantId) {
           var user = ref.connection.peers[participantId];
-          ref.names.push({ name: user.extra.userFullName, avatar: '/profile/' + user.extra.userUUID + '/256' });
+          ref.names.push({ name: user.extra.userFullName, avatar: '/profile/' + user.extra.userUUID + '/128' });
           if (ref.userUIDList.includes(event.extra.userUUID)) {
             const index = ref.userUIDList.indexOf(event.extra.userUUID);
             if (index > -1) {
@@ -680,7 +685,11 @@ body::-webkit-scrollbar {
   width: -webkit-fill-available;
   width: 30%;
   border: 1px solid;
+  /* object-fit: cover; */
 }
+/* .videos-container >>> video[poster] {
+  width: 10%;
+} */
 .share-videos-container >>> video {
   display: inline;
   width: -webkit-fill-available;
