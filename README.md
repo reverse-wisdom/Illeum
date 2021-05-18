@@ -130,11 +130,16 @@ illeum은 인공지능을 활용한 교육 목적의 화상 플랫폼으로 기�
    3. Run (컨테이너 실행)
 8. `docker ps` 를 통해 frontend, backend, AI 컨테이너가 실행되는 것을 확인 (Jenkins, MySQL, RabbitMQ 포함)
 
+# 🏃‍♂️ Progress
+
+- 진행일자 : 2021-04-12 ~ 2021-05-18
+  ![images/sprint.png](images/sprint.png)
+
 # 📒 Documents
 
-- 문서1
-- 문서2
-- 문서3
+- ![중간 발표 PPT](documents/발표/자율PJT_중간발표.pptx)
+- 최종 발표 PPT
+- 최종 UCC
 
 # 🚂 Contributer
 
