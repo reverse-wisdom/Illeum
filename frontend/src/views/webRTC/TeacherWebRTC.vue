@@ -247,7 +247,7 @@ export default {
       localStream.mute('video');
       console.log(localStream.id);
       console.log(document.getElementById(localStream.id));
-      document.getElementById(localStream.id).setAttribute('poster', '/profile/' + this.$store.state.uuid + '/256');
+      document.getElementById(localStream.id).setAttribute('poster', '/profile/' + this.$store.state.uuid + '/64');
       // localStream.mediaElement.setAttribute('poster', 'https://www.webrtc-experiment.com/images/key-press.gif');
       this.isVideo = false;
     },
@@ -684,7 +684,15 @@ body::-webkit-scrollbar {
   width: -webkit-fill-available;
   width: 30%;
   border: 1px solid;
-  object-fit: fill;
+  /* object-fit: fill; */
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+video[poster] {
+  height: 100%;
+  width: 100%;
 }
 .share-videos-container >>> video {
   display: inline;
