@@ -382,7 +382,12 @@ export default {
 
         // canvas
         if (event.data === 'plz-sync-points') {
-          console.log(ref.designer);
+          ref.designer.sync();
+          return;
+        }
+
+        if (event.data === 'plz-sync-points-for-clear') {
+          ref.designer.clearCanvas();
           ref.designer.sync();
           return;
         }
@@ -558,7 +563,12 @@ export default {
       a.click();
     },
     clearCanvas() {
+      var ref = this;
       this.designer.clearCanvas();
+      this.designer.sync();
+      setTimeout(function() {
+        ref.connection.send('plz-sync-points-for-clear');
+      }, 300);
     },
     append(emoji) {
       this.message += emoji;
