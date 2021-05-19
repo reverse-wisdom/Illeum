@@ -78,6 +78,7 @@
 <script>
 import { userEvalList } from '@/api/auth';
 import { fetchRoomname, evaluateList } from '@/api/class';
+import { findCount } from '@/api/entrant';
 
 const daysOfWeek = ['일', '월', '화', '수', '목', '금', '토'];
 const monthsOfYear = ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'];
@@ -164,6 +165,8 @@ export default {
           const { data } = await fetchRoomname(this.eval[i].room_name);
           const roomPartinUser = data[0].rid;
           const res = await evaluateList(roomPartinUser);
+          const res2 = await findCount(roomPartinUser);
+
           var maxPartin = 0;
           // this.fetchRoomlen = res.data.length;
           for (var j = 0; j < res.data.length; j++) {
@@ -171,7 +174,7 @@ export default {
             if (res.data[j].eval_date.slice(0, 10) === this.date) {
               this.partData.push({ uid: res.data[j].uid, participation: res.data[j].participation });
               this.attendData.push({ uid: res.data[j].uid, attend_time: res.data[j].attend_time });
-              this.fetchRoomlen++;
+              this.fetchRoomlen = res2.data;
               //로그인한 유저 참여도 데이터 있는지 없는지 체크하고 조건부 렌더링 체크
               if (res.data[j].uid != this.$store.state.uuid) {
                 this.uidcheck = true;

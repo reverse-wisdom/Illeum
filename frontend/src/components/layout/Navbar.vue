@@ -87,12 +87,20 @@
         </v-list-item-content>
       </v-list> -->
       <v-list style="margin-bottom: 0;">
-        <v-btn v-if="this.$store.state.token" @click="signoutUser" tile outlined>
-          <v-icon left>
-            mdi-logout
-          </v-icon>
-          LOGOUT
-        </v-btn>
+        <v-row class="mx-2 pa-2">
+          <v-btn v-if="this.$store.state.token" @click="signoutUser" tile outlined>
+            <v-icon left>
+              mdi-logout
+            </v-icon>
+            LOGOUT
+          </v-btn>
+          <v-btn class="px-7" style="margin-left:2%;" @click="gohome" tile outlined>
+            <v-icon left>
+              mdi-home
+            </v-icon>
+            HOME
+          </v-btn>
+        </v-row>
       </v-list>
     </v-navigation-drawer>
 
@@ -201,6 +209,9 @@ export default {
   methods: {
     Preview_image() {
       if (this.image != null) this.url = URL.createObjectURL(this.image);
+    },
+    gohome() {
+      this.$router.push({ name: 'Landing' });
     },
     async userUpdate() {
       const uuid = this.$store.state.uuid;
