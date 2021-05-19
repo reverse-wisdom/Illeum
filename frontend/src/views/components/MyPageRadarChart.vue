@@ -37,6 +37,28 @@ export default {
           },
         ],
       },
+      options: {
+        scale: {
+          ticks: {
+            max: this.maxNumber,
+            min: 0,
+
+            beginAtZero: true,
+          },
+        },
+        tooltips: {
+          callbacks: {
+            title: function(tooltipItem, chartData) {
+              return;
+            },
+            label: function(tooltipItem, chartData) {
+              console.log('3333', tooltipItem);
+              console.log('4444', chartData);
+              return `${chartData.labels[tooltipItem['index']]}:${tooltipItem.label}`;
+            },
+          },
+        },
+      },
     };
   },
 
@@ -66,16 +88,7 @@ export default {
   },
   mounted() {
     // 실제 차트 랜더링 부분
-    this.renderChart(this.chartData, {
-      scale: {
-        ticks: {
-          max: this.maxNumber,
-          min: 0,
-          stepsize: 5,
-          beginAtZero: true,
-        },
-      },
-    });
+    this.renderChart(this.chartData, this.options);
   },
 };
 </script>
