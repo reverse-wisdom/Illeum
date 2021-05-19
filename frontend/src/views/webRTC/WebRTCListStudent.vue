@@ -31,7 +31,7 @@
     >
       <template v-slot:[`item.action`]="{ item }">
         <template v-if="checkUser(item) == '강의자'">
-          <v-btn color="info" @click="startWebRTC(item)" :disabled="!hasWebcam">수업 생성</v-btn>
+          <v-btn color="info" @click="startWebRTC(item)" :width="100" :disabled="!hasWebcam">수업 생성</v-btn>
         </template>
         <template v-else-if="item.room_state == '진행'">
           <v-btn color="success" @click="joinWebRTC(item)" :width="100" :disabled="!hasWebcam">수업 참여</v-btn>
@@ -57,13 +57,11 @@ export default {
           value: 'room_name',
         },
         { text: '시작시간', value: 'start_time' },
-        // { text: '시작시간', value: this.$moment(start_time).format('llll') },
         { text: '진행/준비', value: 'room_state' },
         { text: '공개/비공개', value: 'room_type' },
         { text: '', value: 'action' },
       ],
       rooms: [],
-
       time: null, // for camera check interval
       hasWebcam: false,
     };
@@ -81,7 +79,7 @@ export default {
         }
       });
     }
-    console.log(this.rooms);
+
     for (let index = 0; index < this.rooms.length; index++) {
       this.rooms[index].start_time = this.$moment(this.rooms[index].start_time).format('llll');
     }
@@ -130,7 +128,6 @@ export default {
               const { data } = await updateClass({ rid: value.rid, room_state: '진행', start_time }); // PUT: /api/room/updateByRid
               if (data == 'success') {
                 const { data } = await start(value.rid); // GET: /api/rtc/start (rabbitMQ)
-                console.log(data);
                 if (data == 'success') this.$router.push({ name: 'TeacherWebRTC', query: { room_name: value.room_name, rid: value.rid } });
               }
             } catch {
