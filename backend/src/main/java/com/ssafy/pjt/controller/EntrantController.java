@@ -41,6 +41,12 @@ public class EntrantController {
 		return new ResponseEntity<>(entrantRepository.findAll(), HttpStatus.OK);
 	}
 	
+	@ApiOperation(value = "방  참가한 사람 조회")
+	@GetMapping(path = "/findCount")
+	public ResponseEntity<Object> findMember(@RequestParam int rid) {	
+		return new ResponseEntity<>(entrantRepository.findByRid(rid).size()-1, HttpStatus.OK);
+	}
+	
 	@ApiOperation(value = "참여자가 방에 참여했는지 여부 확인")
 	@GetMapping(path = "/findUidAndRid")
 	public ResponseEntity<Object> findUidAndRid(@RequestParam int uid, @RequestParam int rid) {
