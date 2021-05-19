@@ -16,26 +16,49 @@ export default {
           {
             label: '내점수',
             data: [],
-            stepSize: 1,
-            backgroundColor: 'rgba(54, 162, 235, 0.5)',
-            borderColor: 'rgb(54, 162, 235)',
-            pointBackgroundColor: 'rgb(54, 162, 235)',
+
+            fill: false,
+            backgroundColor: 'rgba(255, 98, 92, 0.5)',
+            borderColor: 'rgb(255, 98, 92)',
+            pointBackgroundColor: 'rgb(255, 98, 92)',
             pointBorderColor: '#fff',
             pointHoverBackgroundColor: '#fff',
-            pointHoverBorderColor: 'rgb(54, 162, 235)',
+            pointHoverBorderColor: 'rgb(255, 98, 92)',
           },
           {
             label: '수업 평균',
             data: [],
-            fill: true,
-            backgroundColor: 'rgba(255, 99, 132, 0.5)',
-            borderColor: 'rgb(255, 99, 132)',
-            pointBackgroundColor: 'rgb(255, 99, 132)',
+            fill: false,
+            backgroundColor: 'rgba(117, 107, 255, 0.5)',
+            borderColor: 'rgb(117, 107, 255)',
+            pointBackgroundColor: 'rgb(117, 107, 255)',
             pointBorderColor: '#fff',
             pointHoverBackgroundColor: '#fff',
-            pointHoverBorderColor: 'rgb(255, 99, 132)',
+            pointHoverBorderColor: 'rgb(117, 107, 255)',
           },
         ],
+      },
+      options: {
+        scale: {
+          ticks: {
+            max: this.maxNumber,
+            min: 0,
+
+            beginAtZero: true,
+          },
+        },
+        tooltips: {
+          callbacks: {
+            title: function(tooltipItem, chartData) {
+              return;
+            },
+            label: function(tooltipItem, chartData) {
+              console.log('3333', tooltipItem);
+              console.log('4444', chartData);
+              return `${chartData.labels[tooltipItem['index']]}:${tooltipItem.label}`;
+            },
+          },
+        },
       },
     };
   },
@@ -66,16 +89,7 @@ export default {
   },
   mounted() {
     // 실제 차트 랜더링 부분
-    this.renderChart(this.chartData, {
-      scale: {
-        ticks: {
-          max: this.maxNumber,
-          min: 0,
-          stepsize: 5,
-          beginAtZero: true,
-        },
-      },
-    });
+    this.renderChart(this.chartData, this.options);
   },
 };
 </script>

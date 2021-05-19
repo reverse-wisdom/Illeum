@@ -9,5 +9,8 @@ function partinAll() {
 function findUidAndRid(uid, rid) {
   return posts.get(`/entrant/findUidAndRid?uid=${uid}&rid=${rid}`);
 }
-
-export { partinAll, findUidAndRid };
+//방 참가한 사람 조회
+function findCount(rid) {
+  return posts.get(`/entrant/findCount?rid=${rid}`);
+}
+export { partinAll, findUidAndRid, findCount };

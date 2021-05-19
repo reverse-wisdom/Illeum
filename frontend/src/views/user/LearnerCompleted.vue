@@ -281,7 +281,7 @@ export default {
       const roomPartinUser = data[0].rid;
       this.ridSelected = data[0].rid;
       const res = await evaluateList(roomPartinUser);
-
+      const res2 = await findCount(roomPartinUser);
       for (var i = 0; i < res.data.length; i++) {
         this.per1 += res.data[i].attention;
         this.per2 += res.data[i].distracted;
@@ -354,7 +354,7 @@ export default {
           this.attenduidRank = this.attendRank.indexOf(this.attendRank[m]) + 1;
         }
       }
-      this.evalUserCnt = this.attendRank.length;
+      this.evalUserCnt = res2.data;
       this.change++;
       this.renderKey++;
     },

@@ -26,8 +26,6 @@ export default {
     for (let i = 0; i < this.learnData.length; i++) {
       this.chartData.labels.push(this.learnData[i].data);
       this.chartData.datasets[0].data.push(this.learnData[i].per);
-
-      // 차트색 rgb 랜덤 추출
     }
   },
   mounted() {

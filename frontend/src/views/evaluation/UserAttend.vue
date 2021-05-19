@@ -4,7 +4,7 @@
       <p>출결확인을 위해 1.날짜를 체크하고 2.클레스를 선택해주세요</p>
     </v-row>
     <v-row>
-      <v-col cols="12" sm="4">
+      <v-col cols="4" sm="4">
         <v-date-picker
           v-model="date"
           width="350"
@@ -20,50 +20,56 @@
           max="2100-10-30"
         ></v-date-picker>
       </v-col>
-
-      <v-col cols="12" sm="4">
-        <div style="margin-top:1rem;">
-          <label for="" style=" border: 1px solid #756BFF; padding:10px 20px;  font-size:1.2rem; color:#fff; background:#756BFF;">클래스선택</label>
-          <div style=" margin-top: 20px;">
-            <v-select :items="items" :label="date" solo @input="showPartin" placeholder="클래스를 선택해주세요"></v-select>
+      <v-col cols="8" sm="8">
+        <v-col>
+          <div class="d-flex" style="margin-top:1rem;">
+            <label for="" style="width:80%; margin-top:10px; margin-right:0rem">클래스선택</label>
+            <v-select style="width:1200px" :items="items" :label="date" solo @input="showPartin" placeholder="클래스를 선택해주세요"></v-select>
           </div>
-        </div>
-        <div class="attend-info" style=" ">
-          <div class="attend-time-detail" style="display:flex; flex-direction:row;">
-            <div class="title-attend">
-              <v-icon x-large>mdi-alarm</v-icon>
+        </v-col>
+        <v-row class="border">
+          <div class="attend-box">
+            <div style="display:flex; align-items:center">
+              <div class="attend-info" style=" ">
+                <div class="attend-time-detail" style="">
+                  <div class="title-attend">
+                    <v-icon x-large>mdi-alarm</v-icon>
+                  </div>
+                </div>
+                <div class="label-attend">출석시간</div>
+              </div>
+              <div>{{ attend_time }}</div>
             </div>
-            <div class="label-attend">출석시간</div>
+            <div style="display:flex; align-items:center">
+              <div class="attend-info" style=" ">
+                <div class="attend-check" style="">
+                  <v-icon x-large>
+                    mdi-calendar-check
+                  </v-icon>
+                </div>
+                <div class="label-attend">지각여부</div>
+              </div>
+              <div :class="{ normal: attend == '정상', late: attend == '지각', afk: attend == '결석' }">
+                {{ attend }}
+              </div>
+            </div>
           </div>
-          <div>{{ attend_time }}</div>
 
-          <div class="attend-check" style="display:flex; flex-direction:row;">
-            <v-icon x-large>
-              mdi-calendar-check
-            </v-icon>
-            <div class="label-attend">지각여부</div>
-          </div>
-          <div :class="{ normal: attend == '정상', late: attend == '지각', afk: attend == '결석' }">
-            {{ attend }}
-          </div>
-        </div>
-      </v-col>
-      <v-col cols="12" sm="4">
-        <div>
-          <div class="clock-info">
+          <v-col class="clock-info" cols="6" sm="6" style="margin-top: 3rem; margin-left:10rem;">
             <div class="clock">
               <Clock></Clock>
             </div>
-
             <section class="time-contain">
               <p class="attend-time time-shadow" v-text="currentTime"></p>
             </section>
-          </div>
-          <div class="title-saying">오늘의 명언</div>
-          <div class="saying">
-            <p>{{ randomSaying }}</p>
-          </div>
-        </div>
+          </v-col>
+          <v-col class="main-saying">
+            <div class="title-saying">오늘의 명언</div>
+            <div class="saying">
+              <p>{{ randomSaying }}</p>
+            </div>
+          </v-col>
+        </v-row>
       </v-col>
     </v-row>
   </div>
@@ -199,6 +205,7 @@ export default {
 .user-attend {
   margin: 3% 2%;
   background: #f9f9f9;
+  /* width: 85%; */
 }
 
 section.time-contain {
@@ -227,6 +234,19 @@ h3.is-3:not(:last-child) {
 
   /* margin-bottom: 1rem; */
 }
+.attend-contain {
+  border: 0px solid black;
+  /* width: 39.3vh; */
+  /* margin: ; */
+  color: #fff;
+  padding: 1rem 1.4rem;
+  margin: a;
+  border-radius: 20px 0px 0px 20px;
+  height: 90%;
+  background: #41ea93;
+  /* position: relative; */
+  z-index: 2;
+}
 .title-saying {
   border: 0px solid black;
   width: 39.3vh;
@@ -246,12 +266,12 @@ h3.is-3:not(:last-child) {
 }
 .attend-info {
   display: flex;
-  flex-direction: column;
-  border: 3px solid #000;
-
+  /* flex-direction: column; */
+  /* border: 3px solid #000; */
   font-weight: 900;
   padding: 1rem 1rem;
-  margin: 2rem 1rem;
+
+  margin: -0.5rem 1rem;
 }
 .attend-check {
   margin-top: 5%;
@@ -264,7 +284,7 @@ h3.is-3:not(:last-child) {
   height: 60%;
   padding: 10px 10px;
   margin-left: 35%;
-  font-size: 1.2rem;
+  font-size: 1rem;
 }
 .afk {
   background: #fc5230;
@@ -274,13 +294,13 @@ h3.is-3:not(:last-child) {
   height: 60%;
   padding: 10px 10px;
   margin-left: 35%;
-  font-size: 1.2rem;
+  font-size: 1rem;
 }
 .normal {
   background: #3a7de2;
   border: 0px solid black;
   border-radius: 10px;
-  font-size: 1.2rem;
+  font-size: 1rem;
   width: 30%;
   height: 60%;
   padding: 10px 10px;
@@ -300,7 +320,26 @@ h3.is-3:not(:last-child) {
   padding: 10px 0px 10px 0px;
 } */
 .label-attend {
-  font-size: 1.5rem;
+  font-size: 0.8rem;
   font-weight: bold;
+  display: flex;
+  align-items: center;
+}
+.attend-box {
+  margin-top: -1rem;
+}
+.main-saying {
+  /* height: 100%; */
+  margin: -5rem 2rem;
+}
+.border {
+  padding-top: 1.5rem;
+
+  /* border-radius: 1rem; */
+  background: #fff;
+  border-left: #3a7de2 solid 30px;
+  /* margin-top: 0.5rem; */
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px;
 }
 </style>
