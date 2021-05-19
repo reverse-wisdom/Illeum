@@ -12,7 +12,7 @@
         </p>
       </div>
       <div class="buttons">
-        <button class="button-guide" @click="homeGo">TEST</button>
+        <button class="button-guide" @click="homeGo">GUIDE</button>
         <button class="button-start" @click="startGo">START</button>
       </div>
     </div>
@@ -25,17 +25,17 @@ export default {
   components: {
     LandingComp,
   },
-  beforeCreate() {
-    if (this.$store.getters.isLogin) {
-      this.$router.push({ name: 'MyClass' });
-    }
-  },
+
   methods: {
     homeGo() {
       this.$router.push('/guide');
     },
     startGo() {
-      this.$router.push('/sign');
+      if (this.$store.getters.isLogin) {
+        this.$router.push({ name: 'MyClass' });
+      } else {
+        this.$router.push({ name: 'Sign' });
+      }
     },
   },
 };
