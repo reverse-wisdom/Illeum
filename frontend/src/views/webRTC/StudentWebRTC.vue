@@ -256,14 +256,14 @@ export default {
     offVideo() {
       let localStream = this.connection.attachStreams[0];
       localStream.mute('video');
-      clearInterval(this.time);
+      // var posterImg = require('@/assets/img/poster.png');
+      // document.getElementById(localStream.id).setAttribute('poster', posterImg);
       this.isVideo = false;
     },
     onVideo() {
-      this.connection.session.video = true;
+      // this.connection.session.video = true;
       let localStream = this.connection.attachStreams[0];
       localStream.unmute('video');
-      this.time = setInterval(this.screenCapture, 1000);
       this.isVideo = true;
     },
     onAudio() {
@@ -525,6 +525,22 @@ export default {
           title: '전체 세션 종료 ' + event.sessionid,
         });
       };
+
+      this.connection.onmute = function(e) {
+        var posterImg = require('@/assets/img/poster.png');
+        if (e.session.video) {
+          e.mediaElement.setAttribute('poster', posterImg);
+          e.mediaElement.srcObject = null;
+        }
+      };
+
+      this.connection.onunmute = function(e) {
+        if (e.session.video) {
+          e.mediaElement.removeAttribute('poster');
+          e.mediaElement.srcObject = e.stream;
+        }
+      };
+
       this.connection.onstreamended = function(event) {
         console.log(event);
         if (event.extra.type == 'share') {

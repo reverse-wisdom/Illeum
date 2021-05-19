@@ -227,7 +227,6 @@ export default {
       });
       this.designer.appendTo(document.getElementById('widget-container'));
       this.designer.addSyncListener(function(data) {
-        console.log('sync canvas');
         ref.connection.send(data);
       });
     });
@@ -245,21 +244,19 @@ export default {
     offVideo() {
       let localStream = this.connection.attachStreams[0];
       localStream.mute('video');
-      // document.getElementById(localStream.id).setAttribute('poster', '/profile/' + this.$store.state.uuid + '/256');
-      // console.log(document.getElementById(localStream.id).poster);
-      // document.getElementById(localStream.id).poster.setAttribute('width', '10%');
-      // localStream.mediaElement.setAttribute('poster', 'https://www.webrtc-experiment.com/images/key-press.gif');
-
+      // var posterImg = require('@/assets/img/poster.png');
+      // document.getElementById(localStream.id).setAttribute('poster', posterImg);
       this.isVideo = false;
     },
     onVideo() {
-      this.connection.session.video = true;
+      // this.connection.session.video = true;
       let localStream = this.connection.attachStreams[0];
       localStream.unmute('video');
       this.isVideo = true;
     },
     onAudio() {
       let localStream = this.connection.attachStreams[0];
+
       localStream.unmute('audio');
       this.isAudio = true;
     },
@@ -445,6 +442,21 @@ export default {
         ref.connection.extra.status = '퇴장';
         ref.connection.onUserStatusChanged(event);
         ref.names = temp;
+      };
+
+      this.connection.onmute = function(e) {
+        var posterImg = require('@/assets/img/poster.png');
+        if (e.session.video) {
+          e.mediaElement.setAttribute('poster', posterImg);
+          e.mediaElement.srcObject = null;
+        }
+      };
+
+      this.connection.onunmute = function(e) {
+        if (e.session.video) {
+          e.mediaElement.removeAttribute('poster');
+          e.mediaElement.srcObject = e.stream;
+        }
       };
 
       this.connection.onstreamended = function(event) {
