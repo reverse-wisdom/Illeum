@@ -40,8 +40,11 @@
           v-model="date"
           @click:date="classNameFetch"
           :landscape="landscape"
-          locale="ko-kr"
           :allowed-dates="allowedDates"
+          :weekday-format="getDay"
+          :month-format="getMonth"
+          :header-date-format="headerDate"
+          :title-date-format="titleDate"
           class="mt-4"
           min="1900-04-01"
           max="2100-10-30"
@@ -76,6 +79,9 @@
 import { userEvalList } from '@/api/auth';
 import { fetchRoomname, evaluateList } from '@/api/class';
 import { findCount } from '@/api/entrant';
+
+const daysOfWeek = ['일', '월', '화', '수', '목', '금', '토'];
+const monthsOfYear = ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'];
 
 export default {
   data() {
@@ -120,6 +126,18 @@ export default {
     this.evalcheck = false;
   },
   methods: {
+    titleDate(date) {
+      return monthsOfYear[new Date(date).getMonth(date)] + ' ' + new Date(date).getDate(date) + '일 <br/>' + daysOfWeek[new Date(date).getDay(date)] + '요일';
+    },
+    getDay(date) {
+      return daysOfWeek[new Date(date).getDay(date)];
+    },
+    getMonth(date) {
+      return monthsOfYear[new Date(date).getMonth(date)];
+    },
+    headerDate(date) {
+      return new Date(date).getFullYear(date) + ' ' + monthsOfYear[new Date(date).getMonth(date)];
+    },
     classNameFetch() {
       for (var i = 0; i < this.eval.length; i++) {
         if (this.eval[i].eval_date.slice(0, 10) === this.date && !this.items.includes(this.eval[i].room_name)) {

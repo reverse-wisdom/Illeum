@@ -5,13 +5,13 @@
       border="left"
       dark
       color="#2E95FF"
-      style="margin-top:6%; font-size: 1.5rem; letter-spacing: 2.3px; padding-left:20px; line-height: 45px;"
+      style="margin-top:4%; font-size: 1.5rem; letter-spacing: 2.3px; padding-left:20px; line-height: 45px;"
       elevation="3"
       height="70"
     >
       <span>
         <v-icon>mdi-account-check</v-icon>
-        {{ roomData.room_name }}
+        {{ roomName }}
       </span>
       수업 평가관리
     </v-alert>
@@ -23,8 +23,11 @@
           color="#FF625C"
           @click:date="showAll"
           :landscape="true"
-          locale="ko-kr"
           :allowed-dates="allowedDates"
+          :weekday-format="getDay"
+          :month-format="getMonth"
+          :header-date-format="headerDate"
+          :title-date-format="titleDate"
           class="mt-4"
           min="1900-04-01"
           max="2100-10-30"
@@ -89,7 +92,7 @@
             <tbody>
               <tr v-for="(each, idx) in userEval" :key="idx">
                 <td>{{ idx + 1 }}</td>
-                <td><v-img :src="`/profile/${each.uid}/256`" id="preview" style="width:50px; height:50px;" alt=""></v-img></td>
+                <td><v-img :src="`/profile/${each.uid}/256`" id="preview" style="width:50px; height:50px; display:-webkit-inline-box" alt=""></v-img></td>
                 <td>{{ each.name }}</td>
                 <td>{{ each.email }}</td>
 
@@ -181,6 +184,10 @@ import LecUserPartin from '@/views/evaluation/LecUserPartin';
 
 import { fetchCondition } from '@/api/evaluation';
 import { findByUidClass, findByRidClass } from '@/api/class';
+
+const daysOfWeek = ['일', '월', '화', '수', '목', '금', '토'];
+const monthsOfYear = ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'];
+
 export default {
   components: {
     LecUserEval,
@@ -204,7 +211,7 @@ export default {
       userEval: [], // for table list
       userEvalLength: '', // for table list length
       modalEach: {}, // for modal value
-
+      roomName: '',
       loading: false,
       userEvalAll: [],
       selected: [],
@@ -273,6 +280,8 @@ export default {
     await findByRidClass(this.rid).then(({ data }) => {
       this.roomData = data;
     });
+    console.log(this.roomData);
+    this.roomName = this.roomData.room_name;
     await fetchCondition({ rid: this.rid }).then(({ data }) => {
       this.userEvalAll = data;
       for (let j = 0; j < data.length; j++) {
@@ -284,6 +293,18 @@ export default {
   },
 
   methods: {
+    titleDate(date) {
+      return monthsOfYear[new Date(date).getMonth(date)] + ' ' + new Date(date).getDate(date) + '일 <br/>' + daysOfWeek[new Date(date).getDay(date)] + '요일';
+    },
+    getDay(date) {
+      return daysOfWeek[new Date(date).getDay(date)];
+    },
+    getMonth(date) {
+      return monthsOfYear[new Date(date).getMonth(date)];
+    },
+    headerDate(date) {
+      return new Date(date).getFullYear(date) + ' ' + monthsOfYear[new Date(date).getMonth(date)];
+    },
     openModal(each) {
       this.modalEach = each;
 
@@ -369,8 +390,11 @@ export default {
   margin: 3% 2%;
   font-family: 'GongGothicLight';
 }
+.table-body {
+  min-width: 100%;
+}
 .table_responsive {
-  width: 100%;
+  /* width: 100%; */
   padding: 15px;
   /* overflow: auto; */
   margin: auto;
@@ -378,7 +402,7 @@ export default {
 }
 
 table {
-  width: 100%;
+  /* width: 100%; */
   font-size: 13px;
   color: #444;
   white-space: nowrap;
