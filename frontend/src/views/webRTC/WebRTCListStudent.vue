@@ -12,7 +12,7 @@
     >
       <span>
         <v-icon>mdi-account-check</v-icon>
-        화상수업목록
+        화상수업 목록
       </span>
     </v-alert>
     <v-data-table
@@ -20,13 +20,12 @@
       :items="rooms"
       :items-per-page="10"
       item-key="rid"
-      class="elevation-1"
+      class="elevation-1 table-list"
       :footer-props="{
-        showFirstLastPage: true,
-        firstIcon: 'mdi-arrow-collapse-left',
-        lastIcon: 'mdi-arrow-collapse-right',
-        prevIcon: 'mdi-minus',
-        nextIcon: 'mdi-plus',
+        showFirstLastPage: false,
+        prevIcon: 'mdi-arrow-left',
+        nextIcon: 'mdi-arrow-right',
+        'page-text': '',
         'items-per-page-text': '페이지당 화상회의수',
       }"
     >
@@ -35,10 +34,10 @@
           <v-btn color="info" @click="startWebRTC(item)" :disabled="!hasWebcam">수업 생성</v-btn>
         </template>
         <template v-else-if="item.room_state == '진행'">
-          <v-btn color="success" @click="joinWebRTC(item)" :disabled="!hasWebcam">수업 참여</v-btn>
+          <v-btn color="success" @click="joinWebRTC(item)" :width="100" :disabled="!hasWebcam">수업 참여</v-btn>
         </template>
         <template v-else>
-          <v-btn color="warning" disabled>준비중</v-btn>
+          <v-btn color="warning" disabled :width="100">준비중</v-btn>
         </template>
       </template>
     </v-data-table>
@@ -58,11 +57,13 @@ export default {
           value: 'room_name',
         },
         { text: '시작시간', value: 'start_time' },
+        // { text: '시작시간', value: this.$moment(start_time).format('llll') },
         { text: '진행/준비', value: 'room_state' },
         { text: '공개/비공개', value: 'room_type' },
         { text: '', value: 'action' },
       ],
       rooms: [],
+
       time: null, // for camera check interval
       hasWebcam: false,
     };
@@ -75,10 +76,16 @@ export default {
         for (let index2 = 0; index2 < data.length; index2++) {
           if (result.data[index].room_state != '완료' && data[index2].rid == result.data[index].rid) {
             this.rooms.push(result.data[index]);
+            this.rooms;
           }
         }
       });
     }
+    console.log(this.rooms);
+    for (let index = 0; index < this.rooms.length; index++) {
+      this.rooms[index].start_time = this.$moment(this.rooms[index].start_time).format('llll');
+    }
+
     var ref = this;
     navigator.mediaDevices
       .getUserMedia({ video: true })
@@ -180,5 +187,19 @@ export default {
 .webRTCList {
   margin: 3% 2%;
   font-family: 'GongGothicLight';
+}
+</style>
+<style>
+.table-list .v-data-table__wrapper table {
+  width: 100%;
+  font-size: 13px;
+  color: #444;
+  white-space: nowrap;
+  border-collapse: collapse;
+}
+.table-list > .v-data-table__wrapper > table > thead {
+  background-color: #41ea93;
+  color: #fff;
+  border-bottom: 2px solid #00000017;
 }
 </style>
