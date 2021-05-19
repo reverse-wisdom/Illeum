@@ -1,25 +1,30 @@
 <template>
   <div class="user-partin">
+    <v-row>
+      <p>
+        출결확인을 위해
+        <strong style="letter-spacing:1px">①날짜를 체크하고 ②클래스를 선택</strong>
+        해주세요.
+      </p>
+    </v-row>
     <v-row justify="center">
       <div style="margin-right: 5%">
-        <div style="border: 1px solid ##2E95FF; background: #756BFF; border-radius: 50px; color:white; padding: 0.5rem 0; font-size:1.5rem; margin-bottom: 10%;">
-          <v-icon x-large color="white">mdi-alarm-check</v-icon>
+        <div style="border: 1px solid ##2E95FF; background: #FF625C ; border-radius: 50px; color:white; padding:0.5rem; width:70%; margin:1rem auto;  font-size:1rem; margin-bottom: 10%;">
+          <v-icon color="white">mdi-alarm-check</v-icon>
           출석왕
         </div>
 
-        <div style="">
-          <v-avatar class="mb-3" color="grey darken-1" size="200">
-            <v-img :src="'/profile/' + attendFirstUid + '/256'" id="preview" alt=""></v-img>
-          </v-avatar>
-          <p style="font-size:1.7rem; font-weight:bold;">
-            {{ attendFirst }}
-            <span style="font-size:1.2rem;">교육생</span>
-          </p>
-        </div>
+        <v-avatar class="mb-3" color="grey darken-1" size="200">
+          <v-img :src="'/profile/' + attendFirstUid + '/256'" id="preview" alt=""></v-img>
+        </v-avatar>
+        <p style="font-size:1.7rem; font-weight:bold;">
+          {{ attendFirst }}
+          <span style="font-size:1.2rem;">교육생</span>
+        </p>
       </div>
       <div>
-        <div style="border: 1px solid ##2E95FF; background:#41EA93; border-radius: 50px; color:white; padding:0.5rem 0; font-size:1.5rem; margin-bottom: 10%;">
-          <v-icon x-large color="white">mdi-forum-outline</v-icon>
+        <div style="border: 1px solid ##2E95FF; background: #FF625C ; border-radius: 50px; color:white; padding:0.5rem; width:70%; margin:1rem auto;  font-size:1rem; margin-bottom: 10%;">
+          <v-icon color="white">mdi-forum-outline</v-icon>
           채팅참여왕
         </div>
         <div>
@@ -230,7 +235,7 @@ export default {
 </script>
 <style scoped>
 .user-partin {
-  margin: 3% 0%;
+  margin: 3% 2%;
   background: #f9f9f9;
 }
 </style>
