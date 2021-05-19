@@ -1,7 +1,11 @@
 <template>
   <div class="user-attend">
     <v-row>
-      <p>출결확인을 위해 1.날짜를 체크하고 2.클레스를 선택해주세요</p>
+      <p>
+        출결확인을 위해
+        <strong style="letter-spacing:1px">①날짜를 체크하고 ②클래스를 선택</strong>
+        해주세요.
+      </p>
     </v-row>
     <v-row>
       <v-col cols="4" sm="4">
@@ -23,7 +27,7 @@
       <v-col cols="8" sm="8">
         <v-col>
           <div class="d-flex" style="margin-top:1rem;">
-            <label for="" style="width:80%; margin-top:10px; margin-right:0rem">클래스선택</label>
+            <div class="class-label">수업선택</div>
             <v-select style="width:1200px" :items="items" :label="date" solo @input="showPartin" placeholder="클래스를 선택해주세요"></v-select>
           </div>
         </v-col>
@@ -55,8 +59,8 @@
             </div>
           </div>
 
-          <v-col class="clock-info" cols="6" sm="6" style="margin-top: 3rem; margin-left:10rem;">
-            <div class="clock">
+          <v-col class="clock-info" cols="6" sm="6" style="">
+            <div class="clock" style="margin:2rem auto;">
               <Clock></Clock>
             </div>
             <section class="time-contain">
@@ -226,9 +230,10 @@ h3.is-3:not(:last-child) {
   text-shadow: 0 0 15px rgba(100, 100, 100, 0.35);
 }
 .user-attend .saying {
-  border: 3px solid black;
+  /* border: 3px solid black; */
   border-radius: 10px;
   width: 39.3vh;
+  box-shadow: 0px 5px 10px rgba(150, 106, 106, 0.3);
   padding: 3rem 2rem 1rem 2rem;
   font-weight: 900;
 
@@ -243,7 +248,7 @@ h3.is-3:not(:last-child) {
   margin: a;
   border-radius: 20px 0px 0px 20px;
   height: 90%;
-  background: #41ea93;
+  background: rgb(46, 149, 255);
   /* position: relative; */
   z-index: 2;
 }
@@ -252,8 +257,9 @@ h3.is-3:not(:last-child) {
   width: 39.3vh;
   margin: auto;
   color: #fff;
+
   padding: 0.2rem 2rem;
-  background: #41ea93;
+  background: rgb(46, 149, 255);
   position: absolute;
   z-index: 2;
 }
@@ -262,7 +268,9 @@ h3.is-3:not(:last-child) {
   flex-direction: column;
   justify-items: center;
   align-items: center;
-  margin-left: -5rem;
+  /* margin-top: 3rem; */
+  /* margin-left: 10rem; */
+  /* margin-left: -5rem; */
 }
 .attend-info {
   display: flex;
@@ -279,32 +287,48 @@ h3.is-3:not(:last-child) {
 .late {
   background: #ff9c6c;
   border: 0px solid black;
-  border-radius: 10px;
+  border-radius: 25px;
+  font-size: 1rem;
   width: 30%;
   height: 60%;
-  padding: 10px 10px;
-  margin-left: 35%;
-  font-size: 1rem;
+  padding: 5px 10px;
+  margin-left: 15%;
+  color: white;
 }
 .afk {
   background: #fc5230;
   border: 0px solid black;
-  border-radius: 10px;
+  border-radius: 25px;
+  font-size: 1rem;
   width: 30%;
   height: 60%;
-  padding: 10px 10px;
-  margin-left: 35%;
-  font-size: 1rem;
+  padding: 5px 10px;
+  margin-left: 15%;
+  color: white;
 }
 .normal {
-  background: #3a7de2;
+  background: rgb(46, 149, 255);
   border: 0px solid black;
-  border-radius: 10px;
+  border-radius: 25px;
   font-size: 1rem;
   width: 30%;
   height: 60%;
-  padding: 10px 10px;
-  margin-left: 35%;
+  padding: 5px 10px;
+  margin-left: 15%;
+  color: white;
+}
+.class-label {
+  width: 50%;
+  height: 3rem;
+  font-size: 1.2rem;
+  letter-spacing: 2px;
+  background: rgb(255, 98, 92);
+  border: 0px solid black;
+  border-radius: 50px;
+  /* margin-right: */
+  padding: 12px 15px;
+  margin-right: 1rem;
+  color: white;
 }
 /* .attend-time-detail .title-attend {
   border: 2px solid #f9f9f9;
@@ -320,26 +344,31 @@ h3.is-3:not(:last-child) {
   padding: 10px 0px 10px 0px;
 } */
 .label-attend {
-  font-size: 0.8rem;
+  font-size: 1.1rem;
   font-weight: bold;
   display: flex;
+  margin-left: 0.8rem;
+  margin-top: 0.2rem;
   align-items: center;
 }
 .attend-box {
   margin-top: -1rem;
+  width: 50%;
+  /* margin-right: 10rem; */
 }
 .main-saying {
   /* height: 100%; */
-  margin: -5rem 2rem;
+  margin: -12rem 2rem;
 }
 .border {
   padding-top: 1.5rem;
-
+  margin-left: 1rem;
   /* border-radius: 1rem; */
   background: #fff;
-  border-left: #3a7de2 solid 30px;
+  border-left: rgb(255, 98, 92) solid 30px;
   /* margin-top: 0.5rem; */
   border-top-left-radius: 20px;
   border-bottom-left-radius: 20px;
+  box-shadow: 0px 5px 10px rgba(150, 106, 106, 0.3);
 }
 </style>
