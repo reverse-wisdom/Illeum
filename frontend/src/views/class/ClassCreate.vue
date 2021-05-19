@@ -302,5 +302,6 @@ form {
   border: 2px solid rgb(73, 72, 72);
   border-radius: 20px;
   padding: 1rem 3rem;
+  background: #fff;
 }
 </style>

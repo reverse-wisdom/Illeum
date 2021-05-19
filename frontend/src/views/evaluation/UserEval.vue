@@ -1,7 +1,11 @@
 <template>
   <div class="user-eval">
     <v-row>
-      <p>출결확인을 위해 1.날짜를 체크하고 2.클레스를 선택해주세요</p>
+      <p>
+        출결확인을 위해
+        <strong style="letter-spacing:1px">①날짜를 체크하고 ②클래스를 선택</strong>
+        해주세요.
+      </p>
     </v-row>
     <v-row justify="center">
       <v-date-picker
@@ -21,7 +25,7 @@
       ></v-date-picker>
 
       <v-col cols="12" sm="6">
-        <label for="" style=" border: 1px solid #756BFF; padding:10px 20px;  font-size:1.2rem; color:#fff; background:#756BFF;">클래스선택</label>
+        <div class="class-label">수업선택</div>
         <v-select style="margin-top: 2%;" :items="items" :label="date" solo @input="showEvaluation"></v-select>
       </v-col>
     </v-row>
@@ -31,14 +35,14 @@
     >
       <div v-if="evalcheck" style="margin-top: 3%; display:flex; flex-direction: row;  flex-wrap: wrap; justify-content: flex-start; justify-content: space-around;">
         <div v-if="attendchk" style="margin-right:10vw;">
-          <div class="label-eval">개인데이터</div>
+          <div class="label-eval">개인평가</div>
           <EvalPieChart :learnData="learnData" :key="change" />
         </div>
         <div v-else>
           <h3 style="">결석한 수업입니다. 평균데이터만 확인할 수 있습니다.</h3>
         </div>
         <div>
-          <div class="label-eval">해당클래스의 평균 및 개인 평가데이터</div>
+          <div class="label-eval">해당클래스의 평균 및 개인평가</div>
           <EvalRadarChart :learnData="learnData" :averageData="averageData" :key="renderKey" />
         </div>
       </div>
@@ -253,8 +257,6 @@ export default {
             console.log(this.learnData);
           }
           break;
-        } else {
-          this.attendchk = false;
         }
         this.change++;
         this.renderKey++;
@@ -274,5 +276,18 @@ export default {
   background: #41ea93;
   color: #fff;
   padding: 0.5rem 0rem;
+}
+.class-label {
+  width: auto;
+  height: 3rem;
+  font-size: 1.2rem;
+  letter-spacing: 2px;
+  background: rgb(255, 98, 92);
+  border: 0px solid black;
+  border-radius: 50px;
+  /* margin-right: */
+  padding: 12px 15px;
+  margin-right: 1rem;
+  color: white;
 }
 </style>
