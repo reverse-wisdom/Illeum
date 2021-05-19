@@ -511,6 +511,8 @@ export default {
         }
         var temp = ref.names;
 
+        document.querySelector('#' + event.screenId).remove();
+
         console.log(temp);
         ref.connection.extra.status = '퇴장';
         ref.connection.onUserStatusChanged(event);
