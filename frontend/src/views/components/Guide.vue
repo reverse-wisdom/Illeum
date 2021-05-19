@@ -33,25 +33,25 @@
         <ul class="features">
           <div style="display:flex; flex-direction:row;">
             <li>
-              <em class="fa fa-3x fa-address-book"></em>
+              <em class="fa fa-3x fa-eye"></em>
               <h3>집중</h3>
               <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium aut,</p>
             </li>
 
             <li>
-              <em class="fa fa-3x fa-address-book"></em>
+              <em class="fa fa-3x fa-exclamation"></em>
               <h3>딴짓</h3>
               <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium aut,</p>
             </li>
           </div>
           <div style="display:flex; flex-direction:row;">
             <li>
-              <em class="fa fa-3x fa-address-book"></em>
+              <em class="fa fa-3x fa-eye-slash"></em>
               <h3>졸음</h3>
               <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium aut,</p>
             </li>
             <li>
-              <em class="fa fa-3x fa-address-book"></em>
+              <em class="fa fa-3x fa-window-close"></em>
               <h3>자리비움</h3>
               <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium aut,</p>
             </li>
@@ -66,53 +66,42 @@
           <LandingComp></LandingComp>
         </div>
       </div>
-      <div class=" section section4" :style="image_4">
-        <!-- 데이터 시각화 도구 
-        - 출결
-        - 학습태도 데이터
-        - 참여도 -->
-        <!-- <div class="slide">
-          <h3>Slide 4.1</h3>
-        </div>
-        <div class="slide">
-          <h3>Slide 4.2</h3>
-        </div>
-        <div class="slide">
-          <h3>Slide 4.3</h3>
-        </div> -->
-        <div class="section2a">
-          <div class="explanation">
-            <v-row>
-              <v-col cols="10">
-                <img src="@/assets/img/onlinestudy.jpeg" class="monitor" alt="computer" />
-              </v-col>
-            </v-row>
-            <v-row>
-              <v-col cols="4">
-                <div>
-                  <h3>출결관리</h3>
-                  <p>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim magni veritatis, expedita maiores error.
-                  </p>
-                </div>
-              </v-col>
-              <v-col cols="4">
-                <div>
-                  <h3>출결관리</h3>
-                  <p>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim magni veritatis, expedita maiores error.
-                  </p>
-                </div>
-              </v-col>
-              <v-col cols="4">
-                <div>
-                  <h3>출결관리</h3>
-                  <p>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim magni veritatis, expedita maiores error.
-                  </p>
-                </div>
-              </v-col>
-            </v-row>
+      <div class="section section4" :style="image_4">
+        <div class="back">
+          <div class="section2a">
+            <div class="explanation">
+              <v-row>
+                <v-col cols="10">
+                  <img src="@/assets/img/onlinestudy.jpeg" class="monitor" alt="computer" />
+                </v-col>
+              </v-row>
+              <v-row class="section4-content">
+                <v-col cols="4">
+                  <div>
+                    <h1>출결현황</h1>
+                    <p>
+                      Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim magni veritatis, expedita maiores error.
+                    </p>
+                  </div>
+                </v-col>
+                <v-col cols="4">
+                  <div>
+                    <h1>평가관리/조회</h1>
+                    <p>
+                      Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim magni veritatis, expedita maiores error.
+                    </p>
+                  </div>
+                </v-col>
+                <v-col cols="4">
+                  <div>
+                    <h1>참여도</h1>
+                    <p>
+                      Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim magni veritatis, expedita maiores error.
+                    </p>
+                  </div>
+                </v-col>
+              </v-row>
+            </div>
           </div>
         </div>
       </div>
@@ -133,7 +122,7 @@ export default {
         navigation: true,
         sectionsColor: ['require(', '#ff5f45', '#0798ec', '#fec401', '#1bcee6', '#ee1a59', '#2c3e4f', '#ba5be9', '#b4b8ab'],
       },
-      serviceText: `<h3 style="color: #535353;"><span style="color:##2E95FF;">원격수업의 질</span>을 높여드리는<span style="color:#6173FF;"> '일름' </span>서비스</h3>
+      serviceText: `<h3 style="color: #535353;"><span style="color:#2E95FF;">원격수업의 질</span>을 높여드리는<span style="color:#FF625C;"> '일름' </span>서비스</h3>
         <p class="section1-p">언택트시대 온라인 학습 일름이 해답입니다.</p>`,
     };
   },
@@ -152,7 +141,7 @@ export default {
     },
     image4: {
       type: String,
-      default: require('@/assets/img/bg1.jpg'),
+      default: require('@/assets/img/bg1_ver2.png'),
     },
   },
   computed: {
@@ -181,16 +170,13 @@ export default {
 </script>
 <style scoped>
 @font-face {
-  font-family: 'GongGothicMedium';
-  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-10@1.0/GongGothicMedium.woff') format('woff');
+  font-family: 'S-CoreDream-4Regular';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-4Regular.woff') format('woff');
   font-weight: normal;
   font-style: normal;
 }
-@font-face {
-  font-family: 'GongGothicLight';
-  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-10@1.0/GongGothicLight.woff') format('woff');
-  font-weight: normal;
-  font-style: normal;
+* {
+  font-family: 'S-CoreDream-4Regular';
 }
 .section {
   text-align: center;
@@ -211,8 +197,26 @@ export default {
 }
 .section4 {
   position: relative;
-  opacity: 0.5;
+
+  /* opacity: 0.5; */
 }
+.section2a {
+  position: relative;
+  text-align: left;
+  line-height: 1.5em;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-direction: row;
+  margin-top: 30px;
+  /* margin-right: 350px; */
+}
+/* .back {
+  position: absolute;
+  background-color: rgba(255, 255, 255, 0.8);
+  width: 100%;
+  height: 100%;
+} */
 
 /* .backdrop {
   background: url('https://i.imgbox.com/JGXLxgQb.jpg');
@@ -297,7 +301,8 @@ export default {
 
 .features h3 {
   color: hsl(210, 10%, 33%);
-  font-size: 1.5em;
+  font-size: 2rem;
+
   padding-top: 20px;
 }
 .features li {
@@ -320,28 +325,21 @@ export default {
   padding-top: 50px;
 } */
 
-.section2a {
-  position: relative;
-  text-align: left;
-  line-height: 1.5em;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  flex-direction: row;
-  margin-top: 30px;
-  /* margin-right: 350px; */
-}
-
 .monitor {
   height: 50vh;
   width: auto;
   /* margin-top: 30px; */
   margin: 2% 30% 2% 30%;
+  border-radius: 25px;
+  box-shadow: 2px 3px 15px rgba(0, 0, 0, 0.3);
 }
 
 .explanation {
   position: absolute;
   margin-left: 100px;
   width: 80%;
+}
+.section4-content h1 {
+  margin: 1.2rem auto;
 }
 </style>

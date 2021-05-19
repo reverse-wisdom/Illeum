@@ -17,7 +17,11 @@
       님의 평가관리
     </v-alert>
     <v-row>
-      <p>출결확인을 위해 1.날짜를 체크하고 2.클레스를 선택해주세요</p>
+      <p>
+        출결확인을 위해
+        <strong style="letter-spacing:1px">①날짜를 체크하고 ②클래스를 선택</strong>
+        해주세요.
+      </p>
     </v-row>
     <v-row>
       <v-date-picker
@@ -33,7 +37,7 @@
         max="2100-10-30"
       ></v-date-picker>
       <v-col cols="6" sm="6">
-        <label for="" style=" border: 1px solid #756BFF; padding:10px 20px;  font-size:1.2rem; color:#fff; background:#756BFF;">클래스선택</label>
+        <div for="" class="class-label">클래스선택</div>
         <v-select style="margin-top: 2%;" :items="roomNameList" :value="roomNameList[0]" solo @input="showAll"></v-select>
         <v-col cols="12">
           <v-card class="mx-auto" max-width="600">
@@ -489,5 +493,18 @@ table > tbody > tr:hover {
 }
 .chip-search {
   margin-left: 10em;
+}
+.class-label {
+  width: 50%;
+  height: 3rem;
+  font-size: 1.2rem;
+  letter-spacing: 2px;
+  background: rgb(255, 98, 92);
+  border: 0px solid black;
+  border-radius: 50px;
+  /* margin-right: */
+  padding: 12px 15px;
+  margin-right: 1rem;
+  color: white;
 }
 </style>
