@@ -391,7 +391,7 @@ export default {
                 icon: 'error',
                 title: '참여할 수 없는 화상수업입니다.!!',
               });
-              ref.$router.push({ name: 'WebRTCListAll' });
+              ref.$router.push({ name: 'WebRTCListStudent' });
               return;
             }
             ref.connection.onUserStatusChanged();

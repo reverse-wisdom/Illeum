@@ -48,7 +48,7 @@
                         {{ item.end_time }}
                       </span>
                     </div>
-                    <v-btn class="button" large color="#FF625C" depressed v-bind="attrs" v-on="on" @click="evalShow(item)">
+                    <v-btn class="button" large color="#FF625C" depressed @click="evalShow(item)">
                       내평가보기
                     </v-btn>
                   </div>
