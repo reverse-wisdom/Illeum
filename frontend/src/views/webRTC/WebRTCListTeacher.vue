@@ -20,25 +20,24 @@
       :items="rooms"
       :items-per-page="10"
       item-key="rid"
-      class="elevation-1"
+      class="elevation-1 table-list"
       :footer-props="{
-        showFirstLastPage: true,
-        firstIcon: 'mdi-arrow-collapse-left',
-        lastIcon: 'mdi-arrow-collapse-right',
-        prevIcon: 'mdi-minus',
-        nextIcon: 'mdi-plus',
+        showFirstLastPage: false,
+        prevIcon: 'mdi-arrow-left',
+        nextIcon: 'mdi-arrow-right',
+        'page-text': '',
         'items-per-page-text': '페이지당 화상회의수',
       }"
     >
       <template v-slot:[`item.action`]="{ item }">
         <template v-if="checkUser(item) == '강의자'">
-          <v-btn color="info" @click="startWebRTC(item)" :disabled="!hasWebcam">수업 생성</v-btn>
+          <v-btn color="info" @click="startWebRTC(item)" :width="100" :disabled="!hasWebcam">수업 생성</v-btn>
         </template>
         <template v-else-if="item.room_state == '진행'">
-          <v-btn color="success" @click="joinWebRTC(item)" :disabled="!hasWebcam">수업 참여</v-btn>
+          <v-btn color="success" @click="joinWebRTC(item)" :width="100" :disabled="!hasWebcam">수업 참여</v-btn>
         </template>
         <template v-else>
-          <v-btn color="warning" disabled>준비중</v-btn>
+          <v-btn color="warning" disabled :width="100">준비중</v-btn>
         </template>
       </template>
     </v-data-table>
@@ -62,36 +61,9 @@ export default {
         { text: '', value: 'action' },
       ],
       rooms: [],
-      isChecked: false, // for camera check interval vue watch value
       time: null, // for camera check interval
-      hasMicrophone: false,
-      hasSpeakers: false,
       hasWebcam: false,
-      isMicrophoneAlreadyCaptured: false,
-      isWebcamAlreadyCaptured: false,
     };
-  },
-  watch: {
-    isChecked: function() {
-      var ref = this;
-      setTimeout(function() {
-        ref.time = setInterval(
-          ref.checkDeviceSupport(ref, () => {
-            console.log('사용 가능한 상태인지 체크 중');
-            if (!ref.hasWebcam /*|| ref.isWebcamAlreadyCaptured*/) {
-              console.log('카메라를 사용할 수 없어요.');
-              //alert('카메라가 없거나 사용중 또는 웹의 권한이 없어 화상회의를 사용할 수 없는 상태입니다.');
-              // alert('카메라가 인식되지 않습니다. 연결 상태를 확인해주세요.');
-              this.$swal({
-                icon: 'error',
-                title: '카메라가 인식되지 않습니다. 연결 상태를 확인해주세요.!!',
-              });
-            }
-          }),
-          1500
-        );
-      }, 100);
-    },
   },
   async created() {
     const { data } = await classAll();
@@ -100,9 +72,25 @@ export default {
         this.rooms.push(data[index]);
       }
     }
-  },
-  mounted() {
-    this.isChecked = true;
+
+    for (let index = 0; index < this.rooms.length; index++) {
+      this.rooms[index].start_time = this.$moment(this.rooms[index].start_time).format('llll');
+    }
+
+    var ref = this;
+    navigator.mediaDevices
+      .getUserMedia({ video: true })
+      .then(function(stream) {
+        ref.hasWebcam = true;
+        stream.getTracks()[0].stop();
+      })
+      .catch((err) => {
+        ref.$swal({
+          icon: 'error',
+          title: '웹캠이 존재하지 않거나<br/> 다른 프로그램에서 사용중입니다.!!',
+        });
+        ref.hasWebcam = false;
+      });
   },
   methods: {
     main() {
@@ -130,10 +118,9 @@ export default {
           } else {
             try {
               var start_time = new Date(new Date().toString().split('GMT')[0] + ' UTC').toISOString().split('.')[0] + '.000Z';
-              const { data } = await updateClass({ rid: value.rid, room_state: '진행', start_time }); // PUT: /api/room/updateByRid
+              const { data } = await updateClass({ rid: value.rid, room_state: '진행', start_time, end_time: value.end_time }); // PUT: /api/room/updateByRid
               if (data == 'success') {
                 const { data } = await start(value.rid); // GET: /api/rtc/start (rabbitMQ)
-                console.log(data);
                 if (data == 'success') this.$router.push({ name: 'TeacherWebRTC', query: { room_name: value.room_name, rid: value.rid } });
               }
             } catch {
@@ -183,118 +170,6 @@ export default {
         this.$router.push({ name: 'StudentWebRTC', query: { room_name: value.room_name, rid: value.rid } });
       }
     },
-    checkDeviceSupport(ref, callback) {
-      if (navigator.mediaDevices && navigator.mediaDevices.enumerateDevices) {
-        // Firefox 38+ seems having support of enumerateDevicesx
-        navigator.enumerateDevices = function(callback) {
-          navigator.mediaDevices.enumerateDevices().then(callback);
-        };
-      }
-
-      var MediaDevices = [];
-      // var isHTTPs = location.protocol === 'https:';
-      var canEnumerate = false;
-
-      if (typeof MediaStreamTrack !== 'undefined' && 'getSources' in MediaStreamTrack) {
-        canEnumerate = true;
-      } else if (navigator.mediaDevices && !!navigator.mediaDevices.enumerateDevices) {
-        canEnumerate = true;
-      }
-      if (!canEnumerate) {
-        return;
-      }
-
-      if (!navigator.enumerateDevices && window.MediaStreamTrack && window.MediaStreamTrack.getSources) {
-        navigator.enumerateDevices = window.MediaStreamTrack.getSources.bind(window.MediaStreamTrack);
-      }
-
-      if (!navigator.enumerateDevices && navigator.enumerateDevices) {
-        navigator.enumerateDevices = navigator.enumerateDevices.bind(navigator);
-      }
-
-      if (!navigator.enumerateDevices) {
-        if (callback) {
-          callback();
-        }
-        return;
-      }
-
-      MediaDevices = [];
-      navigator.enumerateDevices(function(devices) {
-        devices.forEach(function(_device) {
-          var device = {};
-          for (var d in _device) {
-            device[d] = _device[d];
-          }
-
-          if (device.kind === 'audio') {
-            device.kind = 'audioinput';
-          }
-
-          if (device.kind === 'video') {
-            device.kind = 'videoinput';
-          }
-
-          var skip;
-          MediaDevices.forEach(function(d) {
-            if (d.id === device.id && d.kind === device.kind) {
-              skip = true;
-            }
-          });
-
-          if (skip) {
-            return;
-          }
-
-          if (!device.deviceId) {
-            device.deviceId = device.id;
-          }
-
-          if (!device.id) {
-            device.id = device.deviceId;
-          }
-
-          if (!device.label) {
-            device.label = 'Please invoke getUserMedia once.';
-            // if (!isHTTPs) {
-            //   device.label = 'HTTPs is required to get label of this ' + device.kind + ' device.';
-            // }
-          } else {
-            if (device.kind === 'videoinput' && !ref.isWebcamAlreadyCaptured) {
-              ref.isWebcamAlreadyCaptured = true;
-            }
-
-            if (device.kind === 'audioinput' && !ref.isMicrophoneAlreadyCaptured) {
-              ref.isMicrophoneAlreadyCaptured = true;
-            }
-          }
-
-          if (device.kind === 'audioinput') {
-            ref.hasMicrophone = true;
-          }
-
-          if (device.kind === 'audiooutput') {
-            ref.hasSpeakers = true;
-          }
-
-          if (device.kind === 'videoinput') {
-            ref.hasWebcam = true;
-          }
-
-          // there is no 'videoouput' in the spec.
-
-          MediaDevices.push(device);
-        });
-
-        if (callback) {
-          callback();
-        }
-      });
-    },
-  },
-  destroyed() {
-    this.isChecked = false;
-    clearInterval(this.time);
   },
 };
 </script>
@@ -309,4 +184,5 @@ export default {
   margin: 3% 2%;
   font-family: 'GongGothicLight';
 }
+/* 테이블 css: WebRTCListStudent.vue css단에서 전역으로 구현 */
 </style>

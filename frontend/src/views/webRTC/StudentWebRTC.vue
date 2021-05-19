@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="class-name">
-      <h2>{{ this.$route.query.room_name }}</h2>
+      <h2>{{ this.$route.query.room_name }}&nbsp;클래스</h2>
     </div>
     <div class="drag-container">
       <div class="panel-one" id="drag-left">
@@ -10,80 +10,104 @@
       </div>
       <div class="dragbar" id="dragbar"></div>
       <div class="panel-two" id="drag-right">
-        <div id="onUserStatusChanged">
-          참여자 목록
-          <template v-for="name in names">
-            {{ name }}
-          </template>
-        </div>
-        <div class="chat-area">
-          <div id="conversation-panel"></div>
-        </div>
-        <div id="key-press" style="text-align: right; display: none; font-size: 11px;">
-          <span style="vertical-align: middle;"></span>
-          <img alt="" src="https://www.webrtc-experiment.com/images/key-press.gif" style="height: 12px; vertical-align: middle;" />
-        </div>
-        <div class="wrapper">
-          <v-textarea id="txt-chat-message" class="regular-input" rows="1" auto-grow single-line outlined style="border-color: white;" v-model="message" @keyup.enter="chat" label=""></v-textarea>
+        <v-tabs v-model="tab" background-color="#2E95FF" hide-slider centered dark icons-and-text>
+          <v-tabs-slider></v-tabs-slider>
 
-          <emoji-picker @emoji="append" :search="search">
-            <div class="emoji-invoker" slot="emoji-invoker" slot-scope="{ events: { click: clickEvent } }" @click.stop="clickEvent">
-              <svg height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
-                <path d="M0 0h24v24H0z" fill="none" />
-                <path
-                  d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 8 15.5 8 14 8.67 14 9.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S9.33 8 8.5 8 7 8.67 7 9.5 7.67 11 8.5 11zm3.5 6.5c2.33 0 4.31-1.46 5.11-3.5H6.89c.8 2.04 2.78 3.5 5.11 3.5z"
-                />
-              </svg>
+          <v-tab href="#tab-1">
+            채팅
+            <v-icon>mdi-chat-outline</v-icon>
+          </v-tab>
+
+          <v-tab href="#tab-2">
+            참여자
+            <v-icon>mdi-account-multiple</v-icon>
+          </v-tab>
+        </v-tabs>
+
+        <v-tabs-items v-model="tab">
+          <v-tab-item :value="'tab-1'">
+            <div class="chat-area">
+              <div id="conversation-panel"></div>
             </div>
-            <div slot="emoji-picker" slot-scope="{ emojis, insert, display }">
-              <div class="emoji-picker" :style="{ top: display.y + 'px', left: display.x + 'px' }">
-                <div class="emoji-picker__search">
-                  <input type="text" v-model="search" v-focus />
+            <div class="wrapper">
+              <v-textarea id="txt-chat-message" class="regular-input" rows="1" no-resize outlined style="border-color: white;" v-model="message" @keyup.enter="chat" label="채팅 입력"></v-textarea>
+
+              <emoji-picker @emoji="append" :search="search">
+                <div class="emoji-invoker" slot="emoji-invoker" slot-scope="{ events: { click: clickEvent } }" @click.stop="clickEvent">
+                  <svg height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M0 0h24v24H0z" fill="none" />
+                    <path
+                      d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 8 15.5 8 14 8.67 14 9.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S9.33 8 8.5 8 7 8.67 7 9.5 7.67 11 8.5 11zm3.5 6.5c2.33 0 4.31-1.46 5.11-3.5H6.89c.8 2.04 2.78 3.5 5.11 3.5z"
+                    />
+                  </svg>
                 </div>
-                <div>
-                  <div v-for="(emojiGroup, category) in emojis" :key="category">
-                    <h5>{{ category }}</h5>
-                    <div class="emojis">
-                      <span v-for="(emoji, emojiName) in emojiGroup" :key="emojiName" @click="insert(emoji)" :title="emojiName">{{ emoji }}</span>
+                <div slot="emoji-picker" slot-scope="{ emojis, insert, display }">
+                  <div class="emoji-picker" :style="{ top: display.y + 'px', left: display.x + 'px' }">
+                    <div class="emoji-picker__search">
+                      <input type="text" v-model="search" v-focus />
+                    </div>
+                    <div>
+                      <div v-for="(emojiGroup, category) in emojis" :key="category">
+                        <h5>{{ category }}</h5>
+                        <div class="emojis">
+                          <span v-for="(emoji, emojiName) in emojiGroup" :key="emojiName" @click="insert(emoji)" :title="emojiName">{{ emoji }}</span>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
+              </emoji-picker>
+              <v-btn id="btn-chat-message" height="3.5rem" large color="primary" @click="chat">입력</v-btn>
             </div>
-          </emoji-picker>
-        </div>
-        <button class="btn btn-primary" id="btn-chat-message" @click="chat">Send</button>
+          </v-tab-item>
+          <v-tab-item :value="'tab-2'">
+            <div id="onUserStatusChanged">
+              <v-list class="name-list">
+                <v-list-item v-for="(name, idx) in names" :key="idx">
+                  <v-list-item-content class="name-list-item">
+                    <v-list-item-title class="name-list-item-content" v-text="name.name"></v-list-item-title>
+                  </v-list-item-content>
+                  <v-avatar class="ma-3" size="50" tile>
+                    <v-img :src="name.avatar"></v-img>
+                  </v-avatar>
+                </v-list-item>
+              </v-list>
+            </div>
+          </v-tab-item>
+        </v-tabs-items>
       </div>
     </div>
     <div class="panel-three">
       <template v-if="isAudio">
-        <v-btn class="mr-4" color="error" @click="offAudio">오디오 끄기</v-btn>
+        <v-btn class="mr-4 btn" color="#FF625C" @click="offAudio">오디오 끄기</v-btn>
       </template>
       <template v-else>
-        <v-btn class="mr-4" color="primary" @click="onAudio">오디오 켜기</v-btn>
+        <v-btn class="mr-4 btn" color="#41EA93" @click="onAudio">오디오 켜기</v-btn>
       </template>
       <template v-if="isVideo">
-        <v-btn class="mr-4" color="error" @click="offVideo">비디오 끄기</v-btn>
+        <v-btn class="mr-4 btn" color="#FF625C" @click="offVideo">비디오 끄기</v-btn>
       </template>
       <template v-else>
-        <v-btn class="mr-4" color="primary" @click="onVideo">비디오 켜기</v-btn>
+        <v-btn class="mr-4 btn" color="#41EA93" @click="onVideo">비디오 켜기</v-btn>
       </template>
 
-      <v-btn class="mr-4" color="cyan" @click="screen">화면공유</v-btn>
-      <v-btn class="mr-4" color="cyan" @click="openWhiteBoard">화이트보드</v-btn>
-      <v-btn class="mr-4" color="cyan" @click="saveMessageLog">채팅기록저장</v-btn>
-      <v-btn class="mr-4" color="cyan" @click="chatTest">채팅콘솔테스트</v-btn>
-      <v-btn class="mr-4" color="error" @click="outRoom">퇴장</v-btn>
+      <v-btn class="mr-4 btn" color="#2E95FF" @click="screen">화면공유</v-btn>
+      <v-btn class="mr-4 btn" color="#2E95FF" @click="openWhiteBoard">화이트보드</v-btn>
+      <v-btn class="mr-4 btn" color="#2E95FF" @click="saveMessageLog">채팅기록저장</v-btn>
+      <v-btn class="mr-4 btn" color="#FF625C" @click="outRoom">종료</v-btn>
     </div>
 
     <!-- 화이트보드 모달 영역 -->
     <div id="modal">
-      <div class="modal_content text-center">
-        <div>
-          <v-btn class="mr-4 mb-4" color="error" @click="closeWhiteBoard">닫기</v-btn>
-        </div>
-        <!-- <div id="widget-container" style="height: 80%; width: 70%; border: 1px solid black; border-top:0; border-bottom: 0;"></div> -->
+      <div class="modal_content ">
         <div id="widget-container"></div>
+        <v-row no-gutters>
+          <v-col></v-col>
+        </v-row>
+        <div class="modal-btn" style="display: inline-flex;">
+          <v-btn class="" color="error" @click="clearCanvas">전체삭제</v-btn>
+          <v-btn class="ml-5" color="#41EA93" @click="closeWhiteBoard">닫기</v-btn>
+        </div>
       </div>
     </div>
     <div class="modal_layer"></div>
@@ -116,6 +140,7 @@ export default {
       time: null, // for AI server interval
       search: '',
       names: [], // name list
+      tab: null,
     };
   },
   created() {
@@ -213,6 +238,7 @@ export default {
     window.onload = function() {
       document.querySelector('#modal').style.display = 'none';
       document.querySelector('#modal').style.top = 0;
+      ref.designer.iframe.style.border = '2px solid black';
     };
 
     this.openRoom();
@@ -221,39 +247,21 @@ export default {
     isLive: function() {
       var ref = this;
       setTimeout(function() {
-        ref.time = setInterval(ref.screenCapture, 5000);
+        ref.time = setInterval(ref.screenCapture, 1000);
       }, 4000);
     },
   },
 
   methods: {
-    async screenCapture() {
-      let video = document.querySelector('video');
-      let canvas = document.createElement('canvas');
-      canvas.width = video.videoWidth || video.clientWidth;
-      canvas.height = video.videoHeight || video.clientHeight;
-
-      var context = canvas.getContext('2d');
-      context.drawImage(video, 0, 0, canvas.width, canvas.height);
-
-      let img = canvas.toDataURL('image/png');
-
-      let userData = {
-        uid: this.$store.state.uuid,
-        rid: this.$route.query.rid,
-        snapshot: img,
-      };
-
-      const { data } = await faceAI(userData);
-      console.log(data);
-    },
     offVideo() {
       let localStream = this.connection.attachStreams[0];
       localStream.mute('video');
+      // var posterImg = require('@/assets/img/poster.png');
+      // document.getElementById(localStream.id).setAttribute('poster', posterImg);
       this.isVideo = false;
     },
     onVideo() {
-      this.connection.session.video = true;
+      // this.connection.session.video = true;
       let localStream = this.connection.attachStreams[0];
       localStream.unmute('video');
       this.isVideo = true;
@@ -275,6 +283,26 @@ export default {
     },
     closeWhiteBoard() {
       document.querySelector('#modal').style.display = 'none';
+    },
+    async screenCapture() {
+      let video = document.querySelector('video');
+      let canvas = document.createElement('canvas');
+      canvas.width = video.videoWidth || video.clientWidth;
+      canvas.height = video.videoHeight || video.clientHeight;
+
+      var context = canvas.getContext('2d');
+      context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+      let img = canvas.toDataURL('image/png');
+
+      let userData = {
+        uid: this.$store.state.uuid,
+        rid: this.$route.query.rid,
+        snapshot: img,
+      };
+
+      const { data } = await faceAI(userData);
+      console.log(data);
     },
     chat() {
       var chatMessage = this.message;
@@ -304,11 +332,13 @@ export default {
       if (event.data) {
         div.innerHTML = '<b>' + userName + '&nbsp;' + timestamp + ':</b><br>' + event.data.chatMessage;
         this.chatLog += '[' + userName + '][' + timestamp + '] ' + event.data.chatMessage.replaceAll('\n', '') + '\r\n';
+        div.style.borderBottom = '0.5px groove #B2EBF2';
       } else {
         div.innerHTML = '<b>' + this.userName + '(당신)&nbsp;' + timestamp + '</b> <br>' + event;
         this.chatLog += '[' + userName + '][' + timestamp + '] ' + event.replaceAll('\n', '') + '\r\n';
         this.chatResult.push({ uid: uuid, userName: userName, chatMessage: event, timestamp: timestamp });
-        div.style.background = '#cbffcb';
+        div.style.background = '#E3F2FD';
+        div.style.borderBottom = '0.5px groove #B2EBF2';
       }
 
       conversationPanel.appendChild(div);
@@ -326,13 +356,21 @@ export default {
         data: true,
       };
 
+      // Student에서는 beforeAdding 적용안됨
+      // this.connection.beforeAddingStream = function(stream, peer) {
+      //   ref.connection.extra.userFullName = ref.$store.state.name;
+      //   ref.connection.extra.userUUID = ref.$store.state.uuid;
+      //   ref.connection.extra.type = 'cam';
+      //   ref.connection.extra.isMaster = true;
+      //   return stream;
+      // };
+
       this.connection.socketURL = 'https://rtcmulticonnection.herokuapp.com:443/';
       // this.connection.socketURL = 'https://illeum-webRTC:9001/';
 
       this.connection.extra.userFullName = this.$store.state.name;
       this.connection.extra.userUUID = this.$store.state.uuid;
       this.connection.extra.type = 'cam';
-      // this.connection.extra.type = 'cam';
       this.connection.extra.status = '입장';
       this.connection.sdpConstraints.mandatory = {
         OfferToReceiveAudio: true,
@@ -353,7 +391,7 @@ export default {
                 icon: 'error',
                 title: '참여할 수 없는 화상수업입니다.!!',
               });
-              ref.$router.push({ name: 'WebRTCListAll' });
+              ref.$router.push({ name: 'WebRTCListStudent' });
               return;
             }
             ref.connection.onUserStatusChanged();
@@ -372,7 +410,8 @@ export default {
         }
       });
 
-      // 리스너 영역
+      // 리스너 영역 시작
+
       this.connection.onopen = function() {
         if (ref.designer.pointsLength <= 0) {
           // you seems having data to be synced with new user!
@@ -391,7 +430,12 @@ export default {
 
         // canvas
         if (event.data === 'plz-sync-points') {
-          console.log(ref.designer);
+          ref.designer.sync();
+          return;
+        }
+
+        if (event.data === 'plz-sync-points-for-clear') {
+          ref.designer.clearCanvas();
           ref.designer.sync();
           return;
         }
@@ -400,12 +444,16 @@ export default {
       };
 
       this.connection.onstream = function(event) {
+        console.log(event);
         var video = event.mediaElement;
 
         if (event.extra.type == 'cam') {
           document.querySelector('.videos-container').appendChild(video);
           video.removeAttribute('controls');
-        } else {
+        } else if (event.extra.type == 'share' || event.extra.typeAlpha == 'share') {
+          document.querySelectorAll('.videos-container > video').forEach((elem) => {
+            elem.style.width = '10%';
+          });
           document.querySelector('.share-videos-container').appendChild(video);
         }
       };
@@ -418,6 +466,8 @@ export default {
                 icon: 'warning',
                 title: '현재 화상수업이 종료 되었습니다.!!',
               });
+
+              ref.convertChat();
 
               ref.connection.getAllParticipants().forEach((participantId) => {
                 ref.connection.disconnectWith(participantId);
@@ -436,39 +486,78 @@ export default {
             }
           }
         } catch {
-          console.log(event);
+          // ref.$swal({
+          //   icon: 'error',
+          //   title: '화상수업 정상 종료 오류.!!',
+          // });
         }
 
         ref.names = [];
         ref.connection.getAllParticipants().forEach(function(participantId) {
           var user = ref.connection.peers[participantId];
-          ref.names.push(user.extra.userFullName);
+          ref.names.push({ name: user.extra.userFullName, avatar: '/profile/' + user.extra.userUUID + '/256' });
         });
 
-        if (!ref.names.length) {
-          ref.names = ['Only You'];
-        } else {
-          ref.names.push(ref.connection.extra.userFullName);
-        }
+        ref.names.push({ name: ref.connection.extra.userFullName, avatar: '/profile/' + ref.connection.extra.userUUID + '/256' });
       };
 
       this.connection.onleave = function(event) {
-        const idx = ref.names.indexOf(event.extra.userFullName);
+        const idx = ref.names.findIndex(function(item) {
+          return item.name == event.extra.userFullName;
+        });
         console.log(idx);
         if (idx > -1) {
           ref.names.splice(idx, 1);
         }
         var temp = ref.names;
 
-        console.log(event);
+        document.querySelector('#' + event.screenId).remove();
+
+        console.log(temp);
         ref.connection.extra.status = '퇴장';
         ref.connection.onUserStatusChanged(event);
-        if (temp.length == 1) ref.names = ['Only You'];
-        else ref.names = temp;
+        ref.names = temp;
       };
 
       this.connection.onEntireSessionClosed = function(event) {
-        console.info('Entire session is closed: ', event.sessionid, event.extra);
+        this.$swal({
+          icon: 'error',
+          title: '전체 세션 종료 ' + event.sessionid,
+        });
+      };
+
+      this.connection.onmute = function(e) {
+        var posterImg = require('@/assets/img/poster.png');
+        if (e.session.video) {
+          e.mediaElement.setAttribute('poster', posterImg);
+          e.mediaElement.srcObject = null;
+        }
+      };
+
+      this.connection.onunmute = function(e) {
+        if (e.session.video) {
+          e.mediaElement.removeAttribute('poster');
+          e.mediaElement.srcObject = e.stream;
+        }
+      };
+
+      this.connection.onstreamended = function(event) {
+        console.log(event);
+        if (event.extra.type == 'share') {
+          var share = document.querySelector('.share-videos-container');
+          if (share != null) {
+            while (share.hasChildNodes()) {
+              share.removeChild(share.firstChild);
+            }
+          }
+
+          document.querySelectorAll('.videos-container > video').forEach((elem) => {
+            elem.style.width = '30%';
+          });
+        } else if (event.extra.userUUID != ref.$store.state.uuid) {
+          var screenId = event.mediaElement.id;
+          document.querySelector('#' + screenId).remove();
+        }
       };
     },
 
@@ -483,12 +572,15 @@ export default {
       });
 
       this.connection.videosContainer = document.querySelector('.share-videos-container');
+      document.querySelectorAll('.videos-container > video').forEach((elem) => {
+        elem.style.width = '10%';
+      });
     },
     async outRoom() {
       var uid = this.$store.state.uuid;
       var rid = this.rid;
       this.connection.extra.status = '퇴장';
-      this.chatTest();
+      this.convertChat();
       await exit(uid, rid) // GET: /api/rtc/exit (rabbitMQ)
         .then(({ data }) => {
           if (data == 'success') {
@@ -542,7 +634,7 @@ export default {
       a.href = objURL;
       a.click();
     },
-    async chatTest() {
+    async convertChat() {
       var rankArr = [];
       var ranking = 1;
       for (let index = 0; index < this.chatResult.length; index++) {
@@ -606,6 +698,14 @@ export default {
 
       return result;
     },
+    clearCanvas() {
+      var ref = this;
+      this.designer.clearCanvas();
+      this.designer.sync();
+      setTimeout(function() {
+        ref.connection.send('plz-sync-points-for-clear');
+      }, 300);
+    },
     append(emoji) {
       this.message += emoji;
     },
@@ -659,10 +759,14 @@ body::-webkit-scrollbar {
   flex: 1;
   width: 20%;
   height: 800px;
+  padding-bottom: 10px;
 }
+
 .panel-three {
   border-top: 2px solid black;
+  margin-top: 1px;
   padding-top: 5px;
+  height: 6rem;
 }
 
 .dragbar {
@@ -670,6 +774,7 @@ body::-webkit-scrollbar {
   cursor: col-resize;
   background-color: black;
 }
+
 .img {
   width: inherit;
 }
@@ -679,14 +784,13 @@ body::-webkit-scrollbar {
   resize: vertical;
   margin: 5px;
   margin-right: 0;
-  min-height: 30px;
 }
 
 #btn-chat-message {
-  margin: 5px;
-  display: block;
+  margin-bottom: 3rem !important;
   float: right;
 }
+
 #btn-chat-message::after {
   clear: both;
 }
@@ -694,7 +798,7 @@ body::-webkit-scrollbar {
 #conversation-panel {
   margin-bottom: 20px;
   text-align: left;
-  height: 650px;
+  min-height: 37rem;
   width: 100%;
   overflow: auto;
 }
@@ -715,25 +819,27 @@ body::-webkit-scrollbar {
   width: -webkit-fill-available;
   width: 30%;
   border: 1px solid;
-  /* pointer-events: none; */
 }
 .share-videos-container >>> video {
   display: inline;
   width: -webkit-fill-available;
   width: 80%;
   border: 1px solid;
-  /* pointer-events: none; */
 }
 
-/* mordal */
+/* modal */
 #modal {
   position: fixed;
   top: 200%;
-  width: 100%;
-  height: 100%;
+  width: 80%;
+  height: 88%;
   z-index: 9999;
+  left: 5%;
+  padding-bottom: 0px;
 }
-
+.modal-btn {
+  margin: 1rem 0 0 55rem;
+}
 #modal h2 {
   margin: 0;
 }
@@ -752,9 +858,12 @@ body::-webkit-scrollbar {
   background: #fff;
   border: 2px solid #666;
 }
+.btn {
+  color: white !important;
+}
 
 #modal .modal_layer {
-  position: fixed;
+  /* position: fixed; */
   top: 0;
   left: 0;
   width: 100%;
@@ -764,26 +873,58 @@ body::-webkit-scrollbar {
 }
 .wrapper {
   position: relative;
-  display: inline-block;
+  display: flex;
+  height: 60px;
+  margin-top: 4rem;
+}
+/* .name-list {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 24px;
+  text-decoration: none;
+  width: 250px;
+  padding: 0px;
+  margin: 0px;
+} */
+.name-list-item {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 24px;
+  text-decoration: none;
+  width: 250px;
+  padding: 0px;
+  margin: 0px;
+}
+.name-list-item-content {
+  background-color: #e6e6e6;
+  background-image: url('//www.kirupa.com/images/gray_smiley.png');
+  background-position: 7px 7px;
+  background-repeat: no-repeat;
+  color: #666;
+  list-style: none outside none;
+  padding-left: 29px;
+  padding-top: 10px;
+  height: 50px;
 }
 
 .regular-input {
-  padding: 0.5rem 1rem;
-  /* border-radius: 3px; */
-  /* border: 1px solid #ccc; */
   width: 22rem;
-  /* height: 6rem; */
-  /* outline: none; */
 }
 
 .regular-input:focus {
   box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.5);
 }
-
+#widget-container {
+  bottom: 0;
+  right: 20%;
+  left: 20%;
+  height: 80%;
+  border: 1px solid black;
+  border-top: 0;
+  border-bottom: 0;
+}
 .emoji-invoker {
   position: absolute;
   top: 0.5rem;
-  right: 0.5rem;
+  right: 5rem;
   width: 1.5rem;
   height: 1.5rem;
   border-radius: 50%;
@@ -802,7 +943,7 @@ body::-webkit-scrollbar {
   z-index: 1;
   font-family: Montserrat, 'Serif';
   border: 1px solid #ccc;
-  width: 15rem;
+  width: 100%;
   height: 20rem;
   overflow: scroll;
   padding: 1rem;
@@ -810,7 +951,7 @@ body::-webkit-scrollbar {
   border-radius: 0.5rem;
   background: #fff;
   box-shadow: 1px 1px 8px #c7dbe6;
-  top: 0 !important;
+  top: -22rem !important;
   left: 0 !important;
 }
 .emoji-picker__search {

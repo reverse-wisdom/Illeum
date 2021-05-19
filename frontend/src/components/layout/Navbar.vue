@@ -81,11 +81,11 @@
         <v-list-item></v-list-item>
       </v-list>
 
-      <v-list style="margin-bottom: 0;">
+      <!-- <v-list style="margin-bottom: 0;">
         <v-list-item-content>
           <router-link to="/webrtclistall">전체수업리스트</router-link>
         </v-list-item-content>
-      </v-list>
+      </v-list> -->
       <v-list style="margin-bottom: 0;">
         <v-row class="mx-2 pa-2">
           <v-btn v-if="this.$store.state.token" @click="signoutUser" tile outlined>

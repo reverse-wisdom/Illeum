@@ -12,6 +12,7 @@ import { EmojiPickerPlugin } from 'vue-emoji-picker';
 import LoadScript from 'vue-plugin-load-script';
 import Toast from 'vue-toastification';
 import 'vue-toastification/dist/index.css';
+import moment from 'moment';
 
 Vue.config.productionTip = false;
 
@@ -22,7 +23,8 @@ const sweetalert2_options = {
 
 Vue.use(VueSweetalert2, sweetalert2_options); // alert API
 
-Vue.use(VueMoment); // vue-moment
+moment.locale('ko');
+Vue.use(VueMoment, { moment }); // vue-moment
 
 export default new Vuetify({
   breakpoint: {
