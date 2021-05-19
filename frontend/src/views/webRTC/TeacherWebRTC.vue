@@ -440,7 +440,8 @@ export default {
         }
         var temp = ref.names;
 
-        console.log(temp);
+        document.querySelector('#' + event.screenId).remove();
+
         ref.connection.extra.status = '퇴장';
         ref.connection.onUserStatusChanged(event);
         ref.names = temp;
