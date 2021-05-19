@@ -247,7 +247,7 @@ export default {
     isLive: function() {
       var ref = this;
       setTimeout(function() {
-        ref.time = setInterval(ref.screenCapture, 5000);
+        ref.time = setInterval(ref.screenCapture, 1000);
       }, 4000);
     },
   },
@@ -263,7 +263,7 @@ export default {
       this.connection.session.video = true;
       let localStream = this.connection.attachStreams[0];
       localStream.unmute('video');
-      this.time = setInterval(this.screenCapture, 5000);
+      this.time = setInterval(this.screenCapture, 1000);
       this.isVideo = true;
     },
     onAudio() {
