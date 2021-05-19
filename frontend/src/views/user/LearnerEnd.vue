@@ -163,6 +163,7 @@
 <script>
 import { userEvalList } from '@/api/auth.js';
 import { fetchRoomname, evaluateList } from '@/api/class';
+import { findCount } from '@/api/entrant';
 import MyPagePieChart from '@/views/components/MyPagePieChart';
 import MyPageRadarChart from '@/views/components/MyPageRadarChart';
 import LecUserPartin from '@/views/evaluation/LecUserPartin';
@@ -281,6 +282,7 @@ export default {
       const roomPartinUser = data[0].rid;
       this.ridSelected = data[0].rid;
       const res = await evaluateList(roomPartinUser);
+      const res2 = await findCount(roomPartinUser);
 
       for (var i = 0; i < res.data.length; i++) {
         this.per1 += res.data[i].attention;
@@ -354,7 +356,8 @@ export default {
           this.attenduidRank = this.attendRank.indexOf(this.attendRank[m]) + 1;
         }
       }
-      this.evalUserCnt = this.attendRank.length;
+
+      this.evalUserCnt = res2.data;
       this.change++;
       this.renderKey++;
     },

@@ -40,7 +40,7 @@
         </v-card>
       </v-tab-item>
       <v-tab-item>
-        <v-card flat color="#f9f9f9" t>
+        <v-card flat color="#f9f9f9">
           <UserPartin></UserPartin>
         </v-card>
       </v-tab-item>
