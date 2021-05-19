@@ -537,7 +537,7 @@ export default {
             ref.connection.closeSocket();
             ref.connection.disconnect();
 
-            ref.$router.push({ name: 'WebRTCListAll' });
+            ref.$router.push({ name: 'WebRTCListTeacher' });
           }
         })
         .catch((err) => {

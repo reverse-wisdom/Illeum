@@ -6,7 +6,7 @@
       dark
       color="#2E95FF"
       id="alert"
-      style="margin-top:6%; font-size: 1.5rem; letter-spacing: 2.3px; padding-left:20px; line-height: 45px;"
+      style="font-size: 1.5rem; letter-spacing: 2.3px; padding-left:20px; line-height: 45px;"
       elevation="3"
       height="70"
     >

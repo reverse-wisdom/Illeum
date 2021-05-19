@@ -6,7 +6,7 @@
       dark
       id="alert"
       color="#2E95FF"
-      style="margin-top:6%; font-size: 1.5rem; letter-spacing: 2.3px; padding-left:20px; line-height: 45px;"
+      style="font-size: 1.5rem; letter-spacing: 2.3px; padding-left:20px; line-height: 45px;"
       elevation="3"
       height="70"
     >
@@ -78,21 +78,21 @@
               <tr>
                 <th scope="col">No</th>
                 <th scope="col">PROFILE</th>
-                <th scope="col">NAME</th>
+                <th scope="col">이름</th>
                 <th scope="col">E-MAIL</th>
 
-                <th scope="col">date</th>
-                <th scope="col">attend</th>
-                <th scope="col">ranking</th>
-                <th scope="col">participation</th>
-                <th scope="col">모달</th>
+                <th scope="col">수업시간</th>
+                <th scope="col">참여시간</th>
+                <th scope="col">채팅참여순위</th>
+                <th scope="col">채팅횟수</th>
+                <th scope="col"></th>
               </tr>
             </thead>
 
             <tbody>
               <tr v-for="(each, idx) in userEval" :key="idx">
                 <td>{{ idx + 1 }}</td>
-                <td><v-img :src="`/profile/${each.uid}/256`" id="preview" style="width:50px; height:50px;" alt=""></v-img></td>
+                <td><v-img :src="`/profile/${each.uid}/256`" id="preview" style="width:50px; height:50px; display:-webkit-inline-box" alt=""></v-img></td>
                 <td>{{ each.name }}</td>
                 <td>{{ each.email }}</td>
 
@@ -400,6 +400,9 @@ export default {
   margin: 3% 2%;
   font-family: 'GongGothicLight';
 }
+.table-body {
+  min-width: 100%;
+}
 .table_responsive {
   width: 100%;
   padding: 15px;
@@ -429,6 +432,7 @@ table th,
 table td {
   border: 1px solid #0000;
   padding: 10px 5px;
+  text-align: center;
 }
 
 table > tbody > tr > td > img {
