@@ -47,27 +47,25 @@ export default {
 
 <style scoped>
 @font-face {
-  font-family: 'GongGothicLight';
-  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-10@1.0/GongGothicLight.woff') format('woff');
+  font-family: 'NEXON Lv1 Gothic OTF';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@2.1/NEXON Lv1 Gothic OTF.woff') format('woff');
   font-weight: normal;
   font-style: normal;
 }
-
 .my-class {
-  margin-left: 7%;
-  font-family: 'GongGothicLight';
+  margin: 10% 2%;
+  font-family: 'NEXON Lv1 Gothic OTF';
 }
 
 .checkbox {
   position: absolute;
-  top: 16px;
-  right: 1%;
+  top: 5%;
+  right: 5%;
 
   -webkit-appearance: none;
   width: 14rem;
-  height: 60px;
+  height: 3.5rem;
   background-color: #41ea93;
-
   border-radius: 50px;
   cursor: pointer;
   outline: none;
@@ -83,44 +81,46 @@ export default {
 .checkbox::before {
   content: '';
   position: absolute;
-  width: 6rem;
-  height: 40px;
-  background-color: #ff625c;
+  width: 7.2rem;
+  height: 3.5rem;
   border-radius: 50px;
-  top: 10px;
+  background-color: #2e95ff;
+
   cursor: pointer;
-  left: 1rem;
-  transition: 0.3s linear;
+
+  /* transition: 0.6s linear; */
 }
 
 .checkbox:checked::before {
-  left: 7.5rem;
+  left: 7rem;
   content: '';
+}
+.toggle-text {
+  top: 5rem;
+  /* z-index: 3; */
 }
 
 #learner {
   position: absolute;
-  top: 1.9rem;
-  right: 8.7%;
-  /* transform: translateY(-50%); */
+  top: 4rem;
+  right: 16.5%;
   color: #fff;
   font-size: 20px;
   font-weight: 400;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  margin-left: px;
+
   outline: none;
   z-index: 3;
 }
 #lecturer {
   position: absolute;
   outline: none;
-  top: 1.9rem;
-  right: 2%;
+  top: 4rem;
+  right: 7%;
   color: #fff;
   font-size: 20px;
   font-weight: 400;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-
   z-index: 3;
 }
 </style>
