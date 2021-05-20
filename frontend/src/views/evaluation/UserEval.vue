@@ -1,7 +1,7 @@
 <template>
   <div class="user-eval">
     <v-row>
-      <p>
+      <p class="guide-text">
         출결확인을 위해
         <strong style="letter-spacing:1px">①날짜를 체크하고 ②클래스를 선택</strong>
         해주세요.
@@ -299,7 +299,7 @@ export default {
   background: rgb(255, 98, 92);
   border: 0px solid black;
   border-radius: 50px;
-  /* margin-right: */
+
   padding: 12px 1rem;
   margin-right: 1rem;
   color: white;
@@ -331,5 +331,8 @@ legend {
   width: inherit;
   color: #fff;
   border-top: #2e95ff solid 0.5rem;
+}
+.guide-text {
+  margin: 0.5rem auto;
 }
 </style>

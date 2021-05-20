@@ -27,13 +27,14 @@ export default {
           {
             label: '평균',
             data: [],
+
             fill: true,
-            backgroundColor: 'rgba(255, 99, 132, 0.2)',
-            borderColor: 'rgb(255, 99, 132)',
-            pointBackgroundColor: 'rgb(255, 99, 132)',
+            backgroundColor: 'rgba(117, 107, 255, 0.5)',
+            borderColor: 'rgb(117, 107, 255)',
+            pointBackgroundColor: 'rgb(117, 107, 255)',
             pointBorderColor: '#fff',
             pointHoverBackgroundColor: '#fff',
-            pointHoverBorderColor: 'rgb(255, 99, 132)',
+            pointHoverBorderColor: 'rgb(117, 107, 255)',
           },
         ],
       },

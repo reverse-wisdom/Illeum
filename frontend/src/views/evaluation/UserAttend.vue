@@ -1,7 +1,7 @@
 <template>
   <div class="user-attend">
     <v-row>
-      <p>
+      <p class="guide-text">
         출결확인을 위해
         <strong style="letter-spacing:1px">①날짜를 체크하고 ②클래스를 선택</strong>
         해주세요.
@@ -360,5 +360,8 @@ h3.is-3:not(:last-child) {
   border-top-left-radius: 20px;
   border-bottom-left-radius: 20px;
   box-shadow: 0px 5px 10px rgba(150, 106, 106, 0.3);
+}
+.guide-text {
+  margin: 0.5rem auto;
 }
 </style>
