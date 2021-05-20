@@ -17,35 +17,48 @@
       님의 평가관리
     </v-alert>
     <v-row>
-      <p>
+      <p class="guide-text">
         출결확인을 위해
         <strong style="letter-spacing:1px">①날짜를 체크하고 ②클래스를 선택</strong>
         해주세요.
       </p>
     </v-row>
     <v-row>
-      <v-date-picker
-        width="400"
-        color="#FF625C"
-        v-model="date"
-        @click:date="classNameFetch"
-        :landscape="true"
-        locale="ko-kr"
-        :allowed-dates="allowedDates"
-        class="mt-4"
-        min="1900-04-01"
-        max="2100-10-30"
-      ></v-date-picker>
       <v-col cols="6" sm="6">
-        <div for="" class="class-label">클래스선택</div>
-        <v-select style="margin-top: 2%;" :items="roomNameList" :value="roomNameList[0]" solo @input="showAll"></v-select>
+        <div class="class-label">
+          <v-icon color="white">mdi-calendar-today</v-icon>
+          날짜선택
+        </div>
+        <v-date-picker
+          width="400"
+          style="height:82%;"
+          color="#FF625C"
+          v-model="date"
+          @click:date="classNameFetch"
+          :landscape="true"
+          locale="ko-kr"
+          :allowed-dates="allowedDates"
+          class="mt-4"
+          min="1900-04-01"
+          max="2100-10-30"
+        ></v-date-picker>
+      </v-col>
+      <v-col cols="6" sm="6">
+        <div class="class-label class-choice">
+          <v-icon color="white">mdi-school-outline</v-icon>
+          수업선택
+        </div>
+        <v-select style="margin-left:2%;" placeholder="클래스를 선택해주세요" :items="roomNameList" :value="roomNameList[0]" solo @input="showAll"></v-select>
         <v-col cols="12">
-          <v-card class="mx-auto" max-width="600">
-            <v-toolbar flat color="">
-              <v-toolbar-title>빠른검색</v-toolbar-title>
+          <v-card class="mx-auto mt-0 " max-width="600">
+            <v-toolbar flat color="rgb(255, 98, 92)" class="" style="padding:0.1rem; color:#fff;">
+              <v-toolbar-title style="letter-spacing: 1px;">
+                <v-icon color="#fff">mdi-account-search-outline</v-icon>
+                빠른검색
+              </v-toolbar-title>
             </v-toolbar>
 
-            <v-container class="py-0">
+            <v-container class="py-1">
               <v-row align="center" justify="start">
                 <v-col v-for="(selection, i) in selections" :key="selection.text" class="shrink">
                   <v-chip :disabled="loading" close @click:close="chipClose(selection, i)">
@@ -96,7 +109,12 @@
             <tbody>
               <tr v-for="(each, idx) in userEval" :key="idx">
                 <td>{{ idx + 1 }}</td>
-                <td><v-img :src="`/profile/${each.uid}/256`" id="preview" style="width:50px; height:50px; display:-webkit-inline-box" alt=""></v-img></td>
+
+                <td>
+                  <v-avatar class="mb-3" color="grey darken-1" size="50">
+                    <v-img :src="`/profile/${each.uid}/256`" id="preview" alt=""></v-img>
+                  </v-avatar>
+                </td>
                 <td>{{ each.name }}</td>
                 <td>{{ each.email }}</td>
 
@@ -104,7 +122,7 @@
                 <td>{{ each.attend }}</td>
                 <td>{{ each.ranking | checkChatRanking }}</td>
                 <td>{{ each.participation }}회 채팅</td>
-                <td><v-btn color="#756BFF" depressed dark @click="openModal(each)">평가조회</v-btn></td>
+                <td><v-btn color="#FF625C" depressed dark @click="openModal(each)">평가조회</v-btn></td>
               </tr>
             </tbody>
           </table>
@@ -115,7 +133,7 @@
     <!-- modal -->
     <v-dialog v-if="$store.state.token" v-model="dialog" hide-overlay max-width="900px">
       <v-card flat>
-        <v-toolbar flat color="#6173FF" dark>
+        <v-toolbar flat color="#2E95FF  " dark>
           <v-toolbar-title>
             <span>{{ modalEach.name }}님의</span>
             평가조회
@@ -143,22 +161,22 @@
 
           <v-tab-item>
             <v-card flat>
-              <div style="margin:1.5rem 0;">
-                <v-icon left x-large>
+              <div style="margin:1.5rem 0; ">
+                <v-icon left large style="margin-bottom:1rem;" color="#2E95FF">
                   mdi-alarm
                 </v-icon>
-                <span style="font-size:2rem;">{{ modalEach.attend_time }}</span>
+                <span style="font-size:2rem; color:#2E95FF ;">{{ modalEach.attend_time }}</span>
                 에 출석하셨습니다!
               </div>
               <div>
                 출결상태는
-                <span style="font-size:2rem;">{{ modalEach.attend }}</span>
+                <span :class="{ normal: modalEach.attend == '정상', late: modalEach.attend == '지각', afk: modalEach.attend == '결석' }" style="font-size:2rem;">{{ modalEach.attend }}</span>
                 입니다.
               </div>
             </v-card>
           </v-tab-item>
           <v-tab-item :key="modalEach.vid + 'A'">
-            <v-card flat>
+            <v-card flat color="">
               <LecUserEval :each="modalEach" :rid="ridSelected"></LecUserEval>
             </v-card>
           </v-tab-item>
@@ -339,6 +357,7 @@ export default {
         }
       }
       this.userEvalLength = this.userEval.length;
+      console.log(this.userEvalLength);
     },
     async getList(chipCheck) {
       this.userEval = [];
@@ -389,20 +408,15 @@ export default {
 </script>
 <style scoped>
 @font-face {
-  font-family: 'GongGothicLight';
-  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-10@1.0/GongGothicLight.woff') format('woff');
+  font-family: 'NEXON Lv1 Gothic OTF';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@2.1/NEXON Lv1 Gothic OTF.woff') format('woff');
   font-weight: normal;
   font-style: normal;
 }
-/* * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'GongGothicLight';
-} */
+
 .manage {
   margin: 3% 2%;
-  font-family: 'GongGothicLight';
+  font-family: 'NEXON Lv1 Gothic OTF';
 }
 .table-body {
   min-width: 100%;
@@ -424,7 +438,7 @@ table {
 }
 
 table > thead {
-  background-color: #41ea93;
+  background-color: #2e95ff;
   color: #fff;
 }
 
@@ -495,16 +509,57 @@ table > tbody > tr:hover {
   margin-left: 10em;
 }
 .class-label {
-  width: 50%;
+  width: 30%;
   height: 3rem;
   font-size: 1.2rem;
   letter-spacing: 2px;
   background: rgb(255, 98, 92);
   border: 0px solid black;
   border-radius: 50px;
-  /* margin-right: */
-  padding: 12px 15px;
+
+  padding: 12px 1rem;
   margin-right: 1rem;
+  color: white;
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
+}
+.guide-text {
+  margin: 2% auto;
+}
+.class-choice {
+  margin-left: 0.8rem;
+  margin-bottom: 1rem;
+}
+.late {
+  background: #ff9c6c;
+  border: 0px solid black;
+  border-radius: 25px;
+  font-size: 1rem;
+  width: 30%;
+  height: 60%;
+  padding: 5px 10px;
+
+  color: white;
+}
+.afk {
+  background: #fc5230;
+  border: 0px solid black;
+  border-radius: 25px;
+  font-size: 1rem;
+  width: 30%;
+  height: 60%;
+  padding: 5px 10px;
+
+  color: white;
+}
+.normal {
+  background: rgb(46, 149, 255);
+  border: 0px solid black;
+  border-radius: 25px;
+  font-size: 1rem;
+  width: 30%;
+  height: 60%;
+  padding: 5px 10px;
   color: white;
 }
 </style>

@@ -274,7 +274,7 @@ export default {
               toast.addEventListener('mouseleave', ref.$swal.resumeTimer);
             },
           });
-          this.$router.push({ name: 'ClassList' });
+          this.$router.push({ name: 'WebRTCListTeacher' });
         }
       } catch {
         this.$swal({
