@@ -28,6 +28,46 @@
           <h3>Slide 2.5</h3>
         </div>
       </div>
+      <div class="section section2" :style="image_2">
+        <!-- 화상플랫폼(webRTC) 기능
+
+        쌍방향 음성, 영상, 화이트보드, 화면공유, 채팅, 실시간알림 , -->
+        <div class="slide">
+          <h3>Slide 2.1</h3>
+        </div>
+        <div class="slide">
+          <h3>Slide 2.2</h3>
+        </div>
+        <div class="slide">
+          <h3>Slide 2.3</h3>
+        </div>
+        <div class="slide">
+          <h3>Slide 2.4</h3>
+        </div>
+        <div class="slide">
+          <h3>Slide 2.5</h3>
+        </div>
+      </div>
+      <div class="section section2" :style="image_2">
+        <!-- 화상플랫폼(webRTC) 기능
+
+        쌍방향 음성, 영상, 화이트보드, 화면공유, 채팅, 실시간알림 , -->
+        <div class="slide">
+          <h3>Slide 2.1</h3>
+        </div>
+        <div class="slide">
+          <h3>Slide 2.2</h3>
+        </div>
+        <div class="slide">
+          <h3>Slide 2.3</h3>
+        </div>
+        <div class="slide">
+          <h3>Slide 2.4</h3>
+        </div>
+        <div class="slide">
+          <h3>Slide 2.5</h3>
+        </div>
+      </div>
       <div class="section section3" :style="image_3">
         <!-- <h4 style="color: #535353;  letter-spacing:4px; font-size:2rem;">실시간 학습태도관리</h4> -->
         <ul class="features">
@@ -197,11 +237,7 @@ export default {
   display: flex;
   flex-direction: row;
 }
-.section4 {
-  position: relative;
 
-  /* opacity: 0.5; */
-}
 .section2a {
   position: relative;
   text-align: left;
@@ -211,6 +247,7 @@ export default {
   align-items: center;
   flex-direction: row;
   margin-top: 30px;
+
   /* margin-right: 350px; */
 }
 /* .back {
