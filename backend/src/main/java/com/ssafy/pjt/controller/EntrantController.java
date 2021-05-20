@@ -86,7 +86,7 @@ public class EntrantController {
 				entran = entrantRepository.save(entran);
 				return new ResponseEntity<>(entran, HttpStatus.OK);
 			} catch (Exception e) {
-				new ResponseEntity<>("fail", HttpStatus.BAD_REQUEST);
+				return new ResponseEntity<>("fail", HttpStatus.BAD_REQUEST);
 			}
 		}
 		// 있으면 찾은거 그냥 반환
