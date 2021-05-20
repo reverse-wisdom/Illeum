@@ -112,7 +112,7 @@ export default {
   bottom: 0;
   height: 80px;
   width: 32.3vw;
-  background: hsl(171, 66%, 44%);
+  background: #41ea93;
   margin-left: 33%;
   text-align: center;
 }

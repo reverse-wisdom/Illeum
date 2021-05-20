@@ -8,39 +8,13 @@
       </p>
     </v-row>
     <v-row justify="center">
-      <div style="margin-right: 5%">
-        <div style="border: 1px solid ##2E95FF; background: #FF625C ; border-radius: 50px; color:white; padding:0.5rem; width:70%; margin:1rem auto;  font-size:1rem; margin-bottom: 10%;">
-          <v-icon color="white">mdi-alarm-check</v-icon>
-          출석왕
+      <v-col style="" cols="6" sm="6">
+        <div class="class-label">
+          <v-icon color="white">mdi-calendar-today</v-icon>
+          날짜선택
         </div>
-
-        <v-avatar class="mb-3" color="grey darken-1" size="200">
-          <v-img :src="'/profile/' + attendFirstUid + '/256'" id="preview" alt=""></v-img>
-        </v-avatar>
-        <p style="font-size:1.7rem; font-weight:bold;">
-          {{ attendFirst }}
-          <span style="font-size:1.2rem;">교육생</span>
-        </p>
-      </div>
-      <div>
-        <div style="border: 1px solid ##2E95FF; background: #FF625C ; border-radius: 50px; color:white; padding:0.5rem; width:70%; margin:1rem auto;  font-size:1rem; margin-bottom: 10%;">
-          <v-icon color="white">mdi-forum-outline</v-icon>
-          채팅참여왕
-        </div>
-        <div>
-          <v-avatar class="mb-3" color="grey darken-1" size="200">
-            <v-img :src="'/profile/' + partinFirstUid + '/256'" id="preview" alt=""></v-img>
-          </v-avatar>
-          <p style="font-size:1.7rem; font-weight:bold;">
-            {{ partinFirst }}
-            <span style="font-size:1.2rem;">교육생</span>
-          </p>
-        </div>
-      </div>
-
-      <v-col cols="12" sm="6">
         <v-date-picker
-          width="300"
+          width="400"
           color="#FF625C"
           v-model="date"
           @click:date="classNameFetch"
@@ -54,29 +28,63 @@
           min="1900-04-01"
           max="2100-10-30"
         ></v-date-picker>
-
-        <v-col style="margin:auto;" cols="12" sm="10">
-          <v-select :items="items" :label="date" solo @input="showPartin" style="max-width:100%; "></v-select>
-        </v-col>
+      </v-col>
+      <v-col cols="6" sm="6">
+        <div class="class-label class-choice">
+          <v-icon color="white">mdi-school-outline</v-icon>
+          수업선택
+        </div>
+        <v-select :items="items" :label="date" solo @input="showPartin" placeholder="클래스를 선택해주세요" style="max-width:100%; margin-left:0.8rem; "></v-select>
+        <div v-if="uidcheck" class="alert-contain">
+          <v-alert v-if="UserAttendRank != 1000" style="width:90%; margin:auto;" color="#2e95ff" border="left" dark>
+            해당 수업 총 수강생 {{ fetchRoomlen }}명중에 출석순위는
+            <span style="font-size:1.5rem;">{{ UserAttendRank }}위</span>
+            입니다
+          </v-alert>
+          <v-alert v-else border="left" style="width:90%; margin:auto;" color="#2e95ff" dark>수업에 참여하지 않았습니다.</v-alert>
+          <v-alert v-if="zeroPartinchk == false" border="left" style="width:90%; margin: 2% auto; " color="#FF625C " dark>
+            해당 수업 총 수강생 {{ fetchRoomlen }}명중에 채팅참여도는
+            <span style="font-size:1.5rem;">{{ UserPartinRank }}위</span>
+            입니다
+          </v-alert>
+          <v-alert v-else border="left" style="width:90%; margin: 2% auto;" color="#FF625C " dark>채팅에 참여하지 않았습니다.</v-alert>
+        </div>
       </v-col>
     </v-row>
-
+    <v-row>
+      <v-col cols="12" sm="12">
+        <fieldset class="partin-contain">
+          <legend>우등생</legend>
+          <div>
+            <v-avatar class="mb-3" color="grey darken-1" size="150">
+              <v-img :src="'/profile/' + attendFirstUid + '/256'" id="preview" alt=""></v-img>
+            </v-avatar>
+            <div class="attend-first">
+              <v-icon color="white">mdi-alarm-check</v-icon>
+              출석왕
+            </div>
+            <p style="font-size:1.7rem; font-weight:bold;  color: #505050;  text-decoration: underline;text-underline-position:under; ">
+              {{ attendFirst }}
+            </p>
+          </div>
+          <div style="margin-left: 10%">
+            <div>
+              <v-avatar class="mb-3" color="grey darken-1" size="150">
+                <v-img :src="'/profile/' + partinFirstUid + '/256'" id="preview" alt=""></v-img>
+              </v-avatar>
+              <div class="chat-first">
+                <v-icon color="white">mdi-forum-outline</v-icon>
+                채팅참여왕
+              </div>
+              <p style="font-size:1.7rem; color: #505050; font-weight:bold; text-decoration: underline; text-underline-position:under; ">
+                {{ partinFirst }}
+              </p>
+            </div>
+          </div>
+        </fieldset>
+      </v-col>
+    </v-row>
     <!-- <h2>{{ date }}</h2> -->
-
-    <div v-if="uidcheck" style="display:flex; flex-direction:column;">
-      <v-alert v-if="UserAttendRank != 1000" style="width:90%; margin:auto;" color="#756BFF" border="left" dark>
-        해당 수업의 총 수강생 {{ fetchRoomlen }}명중에 출석순위는
-        <span style="font-size:1.5rem;">{{ UserAttendRank }}위</span>
-        입니다
-      </v-alert>
-      <v-alert v-else border="left" style="width:90%; margin:auto;" color="#756BFF" dark>수업에 참여하지 않았습니다.</v-alert>
-      <v-alert v-if="zeroPartinchk == false" border="left" style="width:90%; margin: 2% auto; " color="#41EA93" dark>
-        해당 수업의 총 수강생 {{ fetchRoomlen }}명중에 채팅참여도는
-        <span style="font-size:1.5rem;">{{ UserPartinRank }}위</span>
-        입니다
-      </v-alert>
-      <v-alert v-else border="left" style="width:90%; margin: 2% auto;" color="#41EA93" dark>채팅에 참여하지 않았습니다.</v-alert>
-    </div>
   </div>
 </template>
 
@@ -144,6 +152,7 @@ export default {
       return new Date(date).getFullYear(date) + ' ' + monthsOfYear[new Date(date).getMonth(date)];
     },
     classNameFetch() {
+      this.items = [];
       for (var i = 0; i < this.eval.length; i++) {
         if (this.eval[i].eval_date.slice(0, 10) === this.date && !this.items.includes(this.eval[i].room_name)) {
           this.items.push(this.eval[i].room_name);
@@ -164,6 +173,7 @@ export default {
       this.fetchRoomlen = 0;
       this.zeroPartinchk = false;
       this.UserAttendRank = '';
+      this.selectedRoomName = '';
       for (var i = 0; i < this.eval.length; i++) {
         if (this.eval[i].room_name === selected && this.date == this.eval[i].eval_date.slice(0, 10)) {
           this.selectedRoomName = selected;
@@ -225,17 +235,111 @@ export default {
           this.zeroPartinchk = true;
         }
       }
-      console.log(this.partData);
-      console.log(this.fetchRoomlen);
-      console.log(this.partinFirst);
-      console.log(this.partinFirstUid);
     },
   },
 };
 </script>
 <style scoped>
 .user-partin {
-  margin: 3% 2%;
+  margin: 3% 2% 10% 2%;
   background: #f9f9f9;
+}
+.partin-contain {
+  /* display: flex;
+  padding: 2rem 5rem 0rem 5rem;
+  border: 0px solid rgb(73, 72, 72);
+
+  background: #fff;
+  justify-content: space-evenly;
+  box-shadow: 0px 3px 15px rgba(0, 0, 0, 0.3);
+  margin: 1.5rem 2rem -6rem 1rem;
+
+  border-top: #2e95ff solid 3rem;
+
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px; */
+  width: 80%;
+  display: flex;
+  justify-content: center;
+  margin: auto;
+  border: 0px solid black;
+  background: #fff;
+  padding-top: 2rem;
+  border-radius: 20px;
+  border-top: #2e95ff solid 3.75rem;
+  padding-bottom: 2rem;
+  box-shadow: 2px 3px 15px rgba(0, 0, 0, 0.2);
+}
+legend {
+  background: #2e95ff;
+
+  padding-bottom: 0.5rem;
+  padding-top: -2rem;
+  font-size: 1.5rem;
+  box-sizing: border-box;
+
+  width: inherit;
+  color: #fff;
+  border-top: #2e95ff solid 1rem;
+}
+.alert-contain {
+  display: flex;
+  width: 100%;
+  margin-left: 2rem;
+  flex-direction: column;
+  padding: 2rem 1rem 0rem rem;
+  border: 0px solid rgb(73, 72, 72);
+  /* background: #f6f6f6; */
+  border-radius: 30px;
+  /* box-shadow: 0px 3px 15px rgba(0, 0, 0, 0.3); */
+  margin: 1rem auto;
+}
+.attend-first {
+  border: 0px solid #2e95ff;
+  background: #2e95ff;
+  /* border-top: #2e95ff solid 1rem; */
+
+  /* border-radius: 50px; */
+  color: white;
+  padding: 0.5rem;
+  width: 100%;
+  margin: 1rem 1rem 1rem 0rem;
+  font-size: 1rem;
+  /* margin-bottom: 10%; */
+  border-top-left-radius: 0.8rem;
+  border-top-right-radius: 0.8rem;
+}
+.chat-first {
+  border: 0px solid #2e95ff;
+  background: #2e95ff;
+
+  color: white;
+  padding: 0.5rem;
+  width: 100%;
+  margin: 1rem 1rem 1rem 0rem;
+  font-size: 1rem;
+  margin-bottom: 10%;
+  border-top-left-radius: 0.8rem;
+  border-top-right-radius: 0.8rem;
+}
+.class-label {
+  width: 45%;
+  height: 3rem;
+  font-size: 1.2rem;
+  letter-spacing: 2px;
+  background: rgb(255, 98, 92);
+  border: 0px solid black;
+  border-radius: 50px;
+  /* margin-right: */
+  padding: 12px 2rem;
+  margin: 0rem 1rem 0rem 0rem;
+
+  color: white;
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
+}
+.class-choice {
+  margin-left: 0.8rem;
+  margin-bottom: 1rem;
 }
 </style>
