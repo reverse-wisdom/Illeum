@@ -40,26 +40,26 @@ public class EntrantController {
 	public ResponseEntity<Object> findAll() {
 		return new ResponseEntity<>(entrantRepository.findAll(), HttpStatus.OK);
 	}
-	
+
 	@ApiOperation(value = "방  참가한 사람 조회")
 	@GetMapping(path = "/findCount")
-	public ResponseEntity<Object> findMember(@RequestParam int rid) {	
-		return new ResponseEntity<>(entrantRepository.findByRid(rid).size()-1, HttpStatus.OK);
+	public ResponseEntity<Object> findMember(@RequestParam int rid) {
+		return new ResponseEntity<>(entrantRepository.findByRid(rid).size(), HttpStatus.OK);
 	}
-	
+
 	@ApiOperation(value = "참여자가 방에 참여했는지 여부 확인")
 	@GetMapping(path = "/findUidAndRid")
 	public ResponseEntity<Object> findUidAndRid(@RequestParam int uid, @RequestParam int rid) {
 		try {
-			Entrant entrant = entrantRepository.findByUidAndRid(uid,rid);
-			if(entrant != null) {
+			Entrant entrant = entrantRepository.findByUidAndRid(uid, rid);
+			if (entrant != null) {
 				return new ResponseEntity<>(entrant, HttpStatus.OK);
-			}else {
+			} else {
 				return new ResponseEntity<>("참가자 명단에 없습니다.", HttpStatus.NO_CONTENT);
 			}
-		}catch (Exception e) {
+		} catch (Exception e) {
 			return new ResponseEntity<>("fail", HttpStatus.BAD_REQUEST);
-		}	
+		}
 	}
 
 	@ApiOperation(value = "참가자 생성")
@@ -72,14 +72,14 @@ public class EntrantController {
 			entran = new Entrant();
 			entran.setUid(insertRoom.getUid());
 			entran.setRid(insertRoom.getRid());
-			
-            String queueName = "member." + Integer.toString(insertRoom.getUid());
-            String roomName = "room." + Integer.toString(insertRoom.getRid());
+
+			String queueName = "member." + Integer.toString(insertRoom.getUid());
+			String roomName = "room." + Integer.toString(insertRoom.getRid());
 
 			try {
 				Queue queue = new Queue(queueName);
 				FanoutExchange fanout = new FanoutExchange(roomName);
-				
+				fanout.setShouldDeclare(true);
 				Binding bind = BindingBuilder.bind(queue).to(fanout);
 				admin.declareBinding(bind);
 
@@ -98,15 +98,15 @@ public class EntrantController {
 	@DeleteMapping(path = "/deleteByEid")
 	public ResponseEntity<Object> deleteByUid(@RequestParam int eid) {
 		Entrant entran = entrantRepository.findByEid(eid);
-        String queueName = "member." + Integer.toString(entran.getUid());
-        String roomName = "room." + Integer.toString(entran.getRid());
+		String queueName = "member." + Integer.toString(entran.getUid());
+		String roomName = "room." + Integer.toString(entran.getRid());
 
 		try {
 			Queue queue = new Queue(queueName, false);
 			FanoutExchange fanout = new FanoutExchange(roomName);
 			Binding bind = BindingBuilder.bind(queue).to(fanout);
 			admin.removeBinding(bind);
-			
+
 			entrantRepository.deleteByEid(eid);
 		} catch (Exception e) {
 			return new ResponseEntity<>("fail", HttpStatus.BAD_REQUEST);
