@@ -15,7 +15,7 @@
         </div>
         <v-date-picker
           v-model="date"
-          width="350"
+          width="400"
           color="#FF625C"
           @click:date="classNameFetch"
           :allowed-dates="allowedDates"

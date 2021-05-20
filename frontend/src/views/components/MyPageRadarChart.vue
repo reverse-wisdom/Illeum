@@ -16,19 +16,19 @@ export default {
           {
             label: '내점수',
             data: [],
-            stepSize: 1,
-            backgroundColor: 'rgba(54, 162, 235, 0.2)',
-            borderColor: 'rgb(54, 162, 235)',
-            pointBackgroundColor: 'rgb(54, 162, 235)',
+
+            fill: false,
+            backgroundColor: 'rgba(255, 98, 92, 0.5)',
+            borderColor: 'rgb(255, 98, 92)',
+            pointBackgroundColor: 'rgb(255, 98, 92)',
             pointBorderColor: '#fff',
             pointHoverBackgroundColor: '#fff',
-            pointHoverBorderColor: 'rgb(54, 162, 235)',
+            pointHoverBorderColor: 'rgb(255, 98, 92)',
           },
           {
-            label: '평균',
+            label: '수업 평균',
             data: [],
-
-            fill: true,
+            fill: false,
             backgroundColor: 'rgba(117, 107, 255, 0.5)',
             borderColor: 'rgb(117, 107, 255)',
             pointBackgroundColor: 'rgb(117, 107, 255)',
@@ -43,7 +43,6 @@ export default {
           ticks: {
             max: this.maxNumber,
             min: 0,
-
             beginAtZero: true,
           },
         },
@@ -53,8 +52,6 @@ export default {
               return;
             },
             label: function(tooltipItem, chartData) {
-              console.log('3333', tooltipItem);
-              console.log('4444', chartData);
               return `${chartData.labels[tooltipItem['index']]}:${tooltipItem.label}`;
             },
           },

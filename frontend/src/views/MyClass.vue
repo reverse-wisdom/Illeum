@@ -134,12 +134,13 @@ input[type='checkbox'] {
   overflow: hidden;
   position: relative;
   display: inline-block;
+
   width: 10rem;
   height: 3rem;
   -webkit-border-radius: 13px;
   -moz-border-radius: 13px;
   border-radius: 50px;
-  background-color: #ed4956;
+  background-color: #ff625c;
   color: #fff;
   font-weight: bold;
   cursor: pointer;
