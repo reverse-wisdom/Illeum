@@ -67,14 +67,14 @@ export default {
 
 <style scoped>
 @font-face {
-  font-family: 'GongGothicLight';
-  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-10@1.0/GongGothicLight.woff') format('woff');
+  font-family: 'NEXON Lv1 Gothic OTF';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@2.1/NEXON Lv1 Gothic OTF.woff') format('woff');
   font-weight: normal;
   font-style: normal;
 }
 
 #user-eval {
   margin: 3% 2%;
-  font-family: 'GongGothicLight';
+  font-family: 'NEXON Lv1 Gothic OTF';
 }
 </style>

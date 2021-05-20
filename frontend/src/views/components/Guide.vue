@@ -176,7 +176,7 @@ export default {
   font-style: normal;
 }
 * {
-  font-family: 'S-CoreDream-4Regular';
+  /* font-family: 'S-CoreDream-4Regular'; */
 }
 .section {
   text-align: center;
