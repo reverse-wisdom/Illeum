@@ -2,7 +2,7 @@
   <div class="user-partin">
     <v-row>
       <p class="guide-text">
-        출결확인을 위해
+        상대평가 데이터 확인을 위해
         <strong style="letter-spacing:1px">①날짜를 체크하고 ②클래스를 선택</strong>
         해주세요.
       </p>
@@ -14,7 +14,7 @@
           날짜선택
         </div>
         <v-date-picker
-          width="400"
+          width="540"
           color="#FF625C"
           v-model="date"
           @click:date="classNameFetch"
@@ -34,20 +34,20 @@
           <v-icon color="white">mdi-school-outline</v-icon>
           수업선택
         </div>
-        <v-select :items="items" :label="date" solo @input="showPartin" placeholder="클래스를 선택해주세요" style="max-width:100%; margin-left:0.8rem; "></v-select>
+        <v-select :items="items" :label="date" solo @input="showPartin" placeholder="클래스를 선택해주세요" style="max-width:85%; margin-left:0.8rem; "></v-select>
         <div v-if="uidcheck" class="alert-contain">
-          <v-alert v-if="UserAttendRank != 1000" style="width:90%; margin:auto;" color="#2e95ff" border="left" dark>
+          <v-alert v-if="UserAttendRank != 1000" style="width:80%;  margin-top:2%; margin-left:5%;" color="#2e95ff" border="left" dark>
             해당 수업 총 수강생 {{ fetchRoomlen }}명중에 출석순위는
             <span style="font-size:1.5rem;">{{ UserAttendRank }}위</span>
             입니다
           </v-alert>
-          <v-alert v-else border="left" style="width:90%; margin:auto;" color="#2e95ff" dark>수업에 참여하지 않았습니다.</v-alert>
-          <v-alert v-if="zeroPartinchk == false" border="left" style="width:90%; margin: 2% auto; " color="#FF625C " dark>
+          <v-alert v-else border="left" style="width:80%; margin:auto;" color="#2e95ff" dark>수업에 참여하지 않았습니다.</v-alert>
+          <v-alert v-if="zeroPartinchk == false" border="left" style="width:80%; margin-top:2%; margin-left:5%; " color="#FF625C " dark>
             해당 수업 총 수강생 {{ fetchRoomlen }}명중에 채팅참여도는
             <span style="font-size:1.5rem;">{{ UserPartinRank }}위</span>
             입니다
           </v-alert>
-          <v-alert v-else border="left" style="width:90%; margin: 2% auto;" color="#FF625C " dark>채팅에 참여하지 않았습니다.</v-alert>
+          <v-alert v-else border="left" style="width:80%; margin-top:2%; margin-left:5%; " color="#FF625C " dark>채팅에 참여하지 않았습니다.</v-alert>
         </div>
       </v-col>
     </v-row>

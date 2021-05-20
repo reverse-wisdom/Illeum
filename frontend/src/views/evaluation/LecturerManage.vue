@@ -18,9 +18,8 @@
     </v-alert>
     <v-row>
       <p class="guide-text">
-        출결확인을 위해
         <strong style="letter-spacing:1px">①날짜를 체크하고 ②클래스를 선택</strong>
-        해주세요.
+        하면 해당 클래스에 참여한 수강생들의 평가데이터를 조회하실 수 있습니다.
       </p>
     </v-row>
     <v-row>
@@ -31,7 +30,7 @@
         </div>
         <v-date-picker
           width="400"
-          style="height:82%;"
+          style="height:82%; margin-left:-25%;"
           color="#FF625C"
           v-model="date"
           @click:date="classNameFetch"
@@ -50,7 +49,7 @@
         </div>
         <v-select style="margin-left:2%;" placeholder="클래스를 선택해주세요" :items="roomNameList" :value="roomNameList[0]" solo @input="showAll"></v-select>
         <v-col cols="12">
-          <v-card class="mx-auto mt-0 " max-width="600">
+          <v-card class="mx-auto mt-0 " max-width="800">
             <v-toolbar flat color="rgb(255, 98, 92)" class="" style="padding:0.1rem; color:#fff;">
               <v-toolbar-title style="letter-spacing: 1px;">
                 <v-icon color="#fff">mdi-account-search-outline</v-icon>
@@ -102,7 +101,7 @@
                 <th scope="col">참여시간</th>
                 <th scope="col">채팅참여순위</th>
                 <th scope="col">채팅횟수</th>
-                <th scope="col"></th>
+                <th scope="col">평가조회</th>
               </tr>
             </thead>
 
@@ -133,7 +132,7 @@
     <!-- modal -->
     <v-dialog v-if="$store.state.token" v-model="dialog" hide-overlay max-width="900px">
       <v-card flat>
-        <v-toolbar flat color="#2E95FF  " dark>
+        <v-toolbar flat color="#2E95FF " dark>
           <v-toolbar-title>
             <span>{{ modalEach.name }}님의</span>
             평가조회
@@ -161,7 +160,7 @@
 
           <v-tab-item>
             <v-card flat>
-              <div style="margin:1.5rem 0; ">
+              <div style="margin:1rem 0; ">
                 <v-icon left large style="margin-bottom:1rem;" color="#2E95FF">
                   mdi-alarm
                 </v-icon>
@@ -537,7 +536,7 @@ table > tbody > tr:hover {
   font-size: 1rem;
   width: 30%;
   height: 60%;
-  padding: 5px 10px;
+  padding: 0.5rem 3rem;
 
   color: white;
 }
@@ -548,7 +547,7 @@ table > tbody > tr:hover {
   font-size: 1rem;
   width: 30%;
   height: 60%;
-  padding: 5px 10px;
+  padding: 0.5rem 3rem;
 
   color: white;
 }
@@ -559,7 +558,7 @@ table > tbody > tr:hover {
   font-size: 1rem;
   width: 30%;
   height: 60%;
-  padding: 5px 10px;
+  padding: 0.5rem 3rem;
   color: white;
 }
 </style>
