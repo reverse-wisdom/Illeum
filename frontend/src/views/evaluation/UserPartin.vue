@@ -1,7 +1,7 @@
 <template>
   <div class="user-partin">
     <v-row>
-      <p>
+      <p class="guide-text">
         출결확인을 위해
         <strong style="letter-spacing:1px">①날짜를 체크하고 ②클래스를 선택</strong>
         해주세요.
@@ -341,5 +341,8 @@ legend {
 .class-choice {
   margin-left: 0.8rem;
   margin-bottom: 1rem;
+}
+.guide-text {
+  margin: 0.5rem auto;
 }
 </style>

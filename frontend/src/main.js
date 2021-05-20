@@ -40,7 +40,7 @@ export default new Vuetify({
 
 Vue.use(Vuetify); // Vuetify
 
-Vue.use(VueFullPage); //VueFullPage
+Vue.use(VueFullPage);
 
 Vue.use(EmojiPickerPlugin); // emoji
 
