@@ -8,10 +8,128 @@
 
         <button style="margin-bottom:0;" @click="$refs.fullpage.api.moveSectionDown()">NEXT ▼</button>
       </div>
+      <!-- 강의자 -->
       <div class="section section2" :style="image_2">
-        <!-- 화상플랫폼(webRTC) 기능
-
-        쌍방향 음성, 영상, 화이트보드, 화면공유, 채팅, 실시간알림 , -->
+        <div class="mode-label">강의자 가이드</div>
+        <div class="slide">
+          <h4 style="">
+            STEP1.
+            <span style="font-weight:bold; font-size:2rem;">
+              클래스만들기
+            </span>
+          </h4>
+          <div>
+            <div class="lec-detail">
+              강의자는 클래스만들기를 통해 강의 이름, 기간, 시간, 공개여부를 선택하여 클래스를 개설 할 수 있습니다.
+            </div>
+            <img src="@/assets/img/lecturer1.png" />
+          </div>
+        </div>
+        <div class="slide">
+          <h4>
+            STEP2.
+            <span style="font-weight:bold; font-size:2rem;">
+              클래스 리스트
+            </span>
+          </h4>
+          <div>
+            <div class="lec-detail">
+              강의자는 클래스 목록에서 생성된 클래스 확인, 수업을 시작 할 수 있습니다.
+            </div>
+            <img src="@/assets/img/lecturer2.png" />
+          </div>
+        </div>
+        <div class="slide">
+          <h4>
+            STEP3.
+            <span style="font-weight:bold; font-size:2rem;">
+              클래스 시작
+            </span>
+          </h4>
+          <div>
+            <div class="lec-detail">
+              시작 후 화면 공유, 채팅, 화이트보드를 이용해 수업을 진행하고, AI로 수업 태도 알림 을 받을 수 있습니다.
+            </div>
+            <img src="@/assets/img/lecturer3.png" />
+          </div>
+        </div>
+        <div class="slide">
+          <h4>
+            STEP4.
+            <span style="font-weight:bold; font-size:2rem;">
+              클래스 평가 관리
+            </span>
+          </h4>
+          <div>
+            <div class="lec-detail">
+              날짜, 강의, 조건 을 선택하면 참여한 청강자의 평가를 조회 할 수 있습니다.
+            </div>
+            <img src="@/assets/img/lecturer4.png" />
+          </div>
+        </div>
+      </div>
+      <!-- 청강자 -->
+      <div class="section section2" :style="image_2">
+        <div class="mode-label" style="background: #FF625C;">수강자 가이드</div>
+        <div class="slide">
+          <h4>
+            STEP1.
+            <span style="font-weight:bold; font-size:2rem;">
+              수강신청
+            </span>
+          </h4>
+          <div>
+            <div class="lec-detail">
+              수강해야하는 강의를 신청합니다 비공개방이라면 비밀번호를 입력해야 신청이 완료됩니다.
+            </div>
+            <img src="@/assets/img/learner1.png" />
+          </div>
+        </div>
+        <div class="slide">
+          <h4>
+            STEP2.
+            <span style="font-weight:bold; font-size:2rem;">
+              수업 참여
+            </span>
+          </h4>
+          <div>
+            <div class="lec-detail">
+              강의시간이되면 수업에 참여할 수 있습니다.
+            </div>
+            <img src="@/assets/img/learner2.png" />
+          </div>
+        </div>
+        <div class="slide">
+          <h4>
+            STEP3.
+            <span style="font-weight:bold; font-size:2rem;">
+              수업수강
+            </span>
+          </h4>
+          <div>
+            <div class="lec-detail">
+              시작 후 화면 공유, 채팅, 화이트보드를 이용해 수업을 참여하고, AI로 수업 태도 알림 을 받을 수 있습니다.
+            </div>
+            <img src="@/assets/img/learner3.png" />
+          </div>
+        </div>
+        <div class="slide">
+          <h4>
+            STEP4.
+            <span style="font-weight:bold; font-size:2rem;">
+              평가 조회
+            </span>
+          </h4>
+          <div>
+            <div class="lec-detail">
+              집중, 딴짓, 졸음, 자리 비움에 대한 학습 관리, 출결 및 참여도 관리를 통해 자신의 수업태도를 확인 할 수 있습니다.
+            </div>
+            <img src="@/assets/img/learner4.png" />
+          </div>
+        </div>
+      </div>
+      <!-- <div class="section section2" :style="image_2">
+        화상플랫폼(webRTC) 기능 쌍방향 음성, 영상, 화이트보드, 화면공유, 채팅, 실시간알림 ,
         <div class="slide">
           <h3>Slide 2.1</h3>
         </div>
@@ -27,81 +145,18 @@
         <div class="slide">
           <h3>Slide 2.5</h3>
         </div>
-      </div>
-      <div class="section section2" :style="image_2">
-        <!-- 화상플랫폼(webRTC) 기능
-
-        쌍방향 음성, 영상, 화이트보드, 화면공유, 채팅, 실시간알림 , -->
-        <div class="slide">
-          <h3>Slide 2.1</h3>
-        </div>
-        <div class="slide">
-          <h3>Slide 2.2</h3>
-        </div>
-        <div class="slide">
-          <h3>Slide 2.3</h3>
-        </div>
-        <div class="slide">
-          <h3>Slide 2.4</h3>
-        </div>
-        <div class="slide">
-          <h3>Slide 2.5</h3>
-        </div>
-      </div>
-      <div class="section section2" :style="image_2">
-        <!-- 화상플랫폼(webRTC) 기능
-
-        쌍방향 음성, 영상, 화이트보드, 화면공유, 채팅, 실시간알림 , -->
-        <div class="slide">
-          <h3>Slide 2.1</h3>
-        </div>
-        <div class="slide">
-          <h3>Slide 2.2</h3>
-        </div>
-        <div class="slide">
-          <h3>Slide 2.3</h3>
-        </div>
-        <div class="slide">
-          <h3>Slide 2.4</h3>
-        </div>
-        <div class="slide">
-          <h3>Slide 2.5</h3>
-        </div>
-      </div>
+      </div> -->
       <div class="section section3" :style="image_3">
         <!-- <h4 style="color: #535353;  letter-spacing:4px; font-size:2rem;">실시간 학습태도관리</h4> -->
         <ul class="features">
-          <div style="display:flex; flex-direction:row;">
-            <li>
-              <em class="fa fa-3x fa-eye"></em>
-              <h3>집중</h3>
-              <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium aut,</p>
-            </li>
-
-            <li>
-              <em class="fa fa-3x fa-exclamation"></em>
-              <h3>딴짓</h3>
-              <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium aut,</p>
-            </li>
-          </div>
-          <div style="display:flex; flex-direction:row;">
-            <li>
-              <em class="fa fa-3x fa-eye-slash"></em>
-              <h3>졸음</h3>
-              <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium aut,</p>
-            </li>
-            <li>
-              <em class="fa fa-3x fa-window-close"></em>
-              <h3>자리비움</h3>
-              <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium aut,</p>
-            </li>
+          <div style="display:flex; flex-direction:column;  margin-left:2rem; width:40%">
+            <h1 style="color:#756BFF; font-size:3rem; text-align:center; margin-left:4rem;">AI격차가 곧, 공부격차</h1>
+            <div style="margin-left:5rem; margin-top:2rem;">
+              <strong>집중, 딴짓, 졸음, 자리비움</strong>
+              총 4가지 태도를 AI로 실시간 감지하여 학습습관을 스마트하게 관리할 수 있습니다.
+            </div>
           </div>
         </ul>
-        <!-- <div class="text-box">
-          <p class="section3-p">
-            학생들의 카메라에 비치는 얼굴, 시선, 상태에 따라서 현재 학생이 집중하는지, 딴짓을 하는지, 졸고 있는지, 자리를 비웠는지 등의 4가지 상태로 나누어서 AI로 실시간 학습태도를 관리할 수 있습니다.
-          </p>
-        </div> -->
         <div>
           <LandingComp></LandingComp>
         </div>
@@ -119,24 +174,27 @@
                 <v-col cols="4">
                   <div>
                     <h1>출결현황</h1>
-                    <p>
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim magni veritatis, expedita maiores error.
+                    <p style="font-size:1rem;">
+                      <strong>illeum</strong>
+                      은 수강자가 강의를 입장한 시간을 기준으로 출결기록을 실시간으로 체크하기 때문에 수동으로 출결관리를 하지 않아도 됩니다.
                     </p>
                   </div>
                 </v-col>
                 <v-col cols="4">
                   <div>
                     <h1>평가관리/조회</h1>
-                    <p>
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim magni veritatis, expedita maiores error.
+                    <p style="font-size:1rem;">
+                      <strong>illeum</strong>
+                      은 수강자, 강의자 모두 자신이 참여/강의한 클래스에 관한 평가데이터를 데이터 시각화를 기반한 통계데이터를 제공합니다.
                     </p>
                   </div>
                 </v-col>
                 <v-col cols="4">
                   <div>
                     <h1>참여도</h1>
-                    <p>
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim magni veritatis, expedita maiores error.
+                    <p style="font-size:1rem;">
+                      <strong>illeum</strong>
+                      은 수강생의 학습의욕을 고취하고자, 채팅참여기록과 출석기록를 기반하여 상대평가 데이터를 제공합니다.
                     </p>
                   </div>
                 </v-col>
@@ -175,7 +233,7 @@ export default {
     },
     image2: {
       type: String,
-      default: require('@/assets/img/bg2.jpg'),
+      default: require('@/assets/img/bg4.jpg'),
     },
     image3: {
       type: String,
@@ -212,17 +270,17 @@ export default {
 </script>
 <style scoped>
 @font-face {
-  font-family: 'S-CoreDream-4Regular';
-  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-4Regular.woff') format('woff');
+  font-family: 'NEXON Lv1 Gothic OTF';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@2.1/NEXON Lv1 Gothic OTF.woff') format('woff');
   font-weight: normal;
   font-style: normal;
 }
 * {
-  /* font-family: 'S-CoreDream-4Regular'; */
+  font-family: 'NEXON Lv1 Gothic OTF';
 }
 .section {
   text-align: center;
-  font-size: 1rem;
+  font-size: 1.2rem;
 }
 .section1 {
   z-index: -1;
@@ -230,7 +288,7 @@ export default {
   background-size: cover;
 }
 .section2 {
-  opacity: 0.4;
+  /* opacity: 0.4; */
 }
 .section3 {
   /* opacity: 0.5; */
@@ -241,7 +299,7 @@ export default {
 .section2a {
   position: relative;
   text-align: left;
-  line-height: 1.5em;
+  line-height: 1.4em;
   display: flex;
   justify-content: space-around;
   align-items: center;
@@ -278,56 +336,29 @@ export default {
 .content >>> .section1-p {
   color: #535353;
   font-size: 1.25em;
-  font-family: 'GongGothicMedium', 'Serif';
+  font-family: 'NEXON Lv1 Gothic OTF', 'Serif';
 }
 .content >>> h3 {
   color: rgb(250, 248, 248);
   margin-bottom: 15px;
   font-size: 2em;
-  font-family: 'GongGothicLight', 'Serif';
+  font-family: 'NEXON Lv1 Gothic OTF', 'Serif';
 }
 
 .section3-p {
   margin-top: 0px;
   color: hsl(210, 2%, 22%);
   font-size: 0.8em;
-  line-height: 1eem;
+  line-height: 1em;
   padding: 20px 20px;
   max-width: 44%;
   margin: auto;
   line-height: 32px;
-  font-family: 'GongGothicLight';
 }
 .text-box {
   width: 100%;
   display: flex;
 }
-/* .fp-controlArrow {
-  position: absolute;
-  z-index: 4;
-  top: 50%;
-  cursor: pointer;
-  width: 0;
-  height: 0;
-  border-style: solid;
-  margin-top: -38px;
-}
-.fp-controlArrow.fp-prev {
-  left: 30;
-  border: none;
-  width: 50px;
-  height: 101px;
-
-  cursor: pointer;
-}
-.fp-controlArrow.fp-prev {
-  right: 30;
-  border: none;
-  width: 50px;
-  height: 101px;
-
-  cursor: pointer;
-} */
 
 .features {
   padding: 0;
@@ -355,15 +386,6 @@ export default {
   flex-direction: column;
 }
 
-/* .section2 {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  padding-top: 50px;
-} */
-
 .monitor {
   height: 50vh;
   width: auto;
@@ -380,5 +402,26 @@ export default {
 }
 .section4-content h1 {
   margin: 1.2rem auto;
+}
+.slide img {
+  width: 43%;
+  margin-top: 2rem;
+}
+.slide h4 {
+  font-size: 1.5rem;
+
+  margin-top: -2em;
+  margin-bottom: 1rem;
+}
+.lec-detail {
+  font-size: 1rem;
+  font-weight: bold;
+}
+.mode-label {
+  border: 0px solid #fff;
+  background: #2e95ff;
+  color: #fff;
+  padding: 1rem;
+  font-size: 2rem;
 }
 </style>
