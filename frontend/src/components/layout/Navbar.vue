@@ -1,5 +1,5 @@
 <template>
-  <div id="">
+  <div id="navbar">
     <v-navigation-drawer permanent app width="320">
       <img src="../../assets/img/textlogo_2.png" class="Navlogo" alt="" style="width:240px; height:100px; margin: 4% 0;" />
 
@@ -106,61 +106,57 @@
 
     <v-dialog v-if="this.$store.state.token" v-model="dialog" persistent max-width="800px">
       <v-card>
-        <v-card-title>
+        <v-card-title style="background:#2E95FF; color:white;">
           <span class="headline">
             <span>{{ this.$store.state.name }}님의</span>
-            Profile
+            프로필
           </span>
         </v-card-title>
         <v-card-text>
-          <v-container>
-            <v-row>
-              <v-col cols="12">
-                <!-- <v-col cols="12" sm="6" md="6"> -->
-                <div>PROFILE IMAGE</div>
-                <!-- <img src="../../assets/img/greenlogo.png" class="Navlogo" alt="" /> -->
-                <div class="formdata">
-                  <v-file-input
-                    id="thumbnail"
-                    name="thumbnail"
-                    v-model="image"
-                    show-size
-                    label="프로필 이미지 수정을 위해 입력창을 클릭해주세요"
-                    @change="Preview_image($event)"
-                    style=" cursor : pointer;"
-                  ></v-file-input>
-                  <v-img :src="url" id="preview" style="width:100px; height:100px;"></v-img>
-                </div>
-              </v-col>
-              <v-col cols="12">
-                <label for="">계정:</label>
-                {{ this.$store.state.email }}
-              </v-col>
-              <v-col cols="12">
-                <label for="">이름:</label>
-                {{ this.$store.state.name }}
-              </v-col>
-              <v-col cols="12" sm="6">
-                <v-row>
+          <div style="display:flex; flex-direction:column; justify-content:start;">
+            <!-- <v-col cols="12" sm="6" md="6"> -->
+            <div class="label-profile">프로필 이미지</div>
+            <!-- <img src="../../assets/img/greenlogo.png" class="Navlogo" alt="" /> -->
+            <div class="formdata">
+              <v-file-input
+                id="thumbnail"
+                name="thumbnail"
+                v-model="image"
+                show-size
+                label="프로필 이미지 수정을 위해 입력창을 클릭해주세요"
+                @change="Preview_image($event)"
+                style=" cursor : pointer;"
+              ></v-file-input>
+
+              <v-avatar class="mb-3" color="grey darken-1" size="150">
+                <v-img :src="url" id="preview" style=""></v-img>
+              </v-avatar>
+            </div>
+            <div style="display:flex; align-items:center;">
+              <div class="label-profile">계정</div>
+              <div style>{{ this.$store.state.email }}</div>
+            </div>
+            <div style="display:flex; align-items:center;">
+              <div class="label-profile">이름</div>
+              <div>{{ this.$store.state.name }}</div>
+            </div>
+
+            <!-- <v-row>
                   <label for="password">비밀번호:</label>
                   <input type="password" id="password" v-model="password" disabled placeholder="*********" />
                 </v-row>
                 <v-row>
                   <label for="passwordcheck">비밀번호확인:</label>
                   <input type="password" id="passwordcheck" v-model="passwordchk" disabled value="" />
-                </v-row>
-                <v-row>
-                  <template v-if="correspond">
+                </v-row> -->
+
+            <!-- <template>
                     <v-btn id="completed" @click="editPassword">수정완료</v-btn>
-                  </template>
-                  <template v-else>
-                    <v-btn @click="updatePassword">수정하기</v-btn>
-                  </template>
-                </v-row>
-              </v-col>
-              <v-col cols="12" sm="6"></v-col>
-            </v-row>
-          </v-container>
+                  </template> -->
+            <!-- <template>
+                    <v-btn @click="updatePassword">비밀번호수정</v-btn>
+                  </template> -->
+          </div>
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
@@ -177,7 +173,7 @@
 </template>
 
 <script>
-import { logoutUser, editUser, createThumbnails } from '@/api/auth';
+import { logoutUser, editUser, createThumbnails, loginUser } from '@/api/auth';
 export default {
   data() {
     return {
@@ -240,32 +236,75 @@ export default {
         });
       }
     },
-    updatePassword() {
-      const password = document.querySelector('#password');
-      const passwordcheck = document.querySelector('#passwordcheck');
-      password.disabled = false;
-      password.focus();
-      passwordcheck.disabled = false;
-      passwordcheck.classList.add('pwdchk-input');
+    async updatePassword() {
+      this.dialog = false;
+      const { value: user_pw } = await this.$swal({
+        icon: 'question',
+        title: '비밀번호확인',
+        input: 'password',
+        showCancelButton: true,
+        focusConfirm: true,
+      });
+      const userData = {
+        email: this.$store.state.email,
+        password: user_pw,
+      };
+      const { data } = await loginUser(userData);
+      // console.log(data);
+      // console.log(this.$store.state.uuid == data.member.uid);
+
+      if (this.$store.state.uuid == data.member.uid) {
+        const { value: formValues } = await this.$swal({
+          title: '비밀번호 수정',
+          html: '<input id="swal-input1" class="swal2-input">' + '<input id="swal-input2" class="swal2-input">',
+          showCancelButton: true,
+          focusConfirm: true,
+          preConfirm: () => {
+            return [document.getElementById('swal-input1').value, document.getElementById('swal-input2').value];
+          },
+        });
+        if (formValues[0] == formValues[1]) {
+          this.editPassword(formValues[1]);
+        }
+      }
+      // const password = document.querySelector('#password');
+      // const passwordcheck = document.querySelector('#passwordcheck');
+      // password.disabled = false;
+      // password.focus();
+      // passwordcheck.disabled = false;
+      // passwordcheck.classList.add('pwdchk-input');
     },
-    async editPassword() {
+
+    async editPassword(value) {
       const userData = {
         email: this.$store.state.email,
         name: this.$store.state.name,
-        paswword: this.password,
+
+        paswword: value,
       };
-      const { data } = await editUser(userData);
-      if (data == 'success') {
-        this.$swal({
-          icon: 'success',
-          title: '수정완료되었습니다',
-        });
-      }
+      const data = await editUser(userData);
+      console.log(data);
+      // if (data == 'success') {
+      //   this.$swal({
+      //     icon: 'success',
+      //     title: '수정완료되었습니다',
+      //   });
+      // }
     },
   },
 };
 </script>
 <style scoped>
+@font-face {
+  font-family: 'NEXON Lv1 Gothic OTF';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@2.1/NEXON Lv1 Gothic OTF.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+#navbar {
+  /* margin: 3% 2%; */
+  font-family: 'NEXON Lv1 Gothic OTF';
+}
 .name-info {
   font-weight: bold;
   margin-right: 0.2rem;
@@ -278,5 +317,13 @@ export default {
   text-decoration: none;
   color: #24252a;
   font-size: 1rem;
+}
+.label-profile {
+  border: 0px solid #000;
+  background: #2e95ff;
+  margin: 1rem;
+  padding: 1rem 2rem;
+  color: white;
+  font-family: 'NEXON Lv1 Gothic OTF';
 }
 </style>

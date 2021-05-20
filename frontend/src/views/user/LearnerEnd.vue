@@ -118,32 +118,44 @@
               </v-icon>
               참여현황
             </v-tab>
-
             <v-tab-item>
               <v-card flat>
-                <div style="margin:1.5rem 0;">
-                  <v-icon left x-large>
+                <div v-if="modalEach.attend != '결석'" style="margin:1rem 0; ">
+                  <v-icon left large style="margin-bottom:1rem;" color="#2E95FF">
                     mdi-alarm
                   </v-icon>
-                  <span style="font-size:2rem;">{{ modalEach.attend_time }}</span>
+                  <span style="font-size:2rem; color:#2E95FF ;">{{ modalEach.attend_time }}</span>
                   에 출석하셨습니다!
                 </div>
-                <div>
+
+                <div style=" margin: 2rem 1rem;">
                   출결상태는
-                  <span style="font-size:2rem;">{{ modalEach.attend }}</span>
+                  <span :class="{ normal: modalEach.attend == '정상', late: modalEach.attend == '지각', afk: modalEach.attend == '결석' }" style="font-size:2rem;">
+                    {{ modalEach.attend }}
+                  </span>
                   입니다.
                 </div>
               </v-card>
             </v-tab-item>
             <v-tab-item>
               <v-card flat style="width:30%; margin: auto;">
-                <MyPagePieChart :learnData="learnData" :key="modalEach.vid + 'A'" />
-                <MyPageRadarChart :learnData="learnData" :averageData="averageData" :key="modalEach.vid + 'B'" />
+                <div v-if="modalEach.attend != '결석'">
+                  <MyPagePieChart :learnData="learnData" :key="change" />
+                  <MyPageRadarChart :learnData="learnData" :averageData="averageData" :key="modalEach.vid + 'D'" />
+                </div>
+                <div v-else>
+                  결석한 수업이므로 평가가 조회되지 않습니다.
+                </div>
               </v-card>
             </v-tab-item>
             <v-tab-item>
               <v-card flat>
-                <LecUserPartin :each="modalEach" :roomData="modalEach" :evalUserCnt="evalUserCnt" :rid="ridSelected" :key="modalEach.vid + 'C'"></LecUserPartin>
+                <div v-if="modalEach.attend != '결석'">
+                  <LecUserPartin :each="modalEach" :roomData="modalEach" :evalUserCnt="evalUserCnt" :rid="ridSelected" :key="modalEach.vid + 'C'"></LecUserPartin>
+                </div>
+                <div v-else>
+                  결석한 수업이므로 평가가 조회되지 않습니다.
+                </div>
               </v-card>
             </v-tab-item>
           </v-tabs>
@@ -186,8 +198,8 @@ export default {
       attendRank: [],
       attenduidRank: '',
       fetchRoomlen: 0,
-      ridSelected: '',
-      evalcheck: false,
+      evalcheck: true,
+      zeroPartinchk: false,
       averageData: [
         {
           data: '집중',
@@ -210,7 +222,6 @@ export default {
           per: 0,
         },
       ],
-      modalEach: {}, // for modal value
 
       learnData: [
         {
@@ -240,6 +251,11 @@ export default {
       per4: 0,
       per5: 0,
       resDatalen: 0,
+      modalEach: {},
+      ridSelected: '',
+      change: 0,
+      renderKey: 1,
+      attendchk: false,
     };
   },
   computed: {
@@ -264,13 +280,14 @@ export default {
       //출결
       this.attend_time = value.attend_time;
       this.attend = value.attend;
+      this.attendchk = false;
       //평가초기화
       this.roomName = '';
       this.partinRank = [];
       this.attendRank = [];
       this.partuidRank = '';
       this.attenduidRank = '';
-      this.evalUserCnt = 0;
+      this.evalUserCnt = '';
       this.fetchRoomlen = 0;
       //평가
       this.learnData[0].per = value.attention;
@@ -278,6 +295,9 @@ export default {
       this.learnData[2].per = value.asleep;
       this.learnData[3].per = value.afk;
       this.learnData[4].per = value.participation;
+      if (value.attend != '결석') {
+        this.attendchk = true;
+      }
       const { data } = await fetchRoomname(value.room_name);
       const roomPartinUser = data[0].rid;
       this.ridSelected = data[0].rid;
@@ -299,67 +319,13 @@ export default {
       this.averageData[3].per = (this.per4 / res.data.length).toFixed(1);
       this.averageData[4].per = (this.per5 / res.data.length).toFixed(1);
 
-      //-------------참여도구하기
-      // this.evalcheck = true;
-
       this.roomName = value.room_name;
       this.partinRank = [];
       this.attendRank = [];
       this.fetchRoomlen = 0;
 
-      var maxPartin = 0;
-      var first = 100000;
-      //채팅참여도1등, 출석1등 구하기
-      for (var j = 0; j < res.data.length; j++) {
-        this.partinRank.push({ uid: res.data[j].uid, participation: res.data[j].participation });
-        // attendRank push 메소드 시간순으로 정렬됨
-        this.attendRank.push({ uid: res.data[j].uid, attend_time: res.data[j].attend_time });
-        this.attendRank.sort(function(a, b) {
-          return a.attend_time < b.attend_time ? -1 : a.attend_time > b.attend_time ? 1 : 0;
-        });
-        if (maxPartin < res.data[j].participation) {
-          var maxPartin = res.data[j].participation;
-          this.maxUser = res.data[j].name;
-        }
-
-        if (first > res.data[j].ranking) {
-          var first = res.data[j].ranking;
-          this.firstUser = res.data[j].name;
-        }
-        if (this.$store.state.uuid === res.data[j].uid) {
-          this.name = this.$store.state.name;
-          this.fetchRoomlen = res.data.length;
-        }
-      }
-      //채팅참여도 배열 제일 많은순으로 정렬하기
-      this.partinRank.sort(function(a, b) {
-        if (a.participation < b.participation) {
-          return 1;
-        }
-        if (a.participation > b.participation) {
-          return -1;
-        }
-
-        return 0;
-      });
-
-      //로그인한 청강자 채팅참여도 순위 구하기
-      for (var k = 0; k < this.partinRank.length; k++) {
-        if (this.partinRank[k].uid === this.$store.state.uuid) {
-          this.partuidRank = this.partinRank.indexOf(this.partinRank[k]) + 1;
-        }
-      }
-      //로그인한 청강자 출석시간 순위 구하기
-
-      for (var m = 0; m < this.attendRank.length; m++) {
-        if (this.attendRank[m].uid === this.$store.state.uuid) {
-          this.attenduidRank = this.attendRank.indexOf(this.attendRank[m]) + 1;
-        }
-      }
-
-      this.evalUserCnt = res2.data;
+      this.evalUserCnt = String(res2.data);
       this.change++;
-      this.renderKey++;
     },
   },
 };
@@ -477,5 +443,37 @@ input[type='checkbox'] {
 }
 #app > div:nth-child(15) {
   box-shadow: none !important;
+}
+.late {
+  background: #ff9c6c;
+  border: 0px solid black;
+  border-radius: 25px;
+  font-size: 1rem;
+  width: 30%;
+  height: 60%;
+  padding: 0.5rem 3rem;
+
+  color: white;
+}
+.afk {
+  background: #fc5230;
+  border: 0px solid black;
+  border-radius: 25px;
+  font-size: 1rem;
+  width: 30%;
+  height: 60%;
+  padding: 0.5rem 3rem;
+
+  color: white;
+}
+.normal {
+  background: rgb(46, 149, 255);
+  border: 0px solid black;
+  border-radius: 25px;
+  font-size: 1rem;
+  width: 30%;
+  height: 60%;
+  padding: 0.5rem 3rem;
+  color: white;
 }
 </style>

@@ -1,14 +1,6 @@
 <template>
   <div class="mypage-lecselect">
-    <v-alert
-      class="text-start font-weight-black"
-      border="left"
-      dark
-      color="#2E95FF"
-      style="margin-top:4%; font-size: 1.5rem; letter-spacing: 2.3px; padding-left:20px; line-height: 45px;"
-      elevation="3"
-      height="70"
-    >
+    <v-alert class="text-start font-weight-black" border="left" dark color="#2E95FF" style="font-size: 1.5rem; letter-spacing: 2.3px; padding-left:20px; line-height: 45px;" elevation="3" height="70">
       <span>
         <v-icon>mdi-account-check</v-icon>
         {{ roomName }}
@@ -16,7 +8,16 @@
       수업 평가관리
     </v-alert>
     <v-row>
-      <v-col cols="6">
+      <p class="guide-text">
+        날짜를 클릭하면 해당 날짜에 참여한 학생들의 평가데이터를 조회하실 수 있습니다.
+      </p>
+    </v-row>
+    <v-row>
+      <v-col cols="6" sm="6">
+        <div class="class-label">
+          <v-icon color="white">mdi-calendar-today</v-icon>
+          날짜선택
+        </div>
         <v-date-picker
           v-model="date"
           width="400"
@@ -34,13 +35,15 @@
         ></v-date-picker>
       </v-col>
       <!-- 필터검색 -->
-      <v-col cols="6" sm="4" class="chip-search" style="margin:auto;">
-        <v-card class="mx-auto" max-width="400">
-          <v-toolbar flat color="transparent">
-            <v-toolbar-title>빠른검색</v-toolbar-title>
+      <v-col cols="6" sm="6" class="chip-search" style="margin:auto;">
+        <v-card class="mx-auto" max-width="700">
+          <v-toolbar flat color="rgb(255, 98, 92)" class="" style="padding:0.1rem; color:#fff;">
+            <v-toolbar-title style="letter-spacing: 1px;">
+              <v-icon color="#fff">mdi-account-search-outline</v-icon>
+              빠른검색
+            </v-toolbar-title>
           </v-toolbar>
-
-          <v-container class="py-0">
+          <v-container class="py-1">
             <v-row align="center" justify="start">
               <v-col v-for="(selection, i) in selections" :key="selection.text" class="shrink">
                 <v-chip :disabled="loading" close @click:close="chipClose(selection, i)">
@@ -85,14 +88,18 @@
                 <th scope="col">attend</th>
                 <th scope="col">ranking</th>
                 <th scope="col">participation</th>
-                <th scope="col">모달</th>
+                <th scope="col">평가조회</th>
               </tr>
             </thead>
 
             <tbody>
               <tr v-for="(each, idx) in userEval" :key="idx">
                 <td>{{ idx + 1 }}</td>
-                <td><v-img :src="`/profile/${each.uid}/256`" id="preview" style="width:50px; height:50px; display:-webkit-inline-box" alt=""></v-img></td>
+                <td>
+                  <v-avatar class="mb-3" color="grey darken-1" size="50">
+                    <v-img :src="`/profile/${each.uid}/256`" id="preview" alt=""></v-img>
+                  </v-avatar>
+                </td>
                 <td>{{ each.name }}</td>
                 <td>{{ each.email }}</td>
 
@@ -100,7 +107,7 @@
                 <td>{{ each.attend }}</td>
                 <td>{{ each.ranking | checkChatRanking }}</td>
                 <td>{{ each.participation }}회 채팅</td>
-                <td><v-btn color="#756BFF" depressed dark @click="openModal(each)">평가조회</v-btn></td>
+                <td><v-btn color="#FF625C" depressed dark @click="openModal(each)">평가조회</v-btn></td>
               </tr>
             </tbody>
           </table>
@@ -112,10 +119,10 @@
     <v-dialog v-model="dialog" persistent max-width="900">
       <v-card>
         <v-card>
-          <v-toolbar flat color="#6173FF" dark>
+          <v-toolbar flat color="#2E95FF " dark>
             <v-toolbar-title>
               <span>{{ modalEach.name }}님의</span>
-              Evaluation
+              평가조회
             </v-toolbar-title>
           </v-toolbar>
           <v-tabs vertical>
@@ -140,16 +147,16 @@
 
             <v-tab-item>
               <v-card flat>
-                <div style="margin:1.5rem 0;">
-                  <v-icon left x-large>
+                <div style="margin:1rem 0; ">
+                  <v-icon left large style="margin-bottom:1rem;" color="#2E95FF">
                     mdi-alarm
                   </v-icon>
-                  <span style="font-size:2rem;">{{ modalEach.attend_time }}</span>
+                  <span style="font-size:2rem; color:#2E95FF ;">{{ modalEach.attend_time }}</span>
                   에 출석하셨습니다!
                 </div>
                 <div>
                   출결상태는
-                  <span style="font-size:2rem;">{{ modalEach.attend }}</span>
+                  <span :class="{ normal: modalEach.attend == '정상', late: modalEach.attend == '지각', afk: modalEach.attend == '결석' }" style="font-size:2rem;">{{ modalEach.attend }}</span>
                   입니다.
                 </div>
               </v-card>
@@ -307,7 +314,6 @@ export default {
     },
     openModal(each) {
       this.modalEach = each;
-
       this.dialog = true;
     },
     allowedDates(val) {
@@ -325,7 +331,7 @@ export default {
           this.userEval.push(this.userEvalAll[index]);
         }
       }
-      this.userEvalLength = this.userEval.length;
+      this.userEvalLength = String(this.userEval.length);
     },
     async getList(chipCheck) {
       this.userEval = [];
@@ -375,26 +381,20 @@ export default {
 
 <style scoped>
 @font-face {
-  font-family: 'GongGothicLight';
-  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-10@1.0/GongGothicLight.woff') format('woff');
+  font-family: 'NEXON Lv1 Gothic OTF';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@2.1/NEXON Lv1 Gothic OTF.woff') format('woff');
   font-weight: normal;
   font-style: normal;
 }
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'GongGothicLight';
-}
-.manage {
+.mypage-lecselect {
   margin: 3% 2%;
-  font-family: 'GongGothicLight';
+  font-family: 'NEXON Lv1 Gothic OTF';
 }
 .table-body {
   min-width: 100%;
 }
 .table_responsive {
-  /* width: 100%; */
+  width: 100%;
   padding: 15px;
   /* overflow: auto; */
   margin: auto;
@@ -402,7 +402,7 @@ export default {
 }
 
 table {
-  /* width: 100%; */
+  width: 100%;
   font-size: 13px;
   color: #444;
   white-space: nowrap;
@@ -410,18 +410,19 @@ table {
 }
 
 table > thead {
-  background-color: #41ea93;
+  background-color: #2e95ff;
   color: #fff;
 }
 
 table > thead th {
-  padding: 10px 15px;
+  padding: 15px;
 }
 
 table th,
 table td {
-  border: 1px solid #00000017;
-  padding: 10px 15px;
+  border: 1px solid #0000;
+  padding: 10px 5px;
+  text-align: center;
 }
 
 table > tbody > tr > td > img {
@@ -431,7 +432,7 @@ table > tbody > tr > td > img {
   object-fit: cover;
   border-radius: 50%;
   border: 4px solid #fff;
-  box-shadow: 0 2px 6px #0003;
+  box-shadow: 0 2px 6px #000;
 }
 
 .action_btn {
@@ -478,5 +479,100 @@ table > tbody > tr:hover {
 }
 .chip-search {
   margin-left: 10em;
+}
+.action_btn {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.action_btn > a {
+  text-decoration: none;
+  color: #444;
+  background: #fff;
+  border: 1px solid;
+  display: inline-block;
+  padding: 7px 20px;
+  font-weight: bold;
+  border-radius: 3px;
+  transition: 0.3s ease-in-out;
+}
+
+.action_btn > a:nth-child(1) {
+  border-color: #26a69a;
+}
+
+.action_btn > a:nth-child(2) {
+  border-color: orange;
+}
+
+.action_btn > a:hover {
+  box-shadow: 0 3px 8px #0003;
+}
+
+table > tbody > tr {
+  background-color: #fff;
+  transition: 0.3s ease-in-out;
+}
+
+table > tbody > tr:nth-child(even) {
+  background-color: rgb(238, 238, 238);
+}
+
+table > tbody > tr:hover {
+  filter: drop-shadow(0px 5px 10px #0002);
+}
+.chip-search {
+  margin-left: 10em;
+}
+.guide-text {
+  margin: 0.5rem auto;
+}
+.class-label {
+  width: 30%;
+  height: 3rem;
+  font-size: 1.2rem;
+  letter-spacing: 2px;
+  background: rgb(255, 98, 92);
+  border: 0px solid black;
+  border-radius: 50px;
+
+  padding: 12px 1rem;
+  margin-right: 1rem;
+  color: white;
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
+}
+.late {
+  background: #ff9c6c;
+  border: 0px solid black;
+  border-radius: 25px;
+  font-size: 1rem;
+  width: 30%;
+  height: 60%;
+  padding: 0.5rem 3rem;
+
+  color: white;
+}
+.afk {
+  background: #fc5230;
+  border: 0px solid black;
+  border-radius: 25px;
+  font-size: 1rem;
+  width: 30%;
+  height: 60%;
+  padding: 0.5rem 3rem;
+
+  color: white;
+}
+.normal {
+  background: rgb(46, 149, 255);
+  border: 0px solid black;
+  border-radius: 25px;
+  font-size: 1rem;
+  width: 30%;
+  height: 60%;
+  padding: 0.5rem 3rem;
+  color: white;
 }
 </style>

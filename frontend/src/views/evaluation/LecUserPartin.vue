@@ -78,6 +78,7 @@ export default {
     this.partinRank = [];
     this.attendRank = [];
     this.fetchRoomlen = 0;
+    this.afkchk = false;
     const res = await evaluateList(this.rid);
     console.log(res.data);
     console.log(this.each);
@@ -123,13 +124,6 @@ export default {
         this.zeroPartinchk = true;
       }
     }
-    //로그인한 청강자 출석시간 순위 구하기
-    // for (var m = 0; m < this.attendRank.length; m++) {
-    //   if (this.attendRank[m].uid === this.each.uid && this.partinRank[k].vid === this.each.vid) {
-    //     this.attenduidRank = this.attendRank.indexOf(this.attendRank[m]) + 1;
-    //     break;
-    //   }
-    // }
   },
 };
 </script>

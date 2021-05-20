@@ -2,7 +2,7 @@
   <div class="user-eval">
     <v-row>
       <p class="guide-text">
-        출결확인을 위해
+        평가조회를 위해
         <strong style="letter-spacing:1px">①날짜를 체크하고 ②클래스를 선택</strong>
         해주세요.
       </p>
@@ -15,7 +15,7 @@
         </div>
         <v-date-picker
           v-model="date"
-          width="350"
+          width="520"
           @click:date="classNameFetch"
           :landscape="landscape"
           color="#FF625C"
