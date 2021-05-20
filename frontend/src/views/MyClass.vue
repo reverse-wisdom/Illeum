@@ -17,7 +17,7 @@
     <div>
       <input type="checkbox" class="checkbox" v-model="checked" />
     </div>
-    <div class="toggle-text" style="">
+    <div class="toggle-text">
       <div id="learner">
         수강생
       </div>
@@ -60,8 +60,7 @@ export default {
 .checkbox {
   position: absolute;
   top: 5%;
-  right: 5%;
-
+  right: 10%;
   -webkit-appearance: none;
   width: 14rem;
   height: 3.5rem;
@@ -97,26 +96,24 @@ export default {
 }
 .toggle-text {
   top: 5rem;
-  /* z-index: 3; */
 }
 
 #learner {
   position: absolute;
-  top: 4rem;
-  right: 16.5%;
+  top: 4.2rem;
+  right: 21%;
   color: #fff;
   font-size: 20px;
   font-weight: 400;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-
-  outline: none;
+  /* outline: none; */
   z-index: 3;
 }
 #lecturer {
   position: absolute;
-  outline: none;
-  top: 4rem;
-  right: 7%;
+  /* outline: none; */
+  top: 4.2rem;
+  right: 11.5%;
   color: #fff;
   font-size: 20px;
   font-weight: 400;
