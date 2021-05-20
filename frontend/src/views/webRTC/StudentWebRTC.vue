@@ -1,10 +1,17 @@
 <template>
-  <div>
+  <div style="background-color:white; height: auto">
     <div class="class-name">
-      <h2>{{ this.$route.query.room_name }}&nbsp;클래스</h2>
+      <v-row class="mb-6" no-gutters>
+        <v-col class="text-left pl-10"><img src="../../assets/img/textlogo_2.png" alt="" style="height:36px; " /></v-col>
+        <v-col :cols="6">
+          <h2>{{ this.$route.query.room_name }}</h2>
+        </v-col>
+        <v-col></v-col>
+      </v-row>
     </div>
     <div class="drag-container">
       <div class="panel-one" id="drag-left">
+        <div class="hoverEffect"></div>
         <div class="videos-container"></div>
         <div class="share-videos-container"></div>
       </div>
@@ -79,34 +86,85 @@
     </div>
     <div class="panel-three">
       <template v-if="isAudio">
-        <v-btn class="mr-4 btn" color="#FF625C" @click="offAudio">오디오 끄기</v-btn>
+        <v-btn class="mr-4 btn" color="#FF625C" @click="offAudio">
+          <v-icon left>
+            mdi-volume-off
+          </v-icon>
+          오디오 끄기
+        </v-btn>
       </template>
       <template v-else>
-        <v-btn class="mr-4 btn" color="#41EA93" @click="onAudio">오디오 켜기</v-btn>
+        <v-btn class="mr-4 btn" color="#41EA93" @click="onAudio">
+          <v-icon left>
+            mdi-volume-high
+          </v-icon>
+          오디오 켜기
+        </v-btn>
       </template>
       <template v-if="isVideo">
-        <v-btn class="mr-4 btn" color="#FF625C" @click="offVideo">비디오 끄기</v-btn>
+        <v-btn class="mr-4 btn" color="#FF625C" @click="offVideo">
+          <v-icon left>
+            mdi-monitor-off
+          </v-icon>
+          비디오 끄기
+        </v-btn>
       </template>
       <template v-else>
-        <v-btn class="mr-4 btn" color="#41EA93" @click="onVideo">비디오 켜기</v-btn>
+        <v-btn class="mr-4 btn" color="#41EA93" @click="onVideo">
+          <v-icon left>
+            mdi-monitor
+          </v-icon>
+          비디오 켜기
+        </v-btn>
       </template>
 
-      <v-btn class="mr-4 btn" color="#2E95FF" @click="screen">화면공유</v-btn>
-      <v-btn class="mr-4 btn" color="#2E95FF" @click="openWhiteBoard">화이트보드</v-btn>
-      <v-btn class="mr-4 btn" color="#2E95FF" @click="saveMessageLog">채팅기록저장</v-btn>
-      <v-btn class="mr-4 btn" color="#FF625C" @click="outRoom">종료</v-btn>
+      <v-btn class="mr-4 btn" color="#2E95FF" @click="screen">
+        <v-icon left>
+          mdi-monitor-multiple
+        </v-icon>
+        화면공유
+      </v-btn>
+      <v-btn class="mr-4 btn" color="#2E95FF" @click="openWhiteBoard">
+        <v-icon left>
+          mdi-billboard
+        </v-icon>
+        화이트보드
+      </v-btn>
+      <v-btn class="mr-4 btn" color="#2E95FF" @click="saveMessageLog">
+        <v-icon left>
+          mdi-chat-plus
+        </v-icon>
+        채팅기록저장
+      </v-btn>
+      <v-btn class="mr-4 btn" color="#FF625C" @click="outRoom">
+        <v-icon left>
+          mdi-exit-to-app
+        </v-icon>
+        종료
+      </v-btn>
     </div>
 
     <!-- 화이트보드 모달 영역 -->
     <div id="modal">
       <div class="modal_content ">
+        <h3>화이트보드</h3>
         <div id="widget-container"></div>
         <v-row no-gutters>
           <v-col></v-col>
         </v-row>
-        <div class="modal-btn" style="display: inline-flex;">
-          <v-btn class="" color="error" @click="clearCanvas">전체삭제</v-btn>
-          <v-btn class="ml-5" color="#41EA93" @click="closeWhiteBoard">닫기</v-btn>
+        <div class="modal-btn">
+          <v-btn class="" color="error" @click="clearCanvas">
+            <v-icon left>
+              mdi-eraser
+            </v-icon>
+            전체삭제
+          </v-btn>
+          <v-btn class="ml-5" color="#41EA93" @click="closeWhiteBoard">
+            <v-icon left>
+              mdi-close-box-multiple-outline
+            </v-icon>
+            닫기
+          </v-btn>
         </div>
       </div>
     </div>
@@ -183,7 +241,6 @@ export default {
       });
 
     var left = document.getElementById('drag-left');
-    var right = document.getElementById('drag-right');
     var bar = document.getElementById('dragbar');
 
     const drag = (e) => {
@@ -231,7 +288,6 @@ export default {
       });
       this.designer.appendTo(document.getElementById('widget-container'));
       this.designer.addSyncListener(function(data) {
-        console.log('sync canvas');
         ref.connection.send(data);
       });
     });
@@ -327,7 +383,6 @@ export default {
       var date = new Date();
       var timestamp = date.toLocaleTimeString();
       div.className = 'message';
-      var uid = this.$store.state.uuid;
 
       if (event.data) {
         div.innerHTML = '<b>' + userName + '&nbsp;' + timestamp + ':</b><br>' + event.data.chatMessage;
@@ -399,8 +454,6 @@ export default {
             push.create(ref.connection.extra.userFullName + '님이 ' + ref.roomid + '수업에 입장했습니다');
             ref.isLive = true;
             ref.connection.join(roomid);
-            console.log(ref.connection.extra.userFullName);
-            console.log(ref.roomid);
           });
         } else {
           ref.$swal({
@@ -415,7 +468,6 @@ export default {
 
       this.connection.onopen = function(event) {
         if (ref.designer.pointsLength <= 0) {
-          // you seems having data to be synced with new user!
           setTimeout(function() {
             ref.connection.send('plz-sync-points');
           }, 1000);
@@ -435,6 +487,7 @@ export default {
           return;
         }
 
+        // canvas clear
         if (event.data === 'plz-sync-points-for-clear') {
           ref.designer.clearCanvas();
           ref.designer.sync();
@@ -445,13 +498,17 @@ export default {
       };
 
       this.connection.onstream = function(event) {
-        console.log(event);
         var video = event.mediaElement;
-
         if (event.extra.type == 'cam') {
           ref.videoId.push({ userFullName: event.extra.userFullName, id: video.id });
           document.querySelector('.videos-container').appendChild(video);
           video.removeAttribute('controls');
+          video.onmouseover = function() {
+            document.querySelector('.hoverEffect').innerHTML = '<span class="material-icons">face</span>' + event.extra.userFullName;
+          };
+          video.onmouseout = function() {
+            document.querySelector('.hoverEffect').innerHTML = '';
+          };
         } else if (event.extra.type == 'share' || event.extra.typeAlpha == 'share') {
           document.querySelectorAll('.videos-container > video').forEach((elem) => {
             elem.style.width = '10%';
@@ -504,21 +561,7 @@ export default {
       };
 
       this.connection.onleave = function(event) {
-        // var ref = this;
-        // console.log(ref.names);
-        // const idx = ref.names.findIndex(function(item) {
-        //   return item.name == event.extra.userFullName;
-        // });
-        // console.log(idx);
-        // if (idx > -1) {
-        //   ref.names.splice(idx, 1);
-        // }
-        // var temp = ref.names;
-        // // document.querySelector('#' + event.screenId).remove();
-        // console.log(temp);
-        // ref.connection.extra.status = '퇴장';
-        // ref.connection.onUserStatusChanged(event);
-        // ref.names = temp;
+        var ref = this;
       };
 
       this.connection.onEntireSessionClosed = function(event) {
@@ -545,11 +588,9 @@ export default {
 
       this.connection.onstreamended = function(event) {
         ref.connection.onleave = function(e) {
-          var screenId = event.mediaElement.id;
           ref.connection.getAllParticipants().forEach((participantId) => {
             if (e.userid == participantId) {
               for (let index = 0; index < ref.videoId.length; index++) {
-                console.log(ref.videoId[index].userFullName == e.extra.userFullName);
                 if (ref.videoId[index].userFullName == e.extra.userFullName) {
                   if (document.querySelector('#' + ref.videoId[index].id) != null) {
                     document.querySelector('#' + ref.videoId[index].id).remove();
@@ -558,10 +599,10 @@ export default {
               }
             }
           });
-          if (document.querySelector('#' + screenId) != null) document.querySelector('#' + screenId).remove();
+          // if (document.querySelector('#' + screenId) != null) document.querySelector('#' + screenId).remove();
         };
 
-        if (event.extra.type == 'share') {
+        if (event.extra.type == 'share' || event.extra.typeAlpha == 'share') {
           var share = document.querySelector('.share-videos-container');
           if (share != null) {
             while (share.hasChildNodes()) {
@@ -610,9 +651,6 @@ export default {
           if (data == 'success') {
             this.isOutClicked = true;
             this.connection.closeSocket();
-            // this.connection.getAllParticipants().forEach((participantId) => {
-            //   this.connection.disconnectWith(participantId);
-            // });
 
             this.connection.attachStreams.forEach(function(localStream) {
               localStream.stop();
@@ -624,10 +662,9 @@ export default {
             });
 
             this.isLive = false;
-            console.log('멈춤');
             clearInterval(this.time);
 
-            this.$router.push({ name: 'WebRTCListAll' });
+            this.$router.push({ name: 'WebRTCListStudent' });
           }
         })
         .catch((err) => {
@@ -678,15 +715,11 @@ export default {
             ranking: rankArr[index].ranking,
             vid: this.vid,
           };
-          console.log(evaluationData);
           await updateByVid(evaluationData)
             .then(({ data }) => {
-              console.log(data);
               if (data == 'success') console.log(evaluationData + '수정 성공');
             })
-            .catch((err) => {
-              console.log('수정실패.!!');
-            });
+            .catch((err) => {});
         }
         break;
       }
@@ -736,7 +769,6 @@ export default {
       if (!this.isEditing) return;
       event.preventDefault();
       event.returnValue = '';
-      console.log('새로고침 감지!');
       this.outRoom().then();
     },
   },
@@ -756,15 +788,25 @@ export default {
 </script>
 
 <style scoped>
+@font-face {
+  font-family: 'NEXON Lv1 Gothic OTF';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@2.1/NEXON Lv1 Gothic OTF.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+* {
+  font-family: 'NEXON Lv1 Gothic OTF';
+}
 body {
   -ms-overflow-style: none;
-  overflow-y: hidden;
+  /* overflow-y: hidden; */
 }
 body::-webkit-scrollbar {
   display: none;
 }
 
 .class-name {
+  height: 36px;
   text-align: center;
   border-bottom: 1px solid #e5e5e5;
 }
@@ -837,6 +879,10 @@ body::-webkit-scrollbar {
   max-width: 100%;
 }
 
+.videos-container {
+  display: contents;
+}
+
 .videos-container >>> video {
   display: inline;
   width: -webkit-fill-available;
@@ -855,13 +901,14 @@ body::-webkit-scrollbar {
   position: fixed;
   top: 200%;
   width: 80%;
-  height: 88%;
+  height: 80%;
   z-index: 9999;
   left: 5%;
   padding-bottom: 0px;
 }
 .modal-btn {
-  margin: 1rem 0 0 55rem;
+  display: flex;
+  margin: 1rem 10rem 0 0;
 }
 #modal h2 {
   margin: 0;
@@ -877,16 +924,12 @@ body::-webkit-scrollbar {
   width: 100%;
   height: 80%;
   margin: 100px auto;
-  padding: 20px 10px;
+  padding-top: 20px;
   background: #fff;
   border: 2px solid #666;
 }
-.btn {
-  color: white !important;
-}
 
 #modal .modal_layer {
-  /* position: fixed; */
   top: 0;
   left: 0;
   width: 100%;
@@ -898,16 +941,8 @@ body::-webkit-scrollbar {
   position: relative;
   display: flex;
   height: 60px;
-  margin-top: 4rem;
+  margin-top: 5rem;
 }
-/* .name-list {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  font-size: 24px;
-  text-decoration: none;
-  width: 250px;
-  padding: 0px;
-  margin: 0px;
-} */
 .name-list-item {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   font-size: 24px;
@@ -1011,5 +1046,16 @@ body::-webkit-scrollbar {
 .emoji-picker .emojis span:hover {
   background: #ececec;
   cursor: pointer;
+}
+
+.hoverEffect {
+  min-height: 30px;
+  font-size: 15px;
+  text-align: end;
+  padding-right: 30px;
+  color: #111;
+  font-family: 'Helvetica Neue', sans-serif;
+  font-weight: bold;
+  letter-spacing: -1px;
 }
 </style>
