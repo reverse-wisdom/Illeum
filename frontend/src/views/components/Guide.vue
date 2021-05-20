@@ -6,7 +6,7 @@
           <div class="content" v-html="serviceText"></div>
         </div>
 
-        <button style="margin-bottom:0;" @click="$refs.fullpage.api.moveSectionDown()">NEXT ▼</button>
+        <button style="margin-bottom:0;" @click="moveScroll">NEXT ▼</button>
       </div>
       <!-- 강의자 -->
       <div class="section section2" :style="image_2">
@@ -221,10 +221,14 @@ export default {
       options: {
         navigation: true,
         sectionsColor: ['require(', '#ff5f45', '#0798ec', '#fec401', '#1bcee6', '#ee1a59', '#2c3e4f', '#ba5be9', '#b4b8ab'],
+        responsiveWidth: 900,
       },
       serviceText: `<h3 style="color: #535353;"><span style="color:#2E95FF;">원격수업의 질</span>을 높여드리는<span style="color:#FF625C;"> '일름' </span>서비스</h3>
         <p class="section1-p">언택트시대 온라인 학습 일름이 해답입니다.</p>`,
     };
+  },
+  mounted() {
+    console.log(this.$refs.fullpage);
   },
   props: {
     image1: {
@@ -265,6 +269,14 @@ export default {
         backgroundImage: `url(${this.image4})`,
       };
     },
+  },
+  methods: {
+    moveScroll() {
+      $.fn.fullpage.moveSectionDown();
+    },
+  },
+  destroyed() {
+    $.fn.fullpage.destroy('all');
   },
 };
 </script>
