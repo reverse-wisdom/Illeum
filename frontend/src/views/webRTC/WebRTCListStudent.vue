@@ -15,39 +15,50 @@
         화상수업 목록
       </span>
     </v-alert>
-    <v-data-table
-      :headers="headers"
-      :items="rooms"
-      :items-per-page="10"
-      item-key="rid"
-      class="elevation-1 table-list"
-      :footer-props="{
-        showFirstLastPage: false,
-        prevIcon: 'mdi-arrow-left',
-        nextIcon: 'mdi-arrow-right',
-        'page-text': '',
-        'items-per-page-text': '페이지당 화상회의수',
-      }"
-    >
-      <template v-slot:[`item.action`]="{ item }">
-        <template v-if="checkUser(item) == '강의자'">
-          <v-btn color="info" @click="startWebRTC(item)" :width="100" :disabled="!hasWebcam">수업 생성</v-btn>
+
+    <template v-if="!isLoading">
+      <v-data-table
+        :headers="headers"
+        :items="rooms"
+        :items-per-page="10"
+        item-key="rid"
+        no-data-text="수강한 클래스가 없습니다"
+        class="elevation-1 table-list"
+        :footer-props="{
+          showFirstLastPage: false,
+          prevIcon: 'mdi-arrow-left',
+          nextIcon: 'mdi-arrow-right',
+          'page-text': '',
+          'items-per-page-text': '페이지당 화상회의수',
+        }"
+      >
+        <template v-slot:[`item.action`]="{ item }">
+          <template v-if="checkUser(item) == '강의자'">
+            <v-btn color="info" @click="startWebRTC(item)" :width="100" :disabled="!hasWebcam">수업 생성</v-btn>
+          </template>
+          <template v-else-if="item.room_state == '진행'">
+            <v-btn color="success" @click="joinWebRTC(item)" :width="100" :disabled="!hasWebcam">수업 참여</v-btn>
+          </template>
+          <template v-else>
+            <v-btn color="warning" disabled :width="100">준비중</v-btn>
+          </template>
         </template>
-        <template v-else-if="item.room_state == '진행'">
-          <v-btn color="success" @click="joinWebRTC(item)" :width="100" :disabled="!hasWebcam">수업 참여</v-btn>
-        </template>
-        <template v-else>
-          <v-btn color="warning" disabled :width="100">준비중</v-btn>
-        </template>
-      </template>
-    </v-data-table>
+      </v-data-table>
+    </template>
+    <template v-else>
+      <div class="loading-spin">
+        <circle8></circle8>
+      </div>
+    </template>
   </div>
 </template>
 <script>
+import { Circle8 } from 'vue-loading-spinner';
 import { classAll, updateClass } from '@/api/class';
 import { usePartinClass } from '@/api/auth';
 import { start } from '@/api/rabbit';
 export default {
+  components: { Circle8 },
   data() {
     return {
       headers: [
@@ -64,6 +75,7 @@ export default {
       rooms: [],
       time: null, // for camera check interval
       hasWebcam: false,
+      isLoading: true,
     };
   },
 
@@ -79,6 +91,7 @@ export default {
         }
       });
     }
+    this.isLoading = false;
 
     for (let index = 0; index < this.rooms.length; index++) {
       this.rooms[index].start_time = this.$moment(this.rooms[index].start_time).format('llll');
@@ -184,6 +197,11 @@ export default {
 .webRTCList {
   margin: 3% 2%;
   font-family: 'GongGothicLight';
+}
+.loading-spin {
+  display: inline-block;
+  justify-content: center;
+  margin-top: 10%;
 }
 </style>
 <style>
