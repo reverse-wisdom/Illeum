@@ -222,8 +222,6 @@ export default {
         this.$store.commit('clearEmail');
         this.$store.commit('clearRole');
         this.$store.commit('clearName');
-
-        this.$store.state.alertSocket.disconnect();
       } else {
         this.$swal({
           icon: 'error',
