@@ -7,45 +7,55 @@
         해주세요.
       </p>
     </v-row>
-    <v-row justify="center">
-      <v-date-picker
-        v-model="date"
-        width="400"
-        @click:date="classNameFetch"
-        :landscape="landscape"
-        color="#FF625C"
-        :allowed-dates="allowedDates"
-        :weekday-format="getDay"
-        :month-format="getMonth"
-        :header-date-format="headerDate"
-        :title-date-format="titleDate"
-        class="mt-4"
-        min="1900-04-01"
-        max="2100-10-30"
-      ></v-date-picker>
-
-      <v-col cols="12" sm="6">
-        <div class="class-label">수업선택</div>
+    <v-row style="margin-bottom:1rem;">
+      <v-col cols="6">
+        <div class="class-label">
+          <v-icon color="white">mdi-calendar-today</v-icon>
+          날짜선택
+        </div>
+        <v-date-picker
+          v-model="date"
+          width="350"
+          @click:date="classNameFetch"
+          :landscape="landscape"
+          color="#FF625C"
+          :allowed-dates="allowedDates"
+          :weekday-format="getDay"
+          :month-format="getMonth"
+          :header-date-format="headerDate"
+          :title-date-format="titleDate"
+          class="mt-4"
+          style="margin-left:-1.5rem;"
+          min="1900-04-01"
+          max="2100-10-30"
+        ></v-date-picker>
+      </v-col>
+      <v-col cols="6" sm="6">
+        <div class="class-label">
+          <v-icon color="white">mdi-school-outline</v-icon>
+          수업선택
+        </div>
         <v-select style="margin-top: 2%;" :items="items" :label="date" solo @input="showEvaluation"></v-select>
       </v-col>
     </v-row>
-    <v-row
-      style="display: flex;
-    justify-content: center;"
-    >
-      <div v-if="evalcheck" style="margin-top: 3%; display:flex; flex-direction: row;  flex-wrap: wrap; justify-content: flex-start; justify-content: space-around;">
-        <div v-if="attendchk" style="margin-right:10vw;">
-          <div class="label-eval">개인평가</div>
-          <EvalPieChart :learnData="learnData" :key="change" />
+
+    <v-row style="">
+      <fieldset class="chart-contain">
+        <legend>평가조회</legend>
+        <div v-if="evalcheck" style="margin-top: 3%; display:flex; flex-direction: row;  flex-wrap: wrap; justify-content: flex-start; justify-content: space-around;">
+          <div v-if="attendchk" style="margin-right:10vw;">
+            <div class="label-eval">개인평가</div>
+            <EvalPieChart :learnData="learnData" :key="change" />
+          </div>
+          <div v-else>
+            <h3 style="">결석한 수업입니다. 평균데이터만 확인할 수 있습니다.</h3>
+          </div>
+          <div>
+            <div class="label-eval">해당클래스의 평균 및 개인평가</div>
+            <EvalRadarChart :learnData="learnData" :averageData="averageData" :key="renderKey" />
+          </div>
         </div>
-        <div v-else>
-          <h3 style="">결석한 수업입니다. 평균데이터만 확인할 수 있습니다.</h3>
-        </div>
-        <div>
-          <div class="label-eval">해당클래스의 평균 및 개인평가</div>
-          <EvalRadarChart :learnData="learnData" :averageData="averageData" :key="renderKey" />
-        </div>
-      </div>
+      </fieldset>
     </v-row>
   </div>
 </template>
@@ -272,13 +282,17 @@ export default {
   background: #f9f9f9;
 }
 .label-eval {
-  border: 1px solid #41ea93;
-  background: #41ea93;
+  /* border: 1px solid #41ea93; */
+  background: rgb(255, 98, 92);
   color: #fff;
   padding: 0.5rem 0rem;
+  font-size: 1.3rem;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  /* box-shadow: 2px 3px 15px rgba(0, 0, 0, 0.2); */
 }
 .class-label {
-  width: auto;
+  width: 30%;
   height: 3rem;
   font-size: 1.2rem;
   letter-spacing: 2px;
@@ -286,8 +300,36 @@ export default {
   border: 0px solid black;
   border-radius: 50px;
   /* margin-right: */
-  padding: 12px 15px;
+  padding: 12px 1rem;
   margin-right: 1rem;
   color: white;
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
+}
+
+fieldset {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  border: 0px solid black;
+  background: #fff;
+
+  border-radius: 20px;
+  border-top: #2e95ff solid 1rem;
+  padding-bottom: 2rem;
+  margin-left: 0.8rem;
+  box-shadow: 2px 3px 15px rgba(0, 0, 0, 0.2);
+}
+legend {
+  background: #2e95ff;
+
+  padding-bottom: 0.5rem;
+  padding-top: -3rem;
+  font-size: 1.5rem;
+  box-sizing: border-box;
+
+  width: inherit;
+  color: #fff;
+  border-top: #2e95ff solid 0.5rem;
 }
 </style>

@@ -9,6 +9,10 @@
     </v-row>
     <v-row>
       <v-col cols="4" sm="4">
+        <div class="class-label">
+          <v-icon color="white">mdi-calendar-today</v-icon>
+          날짜선택
+        </div>
         <v-date-picker
           v-model="date"
           width="350"
@@ -26,18 +30,21 @@
       </v-col>
       <v-col cols="8" sm="8">
         <v-col>
-          <div class="d-flex" style="margin-top:1rem;">
-            <div class="class-label">수업선택</div>
+          <div class="d-flex" style="margin-top:-0.8rem;">
+            <div class="class-label">
+              <v-icon color="white">mdi-school-outline</v-icon>
+              수업선택
+            </div>
             <v-select style="width:1200px" :items="items" :label="date" solo @input="showPartin" placeholder="클래스를 선택해주세요"></v-select>
           </div>
         </v-col>
-        <v-row class="border">
+        <v-row class="user-attend-contain">
           <div class="attend-box">
             <div style="display:flex; align-items:center">
               <div class="attend-info" style=" ">
                 <div class="attend-time-detail" style="">
                   <div class="title-attend">
-                    <v-icon x-large>mdi-alarm</v-icon>
+                    <v-icon large>mdi-alarm</v-icon>
                   </div>
                 </div>
                 <div class="label-attend">출석시간</div>
@@ -47,7 +54,7 @@
             <div style="display:flex; align-items:center">
               <div class="attend-info" style=" ">
                 <div class="attend-check" style="">
-                  <v-icon x-large>
+                  <v-icon large>
                     mdi-calendar-check
                   </v-icon>
                 </div>
@@ -60,7 +67,7 @@
           </div>
 
           <v-col class="clock-info" cols="6" sm="6" style="">
-            <div class="clock" style="margin:2rem auto;">
+            <div class="clock" style="margin-bottom:2rem">
               <Clock></Clock>
             </div>
             <section class="time-contain">
@@ -209,7 +216,6 @@ export default {
 .user-attend {
   margin: 3% 2%;
   background: #f9f9f9;
-  /* width: 85%; */
 }
 
 section.time-contain {
@@ -217,8 +223,10 @@ section.time-contain {
 }
 
 .attend-time {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
   color: #000;
-  font-size: 3em;
+  font-size: 2.5em;
 }
 
 h3.is-3:not(:last-child) {
@@ -230,35 +238,31 @@ h3.is-3:not(:last-child) {
   text-shadow: 0 0 15px rgba(100, 100, 100, 0.35);
 }
 .user-attend .saying {
-  /* border: 3px solid black; */
   border-radius: 10px;
-  width: 39.3vh;
+  width: 44vh;
   box-shadow: 0px 5px 10px rgba(150, 106, 106, 0.3);
-  padding: 3rem 2rem 1rem 2rem;
+  padding: 4rem 2rem 1rem 2rem;
   font-weight: 900;
-
-  /* margin-bottom: 1rem; */
 }
 .attend-contain {
   border: 0px solid black;
-  /* width: 39.3vh; */
-  /* margin: ; */
+
   color: #fff;
   padding: 1rem 1.4rem;
   margin: a;
   border-radius: 20px 0px 0px 20px;
   height: 90%;
   background: rgb(46, 149, 255);
-  /* position: relative; */
+
   z-index: 2;
 }
 .title-saying {
   border: 0px solid black;
-  width: 39.3vh;
+  width: 44vh;
   margin: auto;
   color: #fff;
 
-  padding: 0.2rem 2rem;
+  padding: 0.5rem 2rem;
   background: rgb(46, 149, 255);
   position: absolute;
   z-index: 2;
@@ -268,17 +272,11 @@ h3.is-3:not(:last-child) {
   flex-direction: column;
   justify-items: center;
   align-items: center;
-  /* margin-top: 3rem; */
-  /* margin-left: 10rem; */
-  /* margin-left: -5rem; */
 }
 .attend-info {
   display: flex;
-  /* flex-direction: column; */
-  /* border: 3px solid #000; */
   font-weight: 900;
   padding: 1rem 1rem;
-
   margin: -0.5rem 1rem;
 }
 .attend-check {
@@ -318,55 +316,47 @@ h3.is-3:not(:last-child) {
   color: white;
 }
 .class-label {
-  width: 50%;
+  width: 40%;
   height: 3rem;
-  font-size: 1.2rem;
-  letter-spacing: 2px;
+  font-size: 1.1rem;
+  letter-spacing: 1px;
   background: rgb(255, 98, 92);
   border: 0px solid black;
+
   border-radius: 50px;
-  /* margin-right: */
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
   padding: 12px 15px;
   margin-right: 1rem;
+
   color: white;
 }
-/* .attend-time-detail .title-attend {
-  border: 2px solid #f9f9f9;
-  border-radius: 10px;
 
-
-  font-weight: bold;
-  width: 40%;
-  color: #000;
-  font-size: 1.2rem;
-  height: 40%;
-  letter-spacing: 2px;
-  padding: 10px 0px 10px 0px;
-} */
 .label-attend {
-  font-size: 1.1rem;
+  font-size: 1rem;
   font-weight: bold;
   display: flex;
-  margin-left: 0.8rem;
+  margin-left: 0.5rem;
   margin-top: 0.2rem;
   align-items: center;
+  color: #414141;
 }
 .attend-box {
-  margin-top: -1rem;
+  margin-top: -0.5rem;
   width: 50%;
-  /* margin-right: 10rem; */
 }
 .main-saying {
-  /* height: 100%; */
-  margin: -12rem 2rem;
+  margin: -11rem 0rem 1rem 1.5rem;
 }
-.border {
+.user-attend-contain {
   padding-top: 1.5rem;
-  margin-left: 1rem;
-  /* border-radius: 1rem; */
+  margin-left: 0.8rem;
   background: #fff;
+  width: 96%;
+  margin-top: -1rem;
+  height: auto;
   border-left: rgb(255, 98, 92) solid 30px;
-  /* margin-top: 0.5rem; */
+
   border-top-left-radius: 20px;
   border-bottom-left-radius: 20px;
   box-shadow: 0px 5px 10px rgba(150, 106, 106, 0.3);
