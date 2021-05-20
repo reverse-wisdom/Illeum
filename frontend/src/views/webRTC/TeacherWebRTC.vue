@@ -136,6 +136,7 @@ export default {
       search: '',
       names: [], // name list
       tab: null,
+      videoId: [],
     };
   },
   created() {
@@ -398,9 +399,9 @@ export default {
       };
 
       this.connection.onstream = function(event) {
-        console.log(event);
         var video = event.mediaElement;
         if (event.extra.type == 'cam') {
+          ref.videoId.push({ userFullName: event.extra.userFullName, id: video.id });
           document.querySelector('.videos-container').appendChild(video);
           video.removeAttribute('controls');
         } else if (event.extra.type == 'share' || event.extra.typeAlpha == 'share') {
@@ -429,7 +430,9 @@ export default {
 
       this.connection.onleave = function(event) {
         var ref = this;
-        // console.log(ref.names);
+        // console.log(this.connection);
+        // console.log(ref.connection);
+
         // const idx = ref.names.findIndex(function(item) {
         //   return item.name == event.extra.userFullName;
         // });
@@ -438,10 +441,8 @@ export default {
         //   ref.names.splice(idx, 1);
         // }
         // var temp = ref.names;
-        // console.log(event);
-        // console.log(ref.connection);
-        // console.log(event);
-        // console.log(ref.connection);
+
+        // console.log(temp);
         // ref.connection.extra.status = '퇴장';
         // ref.connection.onUserStatusChanged(event);
         // ref.names = temp;
@@ -463,10 +464,25 @@ export default {
       };
 
       this.connection.onstreamended = function(event) {
-        console.log(event);
+        ref.connection.onleave = function(e) {
+          var screenId = event.mediaElement.id;
+          ref.connection.getAllParticipants().forEach((participantId) => {
+            if (e.userid == participantId) {
+              for (let index = 0; index < ref.videoId.length; index++) {
+                console.log(ref.videoId[index].userFullName == e.extra.userFullName);
+                if (ref.videoId[index].userFullName == e.extra.userFullName) {
+                  if (document.querySelector('#' + ref.videoId[index].id) != null) {
+                    document.querySelector('#' + ref.videoId[index].id).remove();
+                  }
+                }
+              }
+            }
+          });
+          if (document.querySelector('#' + screenId) != null) document.querySelector('#' + screenId).remove();
+        };
+
         if (event.extra.type == 'share' || event.extra.typeAlpha == 'share') {
           var share = document.querySelector('.share-videos-container');
-          console.log(share);
           if (share != null) {
             while (share.hasChildNodes()) {
               share.removeChild(share.firstChild);
@@ -477,6 +493,7 @@ export default {
             elem.style.width = '30%';
           });
         } else if (event.extra.userUUID != ref.$store.state.uuid) {
+          console.log(event);
           const idx = ref.names.findIndex(function(item) {
             return item.name == event.extra.userFullName;
           });
@@ -486,6 +503,7 @@ export default {
           var screenId = event.mediaElement.id;
           if (document.querySelector('#' + screenId) != null) document.querySelector('#' + screenId).remove();
         }
+        console.log(event);
       };
     },
 

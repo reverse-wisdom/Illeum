@@ -141,6 +141,7 @@ export default {
       search: '',
       names: [], // name list
       tab: null,
+      videoId: [],
     };
   },
   created() {
@@ -372,6 +373,7 @@ export default {
       this.connection.extra.userUUID = this.$store.state.uuid;
       this.connection.extra.type = 'cam';
       this.connection.extra.status = '입장';
+
       this.connection.sdpConstraints.mandatory = {
         OfferToReceiveAudio: true,
         OfferToReceiveVideo: true,
@@ -412,7 +414,7 @@ export default {
 
       // 리스너 영역 시작
 
-      this.connection.onopen = function() {
+      this.connection.onopen = function(event) {
         if (ref.designer.pointsLength <= 0) {
           // you seems having data to be synced with new user!
           setTimeout(function() {
@@ -448,6 +450,7 @@ export default {
         var video = event.mediaElement;
 
         if (event.extra.type == 'cam') {
+          ref.videoId.push({ userFullName: event.extra.userFullName, id: video.id });
           document.querySelector('.videos-container').appendChild(video);
           video.removeAttribute('controls');
         } else if (event.extra.type == 'share' || event.extra.typeAlpha == 'share') {
@@ -542,7 +545,23 @@ export default {
       };
 
       this.connection.onstreamended = function(event) {
-        console.log(event);
+        ref.connection.onleave = function(e) {
+          var screenId = event.mediaElement.id;
+          ref.connection.getAllParticipants().forEach((participantId) => {
+            if (e.userid == participantId) {
+              for (let index = 0; index < ref.videoId.length; index++) {
+                console.log(ref.videoId[index].userFullName == e.extra.userFullName);
+                if (ref.videoId[index].userFullName == e.extra.userFullName) {
+                  if (document.querySelector('#' + ref.videoId[index].id) != null) {
+                    document.querySelector('#' + ref.videoId[index].id).remove();
+                  }
+                }
+              }
+            }
+          });
+          if (document.querySelector('#' + screenId) != null) document.querySelector('#' + screenId).remove();
+        };
+
         if (event.extra.type == 'share') {
           var share = document.querySelector('.share-videos-container');
           if (share != null) {
@@ -591,16 +610,15 @@ export default {
         .then(({ data }) => {
           if (data == 'success') {
             this.isOutClicked = true;
-
-            this.connection.getAllParticipants().forEach((participantId) => {
-              this.connection.disconnectWith(participantId);
-            });
+            this.connection.closeSocket();
+            // this.connection.getAllParticipants().forEach((participantId) => {
+            //   this.connection.disconnectWith(participantId);
+            // });
 
             this.connection.attachStreams.forEach(function(localStream) {
               localStream.stop();
             });
 
-            this.connection.closeSocket();
             this.$swal({
               icon: 'warning',
               title: '화상수업 나가기.!!',
