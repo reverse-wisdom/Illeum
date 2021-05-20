@@ -141,6 +141,7 @@ export default {
       search: '',
       names: [], // name list
       tab: null,
+      videoId: [],
     };
   },
   created() {
@@ -256,14 +257,13 @@ export default {
     offVideo() {
       let localStream = this.connection.attachStreams[0];
       localStream.mute('video');
-      // var posterImg = require('@/assets/img/poster.png');
-      // document.getElementById(localStream.id).setAttribute('poster', posterImg);
+      clearInterval(this.time);
       this.isVideo = false;
     },
     onVideo() {
-      // this.connection.session.video = true;
       let localStream = this.connection.attachStreams[0];
       localStream.unmute('video');
+      this.time = setInterval(this.screenCapture, 5000);
       this.isVideo = true;
     },
     onAudio() {
@@ -372,6 +372,7 @@ export default {
       this.connection.extra.userUUID = this.$store.state.uuid;
       this.connection.extra.type = 'cam';
       this.connection.extra.status = '입장';
+
       this.connection.sdpConstraints.mandatory = {
         OfferToReceiveAudio: true,
         OfferToReceiveVideo: true,
@@ -412,7 +413,7 @@ export default {
 
       // 리스너 영역 시작
 
-      this.connection.onopen = function() {
+      this.connection.onopen = function(event) {
         if (ref.designer.pointsLength <= 0) {
           // you seems having data to be synced with new user!
           setTimeout(function() {
@@ -448,6 +449,7 @@ export default {
         var video = event.mediaElement;
 
         if (event.extra.type == 'cam') {
+          ref.videoId.push({ userFullName: event.extra.userFullName, id: video.id });
           document.querySelector('.videos-container').appendChild(video);
           video.removeAttribute('controls');
         } else if (event.extra.type == 'share' || event.extra.typeAlpha == 'share') {
@@ -482,7 +484,7 @@ export default {
 
               ref.connection.closeSocket();
 
-              ref.$router.push({ name: 'WebRTCListAll' });
+              ref.$router.push({ name: 'WebRTCListStudent' });
             }
           }
         } catch {
@@ -502,21 +504,21 @@ export default {
       };
 
       this.connection.onleave = function(event) {
-        const idx = ref.names.findIndex(function(item) {
-          return item.name == event.extra.userFullName;
-        });
-        console.log(idx);
-        if (idx > -1) {
-          ref.names.splice(idx, 1);
-        }
-        var temp = ref.names;
-
-        document.querySelector('#' + event.screenId).remove();
-
-        console.log(temp);
-        ref.connection.extra.status = '퇴장';
-        ref.connection.onUserStatusChanged(event);
-        ref.names = temp;
+        // var ref = this;
+        // console.log(ref.names);
+        // const idx = ref.names.findIndex(function(item) {
+        //   return item.name == event.extra.userFullName;
+        // });
+        // console.log(idx);
+        // if (idx > -1) {
+        //   ref.names.splice(idx, 1);
+        // }
+        // var temp = ref.names;
+        // // document.querySelector('#' + event.screenId).remove();
+        // console.log(temp);
+        // ref.connection.extra.status = '퇴장';
+        // ref.connection.onUserStatusChanged(event);
+        // ref.names = temp;
       };
 
       this.connection.onEntireSessionClosed = function(event) {
@@ -542,7 +544,23 @@ export default {
       };
 
       this.connection.onstreamended = function(event) {
-        console.log(event);
+        ref.connection.onleave = function(e) {
+          var screenId = event.mediaElement.id;
+          ref.connection.getAllParticipants().forEach((participantId) => {
+            if (e.userid == participantId) {
+              for (let index = 0; index < ref.videoId.length; index++) {
+                console.log(ref.videoId[index].userFullName == e.extra.userFullName);
+                if (ref.videoId[index].userFullName == e.extra.userFullName) {
+                  if (document.querySelector('#' + ref.videoId[index].id) != null) {
+                    document.querySelector('#' + ref.videoId[index].id).remove();
+                  }
+                }
+              }
+            }
+          });
+          if (document.querySelector('#' + screenId) != null) document.querySelector('#' + screenId).remove();
+        };
+
         if (event.extra.type == 'share') {
           var share = document.querySelector('.share-videos-container');
           if (share != null) {
@@ -555,8 +573,14 @@ export default {
             elem.style.width = '30%';
           });
         } else if (event.extra.userUUID != ref.$store.state.uuid) {
+          const idx = ref.names.findIndex(function(item) {
+            return item.name == event.extra.userFullName;
+          });
+          if (idx > -1) {
+            ref.names.splice(idx, 1);
+          }
           var screenId = event.mediaElement.id;
-          document.querySelector('#' + screenId).remove();
+          if (document.querySelector('#' + screenId) != null) document.querySelector('#' + screenId).remove();
         }
       };
     },
@@ -585,16 +609,15 @@ export default {
         .then(({ data }) => {
           if (data == 'success') {
             this.isOutClicked = true;
-
-            this.connection.getAllParticipants().forEach((participantId) => {
-              this.connection.disconnectWith(participantId);
-            });
+            this.connection.closeSocket();
+            // this.connection.getAllParticipants().forEach((participantId) => {
+            //   this.connection.disconnectWith(participantId);
+            // });
 
             this.connection.attachStreams.forEach(function(localStream) {
               localStream.stop();
             });
 
-            this.connection.closeSocket();
             this.$swal({
               icon: 'warning',
               title: '화상수업 나가기.!!',
