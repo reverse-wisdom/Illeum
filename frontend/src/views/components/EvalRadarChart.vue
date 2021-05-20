@@ -28,7 +28,7 @@ export default {
           {
             label: '수업 평균',
             data: [],
-            fill: false,
+            fill: true,
             backgroundColor: 'rgba(117, 107, 255, 0.5)',
             borderColor: 'rgb(117, 107, 255)',
             pointBackgroundColor: 'rgb(117, 107, 255)',
