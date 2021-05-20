@@ -129,7 +129,7 @@
         </div>
       </div>
       <!-- <div class="section section2" :style="image_2">
-        화상플랫폼(webRTC) 기능 쌍방향 음성, 영상, 화이트보드, 화면공유, 채팅, 실시간알림 ,
+        화상플랫폼(webRTC) 기능 쌍방향 음성, 영상, 화이트보드, 화면공유, 채팅, 실시간알림, 화면끄기 ,
         <div class="slide">
           <h3>Slide 2.1</h3>
         </div>
@@ -176,7 +176,7 @@
                     <h1>출결현황</h1>
                     <p style="font-size:1rem;">
                       <strong>illeum</strong>
-                      은 수강자가 강의를 입장한 시간을 기준으로 출결기록을 실시간으로 체크하기 때문에 수동으로 출결관리를 하지 않아도 됩니다.
+                      은 수강자가 강의에 입장한 시간을 기준으로 출결기록을 실시간으로 체크하기 때문에 수동으로 출결관리를 하지 않아도 됩니다.
                     </p>
                   </div>
                 </v-col>
@@ -185,7 +185,7 @@
                     <h1>평가관리/조회</h1>
                     <p style="font-size:1rem;">
                       <strong>illeum</strong>
-                      은 수강자, 강의자 모두 자신이 참여/강의한 클래스에 관한 평가데이터를 데이터 시각화를 기반한 통계데이터를 제공합니다.
+                      은 수강자, 강의자 모두 자신이 참여/강의한 클래스에 관한 평가데이터를 제공합니다.
                     </p>
                   </div>
                 </v-col>
@@ -194,7 +194,7 @@
                     <h1>참여도</h1>
                     <p style="font-size:1rem;">
                       <strong>illeum</strong>
-                      은 수강생의 학습의욕을 고취하고자, 채팅참여기록과 출석기록를 기반하여 상대평가 데이터를 제공합니다.
+                      은 수강생의 학습의욕을 고취하고자, 채팅참여기록과 출석기록를 기반한 상대평가 데이터를 제공합니다.
                     </p>
                   </div>
                 </v-col>
@@ -224,7 +224,7 @@ export default {
         responsiveWidth: 900,
       },
       serviceText: `<h3 style="color: #535353;"><span style="color:#2E95FF;">원격수업의 질</span>을 높여드리는<span style="color:#FF625C;"> '일름' </span>서비스</h3>
-        <p class="section1-p">언택트시대 온라인 학습 일름이 해답입니다.</p>`,
+        <p class="section1-p">언택트시대 온라인 학습, 일름이 해답입니다.</p>`,
     };
   },
   mounted() {
@@ -307,7 +307,9 @@ export default {
   display: flex;
   flex-direction: row;
 }
-
+.section4 {
+  background-size: cover;
+}
 .section2a {
   position: relative;
   text-align: left;
@@ -320,20 +322,6 @@ export default {
 
   /* margin-right: 350px; */
 }
-/* .back {
-  position: absolute;
-  background-color: rgba(255, 255, 255, 0.8);
-  width: 100%;
-  height: 100%;
-} */
-
-/* .backdrop {
-  background: url('https://i.imgbox.com/JGXLxgQb.jpg');
-  background-size: contain;
-  height: 320px;
-  margin-bottom: 40px;
-  margin-top: -30px;
-} */
 
 .content {
   position: relative;

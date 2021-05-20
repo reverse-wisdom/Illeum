@@ -52,8 +52,6 @@ export default {
               return;
             },
             label: function(tooltipItem, chartData) {
-              console.log('3333', tooltipItem);
-              console.log('4444', chartData);
               return `${chartData.labels[tooltipItem['index']]}:${tooltipItem.label}`;
             },
           },
