@@ -502,21 +502,21 @@ export default {
       };
 
       this.connection.onleave = function(event) {
-        const idx = ref.names.findIndex(function(item) {
-          return item.name == event.extra.userFullName;
-        });
-        console.log(idx);
-        if (idx > -1) {
-          ref.names.splice(idx, 1);
-        }
-        var temp = ref.names;
-
-        document.querySelector('#' + event.screenId).remove();
-
-        console.log(temp);
-        ref.connection.extra.status = '퇴장';
-        ref.connection.onUserStatusChanged(event);
-        ref.names = temp;
+        // var ref = this;
+        // console.log(ref.names);
+        // const idx = ref.names.findIndex(function(item) {
+        //   return item.name == event.extra.userFullName;
+        // });
+        // console.log(idx);
+        // if (idx > -1) {
+        //   ref.names.splice(idx, 1);
+        // }
+        // var temp = ref.names;
+        // // document.querySelector('#' + event.screenId).remove();
+        // console.log(temp);
+        // ref.connection.extra.status = '퇴장';
+        // ref.connection.onUserStatusChanged(event);
+        // ref.names = temp;
       };
 
       this.connection.onEntireSessionClosed = function(event) {
@@ -555,8 +555,14 @@ export default {
             elem.style.width = '30%';
           });
         } else if (event.extra.userUUID != ref.$store.state.uuid) {
+          const idx = ref.names.findIndex(function(item) {
+            return item.name == event.extra.userFullName;
+          });
+          if (idx > -1) {
+            ref.names.splice(idx, 1);
+          }
           var screenId = event.mediaElement.id;
-          document.querySelector('#' + screenId).remove();
+          if (document.querySelector('#' + screenId) != null) document.querySelector('#' + screenId).remove();
         }
       };
     },
