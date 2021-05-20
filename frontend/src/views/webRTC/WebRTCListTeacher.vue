@@ -118,7 +118,7 @@ export default {
           } else {
             try {
               var start_time = new Date(new Date().toString().split('GMT')[0] + ' UTC').toISOString().split('.')[0] + '.000Z';
-              const { data } = await updateClass({ rid: value.rid, room_state: '진행', start_time, end_time: value.end_time }); // PUT: /api/room/updateByRid
+              const { data } = await updateClass({ rid: value.rid, room_state: '진행', start_time }); // PUT: /api/room/updateByRid
               if (data == 'success') {
                 const { data } = await start(value.rid); // GET: /api/rtc/start (rabbitMQ)
                 if (data == 'success') this.$router.push({ name: 'TeacherWebRTC', query: { room_name: value.room_name, rid: value.rid } });
