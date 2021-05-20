@@ -111,8 +111,10 @@
 
 <script>
 import LandingComp from '@/views/LandingComp.vue';
+import FullPage from 'vue-fullpage.js';
 export default {
   components: {
+    FullPage,
     LandingComp,
   },
   name: 'app',
