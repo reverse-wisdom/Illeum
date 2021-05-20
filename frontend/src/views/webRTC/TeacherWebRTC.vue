@@ -245,12 +245,9 @@ export default {
     offVideo() {
       let localStream = this.connection.attachStreams[0];
       localStream.mute('video');
-      // var posterImg = require('@/assets/img/poster.png');
-      // document.getElementById(localStream.id).setAttribute('poster', posterImg);
       this.isVideo = false;
     },
     onVideo() {
-      // this.connection.session.video = true;
       let localStream = this.connection.attachStreams[0];
       localStream.unmute('video');
       this.isVideo = true;

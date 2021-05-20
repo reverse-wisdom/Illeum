@@ -257,14 +257,13 @@ export default {
     offVideo() {
       let localStream = this.connection.attachStreams[0];
       localStream.mute('video');
-      // var posterImg = require('@/assets/img/poster.png');
-      // document.getElementById(localStream.id).setAttribute('poster', posterImg);
+      clearInterval(this.time);
       this.isVideo = false;
     },
     onVideo() {
-      // this.connection.session.video = true;
       let localStream = this.connection.attachStreams[0];
       localStream.unmute('video');
+      this.time = setInterval(this.screenCapture, 5000);
       this.isVideo = true;
     },
     onAudio() {
@@ -485,7 +484,7 @@ export default {
 
               ref.connection.closeSocket();
 
-              ref.$router.push({ name: 'WebRTCListAll' });
+              ref.$router.push({ name: 'WebRTCListStudent' });
             }
           }
         } catch {
