@@ -1,7 +1,7 @@
 <template>
   <div>
     <div>
-      <div style="display:flex; justify-content:center; flex-direction:column; margin:2rem 0;">
+      <div v-if="afkchk == false" style="display:flex; justify-content:center; flex-direction:column; margin:2rem 0;">
         <div class="partin-each">
           <span style="font-size:1.5rem;">{{ roomData.room_name }}수업</span>
           에서 총
@@ -21,6 +21,9 @@
           <span style="color:#FF625C; font-size:1.5rem; font-weight: bold;">{{ attenduidRank }}위</span>
           입니다
         </div>
+      </div>
+      <div v-else>
+        <span style="font-size:1.5rem; margin:auto;">결석한 학생입니다.</span>
       </div>
     </div>
   </div>
@@ -53,6 +56,7 @@ export default {
       fetchRoomlen: 0,
       evalcheck: false,
       zeroPartinchk: false,
+      afkchk: false,
     };
   },
   props: {
@@ -90,6 +94,9 @@ export default {
           this.maxUser = res.data[j].name;
         }
 
+        if (this.each.uid == res.data[j].uid && res.data[j].attend == '결석') {
+          this.afkchk = true;
+        }
         if (this.each.uid == res.data[j].uid) {
           this.attenduidRank = res.data[j].ranking;
         }
