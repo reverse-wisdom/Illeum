@@ -1,7 +1,7 @@
 <template>
   <div class="user-eval">
     <v-row>
-      <p>
+      <p class="guide-text">
         출결확인을 위해
         <strong style="letter-spacing:1px">①날짜를 체크하고 ②클래스를 선택</strong>
         해주세요.
@@ -145,7 +145,7 @@ export default {
 
   async created() {
     const { data } = await userEvalList(this.uuid);
-    console.log(data);
+
     for (var i = 0; i < data.length; i++) {
       var eval_date = data[i].eval_date.slice(0, 10);
       this.arrayDates.push(eval_date);
@@ -153,7 +153,6 @@ export default {
     this.eval = data;
     this.items = [];
     this.evalcheck = false;
-    this.attendchk = false;
   },
   methods: {
     titleDate(date) {
@@ -190,6 +189,8 @@ export default {
       this.per4 = 0;
       this.per5 = 0;
       this.attendchk = false;
+      this.evalcheck = false;
+      this.selectedRoomName = '';
       this.learnData = [
         {
           data: '집중',
@@ -234,39 +235,37 @@ export default {
           per: 0,
         },
       ];
-      const { data } = await fetchRoomname(selected);
-      const roomPartinUser = data[0].rid;
-      const res = await evaluateList(roomPartinUser);
-
-      for (var j = 0; j < res.data.length; j++) {
-        this.per1 += res.data[j].attention;
-        this.per2 += res.data[j].distracted;
-        this.per3 += res.data[j].asleep;
-        this.per4 += res.data[j].afk;
-        this.per5 += res.data[j].participation;
-      }
-      // 소수둘째자리에서 반올림해서 소수첫째자리까지 보여줌
-      this.averageData[0].per = (this.per1 / res.data.length).toFixed(1);
-      this.averageData[1].per = (this.per2 / res.data.length).toFixed(1);
-      this.averageData[2].per = (this.per3 / res.data.length).toFixed(1);
-      this.averageData[3].per = (this.per4 / res.data.length).toFixed(1);
-      this.averageData[4].per = (this.per5 / res.data.length).toFixed(1);
       for (var i = 0; i < this.eval.length; i++) {
-        if (this.eval[i].attend != '결석' && this.date == this.eval[i].eval_date.slice(0, 10)) {
-          console.log(this.eval[i].attend);
-          console.log(this.eval[i].eval_date.slice(0, 10));
-          console.log(this.date);
-          this.evalcheck = true;
-          this.attendchk = true;
-          if (this.eval[i].room_name == selected && this.date == this.eval[i].eval_date.slice(0, 10)) {
-            this.learnData[0].per = this.eval[i].attention;
-            this.learnData[1].per = this.eval[i].distracted;
-            this.learnData[2].per = this.eval[i].asleep;
-            this.learnData[3].per = this.eval[i].afk;
-            this.learnData[4].per = this.eval[i].participation;
-            console.log(this.learnData);
+        if (this.eval[i].room_name === selected && this.date == this.eval[i].eval_date.slice(0, 10)) {
+          this.selectedRoomName = selected;
+          const { data } = await fetchRoomname(this.eval[i].room_name);
+          const roomPartinUser = data[0].rid;
+          const res = await evaluateList(roomPartinUser);
+          for (var j = 0; j < res.data.length; j++) {
+            this.per1 += res.data[j].attention;
+            this.per2 += res.data[j].distracted;
+            this.per3 += res.data[j].asleep;
+            this.per4 += res.data[j].afk;
+            this.per5 += res.data[j].participation;
           }
-          break;
+          // 소수둘째자리에서 반올림해서 소수첫째자리까지 보여줌
+          this.averageData[0].per = (this.per1 / res.data.length).toFixed(1);
+          this.averageData[1].per = (this.per2 / res.data.length).toFixed(1);
+          this.averageData[2].per = (this.per3 / res.data.length).toFixed(1);
+          this.averageData[3].per = (this.per4 / res.data.length).toFixed(1);
+          this.averageData[4].per = (this.per5 / res.data.length).toFixed(1);
+          if (this.eval[i].attend != '결석' && this.date == this.eval[i].eval_date.slice(0, 10)) {
+            this.evalcheck = true;
+            this.attendchk = true;
+            if (this.eval[i].room_name == selected && this.date == this.eval[i].eval_date.slice(0, 10)) {
+              this.learnData[0].per = this.eval[i].attention;
+              this.learnData[1].per = this.eval[i].distracted;
+              this.learnData[2].per = this.eval[i].asleep;
+              this.learnData[3].per = this.eval[i].afk;
+              this.learnData[4].per = this.eval[i].participation;
+            }
+            break;
+          }
         }
         this.change++;
         this.renderKey++;
@@ -299,7 +298,7 @@ export default {
   background: rgb(255, 98, 92);
   border: 0px solid black;
   border-radius: 50px;
-  /* margin-right: */
+
   padding: 12px 1rem;
   margin-right: 1rem;
   color: white;
@@ -331,5 +330,8 @@ legend {
   width: inherit;
   color: #fff;
   border-top: #2e95ff solid 0.5rem;
+}
+.guide-text {
+  margin: 0.5rem auto;
 }
 </style>

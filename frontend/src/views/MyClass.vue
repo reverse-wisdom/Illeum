@@ -13,16 +13,21 @@
     >
       # 내가 수강/강의하고 있는 클래스
     </v-alert>
-
-    <div>
+    <input type="checkbox" id="switch1" name="switch1" class="input__on-off" v-model="checked" />
+    <label for="switch1" class="label__on-off">
+      <span class="marble"></span>
+      <span class="on">강의자</span>
+      <span class="off">수강자</span>
+    </label>
+    <!-- <div>
       <input type="checkbox" class="checkbox" v-model="checked" />
     </div>
-    <div class="toggle-text" style="">
+    <div class="toggle-text">
       <div id="learner">
         수강생
       </div>
       <div id="lecturer">강의자</div>
-    </div>
+    </div> -->
 
     <LearnerMode v-if="checked == false"></LearnerMode>
     <LecturerMode v-else></LecturerMode>
@@ -47,27 +52,24 @@ export default {
 
 <style scoped>
 @font-face {
-  font-family: 'GongGothicLight';
-  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-10@1.0/GongGothicLight.woff') format('woff');
+  font-family: 'NEXON Lv1 Gothic OTF';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@2.1/NEXON Lv1 Gothic OTF.woff') format('woff');
   font-weight: normal;
   font-style: normal;
 }
-
 .my-class {
-  margin-left: 7%;
-  font-family: 'GongGothicLight';
+  margin: 10% 2%;
+  font-family: 'NEXON Lv1 Gothic OTF';
 }
 
 .checkbox {
   position: absolute;
-  top: 16px;
-  right: 1%;
-
+  top: 5%;
+  right: 10%;
   -webkit-appearance: none;
   width: 14rem;
-  height: 60px;
+  height: 3.5rem;
   background-color: #41ea93;
-
   border-radius: 50px;
   cursor: pointer;
   outline: none;
@@ -83,44 +85,122 @@ export default {
 .checkbox::before {
   content: '';
   position: absolute;
-  width: 6rem;
-  height: 40px;
-  background-color: #ff625c;
+  width: 7.2rem;
+  height: 3.5rem;
   border-radius: 50px;
-  top: 10px;
+  background-color: #2e95ff;
+
   cursor: pointer;
-  left: 1rem;
-  transition: 0.3s linear;
+
+  /* transition: 0.6s linear; */
 }
 
 .checkbox:checked::before {
-  left: 7.5rem;
+  left: 7rem;
   content: '';
+}
+.toggle-text {
+  top: 5rem;
 }
 
 #learner {
   position: absolute;
-  top: 1.9rem;
-  right: 8.7%;
-  /* transform: translateY(-50%); */
+  top: 4.2rem;
+  right: 21%;
   color: #fff;
   font-size: 20px;
   font-weight: 400;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  margin-left: px;
-  outline: none;
+  /* outline: none; */
   z-index: 3;
 }
 #lecturer {
   position: absolute;
-  outline: none;
-  top: 1.9rem;
-  right: 2%;
+  /* outline: none; */
+  top: 4.2rem;
+  right: 11.5%;
   color: #fff;
   font-size: 20px;
   font-weight: 400;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-
   z-index: 3;
+}
+/* toggle */
+input[type='checkbox'] {
+  display: none;
+}
+
+.label__on-off {
+  overflow: hidden;
+  position: relative;
+  display: inline-block;
+  width: 10rem;
+  height: 3rem;
+  -webkit-border-radius: 13px;
+  -moz-border-radius: 13px;
+  border-radius: 50px;
+  background-color: #ed4956;
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+  -webkit-transition: all 1s;
+  -moz-transition: all 0.3s;
+  -ms-transition: all 0.3s;
+  -o-transition: all 0.3s;
+  transition: all 0.3s;
+}
+
+.label__on-off > * {
+  vertical-align: sub;
+  -webkit-transition: all 0.3s;
+  -moz-transition: all 0.3s;
+  -ms-transition: all 0.3s;
+  -o-transition: all 0.3s;
+  transition: all 0.3s;
+  font-size: 1.3rem;
+  letter-spacing: 2px;
+}
+
+.label__on-off .marble {
+  position: absolute;
+  /* top: 1px; */
+  /* left: -0.1rem; */
+  display: block;
+  width: 3rem;
+  height: 3rem;
+  background-color: #fff;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  border-radius: 50%;
+  -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  -moz-box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.label__on-off .on {
+  display: none;
+  padding-right: 3rem;
+  line-height: 3rem;
+}
+
+.label__on-off .off {
+  padding-left: 3rem;
+  line-height: 3rem;
+}
+
+.input__on-off:checked + .label__on-off {
+  background-color: #2e95ff;
+}
+
+.input__on-off:checked + .label__on-off .on {
+  display: inline-block;
+}
+
+.input__on-off:checked + .label__on-off .off {
+  display: none;
+}
+
+.input__on-off:checked + .label__on-off .marble {
+  left: 7rem;
 }
 </style>
