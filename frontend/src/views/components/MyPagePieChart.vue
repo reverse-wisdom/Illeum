@@ -22,12 +22,14 @@ export default {
   },
 
   created() {
+    console.log(this.learnData);
     for (let i = 0; i < this.learnData.length; i++) {
       this.chartData.labels.push(this.learnData[i].data);
       this.chartData.datasets[0].data.push(this.learnData[i].per);
 
       // 차트색 rgb 랜덤 추출
     }
+    // this.renderChart(this.chartData);
   },
   mounted() {
     // 실제 차트 랜더링 부분
@@ -35,7 +37,7 @@ export default {
       borderWidth: '10px',
       hoverBackgroundColor: 'red',
       hoverBorderWidth: '10px',
-      maintainAspectRatio: false, // false: 상위 div를 무시한 채 창 크기에 따라 크기가 크기가 마음대로 바뀌던 것이 상위 div에 구속된다
+      maintainAspectRatio: true,
       responsive: true,
       width: '50%',
       height: '50%',
