@@ -77,8 +77,8 @@ export default {
     this.evalcheck = true;
     this.partinRank = [];
     this.attendRank = [];
-    this.fetchRoomlen = 0;
     this.afkchk = false;
+    this.fetchRoomlen = 0;
     const res = await evaluateList(this.rid);
     var maxPartin = 0;
     //채팅참여도1등, 출석1등 구하기
@@ -116,8 +116,6 @@ export default {
       if (this.partinRank[k].uid === this.each.uid && this.partinRank[k].vid === this.each.vid) {
         this.partuidRank = this.partinRank.indexOf(this.partinRank[k]) + 1;
         break;
-      } else if (this.partinRank[k].uid === this.$store.state.uuid && this.partinRank[k].participation == 0) {
-        this.zeroPartinchk = true;
       }
     }
   },
