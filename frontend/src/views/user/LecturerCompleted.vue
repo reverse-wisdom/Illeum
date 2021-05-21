@@ -11,7 +11,6 @@
                     <v-img :src="url" id="preview" alt=""></v-img>
                   </label>
                   <div class="content">
-                    <div>rid:{{ item.rid }}</div>
                     <div class="class-name">{{ item.room_name }}</div>
                     <div class="title">
                       <v-icon>mdi-account-circle</v-icon>
