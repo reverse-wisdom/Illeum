@@ -2,7 +2,7 @@
   <div class="user-partin">
     <v-row>
       <p class="guide-text">
-        상대평가 데이터 확인을 위해
+        상대평가를 조회하기 위해
         <strong style="letter-spacing:1px">①날짜를 체크하고 ②클래스를 선택</strong>
         해주세요.
       </p>
