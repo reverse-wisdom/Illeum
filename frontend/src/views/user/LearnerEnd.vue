@@ -140,8 +140,8 @@
             <v-tab-item>
               <v-card flat style="width:30%; margin: auto;">
                 <div v-if="modalEach.attend != '결석'">
-                  <MyPagePieChart :learnData="learnData" :key="change" />
-                  <MyPageRadarChart :learnData="learnData" :averageData="averageData" :key="modalEach.vid + 'D'" />
+                  <MyPagePieChart :learnData="learnData" :key="modalEach.vid + 'D'" />
+                  <MyPageRadarChart :learnData="learnData" :averageData="averageData" :key="modalEach.vid + 'E'" />
                 </div>
                 <div v-else>
                   결석한 수업이므로 평가가 조회되지 않습니다.
@@ -151,7 +151,7 @@
             <v-tab-item>
               <v-card flat>
                 <div v-if="modalEach.attend != '결석'">
-                  <LecUserPartin :each="modalEach" :roomData="modalEach" :evalUserCnt="evalUserCnt" :rid="ridSelected" :key="modalEach.vid + 'C'"></LecUserPartin>
+                  <LecUserPartin :each="modalEach" :roomData="modalEach" :evalUserCnt="evalUserCnt" :rid="ridSelected" :key="modalEach.vid + 'F'"></LecUserPartin>
                 </div>
                 <div v-else>
                   결석한 수업이므로 평가가 조회되지 않습니다.
@@ -320,10 +320,8 @@ export default {
       this.roomName = value.room_name;
       this.partinRank = [];
       this.attendRank = [];
-      this.fetchRoomlen = 0;
 
       this.evalUserCnt = String(res2.data);
-      this.change++;
     },
   },
 };
