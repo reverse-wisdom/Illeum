@@ -155,7 +155,7 @@
       <div class="section section4" :style="image_4">
         <div class="RTC-title">
           <div class="title1">
-            <span><img src="@/assets/img/textlogo_2.png" style="dislpaly:inline-block; width:40%; height:100%;" alt="" /></span>
+            <span><img src="@/assets/img/textlogo_2.png" style="dislpaly:inline-block; width:40%; height:100%; margin-bottom:-1rem;" alt="" /></span>
             이 제공하는
             <br />
             화상플랫폼 지원기능
@@ -554,7 +554,6 @@ export default {
   text-align: left;
   line-height: 4.5rem;
   letter-spacing: -1px;
-  justify-self: center;
   margin-top: 10%;
   color: #2e95ff;
 }
@@ -564,10 +563,11 @@ export default {
   font-weight: bold;
   text-align: center;
   line-height: 5rem;
-
-  letter-spacing: -0.5px;
+  color: #2e95ff;
+  letter-spacing: 0.2px;
   justify-self: center;
   margin-top: 35%;
+  margin-left: 0.5rem;
 }
 .g1 {
   /* margin-top: -3rem; */
