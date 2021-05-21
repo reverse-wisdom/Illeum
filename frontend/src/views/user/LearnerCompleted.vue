@@ -111,8 +111,8 @@
             <v-tab-item>
               <v-card flat style="width:30%; margin: auto;">
                 <div v-if="attend != '결석'">
-                  <MyPagePieChart :learnData="learnData" :key="modalEach.vid + 'C'" />
-                  <MyPageRadarChart :learnData="learnData" :averageData="averageData" :key="renderKey" />
+                  <MyPagePieChart :learnData="learnData" :key="modalEach.vid + 'A'" />
+                  <MyPageRadarChart :learnData="learnData" :averageData="averageData" :key="modalEach.vid + 'D'" />
                 </div>
                 <div v-else>
                   결석한 수업이므로 평가가 조회되지 않습니다.
@@ -121,7 +121,7 @@
             </v-tab-item>
             <v-tab-item>
               <v-card flat>
-                <LecUserPartin :each="modalEach" :roomData="modalEach" :evalUserCnt="evalUserCnt" :rid="ridSelected" :key="modalEach.vid + 'C'"></LecUserPartin>
+                <LecUserPartin :each="modalEach" :roomData="modalEach" :evalUserCnt="evalUserCnt" :rid="ridSelected" :key="modalEach.vid + 'E'"></LecUserPartin>
               </v-card>
             </v-tab-item>
           </v-tabs>
@@ -229,6 +229,11 @@ export default {
       return this.classLi.filter((i) => new Date(i.end_time) < Date.now() && i.room_state == '준비');
     },
   },
+  watch: {
+    learnData(val) {
+      this.learnData = val;
+    },
+  },
   async created() {
     this.classLi = [];
     const { data } = await userEvalList(this.$store.state.uuid);
@@ -248,6 +253,7 @@ export default {
       //출결
       this.attend_time = value.attend_time;
       this.attend = value.attend;
+      console.log(this.attend);
       this.attendchk = false;
 
       this.roomName = value.room_name;
