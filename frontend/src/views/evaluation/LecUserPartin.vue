@@ -80,12 +80,8 @@ export default {
     this.fetchRoomlen = 0;
     this.afkchk = false;
     const res = await evaluateList(this.rid);
-    console.log(res.data);
-    console.log(this.each);
     var maxPartin = 0;
-    var first = 100000;
     //채팅참여도1등, 출석1등 구하기
-    console.log(res.data);
     for (var j = 0; j < res.data.length; j++) {
       if (res.data[j].eval_date.slice(0, 10) == this.each.eval_date.slice(0, 10)) {
         this.partinRank.push({ uid: res.data[j].uid, participation: res.data[j].participation, vid: res.data[j].vid });

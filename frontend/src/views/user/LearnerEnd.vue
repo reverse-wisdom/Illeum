@@ -265,7 +265,6 @@ export default {
   },
   async created() {
     const { data } = await userEvalList(this.$store.state.uuid);
-    console.log(data);
     if (data) {
       this.learnerDoing = true;
       this.classLi = data;
@@ -276,7 +275,6 @@ export default {
       this.modalEach = value;
       this.modalEach.uid = this.$store.state.uuid;
       this.dialog = true;
-      console.log('value', value);
       //출결
       this.attend_time = value.attend_time;
       this.attend = value.attend;

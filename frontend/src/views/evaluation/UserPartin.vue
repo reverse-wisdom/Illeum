@@ -214,7 +214,6 @@ export default {
           }
         }
       }
-      console.log(this.partData);
       this.partData.sort(function(a, b) {
         if (a.participation < b.participation) {
           return 1;

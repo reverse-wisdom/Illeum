@@ -227,9 +227,6 @@ export default {
         <p class="section1-p">언택트시대 온라인 학습, 일름이 해답입니다.</p>`,
     };
   },
-  mounted() {
-    console.log(this.$refs.fullpage);
-  },
   props: {
     image1: {
       type: String,
