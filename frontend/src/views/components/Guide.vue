@@ -10,15 +10,11 @@
       </div>
       <!-- 강의자 -->
       <div class="section section2" :style="image_2">
-        <div class="mode-label">강의자 가이드</div>
+        <div class="mode-label">강의자 메뉴얼</div>
         <div class="slide">
           <h4>
-            <span class="step-label">
-              STEP&nbsp; ①
-            </span>
-
-            <span style="font-weight:bold; font-size:2rem;">
-              클래스만들기
+            <span class="step-label" style="font-weight:bold; font-size:1.5rem; background:#2E95FF;">
+              1. 클래스만들기
             </span>
           </h4>
           <div>
@@ -30,12 +26,8 @@
         </div>
         <div class="slide">
           <h4>
-            <span class="step-label">
-              STEP&nbsp; ②
-            </span>
-
-            <span style="font-weight:bold; font-size:2rem;">
-              클래스리스트
+            <span class="step-label" style="font-weight:bold; font-size:1.5rem;  background:#2E95FF;">
+              2. 클래스리스트
             </span>
           </h4>
           <div>
@@ -47,12 +39,8 @@
         </div>
         <div class="slide">
           <h4>
-            <span class="step-label">
-              STEP&nbsp; ③
-            </span>
-
-            <span style="font-weight:bold; font-size:2rem;">
-              클래스시작
+            <span class="step-label" style="font-weight:bold; font-size:1.5rem;  background:#2E95FF;">
+              3. 클래스시작
             </span>
           </h4>
           <div>
@@ -64,12 +52,8 @@
         </div>
         <div class="slide">
           <h4>
-            <span class="step-label">
-              STEP&nbsp; ④
-            </span>
-
-            <span style="font-weight:bold; font-size:2rem;">
-              클래스평가관리
+            <span class="step-label" style="font-weight:bold; font-size:1.5rem;  background:#2E95FF;">
+              4. 클래스평가관리
             </span>
           </h4>
           <div>
@@ -82,15 +66,11 @@
       </div>
       <!-- 청강자 -->
       <div class="section section3" :style="image_3">
-        <div class="mode-label" style="background: #FF625C;">수강자 가이드</div>
+        <div class="mode-label" style="background: #FF625C; letter-spacing:2px;">수강자 메뉴얼</div>
         <div class="slide">
           <h4>
-            <span class="step-label">
-              STEP&nbsp; ①
-            </span>
-
-            <span style="font-weight:bold; font-size:2rem;">
-              수강신청
+            <span class="step-label" style="font-weight:bold; font-size:1.5rem; background:#FF625C ;">
+              1. 수강신청
             </span>
           </h4>
           <div>
@@ -102,12 +82,8 @@
         </div>
         <div class="slide">
           <h4>
-            <span class="step-label">
-              STEP&nbsp; ②
-            </span>
-
-            <span style="font-weight:bold; font-size:2rem;">
-              수업참여
+            <span class="step-label" style="font-weight:bold; font-size:1.5rem;background:#FF625C ;">
+              2. 수업참여
             </span>
           </h4>
           <div>
@@ -119,12 +95,8 @@
         </div>
         <div class="slide">
           <h4>
-            <span class="step-label">
-              STEP&nbsp; ③
-            </span>
-
-            <span style="font-weight:bold; font-size:2rem;">
-              수업수강
+            <span class="step-label" style="font-weight:bold; font-size:1.5rem; background:#FF625C ;">
+              3. 수업수강
             </span>
           </h4>
           <div>
@@ -136,12 +108,8 @@
         </div>
         <div class="slide">
           <h4>
-            <span class="step-label">
-              STEP&nbsp; ④
-            </span>
-
-            <span style="font-weight:bold; font-size:2rem;">
-              평가조회
+            <span class="step-label" style="font-weight:bold; font-size:1.5rem; background:#FF625C ;">
+              4.평가조회
             </span>
           </h4>
           <div>
@@ -166,14 +134,14 @@
         <div class="slide">
           <img src="@/assets/img/emoji.gif" class="g1" style="" />
           <div class="g1-detail">
-            <div style="font-size:3rem;">1.채팅 및 이모지기능</div>
+            <div style="margin-bottom:1.6rem;font-size:3rem; border:0px solid #000; background:#2E95FF; color:white; padding:0.2rem 0.5rem;">1.채팅 및 이모지기능</div>
             <div>해당 기능을 통해 다양한 소통을 해보세요</div>
           </div>
         </div>
         <div class="slide">
           <img src="@/assets/img/whiteboard.gif" class="g2" style="" />
           <div class="g2-detail">
-            <div style="font-size:3rem;">2.화이트보드기능</div>
+            <div style="margin-bottom:1.6rem;font-size:3rem; border:0px solid #000; background:#2E95FF; color:white; padding:0.2rem 0.5rem; width:62%;">2.화이트보드기능</div>
             <div>
               해당 기능을 활용해서 말하고자 하는 내용을 다양하게 표현해보세요.
               <br />
@@ -184,7 +152,7 @@
         <div class="slide">
           <img src="@/assets/img/share.gif" class="g3" style="" />
           <div class="g3-detail">
-            <div style="font-size:3rem;">3.화면공유기능</div>
+            <div style="margin-bottom:1.6rem;font-size:3rem; border:0px solid #000; background:#2E95FF; color:white; padding:0.2rem 0.5rem; width:61%;">3.화면공유기능</div>
             <div>
               화상수업플랫폼에 꼭~필요한 기능,
               <br />
@@ -195,7 +163,7 @@
         <div class="slide">
           <img src="@/assets/img/alarm.gif" class="g4" style="" />
           <div class="g4-detail">
-            <div style="font-size:3rem;">4.알람기능</div>
+            <div style="margin-bottom:1.6rem;font-size:3rem; border:0px solid #000; background:#2E95FF; color:white; padding:0.2rem 0.5rem; width:38%;">4.알람기능</div>
             <div>
               일름은 유저의 편의를 위해
               <br />
@@ -476,7 +444,7 @@ export default {
   /* margin-top: 30px; */
   margin: 2% 30% 2% 30%;
   border-radius: 25px;
-  box-shadow: 2px 3px 15px rgba(0, 0, 0, 0.3);
+  /* box-shadow: 2px 3px 15px rgba(0, 0, 0, 0.3); */
 }
 
 .explanation {
@@ -502,10 +470,11 @@ export default {
 }
 
 .step-label {
-  border: 1px solid #fff;
-  background: #000;
-  padding: 0.5rem 0.8rem;
+  border: 0px solid #fff;
+  background: #444444;
+  padding: 0.6rem 2.2rem;
   color: #fff;
+  border-radius: 50px;
   letter-spacing: 1px;
   display: inline-block;
 }
@@ -514,7 +483,8 @@ export default {
   background: #2e95ff;
   color: #fff;
   padding: 1rem;
-  font-size: 2rem;
+  font-weight: bold;
+  font-size: 2.2rem;
 }
 .last-h1 {
   width: 60%;
@@ -539,7 +509,7 @@ export default {
   position: relative;
   font-family: 'Recipekorea' !important;
   /* font-size: 2rem; */
-  font-weight: bold;
+
   width: 45%;
   margin-top: 1rem;
   margin-left: 60%;
@@ -551,19 +521,21 @@ export default {
   text-align: left;
   line-height: 4.5rem;
   letter-spacing: -1px;
-  margin-top: 10%;
+
+  right: 30%;
+  margin-top: 15%;
   color: #2e95ff;
 }
 .RTC-title .title2 {
   position: absolute;
   font-size: 1.2rem;
-  font-weight: bold;
+  /* font-weight: bold; */
   text-align: center;
   line-height: 5rem;
   color: #2e95ff;
   letter-spacing: 0.2px;
   justify-self: center;
-  margin-top: 35%;
+  margin-top: 33%;
   margin-left: 0.5rem;
 }
 .g1 {
@@ -627,7 +599,7 @@ export default {
 }
 .AI-title {
   border: 0px solid #000;
-  background: #474747;
+  background: #61d4ed;
   color: #fff;
   padding: 0.5rem 0.5rem;
   font-size: 4.5rem;
@@ -653,11 +625,11 @@ export default {
   left: 50px;
   width: 0;
   border-width: 38.5px 34px 38.5px 0;
-  border-color: transparent #2e95ff transparent transparent;
+  border-color: transparent #4b4b4b transparent transparent;
 }
 .fp-controlArrow.fp-next {
   right: 50px;
   border-width: 38.5px 0 38.5px 34px;
-  border-color: transparent transparent transparent #2e95ff;
+  border-color: transparent transparent transparent #4b4b4b;
 }
 </style>
