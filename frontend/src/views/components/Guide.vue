@@ -192,6 +192,17 @@
             </div>
           </div>
         </div>
+        <div class="slide">
+          <img src="@/assets/img/alarm.gif" class="g4" style="" />
+          <div class="g4-detail">
+            <div style="font-size:3rem;">4.알람기능</div>
+            <div>
+              일름은 유저의 편의를 위해
+              <br />
+              청강생의 학습태도와, 서비스내 활동을 실시간 감지하고 이를 알려줍니다.
+            </div>
+          </div>
+        </div>
       </div>
       <div class="section section5" :style="image_5">
         <!-- <h4 style="color: #535353;  letter-spacing:4px; font-size:2rem;">실시간 학습태도관리</h4> -->
@@ -545,7 +556,7 @@ export default {
   letter-spacing: -1px;
   justify-self: center;
   margin-top: 10%;
-  color: #756bff;
+  color: #2e95ff;
 }
 .RTC-title .title2 {
   position: absolute;
@@ -572,7 +583,7 @@ export default {
   position: absolute;
   font-size: 1.3rem;
   bottom: 35%;
-  left: 20%;
+  left: 15%;
   text-align: left;
 }
 .g2 {
@@ -586,7 +597,7 @@ export default {
   position: absolute;
   font-size: 1.3rem;
   bottom: 35%;
-  left: 53.5%;
+  left: 40%;
   text-align: left;
 }
 
@@ -599,13 +610,27 @@ export default {
 .g3-detail {
   position: absolute;
   font-size: 1.3rem;
-  left: 86.7%;
+  left: 65%;
+  bottom: 35%;
+  text-align: left;
+}
+
+.g4 {
+  border-radius: 30px;
+  margin-right: 35%;
+  height: 55%;
+  width: 45% !important;
+}
+.g4-detail {
+  position: absolute;
+  font-size: 1.3rem;
+  left: 90%;
   bottom: 35%;
   text-align: left;
 }
 .AI-title {
-  border: 1px solid #000;
-  background: #000;
+  border: 0px solid #000;
+  background: #474747;
   color: #fff;
   padding: 0.5rem 0.5rem;
   font-size: 4.5rem;
