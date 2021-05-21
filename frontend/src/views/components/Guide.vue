@@ -651,3 +651,16 @@ export default {
   border-color: transparent transparent transparent #4a4a4a;
 }
 </style>
+<style>
+.fp-controlArrow.fp-prev {
+  left: 50px;
+  width: 0;
+  border-width: 38.5px 34px 38.5px 0;
+  border-color: transparent #2e95ff transparent transparent;
+}
+.fp-controlArrow.fp-next {
+  right: 50px;
+  border-width: 38.5px 0 38.5px 34px;
+  border-color: transparent transparent transparent #2e95ff;
+}
+</style>

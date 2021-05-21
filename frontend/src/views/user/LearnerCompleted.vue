@@ -98,21 +98,21 @@
                   <v-icon left large style="margin-bottom:1rem;" color="#2E95FF">
                     mdi-alarm
                   </v-icon>
-                  <span style="font-size:2rem; color:#2E95FF ;">{{ modalEach.attend_time }}</span>
+                  <span style="font-size:2rem; color:#2E95FF ;">{{ attend_time }}</span>
                   에 출석하셨습니다!
                 </div>
                 <div style=" margin: 2rem 1rem;">
                   출결상태는
-                  <span :class="{ normal: modalEach.attend == '정상', late: modalEach.attend == '지각', afk: modalEach.attend == '결석' }" style="font-size:2rem;">{{ attend }}</span>
+                  <span :class="{ normal: attend == '정상', late: attend == '지각', afk: attend == '결석' }" style="font-size:2rem;">{{ attend }}</span>
                   입니다.
                 </div>
               </v-card>
             </v-tab-item>
             <v-tab-item>
               <v-card flat style="width:30%; margin: auto;">
-                <div v-if="modalEach.attend != '결석'">
+                <div v-if="attend != '결석'">
                   <MyPagePieChart :learnData="learnData" :key="modalEach.vid + 'A'" />
-                  <MyPageRadarChart :learnData="learnData" :averageData="averageData" :key="modalEach.vid + 'B'" />
+                  <MyPageRadarChart :learnData="learnData" :averageData="averageData" :key="modalEach.vid + 'D'" />
                 </div>
                 <div v-else>
                   결석한 수업이므로 평가가 조회되지 않습니다.
@@ -121,12 +121,7 @@
             </v-tab-item>
             <v-tab-item>
               <v-card flat>
-                <div v-if="modalEach.attend != '결석'">
-                  <LecUserPartin :each="modalEach" :roomData="modalEach" :evalUserCnt="evalUserCnt" :rid="ridSelected" :key="modalEach.vid + 'C'"></LecUserPartin>
-                </div>
-                <div v-else>
-                  결석한 수업이므로 평가가 조회되지 않습니다.
-                </div>
+                <LecUserPartin :each="modalEach" :roomData="modalEach" :evalUserCnt="evalUserCnt" :rid="ridSelected" :key="modalEach.vid + 'E'"></LecUserPartin>
               </v-card>
             </v-tab-item>
           </v-tabs>
@@ -234,6 +229,11 @@ export default {
       return this.classLi.filter((i) => new Date(i.end_time) < Date.now() && i.room_state == '준비');
     },
   },
+  watch: {
+    learnData(val) {
+      this.learnData = val;
+    },
+  },
   async created() {
     this.classLi = [];
     const { data } = await userEvalList(this.$store.state.uuid);
@@ -253,6 +253,7 @@ export default {
       //출결
       this.attend_time = value.attend_time;
       this.attend = value.attend;
+      console.log(this.attend);
       this.attendchk = false;
 
       this.roomName = value.room_name;
@@ -345,6 +346,7 @@ export default {
       this.averageData[4].per = (this.per5 / res.data.length).toFixed(1);
 
       this.evalUserCnt = String(res2.data);
+      this.renderKey++;
     },
   },
 };
