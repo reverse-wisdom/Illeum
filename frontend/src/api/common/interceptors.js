@@ -17,6 +17,12 @@ export function setInterceptors(instance) {
           title: '세션만료',
           text: '다시 로그인 해주세요',
           confirmButtonText: '확인',
+        }).then((result) => {
+          if (result.isConfirmed) {
+            localStorage.clear();
+            sessionStorage.clear();
+            window.location.href = 'sign';
+          }
         });
       }
 
@@ -40,6 +46,12 @@ export function setInterceptors(instance) {
           title: '세션만료',
           text: '다시 로그인 해주세요',
           confirmButtonText: '확인',
+        }).then((result) => {
+          if (result.isConfirmed) {
+            localStorage.clear();
+            sessionStorage.clear();
+            window.location.href = 'sign';
+          }
         });
       }
 
